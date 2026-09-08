@@ -1,0 +1,68 @@
+{
+  "areas": [
+    {
+      "id": "biomedical-imaging",
+      "name": "Biomedical AI",
+      "scope": "Machine learning and computational methods for clinical imaging, digital pathology, microscopy, neuroimaging, health records, physiological signals, and biomedical data analysis.",
+      "families": [
+        {
+          "id": "biomedical-imaging.clinical-ehr-predictive-modeling",
+          "name": "Clinical Prediction from Health Records",
+          "scope": "Predictive modeling over electronic health records, clinical codes, and claims for diagnosis, risk, readmission, treatment, and outcome prediction."
+        },
+        {
+          "id": "biomedical-imaging.drug-discovery-and-development",
+          "name": "Drug Discovery and Development",
+          "scope": "Computational drug discovery and pharmaceutical development: target/ADMET prediction, drug toxicity and interaction (DDI), drug repurposing, mechanism-of-action, drug labeling, pharmacogenomics, drug knowledgebases and ontologies, and medicinal-chemistry property prediction. Distinct from clinical predictive modeling over health records."
+        }
+      ]
+    },
+    {
+      "id": "scientific-computing",
+      "name": "Scientific Computing",
+      "scope": "Scientific software, simulation, optimization, and machine learning for proteins, molecules, materials, genomics, physics, Earth systems, energy, geoscience, quantum systems, neuroscience, astronomy, and population models.",
+      "families": [
+        {
+          "id": "scientific-computing.protein-structure",
+          "name": "Protein Modeling",
+          "scope": "Protein and biomolecular-complex structure prediction, folding, inverse folding, sequence-to-structure modeling, and computational protein design."
+        },
+        {
+          "id": "scientific-computing.molecular-informatics",
+          "name": "Molecular Informatics",
+          "scope": "Molecular representations, property prediction, generative chemistry, docking, synthesis planning, cheminformatics, fingerprints, and substructure analysis for small molecules and drugs."
+        },
+        {
+          "id": "scientific-computing.materials-informatics",
+          "name": "Materials Informatics",
+          "scope": "Data structures, property prediction, atomistic learning, generative design, simulation preparation, and analysis for crystals, inorganic compounds, and engineered materials."
+        },
+        {
+          "id": "scientific-computing.molecular-simulation-and-dynamics",
+          "name": "Molecular Simulation",
+          "scope": "Molecular dynamics, force fields, enhanced sampling, free-energy calculation, and simulation engines for biomolecules, small molecules, and atomistic systems."
+        },
+        {
+          "id": "scientific-computing.genomics-and-bioinformatics",
+          "name": "Genomics and Bioinformatics",
+          "scope": "Genomic sequence analysis, variant calling, single-cell and spatial omics, differential expression, biological data structures, and bioinformatics workflows."
+        },
+        {
+          "id": "scientific-computing.quantum-computing",
+          "name": "Quantum Computing",
+          "scope": "Quantum circuits, simulators, execution frameworks, algorithms, and hybrid quantum-classical learning."
+        },
+        {
+          "id": "scientific-computing.structure-visualization",
+          "name": "Biomolecular Visualization",
+          "scope": "Interactive 3D visualization and rendering of proteins, nucleic acids, molecular trajectories, and electron-microscopy density maps."
+        },
+        {
+          "id": "scientific-computing.quantum-chemistry",
+          "name": "Quantum Chemistry",
+          "scope": "Electronic-structure and quantum-chemistry computational methods and workflows: density-functional theory (DFT), ab initio and semi-empirical methods, XTB, geometry optimization, and post-Hartree-Fock calculations for atoms, molecules, crystals, and reaction systems. Distinct from Quantum Computing (qubit circuits, simulators, and quantum algorithms)."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "repository_count": 0,
+  "assignment_count": 0,
+  "area_count": 2,
+  "family_count": 10,
+  "non_empty_family_count": 0,
+  "taxonomy_sha256": "30f8aa8934db13c613e6dfea053acb0023543cb9d5c3990e348ecf100479c985",
+  "repository_index_sha256": null,
+  "assignment_index_sha256": null,
+  "source_router_run_id": null
+}

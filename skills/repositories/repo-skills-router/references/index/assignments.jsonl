@@ -1,0 +1,127 @@
+{"repo_id":"aipoch/medical-research-skills","legacy_repo_id":null,"skill_id":"medical-research-skills","area":"Biomedical AI","family":"Clinical Prediction from Health Records","confidence":"high"}
+{"repo_id":"sunlabuiuc/PyHealth","legacy_repo_id":null,"skill_id":"pyhealth","area":"Biomedical AI","family":"Clinical Prediction from Health Records","confidence":"high"}
+{"repo_id":"DrugClaw/adr","legacy_repo_id":null,"skill_id":"drug-adr","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/ddi","legacy_repo_id":null,"skill_id":"drug-ddi","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_combination","legacy_repo_id":null,"skill_id":"drug-combination","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_disease","legacy_repo_id":null,"skill_id":"drug-disease","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_knowledgebase","legacy_repo_id":null,"skill_id":"drug-knowledgebase","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_labeling","legacy_repo_id":null,"skill_id":"drug-labeling","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_mechanism","legacy_repo_id":null,"skill_id":"drug-mechanism","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_molecular_property","legacy_repo_id":null,"skill_id":"drug-molecular-property","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_nlp","legacy_repo_id":null,"skill_id":"drug-nlp","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_ontology","legacy_repo_id":null,"skill_id":"drug-ontology","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_repurposing","legacy_repo_id":null,"skill_id":"drug-repurposing","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_review","legacy_repo_id":null,"skill_id":"drug-review","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/drug_toxicity","legacy_repo_id":null,"skill_id":"drug-toxicity","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/dti","legacy_repo_id":null,"skill_id":"drug-dti","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"DrugClaw/pharmacogenomics","legacy_repo_id":null,"skill_id":"pharmacogenomics","area":"Biomedical AI","family":"Drug Discovery and Development","confidence":"high"}
+{"repo_id":"HeliXonProtein/OmegaFold","legacy_repo_id":null,"skill_id":"omega-fold","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"K-Dense-AI/scientific-agent-skills","legacy_repo_id":null,"skill_id":"scientific-agent-skills","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"PaddlePaddle/PaddleHelix","legacy_repo_id":null,"skill_id":"paddlehelix","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"RosettaCommons/RFdiffusion","legacy_repo_id":null,"skill_id":"rfdiffusion","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"SciAgent-Skills/proteomics-protein-engineering","legacy_repo_id":null,"skill_id":"proteomics-protein-engineering","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"SciAgent-Skills/structural-biology-drug-discovery","legacy_repo_id":null,"skill_id":"structural-biology-drug-discovery","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"aqlaboratory/openfold","legacy_repo_id":null,"skill_id":"openfold","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"bytedance/Protenix","legacy_repo_id":null,"skill_id":"protenix","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"chaidiscovery/chai-lab","legacy_repo_id":null,"skill_id":"chai-lab","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"dauparas/ProteinMPNN","legacy_repo_id":null,"skill_id":"protein-mpnn","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"facebookresearch/esm","legacy_repo_id":null,"skill_id":"esm","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"google-deepmind/alphafold","legacy_repo_id":null,"skill_id":"alphafold","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"google-deepmind/alphafold3","legacy_repo_id":null,"skill_id":"alphafold3","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"jwohlwend/boltz","legacy_repo_id":null,"skill_id":"boltz","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"lucidrains/alphafold2","legacy_repo_id":null,"skill_id":"alphafold2","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"lucidrains/alphafold3-pytorch","legacy_repo_id":null,"skill_id":"alphafold3-pytorch","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"martinpacesa/BindCraft","legacy_repo_id":null,"skill_id":"bindcraft","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/binder-design","legacy_repo_id":null,"skill_id":"binder-design","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/binding-characterization","legacy_repo_id":null,"skill_id":"binding-characterization","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/boltzgen","legacy_repo_id":null,"skill_id":"boltzgen","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/campaign-manager","legacy_repo_id":null,"skill_id":"protein-campaign-manager","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/cell-free-expression","legacy_repo_id":null,"skill_id":"cell-free-expression","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/foldseek","legacy_repo_id":null,"skill_id":"foldseek","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/germinal","legacy_repo_id":null,"skill_id":"germinal","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/ipsae","legacy_repo_id":null,"skill_id":"ipsae","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/ligandmpnn","legacy_repo_id":null,"skill_id":"ligandmpnn","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/mosaic","legacy_repo_id":null,"skill_id":"mosaic","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/pdb","legacy_repo_id":null,"skill_id":"pdb-structure","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/protein-design-workflow","legacy_repo_id":null,"skill_id":"protein-design-workflow","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/protein-qc","legacy_repo_id":null,"skill_id":"protein-qc","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/setup","legacy_repo_id":null,"skill_id":"protein-design-setup","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/solublempnn","legacy_repo_id":null,"skill_id":"solublempnn","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"protein-design-skills/uniprot","legacy_repo_id":null,"skill_id":"uniprot","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"scverse/gget","legacy_repo_id":null,"skill_id":"gget","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"sokrypton/ColabFold","legacy_repo_id":null,"skill_id":"colabfold","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"westlake-repl/SaProt","legacy_repo_id":null,"skill_id":"sa-prot","area":"Scientific Computing","family":"Protein Modeling","confidence":"high"}
+{"repo_id":"DeepGraphLearning/torchdrug","legacy_repo_id":null,"skill_id":"torchdrug","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"K-Dense-AI/scientific-agent-skills","legacy_repo_id":null,"skill_id":"scientific-agent-skills","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"MolecularAI/REINVENT4","legacy_repo_id":null,"skill_id":"reinvent4","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"MolecularAI/aizynthfinder","legacy_repo_id":null,"skill_id":"aizynthfinder","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"PaddlePaddle/PaddleHelix","legacy_repo_id":null,"skill_id":"paddlehelix","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"SciAgent-Skills/scientific-computing","legacy_repo_id":null,"skill_id":"sciagent-scientific-computing","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"awslabs/dgl-lifesci","legacy_repo_id":null,"skill_id":"dgl-lifesci","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"chemosim-lab/ProLIF","legacy_repo_id":null,"skill_id":"prolif","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"chemprop/chemprop","legacy_repo_id":null,"skill_id":"chemprop","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"computational-chemistry-agent-skills/molecular-conformer","legacy_repo_id":null,"skill_id":"molecular-conformer","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"computational-chemistry-agent-skills/molecular-representation","legacy_repo_id":null,"skill_id":"molecular-representation","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"datamol-io/datamol","legacy_repo_id":null,"skill_id":"datamol","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"deepchem/deepchem","legacy_repo_id":null,"skill_id":"deepchem","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"divelab/DIG","legacy_repo_id":null,"skill_id":"dive-into-graphs","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"gcorso/DiffDock","legacy_repo_id":null,"skill_id":"diffdock","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"jwohlwend/boltz","legacy_repo_id":null,"skill_id":"boltz","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"microsoft/Graphormer","legacy_repo_id":null,"skill_id":"graphormer","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"omicverse/omicverse","legacy_repo_id":null,"skill_id":"omicverse","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"openforcefield/openff-toolkit","legacy_repo_id":null,"skill_id":"openff-toolkit","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"rdkit/rdkit","legacy_repo_id":null,"skill_id":"rdkit","area":"Scientific Computing","family":"Molecular Informatics","confidence":"high"}
+{"repo_id":"atomistic-machine-learning/schnetpack","legacy_repo_id":null,"skill_id":"schnetpack","area":"Scientific Computing","family":"Materials Informatics","confidence":"high"}
+{"repo_id":"deepchem/deepchem","legacy_repo_id":null,"skill_id":"deepchem","area":"Scientific Computing","family":"Materials Informatics","confidence":"high"}
+{"repo_id":"materialsproject/pymatgen","legacy_repo_id":null,"skill_id":"pymatgen","area":"Scientific Computing","family":"Materials Informatics","confidence":"high"}
+{"repo_id":"microsoft/Graphormer","legacy_repo_id":null,"skill_id":"graphormer","area":"Scientific Computing","family":"Materials Informatics","confidence":"high"}
+{"repo_id":"microsoft/mattergen","legacy_repo_id":null,"skill_id":"mattergen","area":"Scientific Computing","family":"Materials Informatics","confidence":"high"}
+{"repo_id":"FoldingAtHome/coronavirus","legacy_repo_id":null,"skill_id":"coronavirus","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"MDAnalysis/mdanalysis","legacy_repo_id":null,"skill_id":"mdanalysis","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"OpenFreeEnergy/openfe","legacy_repo_id":null,"skill_id":"openfe","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"atomistic-machine-learning/schnetpack","legacy_repo_id":null,"skill_id":"schnetpack","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"computational-chemistry-agent-skills/analysis","legacy_repo_id":null,"skill_id":"compchem-analysis","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"computational-chemistry-agent-skills/atomistic-workflows","legacy_repo_id":null,"skill_id":"atomistic-workflows","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"computational-chemistry-agent-skills/data-processing","legacy_repo_id":null,"skill_id":"compchem-data-processing","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"computational-chemistry-agent-skills/machine-learning-potentials","legacy_repo_id":null,"skill_id":"machine-learning-potentials","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"computational-chemistry-agent-skills/molecular-dynamics","legacy_repo_id":null,"skill_id":"molecular-dynamics","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"computational-chemistry-agent-skills/tools","legacy_repo_id":null,"skill_id":"compchem-tools","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"deepmodeling/deepmd-kit","legacy_repo_id":null,"skill_id":"deepmd-kit","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"lucidrains/alphafold3-pytorch","legacy_repo_id":null,"skill_id":"alphafold3-pytorch","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"openforcefield/openff-toolkit","legacy_repo_id":null,"skill_id":"openff-toolkit","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"openmm/openmm","legacy_repo_id":null,"skill_id":"openmm","area":"Scientific Computing","family":"Molecular Simulation","confidence":"high"}
+{"repo_id":"ClawBio/ClawBio","legacy_repo_id":null,"skill_id":"clawbio","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"K-Dense-AI/scientific-agent-skills","legacy_repo_id":null,"skill_id":"scientific-agent-skills","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"PaddlePaddle/PaddleHelix","legacy_repo_id":null,"skill_id":"paddlehelix","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"SciAgent-Skills/biostatistics","legacy_repo_id":null,"skill_id":"biostatistics","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"SciAgent-Skills/cell-biology","legacy_repo_id":null,"skill_id":"cell-biology","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"SciAgent-Skills/genomics-bioinformatics","legacy_repo_id":null,"skill_id":"genomics-bioinformatics","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"SciAgent-Skills/lab-automation","legacy_repo_id":null,"skill_id":"lab-automation","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"SciAgent-Skills/molecular-biology","legacy_repo_id":null,"skill_id":"molecular-biology","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"SciAgent-Skills/systems-biology-multiomics","legacy_repo_id":null,"skill_id":"systems-biology-multiomics","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"Teichlab/celltypist","legacy_repo_id":null,"skill_id":"celltypist","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"aertslab/pySCENIC","legacy_repo_id":null,"skill_id":"pyscenic","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"biopython/biopython","legacy_repo_id":null,"skill_id":"biopython","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"biotite-dev/biotite","legacy_repo_id":null,"skill_id":"biotite","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"google/deepvariant","legacy_repo_id":null,"skill_id":"deepvariant","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"hail-is/hail","legacy_repo_id":null,"skill_id":"hail","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"kblin/ncbi-genome-download","legacy_repo_id":null,"skill_id":"ncbi-genome-download","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"moshi4/pyCirclize","legacy_repo_id":null,"skill_id":"pycirclize","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"omicverse/omicverse","legacy_repo_id":null,"skill_id":"omicverse","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"pysam-developers/pysam","legacy_repo_id":null,"skill_id":"pysam","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"scikit-bio/scikit-bio","legacy_repo_id":null,"skill_id":"scikit-bio","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"scverse/PyDESeq2","legacy_repo_id":null,"skill_id":"pydeseq2","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"scverse/anndata","legacy_repo_id":null,"skill_id":"anndata","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"scverse/gget","legacy_repo_id":null,"skill_id":"gget","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"scverse/scanpy","legacy_repo_id":null,"skill_id":"scanpy","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"scverse/scvi-tools","legacy_repo_id":null,"skill_id":"scvi-tools","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"scverse/squidpy","legacy_repo_id":null,"skill_id":"squidpy","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"sokrypton/ColabFold","legacy_repo_id":null,"skill_id":"colabfold","area":"Scientific Computing","family":"Genomics and Bioinformatics","confidence":"high"}
+{"repo_id":"quantumlib/OpenFermion","legacy_repo_id":null,"skill_id":"openfermion","area":"Scientific Computing","family":"Quantum Computing","confidence":"high"}
+{"repo_id":"BradyAJohnston/MolecularNodes","legacy_repo_id":null,"skill_id":"molecularnodes","area":"Scientific Computing","family":"Biomolecular Visualization","confidence":"high"}
+{"repo_id":"biotite-dev/biotite","legacy_repo_id":null,"skill_id":"biotite","area":"Scientific Computing","family":"Biomolecular Visualization","confidence":"high"}
+{"repo_id":"chemosim-lab/ProLIF","legacy_repo_id":null,"skill_id":"prolif","area":"Scientific Computing","family":"Biomolecular Visualization","confidence":"high"}
+{"repo_id":"moshi4/pyCirclize","legacy_repo_id":null,"skill_id":"pycirclize","area":"Scientific Computing","family":"Biomolecular Visualization","confidence":"high"}
+{"repo_id":"scverse/scanpy","legacy_repo_id":null,"skill_id":"scanpy","area":"Scientific Computing","family":"Biomolecular Visualization","confidence":"high"}
+{"repo_id":"scverse/squidpy","legacy_repo_id":null,"skill_id":"squidpy","area":"Scientific Computing","family":"Biomolecular Visualization","confidence":"high"}
+{"repo_id":"computational-chemistry-agent-skills/quantum-chemistry","legacy_repo_id":null,"skill_id":"quantum-chemistry","area":"Scientific Computing","family":"Quantum Chemistry","confidence":"high"}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "2.0",
+  "repo_id": "RosettaCommons/RFdiffusion",
+  "skill_id": "rfdiffusion",
+  "taxonomy_sha256": "30f8aa8934db13c613e6dfea053acb0023543cb9d5c3990e348ecf100479c985",
+  "routing_status": "classified",
+  "assignments": [
+    {
+      "area": "Scientific Computing",
+      "family": "Protein Modeling"
+    }
+  ]
+}

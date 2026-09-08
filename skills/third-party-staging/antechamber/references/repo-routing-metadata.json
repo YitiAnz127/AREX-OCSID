@@ -1,0 +1,18 @@
+{
+  "schema_version": "2.0",
+  "repo_id": "AmberTools/antechamber",
+  "skill_id": "antechamber",
+  "provenance": {
+    "source": "third-party skill library: computational-chemistry-agent-skills (molecular-dynamics/antechamber)",
+    "source_skill_path": "molecular-dynamics/antechamber/SKILL.md",
+    "library_homepage": "https://ambermd.org/antechamber/ac.html"
+  },
+  "taxonomy_sha256": "pending-rebuild",
+  "routing_status": "classified",
+  "assignments": [
+    {
+      "area": "Scientific Computing",
+      "family": "Molecular Simulation"
+    }
+  ]
+}
