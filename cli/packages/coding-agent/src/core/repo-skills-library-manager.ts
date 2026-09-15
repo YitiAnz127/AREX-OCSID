@@ -19,7 +19,7 @@ import { getAgentDir, getBundledSkillsDir } from "../config.ts";
 import { getGitProcessEnv, spawnProcess, waitForChildProcess } from "../utils/child-process.ts";
 
 const STATE_SCHEMA_VERSION = 2;
-const OFFICIAL_REPOSITORY = "https://github.com/YitiAnz127/AREX-chem-skills.git";
+const OFFICIAL_REPOSITORY = "https://github.com/YitiAnz127/ocsid-repo-skill.git";
 const LIBRARY_PATH = "skills/repositories";
 const ROUTER_ID = "repo-skills-router";
 const ROUTER_INDEX_PATH = join("references", "index");
@@ -64,7 +64,7 @@ const ASSIGNMENT_INDEX_FIELDS = new Set([
 	"confidence",
 ]);
 const MANUAL_INSTALL_URL =
-	"https://github.com/YitiAnz127/AREX-chem-skills#install-the-published-repository-collection";
+	"https://github.com/YitiAnz127/ocsid-repo-skill#install-the-published-repository-collection";
 
 export class RepoSkillsLibraryError extends Error {
 	readonly exitCode: number;
