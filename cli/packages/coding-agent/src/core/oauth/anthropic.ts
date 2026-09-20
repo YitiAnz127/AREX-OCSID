@@ -9,7 +9,7 @@ import type { Server } from "node:http";
 import type { AuthInteraction, OAuthAuth, OAuthCredential } from "@earendil-works/pi-ai";
 import { getDiscoOAuthCallbackHost } from "./callback-host.ts";
 import { oauthErrorHtml, oauthSuccessHtml } from "./oauth-page.ts";
-import { generatePKCE } from "./pkce.ts";
+import { generateOAuthState, generatePKCE } from "./pkce.ts";
 
 type CallbackServerInfo = {
 	server: Server;
@@ -227,7 +227,10 @@ async function exchangeAuthorizationCode(
 
 async function loginAnthropic(interaction: AuthInteraction): Promise<OAuthCredential> {
 	const { verifier, challenge } = await generatePKCE();
-	const server = await startCallbackServer(verifier);
+	// The state must stay independent of the PKCE verifier: it is sent in the
+	// authorize URL, so reusing the verifier would expose it and defeat PKCE.
+	const expectedState = generateOAuthState();
+	const server = await startCallbackServer(expectedState);
 	const manualAbort = new AbortController();
 	let code: string | undefined;
 	let state: string | undefined;
@@ -243,7 +246,7 @@ async function loginAnthropic(interaction: AuthInteraction): Promise<OAuthCreden
 			scope: SCOPES,
 			code_challenge: challenge,
 			code_challenge_method: "S256",
-			state: verifier,
+			state: expectedState,
 		});
 		interaction.notify({
 			type: "auth_url",
@@ -275,9 +278,9 @@ async function loginAnthropic(interaction: AuthInteraction): Promise<OAuthCreden
 			state = result.state;
 		} else if (manualInput) {
 			const parsed = parseAuthorizationInput(manualInput);
-			if (parsed.state && parsed.state !== verifier) throw new Error("OAuth state mismatch");
+			if (parsed.state && parsed.state !== expectedState) throw new Error("OAuth state mismatch");
 			code = parsed.code;
-			state = parsed.state ?? verifier;
+			state = parsed.state ?? expectedState;
 		}
 
 		if (!code) {
@@ -285,9 +288,9 @@ async function loginAnthropic(interaction: AuthInteraction): Promise<OAuthCreden
 			if (manualError) throw manualError;
 			if (manualInput) {
 				const parsed = parseAuthorizationInput(manualInput);
-				if (parsed.state && parsed.state !== verifier) throw new Error("OAuth state mismatch");
+				if (parsed.state && parsed.state !== expectedState) throw new Error("OAuth state mismatch");
 				code = parsed.code;
-				state = parsed.state ?? verifier;
+				state = parsed.state ?? expectedState;
 			}
 		}
 

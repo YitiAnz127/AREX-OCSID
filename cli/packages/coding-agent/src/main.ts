@@ -26,7 +26,7 @@ import { createProjectTrustContext } from "./cli/project-trust.ts";
 import { handleRepoSkillsCommand } from "./cli/repo-skills.ts";
 import { selectSession } from "./cli/session-picker.ts";
 import { shouldRunFirstTimeSetup, showFirstTimeSetup, showStartupSelector } from "./cli/startup-ui.ts";
-import { ENV_SESSION_DIR, expandTildePath, getAgentDir, getPackageDir, VERSION } from "./config.ts";
+import { APP_NAME, ENV_SESSION_DIR, expandTildePath, getAgentDir, getPackageDir, VERSION } from "./config.ts";
 import { type CreateAgentSessionRuntimeFactory, createAgentSessionRuntime } from "./core/agent-session-runtime.ts";
 import {
 	type AgentSessionRuntimeDiagnostic,
@@ -62,7 +62,7 @@ import { isManagedInstallMarkerUsable, readManagedInstallMarker } from "./utils/
 import { isLocalPath, normalizePath, resolvePath } from "./utils/paths.ts";
 import { cleanupWindowsSelfUpdateQuarantine } from "./utils/windows-self-update.ts";
 
-const EXTENSION_LOAD_FAILURE_HINT = 'Hint: Start without extensions using "disco -ne".';
+const EXTENSION_LOAD_FAILURE_HINT = `Hint: Start without extensions using "${APP_NAME} -ne".`;
 
 /**
  * Read all content from piped stdin.
@@ -646,7 +646,20 @@ export async function main(args: string[], options?: MainOptions) {
 	const { migratedAuthProviders: migratedProviders, deprecationWarnings } = runMigrations(cwd);
 	time("runMigrations");
 
-	const startupSettingsManager = SettingsManager.create(cwd, agentDir);
+	// Project-scope settings must not be honoured before this project's trust
+	// decision is made. A cloned repository ships its own .disco/settings.json,
+	// and reading its sessionDir here would redirect transcripts — and let
+	// --continue adopt a planted transcript as the user's own prior conversation —
+	// ahead of the trust prompt. Only an already-trusted project contributes
+	// project-scope settings to the startup lookup.
+	const trustStore = new ProjectTrustStore(agentDir);
+	// `--approve`/`-a` is an explicit decision for this invocation, so it counts
+	// here exactly as it does for the runtime settings manager below; ignoring it
+	// would make the two disagree about a project that is absent from trust.json.
+	const startupProjectTrusted = parsed.projectTrustOverride ?? trustStore.get(cwd) === true;
+	const startupSettingsManager = SettingsManager.create(cwd, agentDir, {
+		projectTrusted: startupProjectTrusted,
+	});
 	reportDiagnostics(collectSettingsDiagnostics(startupSettingsManager, "startup session lookup"));
 
 	// Experimental first-time setup: theme choice and analytics opt-in.
@@ -691,7 +704,6 @@ export async function main(args: string[], options?: MainOptions) {
 	}
 	time("createSessionManager");
 
-	const trustStore = new ProjectTrustStore(agentDir);
 	const sessionCwd = sessionManager.getCwd();
 	const autoTrustOnReloadCwd =
 		parsed.projectTrustOverride === undefined && !hasTrustRequiringProjectResources(sessionCwd)

@@ -23,8 +23,8 @@ import {
 	type Theme,
 } from "../modes/interactive/theme/theme.ts";
 
-const OFFICIAL_PACKAGE_NAME = "@arex-skill/disco";
-const OFFICIAL_APP_NAME = "disco";
+const OFFICIAL_PACKAGE_NAME = "ocsid";
+const OFFICIAL_APP_NAME = "ocsid";
 const OFFICIAL_CONFIG_DIR_NAME = ".disco";
 
 interface DistributionMetadata {

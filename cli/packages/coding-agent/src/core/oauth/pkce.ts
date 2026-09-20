@@ -32,3 +32,18 @@ export async function generatePKCE(): Promise<{ verifier: string; challenge: str
 
 	return { verifier, challenge };
 }
+
+/**
+ * Generate an independent OAuth `state` value.
+ *
+ * The state must never be derived from the PKCE verifier. The state travels in
+ * the authorize URL and is therefore visible in browser history, `Referer`
+ * headers, and any proxy log on the path, whereas PKCE only holds if the
+ * verifier stays secret until the token exchange. Reusing the verifier as the
+ * state exposes it to everyone who can observe that URL.
+ */
+export function generateOAuthState(): string {
+	const stateBytes = new Uint8Array(16);
+	crypto.getRandomValues(stateBytes);
+	return base64urlEncode(stateBytes);
+}

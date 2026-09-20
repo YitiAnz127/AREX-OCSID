@@ -46,8 +46,11 @@ describe("version checks", () => {
 		vi.stubGlobal("fetch", fetchMock);
 
 		await expect(getLatestDiscoVersion("1.2.3")).resolves.toBe("1.2.4");
+		// The endpoint is derived from the running package name, so a rebrand cannot
+		// silently point the version check — and the `update --self` target built
+		// from its result — at a different npm package.
 		expect(fetchMock).toHaveBeenCalledWith(
-			"https://registry.npmjs.org/%40arex-skill%2Fdisco/latest",
+			"https://registry.npmjs.org/ocsid/latest",
 			expect.objectContaining({
 				headers: expect.objectContaining({
 					"User-Agent": expect.stringMatching(/^disco\/1\.2\.3 /),

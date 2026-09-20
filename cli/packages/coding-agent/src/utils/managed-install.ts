@@ -3,6 +3,14 @@ import { homedir } from "node:os";
 import { isAbsolute, join, relative, resolve } from "node:path";
 
 export const MANAGED_INSTALL_SCHEMA_VERSION = 1;
+/**
+ * The package name the platform installers (`install-disco.sh` and
+ * `install-disco.ps1`) install into a managed release tree, and therefore the
+ * name recorded in `managed-install.json`. It deliberately stays
+ * `@arex-skill/disco` while the published managed package is the upstream one.
+ * `readManagedInstallMarker` derives its expected entrypoint from this value, so
+ * changing it here would invalidate every marker already written on disk.
+ */
 export const MANAGED_PACKAGE_NAME = "@arex-skill/disco";
 
 export interface ManagedInstallMarker {
@@ -111,8 +119,7 @@ export function readManagedInstallMarker(): ManagedInstallMarker | undefined {
 			"releases",
 			marker.activeVersion,
 			"node_modules",
-			"@arex-skill",
-			"disco",
+			...MANAGED_PACKAGE_NAME.split("/"),
 			"dist",
 			"cli.js",
 		);

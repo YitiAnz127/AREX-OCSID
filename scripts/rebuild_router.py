@@ -24,9 +24,16 @@ WRITE_LIVE = "--write-live" in sys.argv
 OUTPUT = None
 if "--output-dir" in sys.argv:
     try:
-        OUTPUT = os.path.abspath(sys.argv[sys.argv.index("--output-dir") + 1])
+        OUTPUT = sys.argv[sys.argv.index("--output-dir") + 1]
     except IndexError as exc:
         raise SystemExit("--output-dir requires a directory") from exc
+    # os.path.abspath("") is the current working directory, which is truthy, so an
+    # empty value used to disable the check and write SKILL.md, references/areas/*
+    # and references/index/* straight into the invocation directory — normally the
+    # repository root — instead of an isolated directory.
+    if not OUTPUT.strip():
+        raise SystemExit("--output-dir requires a non-empty directory")
+    OUTPUT = os.path.abspath(OUTPUT)
 if WRITE_LIVE and OUTPUT:
     raise SystemExit("use either --write-live or --output-dir, not both")
 CHECK = not WRITE_LIVE and OUTPUT is None

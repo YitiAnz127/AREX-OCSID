@@ -4,6 +4,11 @@ set -eu
 # DisCo managed installer for macOS, Linux, WSL, and other Unix-like shells.
 # It installs the published npm package into a private release tree and never
 # replaces an unrelated `disco` command.
+#
+# NOTE: This installer installs the published upstream package
+# `@arex-skill/disco`. It does NOT install the local `ocsid` CLI build from the
+# arex-test repo, because `ocsid` is not published to npm yet. To run the local
+# build, use `cli/` directly (npm install && npm run build && npm link).
 
 PACKAGE_NAME="@arex-skill/disco"
 DEFAULT_NODE_VERSION="22.19.0"
@@ -38,21 +43,85 @@ command_exists() {
 
 absolute_path() {
 	case "$1" in
-		~/*) printf '%s/%s\n' "${HOME:?HOME is not set}" "${1#~/}" ;;
-		/*) printf '%s\n' "$1" ;;
+		"~/"*) printf '%s/%s\n' "${HOME:?HOME is not set}" "${1#\~/}" ;;
+		/* | [A-Za-z]:[\\/]*) printf '%s\n' "$1" ;;
 		*) printf '%s/%s\n' "$(pwd)" "$1" ;;
 	esac
 }
 
+# Lexically resolve "." and ".." segments and drop trailing separators, without
+# touching the filesystem and without resolving symlinks. Assumes an absolute
+# input. A lexical result is sufficient because the install root is rejected
+# when it is a symlink, and it keeps this script portable to POSIX sh:
+# `realpath -m` is GNU-only and `readlink -f` is absent on older macOS.
+normalize_path() {
+	_remaining="$1"
+	_result=""
+	while [ -n "$_remaining" ]; do
+		case "$_remaining" in
+			/*) _remaining="${_remaining#/}" ;;
+		esac
+		case "$_remaining" in
+			*/*)
+				_segment="${_remaining%%/*}"
+				_remaining="${_remaining#*/}"
+				;;
+			*)
+				_segment="$_remaining"
+				_remaining=""
+				;;
+		esac
+		case "$_segment" in
+			"" | ".") : ;;
+			"..")
+				case "$_result" in
+					*/*) _result="${_result%/*}" ;;
+					*) _result="" ;;
+				esac
+				;;
+			*) _result="$_result/$_segment" ;;
+		esac
+	done
+	if [ -z "$_result" ]; then
+		printf '/\n'
+	else
+		printf '%s\n' "$_result"
+	fi
+}
+
 validate_install_dir() {
-	case "$INSTALL_DIR" in
-		/|"$HOME"|"$AGENT_DIR"|"${TMPDIR:-/tmp}")
+	# Compare normalized forms so equivalent spellings of the same directory
+	# ("$HOME/", "$HOME//", "$HOME/.", "$AGENT_DIR/sub/..") cannot slip past this
+	# guard and turn the uninstall `rm -rf` into a home-directory wipe.
+	_install_normalized="$(normalize_path "$INSTALL_DIR")"
+	_home_normalized="$(normalize_path "$(absolute_path "${HOME:?HOME is not set}")")"
+	_tmpdir_normalized="$(normalize_path "$(absolute_path "${TMPDIR:-/tmp}")")"
+
+	case "$_install_normalized" in
+		"" | "/" | "$_home_normalized" | "$AGENT_DIR" | "$_tmpdir_normalized")
 			die "refusing to use a broad managed install directory: $INSTALL_DIR"
 			;;
 	esac
-	case "$INSTALL_DIR" in
-		*/.) die "managed install directory must name a child directory: $INSTALL_DIR" ;;
-		*) : ;;
+
+	# Refuse an ancestor of HOME or of the agent directory: uninstalling such a
+	# root would delete the user's home directory, or credentials and sessions
+	# under the agent directory, while reporting that they were preserved.
+	case "$_home_normalized/" in
+		"$_install_normalized"/*)
+			die "refusing a managed install directory that contains HOME: $INSTALL_DIR"
+			;;
+	esac
+	case "$AGENT_DIR/" in
+		"$_install_normalized"/*)
+			die "refusing a managed install directory that contains the agent directory: $INSTALL_DIR"
+			;;
+	esac
+
+	# Refuse top-level directories such as /etc, /usr or /var: a managed install
+	# root is expected to be a dedicated child directory.
+	case "$_install_normalized" in
+		/*/*) : ;;
+		*) die "refusing a top-level managed install directory: $INSTALL_DIR" ;;
 	esac
 }
 
@@ -94,7 +163,7 @@ download_file() {
 	url="$1"
 	destination="$2"
 	if command_exists curl; then
-		curl -fL --retry 3 --retry-delay 1 --connect-timeout 15 --silent --show-error "$url" -o "$destination"
+		curl -fL --proto '=https' --proto-redir '=https' --retry 3 --retry-delay 1 --connect-timeout 15 --silent --show-error "$url" -o "$destination"
 		return
 	fi
 	if command_exists wget; then
@@ -204,6 +273,37 @@ prepend_node_bin_to_path() {
 	esac
 }
 
+# The updater is persisted on disk and re-executed for every future --update, so
+# an unverified download becomes a durable trust anchor for this installation.
+# Verify it against the release SHA256SUMS whenever that file is published next
+# to the installer; a mismatch is fatal, an unavailable or incomplete checksum
+# file degrades to a warning so mirrors without one keep working.
+verify_persisted_installer() {
+	installer_url="$1"
+	checksum_url=""
+	case "$installer_url" in
+		*/install-disco.sh) checksum_url="${installer_url%/install-disco.sh}/SHA256SUMS" ;;
+	esac
+	if [ -z "$checksum_url" ]; then
+		echo "warning: cannot derive a checksum URL from $installer_url; the managed updater was not verified" >&2
+		return 0
+	fi
+	checksum_file="$TMP_DIR/SHA256SUMS"
+	if ! download_file "$checksum_url" "$checksum_file" 2>/dev/null; then
+		echo "warning: could not fetch $checksum_url; the managed updater was not verified" >&2
+		return 0
+	fi
+	expected="$(awk '$2 == "install-disco.sh" || $2 == "*install-disco.sh" { print $1; exit }' "$checksum_file")"
+	if [ -z "$expected" ]; then
+		echo "warning: $checksum_url has no entry for install-disco.sh; the managed updater was not verified" >&2
+		return 0
+	fi
+	actual="$(sha256_file "$INSTALLER_PATH")"
+	if [ "$actual" != "$expected" ]; then
+		die "managed updater checksum mismatch: expected $expected, got $actual"
+	fi
+}
+
 ensure_persisted_installer() {
 	INSTALLER_PATH="$INSTALL_DIR/install-disco.sh"
 	case "$0" in
@@ -215,7 +315,9 @@ ensure_persisted_installer() {
 		destination_path="$(resolve_existing_path "$INSTALLER_PATH")"
 		if [ "$source_path" != "$destination_path" ]; then cp "$0" "$INSTALLER_PATH"; fi
 	else
-		download_file "${DISCO_INSTALLER_URL:-$DEFAULT_INSTALLER_URL}" "$INSTALLER_PATH" || die "could not persist the managed updater"
+		installer_url="${DISCO_INSTALLER_URL:-$DEFAULT_INSTALLER_URL}"
+		download_file "$installer_url" "$INSTALLER_PATH" || die "could not persist the managed updater"
+		verify_persisted_installer "$installer_url"
 	fi
 	chmod 700 "$INSTALLER_PATH"
 }
@@ -223,7 +325,13 @@ ensure_persisted_installer() {
 write_atomic() {
 	destination="$1"
 	content="$2"
-	temporary="$destination.tmp.$$"
+	# Create the temporary file with mktemp instead of a predictable PID-suffixed
+	# name. On a shared or NFS install root another local user can pre-create that
+	# name as a symlink, so a plain `>` redirect would clobber any file this user
+	# can write, and the `mv -f` below would run without any existing-file check.
+	if ! temporary="$(mktemp "$destination.XXXXXX" 2>/dev/null)"; then
+		return 1
+	fi
 	if ! printf '%s' "$content" > "$temporary"; then
 		rm -f "$temporary"
 		return 1
@@ -271,7 +379,13 @@ write_launcher() {
 			return 1
 		fi
 	fi
-	launcher_tmp="$launcher.$$"
+	# mktemp rather than a predictable `$launcher.$$`: the write below follows
+	# symlinks, so on a shared install root another local user could pre-create the
+	# name as a link and have this clobber a file the installing user can write.
+	if ! launcher_tmp="$(mktemp "$launcher.XXXXXX" 2>/dev/null)"; then
+		printf 'error: cannot create a temporary launcher next to %s\n' "$launcher" >&2
+		return 1
+	fi
 	install_literal="$(shell_quote "$INSTALL_DIR")"
 	agent_literal="$(shell_quote "$AGENT_DIR")"
 if ! cat > "$launcher_tmp" <<EOF
@@ -320,7 +434,18 @@ write_marker() {
 	entrypoint_escaped="$(json_escape "$package_dir/dist/cli.js")"
 	node_escaped="$(json_escape "$NODE_PATH")"
 	installer_escaped="$(json_escape "$INSTALLER_PATH")"
-	marker_tmp="$INSTALL_DIR/managed-install.json.tmp.$$"
+	# mktemp rather than a predictable `managed-install.json.tmp.$$` for the same
+	# reason as the launcher above: the write follows symlinks.
+	#
+	# This must report failure with `return 1`, never `die`. `write_marker` is
+	# called as `write_marker ... || activation_failed=1` while the previous
+	# release sits in "$TMP_DIR/previous-release" and the cleanup trap is armed;
+	# exiting here would skip the rollback below and then let the trap delete the
+	# only copy of the previous release.
+	if ! marker_tmp="$(mktemp "$INSTALL_DIR/managed-install.json.XXXXXX" 2>/dev/null)"; then
+		printf 'error: cannot create a temporary install marker in %s\n' "$INSTALL_DIR" >&2
+		return 1
+	fi
 if ! cat > "$marker_tmp" <<EOF
 {
   "schemaVersion": 1,
@@ -359,6 +484,60 @@ check_command_conflict() {
 
 acquire_lock() {
 	LOCK_DIR="$INSTALL_DIR/.lock"
+	if mkdir "$LOCK_DIR" 2>/dev/null; then
+		printf '%s\n' "$$" > "$LOCK_DIR/pid"
+		return
+	fi
+
+	# Only the EXIT/INT/TERM trap removes the lock, so an installer killed with
+	# SIGKILL or a power loss leaves it behind and every later install, --update
+	# and --uninstall fails until the user deletes the directory by hand. Recover
+	# the lock when its recorded holder is gone; a lock with no pid file is only
+	# treated as abandoned once it is old enough that its creator cannot still be
+	# mid-acquire.
+	stale_pid=""
+	if [ -f "$LOCK_DIR/pid" ]; then
+		stale_pid="$(tr -d '[:space:]' < "$LOCK_DIR/pid" 2>/dev/null || true)"
+	fi
+	if [ -n "$stale_pid" ]; then
+		# A holder that still answers kill -0 is running.
+		if kill -0 "$stale_pid" 2>/dev/null; then
+			die "another DisCo managed installer (pid $stale_pid) is already modifying $INSTALL_DIR"
+		fi
+		# kill -0 also fails with EPERM when the holder is alive but owned by another
+		# user (an install run under sudo in a shared root). /proc distinguishes that
+		# on Linux, so a live lock is not reclaimed out from under its holder.
+		if [ -d "/proc/$stale_pid" ]; then
+			die "another DisCo managed installer (pid $stale_pid) is already modifying $INSTALL_DIR"
+		fi
+	fi
+	# No pid file: only an old lock can be abandoned, since its creator may still be
+	# between mkdir and writing its pid.
+	if [ -z "$stale_pid" ] && [ -n "$(find "$LOCK_DIR" -maxdepth 0 -mmin -5 2>/dev/null)" ]; then
+		die "another DisCo managed installer is already modifying $INSTALL_DIR"
+	fi
+
+	# Reclaim by renaming the abandoned lock aside. `mv` to a unique name succeeds
+	# for exactly one waiter, whereas testing staleness and then `rm -rf`-ing is a
+	# TOCTOU: between the check and the removal another installer can create a
+	# fresh lock, which this process then deletes, leaving two installers writing
+	# into $INSTALL_DIR at once.
+	lock_graveyard="$LOCK_DIR.stale.$$"
+	if ! mv "$LOCK_DIR" "$lock_graveyard" 2>/dev/null; then
+		die "another DisCo managed installer is already modifying $INSTALL_DIR"
+	fi
+	# Re-check what was actually taken. If a live installer re-created the lock
+	# between the test above and the rename, the directory moved aside belongs to
+	# it: put it back rather than delete a live lock.
+	if [ -f "$lock_graveyard/pid" ]; then
+		taken_pid="$(tr -d '[:space:]' < "$lock_graveyard/pid" 2>/dev/null || true)"
+		if [ -n "$taken_pid" ] && [ "$taken_pid" != "$stale_pid" ]; then
+			mv "$lock_graveyard" "$LOCK_DIR" 2>/dev/null || rm -rf "$lock_graveyard"
+			die "another DisCo managed installer (pid $taken_pid) is already modifying $INSTALL_DIR"
+		fi
+	fi
+	echo "warning: recovering the stale installer lock at $LOCK_DIR" >&2
+	rm -rf "$lock_graveyard"
 	if ! mkdir "$LOCK_DIR" 2>/dev/null; then
 		die "another DisCo managed installer is already modifying $INSTALL_DIR"
 	fi
@@ -367,7 +546,12 @@ acquire_lock() {
 
 cleanup() {
 	if [ -n "${RELEASE_STAGE:-}" ] && [ -e "$RELEASE_STAGE" ]; then rm -rf "$RELEASE_STAGE"; fi
-	if [ -n "${LOCK_DIR:-}" ] && [ -d "$LOCK_DIR" ]; then rm -rf "$LOCK_DIR"; fi
+	# Remove the lock only while this process still owns it; a lock reclaimed by a
+	# later installer must not be deleted by this one's exit trap.
+	if [ -n "${LOCK_DIR:-}" ] && [ -d "$LOCK_DIR" ]; then
+		owner_pid="$(tr -d '[:space:]' < "$LOCK_DIR/pid" 2>/dev/null || true)"
+		if [ -z "$owner_pid" ] || [ "$owner_pid" = "$$" ]; then rm -rf "$LOCK_DIR"; fi
+	fi
 	if [ -n "${TMP_DIR:-}" ] && [ -d "$TMP_DIR" ]; then rm -rf "$TMP_DIR"; fi
 }
 
@@ -454,9 +638,9 @@ while [ "$#" -gt 0 ]; do
 done
 
 AGENT_DIR="${DISCO_CODING_AGENT_DIR:-${HOME:?HOME is not set}/.disco/agent}"
-AGENT_DIR="$(absolute_path "$AGENT_DIR")"
+AGENT_DIR="$(normalize_path "$(absolute_path "$AGENT_DIR")")"
 if [ -n "${DISCO_INSTALL_DIR:-}" ] && [ -z "$INSTALL_DIR" ]; then INSTALL_DIR="$DISCO_INSTALL_DIR"; fi
-INSTALL_DIR="$(absolute_path "${INSTALL_DIR:-$AGENT_DIR/install}")"
+INSTALL_DIR="$(normalize_path "$(absolute_path "${INSTALL_DIR:-$AGENT_DIR/install}")")"
 validate_install_dir
 TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/disco-install.XXXXXX")"
 LOCK_DIR=""

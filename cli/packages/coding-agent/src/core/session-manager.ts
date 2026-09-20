@@ -30,6 +30,17 @@ import {
 
 export const CURRENT_SESSION_VERSION = 3;
 
+/**
+ * Session transcripts and their directory are written owner-only. A transcript
+ * can contain anything that ever appeared in a conversation — pasted
+ * credentials, `cat .env` output, OAuth tokens — so it is protected like
+ * `auth.json` rather than inheriting the process umask (0644/0755 for a default
+ * 022 umask on Linux and macOS, which would leave every local user able to read
+ * them). The mode is advisory on Windows, where POSIX permissions do not apply.
+ */
+const SESSION_DIR_MODE = 0o700;
+const SESSION_FILE_MODE = 0o600;
+
 export interface SessionHeader {
 	type: "session";
 	version?: number; // v1 sessions don't have this
@@ -486,7 +497,7 @@ function getDefaultSessionDirPath(cwd: string, agentDir: string = getDefaultAgen
 export function getDefaultSessionDir(cwd: string, agentDir: string = getDefaultAgentDir()): string {
 	const sessionDir = getDefaultSessionDirPath(cwd, agentDir);
 	if (!existsSync(sessionDir)) {
-		mkdirSync(sessionDir, { recursive: true });
+		mkdirSync(sessionDir, { recursive: true, mode: SESSION_DIR_MODE });
 	}
 	return sessionDir;
 }
@@ -880,7 +891,7 @@ export class SessionManager {
 		this.sessionDir = normalizePath(sessionDir);
 		this.persist = persist;
 		if (persist && this.sessionDir && !existsSync(this.sessionDir)) {
-			mkdirSync(this.sessionDir, { recursive: true });
+			mkdirSync(this.sessionDir, { recursive: true, mode: SESSION_DIR_MODE });
 		}
 
 		if (sessionFile) {
@@ -986,7 +997,7 @@ export class SessionManager {
 
 	private _rewriteFile(): void {
 		if (!this.persist || !this.sessionFile) return;
-		const fd = openSync(this.sessionFile, "w");
+		const fd = openSync(this.sessionFile, "w", SESSION_FILE_MODE);
 		try {
 			for (const entry of this.fileEntries) {
 				writeFileSync(fd, `${JSON.stringify(entry)}\n`);
@@ -1045,7 +1056,7 @@ export class SessionManager {
 		const hasAssistant = this.fileEntries.some((e) => e.type === "message" && e.message.role === "assistant");
 		if (!hasAssistant) {
 			if (this.flushed) {
-				appendFileSync(this.sessionFile, `${JSON.stringify(entry)}\n`);
+				appendFileSync(this.sessionFile, `${JSON.stringify(entry)}\n`, { mode: SESSION_FILE_MODE });
 			} else {
 				// Mark as not flushed so when assistant arrives, all entries get written
 				this.flushed = false;
@@ -1054,7 +1065,7 @@ export class SessionManager {
 		}
 
 		if (!this.flushed) {
-			const fd = openSync(this.sessionFile, "wx");
+			const fd = openSync(this.sessionFile, "wx", SESSION_FILE_MODE);
 			try {
 				for (const e of this.fileEntries) {
 					writeFileSync(fd, `${JSON.stringify(e)}\n`);
@@ -1064,7 +1075,7 @@ export class SessionManager {
 			}
 			this.flushed = true;
 		} else {
-			appendFileSync(this.sessionFile, `${JSON.stringify(entry)}\n`);
+			appendFileSync(this.sessionFile, `${JSON.stringify(entry)}\n`, { mode: SESSION_FILE_MODE });
 		}
 	}
 
@@ -1630,7 +1641,7 @@ export class SessionManager {
 
 		const dir = sessionDir ? normalizePath(sessionDir) : getDefaultSessionDir(resolvedTargetCwd);
 		if (!existsSync(dir)) {
-			mkdirSync(dir, { recursive: true });
+			mkdirSync(dir, { recursive: true, mode: SESSION_DIR_MODE });
 		}
 
 		// Create new session file with new ID but forked content
@@ -1652,12 +1663,12 @@ export class SessionManager {
 			parentSession: resolvedSourcePath,
 			discoMode: options?.discoMode ?? resolveDiscoAgentMode(sourceHeader.discoMode).mode,
 		};
-		writeFileSync(newSessionFile, `${JSON.stringify(newHeader)}\n`, { flag: "wx" });
+		writeFileSync(newSessionFile, `${JSON.stringify(newHeader)}\n`, { flag: "wx", mode: SESSION_FILE_MODE });
 
 		// Copy all non-header entries from source
 		for (const entry of sourceEntries) {
 			if (entry.type !== "session") {
-				appendFileSync(newSessionFile, `${JSON.stringify(entry)}\n`);
+				appendFileSync(newSessionFile, `${JSON.stringify(entry)}\n`, { mode: SESSION_FILE_MODE });
 			}
 		}
 

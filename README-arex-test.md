@@ -101,7 +101,10 @@ CLI 内置 router 是空模板：它包含相同的 2-area/10-family taxonomy，
 
 - 当前没有 `skills/mcp/`，也没有可运行的 MCP server。
 - 109 条 repository index 记录的 `source_commit` 均为 null。
-- 49 个第三方导入根使用逻辑 repository ID，并声明未知许可证。
+- 50 个第三方导入根使用逻辑 repository ID，并声明未知许可证。这些 ID 形如
+  `库名/簇名`（如 `SciAgent-Skills/genomics-bioinformatics`），据此生成的
+  `source_url` 可能指向不存在的 GitHub 仓库；`DrugClaw/*`、`ClawBio/ClawBio`
+  等则对应真实仓库。逻辑 ID 的 `source_commit` 与 `source_skill_root` 均为 null。
 - 另有 10 个 retained AREX 根声明 `NOASSERTION`；这表示未取得明确 SPDX 结论，
   不是已确认的再分发许可。
 - `repo-provenance.md` 是描述性来源记录，不等于 commit-pinned 供应链清单。

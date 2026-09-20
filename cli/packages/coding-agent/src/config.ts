@@ -129,7 +129,7 @@ function getSelfUpdateCommandForMethod(
 			if (
 				!isManagedInstallMarkerUsable(marker) ||
 				target.packageName !== installedPackageName ||
-				target.packageName !== "@arex-skill/disco"
+				!isOwnPackageName(target.packageName)
 			) {
 				return undefined;
 			}
@@ -534,11 +534,24 @@ try {
 }
 
 const discoConfigName: string | undefined = pkg.discoConfig?.name;
-export const PACKAGE_NAME: string = pkg.name || "@arex-skill/disco";
-export const APP_NAME: string = discoConfigName || "disco";
+export const PACKAGE_NAME: string = pkg.name || "ocsid";
+export const APP_NAME: string = discoConfigName || "ocsid";
 export const APP_TITLE: string = APP_NAME;
 export const CONFIG_DIR_NAME: string = pkg.discoConfig?.configDir || ".disco";
 export const VERSION: string = pkg.version || "0.0.0";
+
+/**
+ * Package names this CLI shipped under before it was renamed to `ocsid`. They
+ * stay accepted for managed-install markers, extension module aliases, and
+ * self-update targets written by earlier releases, but they are never used to
+ * derive a new path or a new install target.
+ */
+export const LEGACY_PACKAGE_NAMES = ["@arex-skill/disco", "@auto-ml-skills/disco"] as const;
+
+/** True when `name` is this CLI's canonical package name or one of its legacy names. */
+export function isOwnPackageName(name: string): boolean {
+	return name === PACKAGE_NAME || (LEGACY_PACKAGE_NAMES as readonly string[]).includes(name);
+}
 
 export const ENV_AGENT_DIR = "DISCO_CODING_AGENT_DIR";
 export const ENV_SESSION_DIR = "DISCO_CODING_AGENT_SESSION_DIR";

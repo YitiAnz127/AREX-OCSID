@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 from pathlib import Path
@@ -19,6 +20,27 @@ class FrontmatterError(ValueError):
     """Raised when a SKILL.md frontmatter block is present but malformed."""
 
 
+def _reject_escaping_symlinks(source: Path) -> None:
+    """Fail closed when a source resource tree links outside itself.
+
+    ``shutil.copytree`` dereferences symlinks by default, so a third-party skill
+    containing ``assets/agent-key -> ~/.ssh/id_rsa`` would have that file's
+    *contents* copied into the generated repo skill as a regular file, and from
+    there into any published collection. The source tree is untrusted by
+    definition, so links that leave it are refused outright.
+    """
+    resolved_source = source.resolve()
+    for root, dirs, files in os.walk(source, followlinks=False):
+        for entry in [*dirs, *files]:
+            candidate = Path(root) / entry
+            if not candidate.is_symlink():
+                continue
+            if not candidate.resolve().is_relative_to(resolved_source):
+                raise SystemExit(
+                    f"refusing to import {candidate}: it is a symlink pointing outside {source}"
+                )
+
+
 def copy_companion_resources(source_dir: str | Path, target_dir: str | Path) -> list[str]:
     """Copy supported resource directories next to a normalized SKILL.md."""
     source = Path(source_dir)
@@ -26,9 +48,21 @@ def copy_companion_resources(source_dir: str | Path, target_dir: str | Path) -> 
     copied: list[str] = []
     for name in COMPANION_RESOURCE_DIRS:
         resource = source / name
+        # Check the companion directory itself before `is_dir()`: that call follows
+        # symlinks, so `skill/assets -> ~/.ssh` would make `resolved_source` become
+        # the link target and every entry inside it count as "inside the source".
+        # `copytree` always follows its top-level src, so that directory-level form
+        # of the threat has to be refused here.
+        if resource.is_symlink():
+            raise SystemExit(
+                f"refusing to import {resource}: companion resource directory is a symlink"
+            )
         if not resource.is_dir():
             continue
-        shutil.copytree(resource, target / name, dirs_exist_ok=True)
+        _reject_escaping_symlinks(resource)
+        # symlinks=True preserves in-tree links instead of reading through them,
+        # so a link can never pull host file contents into the collection.
+        shutil.copytree(resource, target / name, dirs_exist_ok=True, symlinks=True)
         copied.append(name)
     return copied
 

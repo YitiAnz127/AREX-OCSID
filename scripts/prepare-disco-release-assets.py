@@ -18,7 +18,13 @@ from pathlib import Path
 from typing import NoReturn
 
 
-PACKAGE_NAME = "@arex-skill/disco"
+# The package this repository builds and publishes from `cli/package.json`.
+LOCAL_PACKAGE_NAME = "ocsid"
+# The package the platform installers install into a managed release tree, and the
+# name recorded in `managed-install.json`. It is deliberately the published
+# upstream package while `ocsid` is unpublished, so it differs from
+# LOCAL_PACKAGE_NAME; `src/utils/managed-install.ts` keys its marker on this name.
+INSTALLER_PACKAGE_NAME = "@arex-skill/disco"
 ASSET_NAMES = ("install-disco.sh", "install-disco.ps1")
 FORBIDDEN_PATTERNS = (
     "@auto-ml-skills/disco",
@@ -47,8 +53,8 @@ def package_version(root: Path) -> str:
         fail(f"cannot read {package_path}: {exc}")
     name = data.get("name")
     version = data.get("version")
-    if name != PACKAGE_NAME:
-        fail(f"{package_path} has package name {name!r}; expected {PACKAGE_NAME!r}")
+    if name != LOCAL_PACKAGE_NAME:
+        fail(f"{package_path} has package name {name!r}; expected {LOCAL_PACKAGE_NAME!r}")
     if not isinstance(version, str) or not re.fullmatch(r"\d+\.\d+\.\d+", version):
         fail(f"{package_path} has an invalid release version: {version!r}")
     return version
@@ -58,8 +64,8 @@ def validate_asset(path: Path) -> None:
     if not path.is_file():
         fail(f"missing installer asset: {path}")
     text = path.read_text(encoding="utf-8")
-    if PACKAGE_NAME not in text:
-        fail(f"{path} does not target {PACKAGE_NAME}")
+    if INSTALLER_PACKAGE_NAME not in text:
+        fail(f"{path} does not target {INSTALLER_PACKAGE_NAME}")
     for forbidden in FORBIDDEN_PATTERNS:
         if forbidden in text:
             fail(f"{path} contains forbidden stale or local reference: {forbidden}")
@@ -93,7 +99,7 @@ def main(argv: list[str] | None = None) -> int:
     (output_dir / "release-metadata.json").write_text(
         json.dumps(
             {
-                "packageName": PACKAGE_NAME,
+                "packageName": INSTALLER_PACKAGE_NAME,
                 "packageVersion": version,
                 "assets": list(ASSET_NAMES),
                 "checksumsFile": "SHA256SUMS",
@@ -103,7 +109,7 @@ def main(argv: list[str] | None = None) -> int:
         + "\n",
         encoding="utf-8",
     )
-    print(f"Prepared DisCo installer assets for {PACKAGE_NAME}@{version} in {output_dir}")
+    print(f"Prepared DisCo installer assets for {INSTALLER_PACKAGE_NAME}@{version} in {output_dir}")
     print(f"Attach {', '.join(ASSET_NAMES)} and SHA256SUMS to the matching GitHub Release.")
     return 0
 

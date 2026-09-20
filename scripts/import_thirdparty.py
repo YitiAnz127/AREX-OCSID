@@ -78,13 +78,13 @@ def write_skill(skill_id, family, repo_id, repo_url, desc, src_body,
                 license=None, sub_skills=None, source_root=""):
     d = os.path.join(REPO, skill_id)
     os.makedirs(os.path.join(d, "references"), exist_ok=True)
-    fd = first_sentence(desc).replace('"', '&quot;')
+    fd = first_sentence(desc)
     sub_skills_block = ''
     if sub_skills:
         sub_skills_block = '\n## Sub-skills\n\n' + '\n'.join(f'- `{s}`' for s in sub_skills) + '\n'
     smd = f"""---
 name: {skill_id}
-description: "{fd}"
+description: {json.dumps(fd, ensure_ascii=False)}
 disable-model-invocation: true
 metadata:
   disco-role: operating
@@ -143,6 +143,34 @@ Frontmatter normalized to AREX repo-skill schema; references/ added; body retain
 
 # --------------------------------------------------------- sub-skill shrink
 def flatten_subskill_id(rel): return "-".join(rel.split(os.sep)).strip("-_")
+
+SAFE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+def safe_scalar_name(value, label):
+    """Refuse a frontmatter name that could break out of its YAML scalar.
+
+    `flatten_subskill_id` only joins path segments, so a source directory named
+    with a colon or a newline would otherwise be interpolated raw into the
+    generated SKILL.md and could corrupt or inject frontmatter fields. Failing
+    loudly keeps valid names byte-identical while closing that path.
+    """
+    if not SAFE_NAME.match(value):
+        raise SystemExit(f"refusing to write {label}: unsafe skill name {value!r}")
+    return value
+
+def checked_skill_md(root_real, path):
+    """Return `path`, refusing a SKILL.md that resolves outside the source root.
+
+    `os.path.isfile` and the frontmatter reader both follow symlinks, so a
+    third-party tree containing `sub/SKILL.md -> /etc/passwd` (or any host file)
+    would have that file's contents, together with attacker-chosen `name:` and
+    `description:` frontmatter, laundered into the generated repo skill and from
+    there into a published collection. Links that stay inside the source tree are
+    still followed, since their content is already part of the tree.
+    """
+    real = os.path.realpath(path)
+    if real != root_real and not real.startswith(root_real + os.sep):
+        raise SystemExit(f"refusing to import {path}: SKILL.md resolves outside {root_real}")
+    return path
 
 # --------------------------------------------------------- MAIN PLAN
 # family must exist in taxonomy. skill_id must be unique vs repo-skills/.
@@ -274,7 +302,8 @@ def main():
                 print(f"  [SKIP dup] {did}")
                 continue
             # root SKILL.md (if dir has its own) else synthesize
-            root_md = os.path.join(src, "SKILL.md")
+            src_real = os.path.realpath(src)
+            root_md = checked_skill_md(src_real, os.path.join(src, "SKILL.md"))
             try:
                 if os.path.isfile(root_md):
                     fm, body = parse_frontmatter(root_md)
@@ -292,7 +321,7 @@ def main():
                     rel = os.path.relpath(r, src)
                     if rel == ".":
                         continue
-                    subs.append((rel, os.path.join(r, "SKILL.md")))
+                    subs.append((rel, checked_skill_md(src_real, os.path.join(r, "SKILL.md"))))
             subs.sort()
             parsed_subs = []
             try:
@@ -313,19 +342,20 @@ def main():
             copy_companion_resources(src, d)
             # write sub-skills
             for rel, md, sfm, sbody in parsed_subs:
-                subdir = os.path.join(d, "sub-skills", flatten_subskill_id(rel))
+                sub_name = safe_scalar_name(flatten_subskill_id(rel), rel)
+                subdir = os.path.join(d, "sub-skills", sub_name)
                 os.makedirs(subdir, exist_ok=True)
-                sdesc = sfm.get("description") or f"Sub-skill {flatten_subskill_id(rel)} for {did}."
-                sfd = first_sentence(sdesc).replace('"', '&quot;')
+                sdesc = sfm.get("description") or f"Sub-skill {sub_name} for {did}."
+                sfd = first_sentence(sdesc)
                 smd = f"""---
-name: {flatten_subskill_id(rel)}
-description: "{sfd}"
+name: {sub_name}
+description: {json.dumps(sfd, ensure_ascii=False)}
 disable-model-invocation: true
 metadata:
   disco-role: operating
 ---
 
-# {flatten_subskill_id(rel)} — {did} sub-skill
+# {sub_name} — {did} sub-skill
 
 {sbody}
 """

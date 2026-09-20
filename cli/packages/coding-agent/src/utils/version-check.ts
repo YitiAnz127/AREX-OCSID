@@ -1,7 +1,13 @@
 import { compare, valid } from "semver";
+import { PACKAGE_NAME } from "../config.ts";
 import { getDiscoUserAgent } from "./disco-user-agent.ts";
 
-const DEFAULT_LATEST_VERSION_URL = "https://registry.npmjs.org/%40arex-skill%2Fdisco/latest";
+/**
+ * Derived from the running package name so a rebrand cannot silently point the
+ * version check, and the `update --self` target built from its result, at a
+ * different npm package.
+ */
+const DEFAULT_LATEST_VERSION_URL = `https://registry.npmjs.org/${encodeURIComponent(PACKAGE_NAME)}/latest`;
 const DEFAULT_VERSION_CHECK_TIMEOUT_MS = 10000;
 
 export interface LatestDiscoRelease {

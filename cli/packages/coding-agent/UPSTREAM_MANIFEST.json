@@ -106,14 +106,14 @@
           "upstreamSha256": "4d8350fe6e3a22a9383ee26e37b9969b7d300539962097146b403a9dd2dbf8a6",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/cli/startup-ui.ts",
-          "localSha256": "91e71dc2cb19e9e7edab1167ad5326b17ffa86a34d872a5ce866f1e8219590b9"
+          "localSha256": "5591ece9ac9e27f704cb12048b5f95ce1c86f410f4eed218b8c067d2e35e7c89"
         },
         {
           "upstreamPath": "packages/coding-agent/src/config.ts",
           "upstreamSha256": "d9dce190990ce48a273ad04d06a51baba5c47904f39363521451225dbd3501b2",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/config.ts",
-          "localSha256": "867d174cda2013ebabde1012b21cfb0edc2a516fed2a5278156bcfd0e3ac915b"
+          "localSha256": "56c06bec00d6d4a5a9dc47063f1d416ace1622aeeeb7c772d434f16d687eeeef"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/agent-session-runtime.ts",
@@ -295,7 +295,7 @@
           "upstreamSha256": "2498fc18f7484485b34b1c23c2338b023d8bd3759bcd34782a3b80776306ecf8",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/extensions/loader.ts",
-          "localSha256": "c5ae93169fc8931665c5ca9cb053cb535538befb1275d34427684eb255cefbf7"
+          "localSha256": "eda7e443ec46da683b6a8601b3c0f780c412262ef12d3ead5ac2c64344d381d0"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/extensions/runner.ts",
@@ -484,7 +484,7 @@
           "upstreamSha256": "5ca662efec88c135559630deda469fcf022035ddfb61b4610de8d74cee5c8b39",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/session-manager.ts",
-          "localSha256": "b92ebae32b55c036535fdd20ee4685ef4de99ea6546261ed282b9dfea4027e83"
+          "localSha256": "8df4b43bc11567834c7f0909ea27d7d8da7ae0a1ec381f9c45836d9188f2231b"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/settings-manager.ts",
@@ -708,7 +708,7 @@
           "upstreamSha256": "5460a1b1168714787208004907a95094f7712730a31b0c08becc3674ebda6199",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/main.ts",
-          "localSha256": "61654209c1f219cc9f6d002af7d94bd0d4e8e78b282eff2bf78029592220096a"
+          "localSha256": "0205af51f013f0d35f73988105f9f0e5bd8ff730b87b536e5030cd6235388af6"
         },
         {
           "upstreamPath": "packages/coding-agent/src/migrations.ts",
@@ -1010,9 +1010,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/external-editor.ts",
           "upstreamSha256": "b71e4ed7e99f119bb69f82d57207d8a20beb12560ebd8736ee73631e25784336",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/modes/interactive/external-editor.ts",
-          "localSha256": "b71e4ed7e99f119bb69f82d57207d8a20beb12560ebd8736ee73631e25784336"
+          "localSha256": "d0aa09ddef724399ec98bed3e48d8650ec7f796eea736e2dcc266fe79d2c8693"
         },
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/interactive-mode.ts",
@@ -1103,7 +1103,7 @@
           "upstreamSha256": "3d350ad2fb8527d897cdc0e74cb1ddfe40027505d6f15502c944c71af59625be",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/package-manager-cli.ts",
-          "localSha256": "f2452020f69dc12f439fbf064b127e4181326abcdbf7285de445e3a21269b5d8"
+          "localSha256": "173fa85e1f1838d01eddfbfd42f064fd71ce26c79fe39fcf83da7c3a2d23cca9"
         },
         {
           "upstreamPath": "packages/coding-agent/src/rpc-entry.ts",
@@ -1313,7 +1313,7 @@
           "upstreamSha256": "58ed735743eb5f6889d26fb4c9c7ef21f7b9a5e3472e0455e83558251220e5f0",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/utils/version-check.ts",
-          "localSha256": "450c9a265ad14261de2b85219c2a0db6992151bbee3eaa21f0a745f384dcda6d"
+          "localSha256": "e8fd7796736955a869ed5abf0f542cac0f9dd309a9f56cd3acc7a9a0d722b96f"
         },
         {
           "upstreamPath": "packages/coding-agent/src/utils/windows-self-update.ts",
@@ -1939,9 +1939,9 @@
         {
           "upstreamPath": "packages/coding-agent/test/interactive-mode-suspend.test.ts",
           "upstreamSha256": "a98127e3c150d941cb452159b64526919c27760020226253be987ceb6522bd93",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/test/interactive-mode-suspend.test.ts",
-          "localSha256": "a98127e3c150d941cb452159b64526919c27760020226253be987ceb6522bd93"
+          "localSha256": "74ead51a401a42544e03a85889ccdc0d7fbf8c212b7d1a12f438bf72aee1f4f5"
         },
         {
           "upstreamPath": "packages/coding-agent/test/keybindings-migration.test.ts",
@@ -2025,7 +2025,7 @@
           "upstreamSha256": "2f85736135e0f712254475d842cc47568f78deb7cd5d9690feffd7174683fbe9",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/test/package-command-paths.test.ts",
-          "localSha256": "7e4406caa10add9b247eefb15ad7ff33bd57e945a618b795291638bfc02f1006"
+          "localSha256": "58ac1d8b8967f3c82e3508e9c5ae6dd8e4eff56fb010ec243c18db6a755ea405"
         },
         {
           "upstreamPath": "packages/coding-agent/test/package-manager-ssh.test.ts",
@@ -2858,7 +2858,7 @@
           "upstreamSha256": "4ef737cc3ecdf6f9eef462608694583431356f9f817238d2af91bfd6e8ac05bb",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/test/version-check.test.ts",
-          "localSha256": "32d0d77a8945d37b91955852ad22ab1be729af845ba7cb9cf4ec9bae24c1aa51"
+          "localSha256": "99e86712ac1828a503c67a17ab491a7769602d2b1cdcc4282f30b2f13582ca29"
         }
       ]
     },
@@ -4119,7 +4119,7 @@
       "upstreamSha256": "1f989e989a1d4ebd835aa4b09ab0b08d9a2df73648c3d2cea99c4e075308d2b1",
       "disposition": "retained_modified",
       "localPath": "packages/coding-agent/src/core/oauth/anthropic.ts",
-      "localSha256": "41858aa7bc6937f2ed8f5efb5852968d6dd66d2312f4217d3ae2fdc06bef1f11"
+      "localSha256": "e2413359a1891cc80fac22277d21d2f55cbee44d1452fa3965db03a55c00c483"
     },
     {
       "upstreamPath": "packages/ai/src/auth/oauth/device-code.ts",
@@ -4167,9 +4167,9 @@
     {
       "upstreamPath": "packages/ai/src/auth/oauth/pkce.ts",
       "upstreamSha256": "33835111577490103dbb7509b7687db1643691d7b425845428f3cbeb873fe9cf",
-      "disposition": "retained_unchanged",
+      "disposition": "retained_modified",
       "localPath": "packages/coding-agent/src/core/oauth/pkce.ts",
-      "localSha256": "33835111577490103dbb7509b7687db1643691d7b425845428f3cbeb873fe9cf"
+      "localSha256": "df12e6b732c94f29db355d0342dfd52f500c45a8117709cde1ca58feb0206b77"
     },
     {
       "upstreamPath": "packages/ai/src/auth/oauth/radius.ts",
@@ -4865,7 +4865,7 @@
     },
     {
       "localPath": "packages/coding-agent/src/disco/skills/verify-repo-skill/scripts/with_import_lock.mjs",
-      "localSha256": "16bb2ca0ae9a56d1ba1644665cb99a7d97fe76ef55a3588c58c7b667c04ad935",
+      "localSha256": "6ae907234921e2eae41276b176fd8430e796fbc7a98e2a723a35eae009f69a44",
       "origin": "disco_owned"
     },
     {
@@ -4895,7 +4895,7 @@
     },
     {
       "localPath": "packages/coding-agent/src/utils/managed-install.ts",
-      "localSha256": "78f87f197ebf04259038c36f6073d345aae10bb5ee3c0367955ad75ec542e31f",
+      "localSha256": "f04483b6f9e6bd0ca5be88c31c716cd3722d177c12b5e3bb9fa86ecf25c1a516",
       "origin": "disco_owned"
     },
     {

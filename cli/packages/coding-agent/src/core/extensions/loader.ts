@@ -61,8 +61,9 @@ const VIRTUAL_MODULES: Record<string, unknown> = {
 	"@earendil-works/pi-ai/compat": _bundledPiAiCompat,
 	"@earendil-works/pi-ai/oauth": _bundledPiAiOauth,
 	"@earendil-works/pi-ai/providers/all": _bundledPiAiProviders,
+	"ocsid": _bundledPiCodingAgent,
 	"@arex-skill/disco": _bundledPiCodingAgent,
-	// Keep the old package name as a compatibility alias; it is not an npm dependency.
+	// Keep the old package names as compatibility aliases; they are not npm dependencies.
 	"@auto-ml-skills/disco": _bundledPiCodingAgent,
 	"@earendil-works/pi-coding-agent": _bundledPiCodingAgent,
 	"@mariozechner/pi-agent-core": _bundledPiAgentCore,
@@ -115,8 +116,9 @@ function getAliases(): Record<string, string> {
 	);
 
 	_aliases = {
+		"ocsid": piCodingAgentEntry,
 		"@arex-skill/disco": piCodingAgentEntry,
-		// Keep the old package name as a compatibility alias to this package's internal SDK entry.
+		// Keep the old package names as compatibility aliases to this package's internal SDK entry.
 		"@auto-ml-skills/disco": piCodingAgentEntry,
 		"@earendil-works/pi-coding-agent": piCodingAgentEntry,
 		"@earendil-works/pi-agent-core": piAgentCoreEntry,

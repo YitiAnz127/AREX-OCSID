@@ -40,13 +40,84 @@ expand_tilde() {
 		"~")
 			printf '%s\n' "${HOME:?}"
 			;;
-		~/*)
-			printf '%s/%s\n' "${HOME:?}" "${path#~/}"
+		"~/"*)
+			printf '%s/%s\n' "${HOME:?}" "${path#\~/}"
 			;;
 		*)
 			printf '%s\n' "$path"
 			;;
 	esac
+}
+
+# Resolve "." and ".." segments and strip trailing separators lexically. This is
+# a pure string transform with no filesystem access, so it cannot resolve
+# symlinks: `canonicalize_path` below resolves the existing prefix first and the
+# guards then compare those results. Staying lexical keeps it portable, since
+# `realpath -m` is GNU-only and `readlink -f` is unavailable on older macOS.
+normalize_path() {
+	local path="$1"
+	local segment
+	local -a parts=()
+	local IFS=/
+
+	for segment in $path; do
+		case "$segment" in
+			"" | ".")
+				;;
+			"..")
+				if [[ "${#parts[@]}" -gt 0 ]]; then
+					parts=("${parts[@]:0:${#parts[@]}-1}")
+				fi
+				;;
+			*)
+				parts+=("$segment")
+				;;
+		esac
+	done
+
+	if [[ "${#parts[@]}" -eq 0 ]]; then
+		printf '/\n'
+		return
+	fi
+
+	local result=""
+	for segment in "${parts[@]}"; do
+		result="$result/$segment"
+	done
+	printf '%s\n' "$result"
+}
+
+# Return an absolute, normalized form of a possibly relative path.
+absolute_path() {
+	local path="$1"
+	case "$path" in
+		/* | [A-Za-z]:[\\/]*) printf '%s\n' "$path" ;;
+		*) printf '%s/%s\n' "$(pwd -P)" "$path" ;;
+	esac
+}
+
+# Resolve symlinks in the deepest existing portion of an absolute path and
+# re-append the part that does not exist yet. `normalize_path` is a pure string
+# transform, so on its own it cannot see that "$HOME/link/etc" with `link -> /`
+# really names /etc — and `rm -rf` follows symlinks in parent components.
+# Resolving the existing prefix is what makes the guards below compare real
+# locations. `realpath -m` would do this in one step but is GNU-only, and
+# `readlink -f` is absent on older macOS.
+canonicalize_path() {
+	local path="$1"
+	local tail=""
+	local base="$path"
+	while [[ ! -e "$base" && "$base" != "/" ]]; do
+		tail="/$(basename "$base")$tail"
+		base="$(dirname "$base")"
+	done
+	if [[ -e "$base" ]]; then
+		local resolved
+		resolved="$(cd "$base" && pwd -P)" || resolved="$base"
+		printf '%s\n' "${resolved}${tail}"
+	else
+		printf '%s\n' "$path"
+	fi
 }
 
 force=0
@@ -81,14 +152,35 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ -n "${HOME:-}" ]] || die "HOME is not set"
-disco_dir="$(expand_tilde "$disco_dir")"
+home_dir="$(normalize_path "$(canonicalize_path "$(absolute_path "$HOME")")")"
+disco_dir="$(normalize_path "$(canonicalize_path "$(absolute_path "$(expand_tilde "$disco_dir")")")")"
 agent_dir="$disco_dir/agent"
 skills_dir="$agent_dir/skills"
 preserved_names=(auth.json settings.json models.json)
 
+# Compare the target after normalization so equivalent spellings of the same
+# directory ("$HOME/", "$HOME//", "$HOME/.", "$HOME/sub/..") cannot slip past the
+# guard and turn the `rm -rf` below into a home-directory wipe.
 case "$disco_dir" in
-	"" | "/" | "$HOME")
+	"" | "/" | "$home_dir")
 		die "refusing to reset unsafe path: $disco_dir"
+		;;
+esac
+
+# Refuse an ancestor of HOME (e.g. /home or /): removing it would take the
+# user's home directory and unrelated data with it.
+case "$home_dir/" in
+	"$disco_dir"/*)
+		die "refusing to reset a directory that contains HOME: $disco_dir"
+		;;
+esac
+
+# Refuse a top-level system directory. This is an explicit list rather than a
+# "must be at least two levels deep" rule, because with HOME=/ the legitimate
+# reset target is /.disco — a direct child of the root.
+case "$disco_dir" in
+	/etc | /usr | /var | /bin | /sbin | /lib | /lib64 | /libexec | /boot | /dev | /proc | /sys | /opt | /root | /home | /srv | /run | /media | /mnt | /tmp)
+		die "refusing to reset a top-level system directory: $disco_dir"
 		;;
 esac
 

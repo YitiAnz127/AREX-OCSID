@@ -9,13 +9,24 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+# NOTE: This installer installs the published upstream package
+# "@arex-skill/disco". It does NOT install the local `ocsid` CLI build from the
+# arex-test repo, because `ocsid` is not published to npm yet. To run the local
+# build, use the cli/ directory directly (npm install && npm run build && npm link).
 $PackageName = "@arex-skill/disco"
 $MinimumNodeVersion = [version]"22.19.0"
 $DefaultNodeVersion = "22.19.0"
 $DefaultInstallerUrl = "https://github.com/VectorSpaceLab/AREX-Skill/releases/latest/download/install-disco.ps1"
 $AgentDir = if ($env:DISCO_CODING_AGENT_DIR) { $env:DISCO_CODING_AGENT_DIR } else { Join-Path $env:USERPROFILE ".disco\agent" }
 $AgentDir = [Environment]::ExpandEnvironmentVariables($AgentDir)
-if ($AgentDir.StartsWith("~")) { $AgentDir = Join-Path $env:USERPROFILE $AgentDir.Substring(2) }
+# Only "~" and "~/" (or "~\") are home references. Matching a bare StartsWith("~")
+# and then taking Substring(2) throws ArgumentOutOfRangeException when the value is
+# exactly "~", and silently mangles a path such as "~user".
+if ($AgentDir -eq '~') {
+    $AgentDir = $env:USERPROFILE
+} elseif ($AgentDir.StartsWith('~/') -or $AgentDir.StartsWith('~\')) {
+    $AgentDir = Join-Path $env:USERPROFILE $AgentDir.Substring(2)
+}
 $ManagedRoot = if ($InstallDir) { $InstallDir } elseif ($env:DISCO_INSTALL_DIR) { $env:DISCO_INSTALL_DIR } else { Join-Path $AgentDir "install" }
 $ManagedRoot = [IO.Path]::GetFullPath($ManagedRoot)
 $rootPath = [IO.Path]::GetPathRoot($ManagedRoot)
