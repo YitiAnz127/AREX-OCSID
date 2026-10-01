@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -103,7 +103,7 @@ async function writeInputs(root: string, withLegacyMetadata = false): Promise<{ 
 	await writeFile(
 		assignments,
 		[
-			JSON.stringify({ repo_id: "owner/alpha", ...alphaAssignments[0], confidence: "high" }),
+			JSON.stringify({ repo_id: "owner/alpha", ...alphaAssignments[0], confidence: "high", confidence_basis: "materialized-unpinned" }),
 			JSON.stringify({ repo_id: "owner/alpha", ...alphaAssignments[1], confidence: "medium" }),
 			JSON.stringify({ repo_id: "owner/beta", ...betaAssignments[0], confidence: "high" }),
 		].join("\n") + "\n",
@@ -151,6 +151,7 @@ describe("build_repo_skills_collection.mjs", () => {
 		const assignmentIndex = await readFile(path.join(fixture.output, "repo-skills-router", "references", "index", "assignments.jsonl"), "utf8");
 		expect(assignmentIndex).toContain('"legacy_repo_id":"batch_0/alpha"');
 		expect(assignmentIndex).toContain('"confidence":"medium"');
+		expect(assignmentIndex).toContain('"confidence_basis":"materialized-unpinned"');
 			expect(await readFile(path.join(fixture.output, "repo-skills-router", "references", "families", "scientific-computing", "molecular-informatics.md"), "utf8")).toContain("repo-skills/alpha-repo/SKILL.md");
 	});
 
@@ -199,7 +200,9 @@ describe("build_repo_skills_collection.mjs", () => {
 		cleanup.push(root);
 		const fixture = await writeInputs(root);
 		const leakedFile = path.join(root, "checkout", "skills", "disco", "alpha-source", "references", "leaked-env.md");
-		await writeFile(leakedFile, `Inspection prefix: ${path.join(process.env.HOME ?? "", ".disco", "agent", "envs", "alpha")}\n`, "utf8");
+		// P1-16 (Windows): use os.homedir() — process.env.HOME is undefined on
+		// Windows while the builder (and this test) canonicalize via os.homedir().
+		await writeFile(leakedFile, `Inspection prefix: ${path.join(homedir(), ".disco", "agent", "envs", "alpha")}\n`, "utf8");
 
 		const result = spawnSync(process.execPath, [scriptPath, ...fixture.args], { encoding: "utf8" });
 		expect(result.status).toBe(2);

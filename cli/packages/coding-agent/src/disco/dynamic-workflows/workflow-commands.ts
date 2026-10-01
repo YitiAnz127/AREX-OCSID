@@ -211,13 +211,31 @@ export function registerWorkflowCommands(
 				}
 				case "resume": {
 					if (!id) return ctx.ui.notify(USAGE, "warning");
-					const ok = await manager.resume(id);
+					// `id` is raw user input, and resume reaches the persistence layer
+					// (load + acquireRunLease), which rejects an unsafe runId by throwing.
+					// Surface that as a notification instead of letting it escape the
+					// command handler as an unhandled rejection.
+					let ok = false;
+					try {
+						ok = await manager.resume(id);
+					} catch (error) {
+						ctx.ui.notify(error instanceof Error ? error.message : String(error), "error");
+						return;
+					}
 					ctx.ui.notify(ok ? `Resumed ${id}` : `Resume not available for ${id} yet`, ok ? "info" : "warning");
 					return;
 				}
 				case "rm": {
 					if (!id) return ctx.ui.notify(USAGE, "warning");
-					ctx.ui.notify(manager.deleteRun(id) ? `Removed ${id}` : `No run ${id}`, "info");
+					// Same as `resume`: persistence.delete() throws on an unsafe runId.
+					let removed = false;
+					try {
+						removed = manager.deleteRun(id);
+					} catch (error) {
+						ctx.ui.notify(error instanceof Error ? error.message : String(error), "error");
+						return;
+					}
+					ctx.ui.notify(removed ? `Removed ${id}` : `No run ${id}`, "info");
 					return;
 				}
 				case "save": {

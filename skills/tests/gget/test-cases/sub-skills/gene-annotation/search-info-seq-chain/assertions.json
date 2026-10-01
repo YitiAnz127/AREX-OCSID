@@ -1,0 +1,22 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "gene-annotation",
+  "target_capability": "search-info-seq-identifier-chain",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "sub-skills/gene-annotation/SKILL.md",
+    "sub-skills/gene-annotation/references/api.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/gene-annotation/SKILL.md",
+    "sub-skills/gene-annotation/references/api.md",
+    "sub-skills/gene-annotation/references/workflows.md"
+  ],
+  "assertions": [
+    "The response routes to the gene-annotation sub-skill for identifier-centered Ensembl work.",
+    "The response uses gget.search(\"ace2\", species=\"homo_sapiens\", limit=5) to discover the Ensembl ID as documented in the gene-annotation fast path.",
+    "The response uses gget.info(id, ncbi=False, pdb=False) to inspect object_type, canonical_transcript, and biotype.",
+    "The response uses gget.seq(id, translate=True) for the UniProt protein sequence and describes the return as a FASTA-line Python list.",
+    "The response does not direct the user to the original gget source repository checkout."
+  ]
+}

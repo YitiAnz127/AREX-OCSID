@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import { type SpawnSyncReturns, spawnSync } from "child_process";
-import { chmodSync, createWriteStream, existsSync, mkdirSync, readdirSync, renameSync, rmSync } from "fs";
+import { chmodSync, createWriteStream, existsSync, mkdirSync, readdirSync, realpathSync, renameSync, rmSync } from "fs";
 import { arch, platform } from "os";
-import { join } from "path";
+import { join, sep } from "path";
 import { Readable } from "stream";
 import { pipeline } from "stream/promises";
 import { APP_NAME, getBinDir } from "../config.ts";
@@ -134,6 +134,48 @@ async function downloadFile(url: string, dest: string): Promise<void> {
 
 	const fileStream = createWriteStream(dest);
 	await pipeline(Readable.fromWeb(response.body as any), fileStream);
+}
+
+/**
+ * Verify the extracted tree holds only real files and directories, all inside
+ * `extractDir`.
+ *
+ * The extractor itself is the primary defence — GNU/BSD tar, Info-ZIP unzip and
+ * .NET's Expand-Archive all refuse `..`/absolute members by default — but this
+ * code shells out to whichever of those is on PATH and takes the first that
+ * exits 0, so the guarantee is a property of the host, not of this program. This
+ * check is the backstop: it runs before the located binary is renamed into place
+ * and made executable, so a traversal member that did slip through cannot become
+ * the `rg`/`fd` the agent then runs.
+ */
+export function assertExtractedTreeContained(extractDir: string): void {
+	const rootReal = realpathSync(extractDir);
+	const stack: string[] = [rootReal];
+
+	while (stack.length > 0) {
+		const currentDir = stack.pop();
+		if (!currentDir) continue;
+
+		for (const entry of readdirSync(currentDir, { withFileTypes: true })) {
+			const fullPath = join(currentDir, entry.name);
+			if (entry.isSymbolicLink()) {
+				throw new Error(`Extracted archive contains a symlink (${fullPath}); refusing to use it`);
+			}
+			if (entry.isDirectory()) {
+				stack.push(fullPath);
+				continue;
+			}
+			if (!entry.isFile()) {
+				throw new Error(`Extracted archive contains a non-regular file (${fullPath}); refusing to use it`);
+			}
+			// A directory symlink would be reported above, but a realpath compare
+			// also catches a mount/bind that resolves outside the tree.
+			const real = realpathSync(fullPath);
+			if (real !== rootReal && !real.startsWith(rootReal + sep)) {
+				throw new Error(`Extracted archive member escapes ${extractDir} (${fullPath} -> ${real})`);
+			}
+		}
+	}
 }
 
 function findBinaryRecursively(rootDir: string, binaryFileName: string): string | null {
@@ -284,6 +326,9 @@ async function downloadTool(tool: "fd" | "rg"): Promise<string> {
 		} else {
 			throw new Error(`Unsupported archive format: ${assetName}`);
 		}
+
+		// Validate the tree before anything from it is renamed into place.
+		assertExtractedTreeContained(extractDir);
 
 		// Find the binary in extracted files. Some archives contain files directly
 		// at root, others nest under a versioned subdirectory.

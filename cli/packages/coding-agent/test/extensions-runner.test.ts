@@ -1001,4 +1001,54 @@ describe("ExtensionRunner", () => {
 			expect(errors[0].error).toContain("header handler boom");
 		});
 	});
+
+	describe("tool_call fail-closed", () => {
+		it("blocks the tool when a tool_call handler throws (fail-safe contract)", async () => {
+			const extCode = `
+				export default function(pi) {
+					pi.on("tool_call", () => {
+						throw new Error("security gate boom");
+					});
+				}
+			`;
+			fs.writeFileSync(path.join(extensionsDir, "block.ts"), extCode);
+			const result = await discoverAndLoadExtensions([], tempDir, tempDir);
+			const runner = new ExtensionRunner(result.extensions, result.runtime, tempDir, sessionManager, modelRegistry);
+			const errors: Array<{ event: string; error: string }> = [];
+			runner.onError((err) => errors.push(err));
+
+			await expect(
+				runner.emitToolCall({
+					type: "tool_call",
+					toolName: "bash",
+					toolCallId: "call-1",
+					input: { command: "rm -rf /" },
+				}),
+			).rejects.toThrow("security gate boom");
+
+			// The error is recorded AND propagated so the caller can block.
+			expect(errors).toHaveLength(1);
+			expect(errors[0].event).toBe("tool_call");
+			expect(errors[0].error).toContain("security gate boom");
+		});
+
+		it("lets a healthy tool_call handler return a block result without throwing", async () => {
+			const extCode = `
+				export default function(pi) {
+					pi.on("tool_call", () => ({ block: true, reason: "Blocked by policy" }));
+				}
+			`;
+			fs.writeFileSync(path.join(extensionsDir, "block-result.ts"), extCode);
+			const result = await discoverAndLoadExtensions([], tempDir, tempDir);
+			const runner = new ExtensionRunner(result.extensions, result.runtime, tempDir, sessionManager, modelRegistry);
+
+			const res = await runner.emitToolCall({
+				type: "tool_call",
+				toolName: "bash",
+				toolCallId: "call-2",
+				input: { command: "dangerous" },
+			});
+			expect(res).toEqual({ block: true, reason: "Blocked by policy" });
+		});
+	});
 });

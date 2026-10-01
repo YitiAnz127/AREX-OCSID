@@ -1,0 +1,92 @@
+# Linux test environment for the coding-agent suite.
+#
+# Windows runs of this suite always report ~30 failures (config, managed-install,
+# package-*, trust-*, sdk-session-manager, footer-width, model-selector, and the
+# `edit tool` EACCES pair). Those are platform artifacts, not defects — verified
+# by running the same suite here, where they pass. This image exists so that
+# "is this failure real?" has a cheap, repeatable answer.
+#
+# ---------------------------------------------------------------------------
+# BUILD (from cli/)
+#   docker build -t arex-test:linux -f Dockerfile.test-linux .
+#
+# RUN (from the REPOSITORY ROOT — all three mounts are required)
+#   docker run --rm \
+#     -v "$PWD/cli:/src:ro" \
+#     -v "$PWD/skills:/skills:ro" \
+#     -v "$PWD/docs:/docs:ro" \
+#     -v arex-work:/work \
+#     arex-test:linux bash -lc '
+#       cd /work
+#       tar -C /src --exclude=node_modules --exclude=dist --exclude=.git -cf - . | tar -C /work -xf -
+#       [ -d node_modules ] || npm ci --no-audit --no-fund
+#       npm test'
+#
+# ---------------------------------------------------------------------------
+# WHY EACH PIECE IS HERE
+#
+# * skills/ and docs/ must be mounted. Several tests resolve the REPO ROOT as
+#   five levels up from src/audit (audit.loader.test.ts:12), which inside this
+#   layout is "/". Without those mounts, ~17 benchmark tests fail on missing
+#   fixtures — that is a mount mistake, not a code failure.
+#
+# * node_modules is deliberately NOT bind-mounted. The host tree carries
+#   Windows-only binaries (e.g. @rolldown/binding-win32-x64-msvc) and installing
+#   over it would clobber the developer's local setup. The source is copied into
+#   a named volume instead, so Linux deps live there and are reused across runs.
+#
+# * fd comes from the pinned release below, NOT from Debian's fd-find package.
+#   Debian ships fd 8.6, and `find` needs `--no-require-git` (fd >= 9) for all
+#   .gitignore handling — on 8.x the tool degrades to listing ignored files and
+#   emits a notice, and three regression tests fail. Installing 10.x restores
+#   the real behaviour.
+#
+# * ripgrep is present because tools-manager.getToolPath falls back to PATH; fd
+#   is found either as `fd` or via `systemBinaryNames: ["fd", "fdfind"]`.
+#   vitest.config.ts forces DISCO_OFFLINE=1, so neither tool can ever be
+#   downloaded at test time — they must already be on PATH.
+#
+# * python3 is used by parts of the repo's tooling that the tests shell out to.
+#
+# ---------------------------------------------------------------------------
+# EXPECTED RESULT
+#   Test Files  ~252 passed (261)
+#   Tests       ~2250 passed, 51 skipped
+#
+# Two known false failures remain: test/clipboard-image.test.ts ("Non-Wayland"
+# cases). Docker Desktop on Windows runs containers in a WSL2 VM, so
+# /proc/version contains "microsoft" and isWSL() returns true even though the
+# tests pass `env: {}`. On genuine Linux (CI, a Linux host) those pass too, so a
+# run here should be expected to show exactly those two.
+
+FROM node:24-slim
+
+ARG FD_VERSION=10.2.0
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+      ripgrep \
+      git \
+      python3 \
+      ca-certificates \
+      curl; \
+    rm -rf /var/lib/apt/lists/*
+
+# Pinned fd release, selected per target architecture.
+ARG TARGETARCH
+RUN set -eux; \
+    case "${TARGETARCH}" in \
+      amd64) FD_ARCH=x86_64-unknown-linux-gnu ;; \
+      arm64) FD_ARCH=aarch64-unknown-linux-gnu ;; \
+      *) echo "unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac; \
+    curl -fsSL "https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-${FD_ARCH}.tar.gz" -o /tmp/fd.tgz; \
+    tar -xzf /tmp/fd.tgz -C /tmp; \
+    install -m 0755 "/tmp/fd-v${FD_VERSION}-${FD_ARCH}/fd" /usr/local/bin/fd; \
+    rm -rf /tmp/fd.tgz "/tmp/fd-v${FD_VERSION}-${FD_ARCH}"; \
+    fd --version; \
+    rg --version; \
+    python3 -V
+
+WORKDIR /work

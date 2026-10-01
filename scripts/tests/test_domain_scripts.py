@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import subprocess
 import sys
 import tempfile
@@ -92,6 +93,43 @@ class DomainScriptTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue((Path(output_dir) / "references" / "index" / "taxonomy.json").is_file())
         self.assertEqual(LIVE_INDEX.stat().st_mtime_ns, before.st_mtime_ns)
+
+    def test_build_metadata_uses_key_sorted_serialization_with_consistent_digests(self) -> None:
+        """Locks the cross-language contract with update_repo_skills_router.mjs.
+
+        build-metadata.json MUST serialize keys in sorted order (stable_json_sorted),
+        matching the mjs stableJsonValue, and its two *_sha256 digests MUST be the
+        sha256 of the exact repositories.jsonl / assignments.jsonl bytes written.
+        This is what keeps the Python twin byte-identical to the upstream mjs so the
+        two generators never report each other stale.
+
+        Note: key sorting is meaningful here because build-metadata's source dict is
+        written in non-sorted insertion order below (schema_version first, ...), so a
+        plain insertion-order dump would differ from key-sorted.
+        """
+        with tempfile.TemporaryDirectory() as output_dir:
+            result = subprocess.run(
+                [sys.executable, str(REBUILD), "--output-dir", output_dir],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            index = Path(output_dir) / "references" / "index"
+            metadata = json.loads((index / "build-metadata.json").read_text(encoding="utf-8"))
+
+            # Keys must appear in sorted (code-point) order, like mjs stableJsonValue.
+            keys = list(metadata.keys())
+            self.assertEqual(keys, sorted(keys))
+
+            # The declared digests must re-hash the actual written index files.
+            repo_bytes = (index / "repositories.jsonl").read_bytes()
+            assign_bytes = (index / "assignments.jsonl").read_bytes()
+            self.assertEqual(metadata["repository_index_sha256"], "sha256:" + hashlib.sha256(repo_bytes).hexdigest())
+            self.assertEqual(metadata["assignment_index_sha256"], "sha256:" + hashlib.sha256(assign_bytes).hexdigest())
+
 
     def test_import_dry_run_uses_explicit_source_root_and_reports_count(self) -> None:
         with tempfile.TemporaryDirectory() as source_dir:

@@ -346,11 +346,21 @@ describe("SettingsManager", () => {
 			expect(manager.getHttpIdleTimeoutMs()).toBe(0);
 		});
 
-		it("should reject invalid timeout values", () => {
+		it("degrades an invalid timeout value to the default instead of throwing", () => {
+			// This getter runs unguarded during session bring-up (interactive-mode,
+			// sdk, main), so a hand-edited or corrupted settings.json must not crash
+			// startup. Invalid values now degrade to the documented default, like
+			// every other setting. (The previous contract was to throw, which is what
+			// a corrupted file would have done.)
 			writeFileSync(join(agentDir, "settings.json"), JSON.stringify({ httpIdleTimeoutMs: -1 }));
-			const manager = SettingsManager.create(projectDir, agentDir);
+			const negative = SettingsManager.create(projectDir, agentDir);
+			expect(() => negative.getHttpIdleTimeoutMs()).not.toThrow();
+			expect(negative.getHttpIdleTimeoutMs()).toBe(DEFAULT_HTTP_IDLE_TIMEOUT_MS);
 
-			expect(() => manager.getHttpIdleTimeoutMs()).toThrow("Invalid httpIdleTimeoutMs setting");
+			writeFileSync(join(agentDir, "settings.json"), JSON.stringify({ httpIdleTimeoutMs: "abc" }));
+			const nonNumeric = SettingsManager.create(projectDir, agentDir);
+			expect(() => nonNumeric.getHttpIdleTimeoutMs()).not.toThrow();
+			expect(nonNumeric.getHttpIdleTimeoutMs()).toBe(DEFAULT_HTTP_IDLE_TIMEOUT_MS);
 		});
 	});
 

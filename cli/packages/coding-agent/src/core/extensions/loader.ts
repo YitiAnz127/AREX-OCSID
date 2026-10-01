@@ -644,8 +644,14 @@ function resolveExtensionEntries(dir: string): string[] | null {
  * 3. Subdirectory with package.json: `extensions/* /package.json` with a DisCo/legacy Pi manifest
  *
  * No recursion beyond one level. Complex packages must use package.json manifest.
+ *
+ * Symlink entries are deliberately skipped. A symlink inside the extensions
+ * directory could point outside the workspace (e.g. `evil.ts -> /home/user/virus.mjs`)
+ * and would otherwise be loaded and executed — arbitrary code execution. Mirroring
+ * the skill-manager's symlink-rejection policy (collectPortableFiles/listLiveSkillTrees),
+ * we only ever load real files and real directories. (P0-02 containment.)
  */
-function discoverExtensionsInDir(dir: string): string[] {
+export function discoverExtensionsInDir(dir: string): string[] {
 	if (!fs.existsSync(dir)) {
 		return [];
 	}
@@ -658,14 +664,20 @@ function discoverExtensionsInDir(dir: string): string[] {
 		for (const entry of entries) {
 			const entryPath = path.join(dir, entry.name);
 
+			// Symlinks are never loaded (see doc comment above) — closing the
+			// symlink-escape RCE entry point before any execution can happen.
+			if (entry.isSymbolicLink()) {
+				continue;
+			}
+
 			// 1. Direct files: *.ts or *.js
-			if ((entry.isFile() || entry.isSymbolicLink()) && isExtensionFile(entry.name)) {
+			if (entry.isFile() && isExtensionFile(entry.name)) {
 				discovered.push(entryPath);
 				continue;
 			}
 
 			// 2 & 3. Subdirectories
-			if (entry.isDirectory() || entry.isSymbolicLink()) {
+			if (entry.isDirectory()) {
 				const entries = resolveExtensionEntries(entryPath);
 				if (entries) {
 					discovered.push(...entries);

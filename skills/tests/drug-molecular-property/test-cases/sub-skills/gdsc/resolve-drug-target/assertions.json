@@ -1,0 +1,20 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "gdsc",
+  "target_capability": "query-gdsc-drug-target-lookup",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "SKILL.md",
+    "sub-skills/gdsc/SKILL.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/gdsc/SKILL.md"
+  ],
+  "assertions": [
+    "The response routes to the gdsc sub-skill of drug-molecular-property for a GDSC drug-target lookup.",
+    "The response uses the documented query_gdsc(\"Erlotinib\") Python API from sub-skills/gdsc/SKILL.md.",
+    "The response reports the screened-compounds match with TARGET EGFR and TARGET_PATHWAY EGFR signaling as documented in the gdsc LLM integration example.",
+    "The response describes the JSON return format (source, match_count, matches) from the gdsc SKILL.md return-format block.",
+    "The response does not instruct the user to open files from the original DrugClaw/drug_molecular_property checkout."
+  ]
+}

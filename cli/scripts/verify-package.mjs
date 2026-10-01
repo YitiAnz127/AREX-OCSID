@@ -281,8 +281,24 @@ try {
 		"RpcClient default CLI path must resolve inside the installed DisCo package",
 	);
 
-	const systemPromptModule = await import(`${pathToFileURL(join(packageRoot, "dist", "core", "system-prompt.js")).href}?verify=${Date.now()}`);
+const systemPromptModule = await import(`${pathToFileURL(join(packageRoot, "dist", "core", "system-prompt.js")).href}?verify=${Date.now()}`);
 	const prompt = systemPromptModule.buildSystemPrompt({ cwd: packageRoot });
+
+	// BUG-P1-01: ESM build smoke test — the whole point of dist/benchmark/schema.js
+	// is that it must import and run as ESM (no hidden `require("node:crypto")`
+	// left behind that would throw `ReferenceError: require is not defined`).
+	const benchmarkSchemaModule = await import(
+		`${pathToFileURL(join(packageRoot, "dist", "benchmark", "schema.js")).href}?verify=${Date.now()}`
+	);
+	const buildManifest = benchmarkSchemaModule.buildManifest;
+	check(typeof buildManifest === "function", "dist/benchmark/schema.js must export buildManifest");
+	if (typeof buildManifest === "function") {
+		const smoke = buildManifest("smoke", "2026-01-01T00:00:00Z", [{ skillId: "alpha", split: "train" }]);
+		check(smoke.schema === "disco.benchmark.v1", "built schema.js buildManifest returned the wrong schema id");
+		check(Array.isArray(smoke.splits.train) && smoke.splits.train.includes("alpha"), "built schema.js did not bucket the train split");
+		check(/^[0-9a-f]{64}$/u.test(smoke.splitHash), "built schema.js computed a non-sha256 splitHash");
+	}
+
 	const pathMatches = [
 		/^- Main documentation: (.+)$/mu.exec(prompt)?.[1],
 		/^- Additional docs: (.+)$/mu.exec(prompt)?.[1],

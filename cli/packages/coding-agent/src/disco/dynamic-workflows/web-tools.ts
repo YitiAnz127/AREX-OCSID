@@ -9,6 +9,7 @@
 
 import { Type } from "typebox";
 import { defineTool, type ToolDefinition } from "../../core/extensions/types.ts";
+import { guardedFetch } from "./url-guard.ts";
 
 const UA =
 	"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36";
@@ -17,7 +18,10 @@ async function fetchText(url: string, timeoutMs = 15000): Promise<{ status: numb
 	const controller = new AbortController();
 	const timer = setTimeout(() => controller.abort(), timeoutMs);
 	try {
-		const res = await fetch(url, { headers: { "user-agent": UA }, signal: controller.signal, redirect: "follow" });
+		// guardedFetch validates the URL and every redirect hop (SSRF containment);
+		// redirect: "follow" would let an approved public host bounce the request
+		// to a loopback/private/metadata address.
+		const res = await guardedFetch(url, { headers: { "user-agent": UA }, signal: controller.signal });
 		return { status: res.status, body: await res.text() };
 	} finally {
 		clearTimeout(timer);

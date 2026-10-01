@@ -1,0 +1,3 @@
+I have a CSV of molecules with three binary toxicity endpoints (tox_a, tox_b, tox_c) and I want to train a binary classifier that predicts whether each molecule is toxic on each endpoint. The first column is called "smiles". I'd like to report ROC-AUC, PRC, accuracy and F1, track the best model on mean PRC, and balance the classes so minority classes are not ignored. I'm testing on a laptop, so I want it to run fast on CPU only. Please give me a ready-to-run `chemprop train` command with explicit smiles and target columns.
+
+You can assume chemprop (2.2.x) is installed and python 3.12 is available. Please also tell me which split strategy to use by default and where the trained checkpoint will be written.

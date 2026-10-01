@@ -1,5 +1,6 @@
 import type { AssistantMessage } from "@earendil-works/pi-ai";
 import { Container, Markdown, type MarkdownTheme, Spacer, Text } from "@earendil-works/pi-tui";
+import { sanitizeForDisplay } from "./display-text.ts";
 import { getMarkdownTheme, theme } from "../theme/theme.ts";
 
 const OSC133_ZONE_START = "\x1b]133;A\x07";
@@ -100,7 +101,12 @@ export class AssistantMessageComponent extends Container {
 			if (content.type === "text" && content.text.trim()) {
 				// Assistant text messages with no background - trim the text
 				// Set paddingY=0 to avoid extra spacing before tool executions
-				this.contentContainer.addChild(new Markdown(content.text.trim(), this.outputPad, 0, this.markdownTheme));
+				// Model text is attacker-influenceable (prompt injection from a repo
+				// file). Sanitize before rendering: pi-tui writes rendered strings
+				// straight to stdout, so a raw ESC here is executed by the terminal.
+				this.contentContainer.addChild(
+					new Markdown(sanitizeForDisplay(content.text).trim(), this.outputPad, 0, this.markdownTheme),
+				);
 			} else if (content.type === "thinking") {
 				const thinkingBlocks: string[] = [];
 				for (; i < message.content.length; i++) {
@@ -133,7 +139,7 @@ export class AssistantMessageComponent extends Container {
 				} else {
 					// Render each run of thinking blocks as one Markdown section.
 					this.contentContainer.addChild(
-						new Markdown(thinkingBlocks.join("\n\n"), this.outputPad, 0, this.markdownTheme, {
+						new Markdown(sanitizeForDisplay(thinkingBlocks.join("\n\n")), this.outputPad, 0, this.markdownTheme, {
 							color: (text: string) => theme.fg("thinkingText", text),
 							italic: true,
 						}),

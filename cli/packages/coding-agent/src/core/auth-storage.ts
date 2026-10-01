@@ -4,7 +4,7 @@
  */
 
 import type { Credential, CredentialInfo, CredentialStore } from "@earendil-works/pi-ai";
-import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import lockfile from "proper-lockfile";
 import { getAgentDir } from "../config.ts";
@@ -39,10 +39,23 @@ export class FileAuthStorageBackend implements AuthStorageBackend {
 		}
 	}
 
+	/**
+	 * Write credential/catalog JSON atomically: write to a temp sibling first,
+	 * then rename over the target. `writeFileSync` directly to the final path is
+	 * truncate-then-write, so a crash/power-loss mid-write leaves a partial or
+	 * empty auth.json — silently losing every stored credential on the next
+	 * process start (audit F2). renameSync is atomic on the same filesystem.
+	 */
+	private writeAtomic(content: string): void {
+		const tmpPath = `${this.authPath}.tmp`;
+		writeFileSync(tmpPath, content, AUTH_FILE_WRITE_OPTIONS);
+		chmodSync(tmpPath, 0o600);
+		renameSync(tmpPath, this.authPath);
+	}
+
 	private ensureFileExists(): void {
 		if (!existsSync(this.authPath)) {
-			writeFileSync(this.authPath, "{}", AUTH_FILE_WRITE_OPTIONS);
-			chmodSync(this.authPath, 0o600);
+			this.writeAtomic("{}");
 		}
 	}
 
@@ -83,8 +96,7 @@ export class FileAuthStorageBackend implements AuthStorageBackend {
 			const current = existsSync(this.authPath) ? readFileSync(this.authPath, "utf-8") : undefined;
 			const { result, next } = fn(current);
 			if (next !== undefined) {
-				writeFileSync(this.authPath, next, AUTH_FILE_WRITE_OPTIONS);
-				chmodSync(this.authPath, 0o600);
+				this.writeAtomic(next);
 			}
 			return result;
 		} finally {
@@ -128,8 +140,7 @@ export class FileAuthStorageBackend implements AuthStorageBackend {
 			const { result, next } = await fn(current);
 			throwIfCompromised();
 			if (next !== undefined) {
-				writeFileSync(this.authPath, next, AUTH_FILE_WRITE_OPTIONS);
-				chmodSync(this.authPath, 0o600);
+				this.writeAtomic(next);
 			}
 			throwIfCompromised();
 			return result;

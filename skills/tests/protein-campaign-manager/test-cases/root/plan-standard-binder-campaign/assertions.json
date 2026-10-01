@@ -1,0 +1,21 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "goal-to-pipeline-campaign-planning",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "SKILL.md",
+    "references/capability-map.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response recommends the standard pipeline rfdiffusion -> proteinmpnn -> chai -> protein-qc for a standard miniprotein binder goal.",
+    "The response states ~500 backbones and ~4,000 sequences for a 10-binder campaign, matching the SKILL.md '10 binders' row (500 backbones, 8 sequences/backbone, 4,000 total).",
+    "The response gives the rfdiffusion command including inference.num_designs=500, ppi.hotspot_res, and contigmap.contigs as shown in the SKILL.md complete pipeline generator.",
+    "The response gives the ProteinMPNN loop calling modal_ligandmpnn.py with --params-str \"--number_of_batches 8 --temperature 0.1\" and the grep -c \"^>\" checkpoint expecting ~4000.",
+    "The response reports total time 8-12 hours and cost ~$60-70 for the standard campaign and an expected 10-20 diverse final designs after clustering.",
+    "The response does not reference files from the original protein-design-skills/campaign-manager checkout."
+  ]
+}

@@ -1,0 +1,441 @@
+{
+  "skillCount": 109,
+  "profiles": [
+    {
+      "skillId": "aizynthfinder",
+      "category": "executable"
+    },
+    {
+      "skillId": "alphafold",
+      "category": "executable"
+    },
+    {
+      "skillId": "alphafold2",
+      "category": "executable"
+    },
+    {
+      "skillId": "alphafold3",
+      "category": "executable"
+    },
+    {
+      "skillId": "alphafold3-pytorch",
+      "category": "executable"
+    },
+    {
+      "skillId": "anndata",
+      "category": "executable"
+    },
+    {
+      "skillId": "atomistic-workflows",
+      "category": "workflow"
+    },
+    {
+      "skillId": "bindcraft",
+      "category": "executable"
+    },
+    {
+      "skillId": "binder-design",
+      "category": "reference"
+    },
+    {
+      "skillId": "binding-characterization",
+      "category": "reference"
+    },
+    {
+      "skillId": "biopython",
+      "category": "executable"
+    },
+    {
+      "skillId": "biostatistics",
+      "category": "workflow"
+    },
+    {
+      "skillId": "biotite",
+      "category": "executable"
+    },
+    {
+      "skillId": "boltz",
+      "category": "executable"
+    },
+    {
+      "skillId": "boltzgen",
+      "category": "reference"
+    },
+    {
+      "skillId": "cell-biology",
+      "category": "workflow"
+    },
+    {
+      "skillId": "cell-free-expression",
+      "category": "reference"
+    },
+    {
+      "skillId": "celltypist",
+      "category": "executable"
+    },
+    {
+      "skillId": "chai-lab",
+      "category": "executable"
+    },
+    {
+      "skillId": "chemprop",
+      "category": "executable"
+    },
+    {
+      "skillId": "clawbio",
+      "category": "executable"
+    },
+    {
+      "skillId": "colabfold",
+      "category": "executable"
+    },
+    {
+      "skillId": "compchem-analysis",
+      "category": "workflow"
+    },
+    {
+      "skillId": "compchem-data-processing",
+      "category": "workflow"
+    },
+    {
+      "skillId": "compchem-tools",
+      "category": "workflow"
+    },
+    {
+      "skillId": "coronavirus",
+      "category": "executable"
+    },
+    {
+      "skillId": "datamol",
+      "category": "executable"
+    },
+    {
+      "skillId": "deepchem",
+      "category": "executable"
+    },
+    {
+      "skillId": "deepmd-kit",
+      "category": "workflow"
+    },
+    {
+      "skillId": "deepvariant",
+      "category": "executable"
+    },
+    {
+      "skillId": "dgl-lifesci",
+      "category": "executable"
+    },
+    {
+      "skillId": "diffdock",
+      "category": "executable"
+    },
+    {
+      "skillId": "dive-into-graphs",
+      "category": "executable"
+    },
+    {
+      "skillId": "drug-adr",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-combination",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-ddi",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-disease",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-dti",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-knowledgebase",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-labeling",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-mechanism",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-molecular-property",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-nlp",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-ontology",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-repurposing",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-review",
+      "category": "workflow"
+    },
+    {
+      "skillId": "drug-toxicity",
+      "category": "workflow"
+    },
+    {
+      "skillId": "esm",
+      "category": "executable"
+    },
+    {
+      "skillId": "foldseek",
+      "category": "reference"
+    },
+    {
+      "skillId": "genomics-bioinformatics",
+      "category": "workflow"
+    },
+    {
+      "skillId": "germinal",
+      "category": "reference"
+    },
+    {
+      "skillId": "gget",
+      "category": "executable"
+    },
+    {
+      "skillId": "graphormer",
+      "category": "executable"
+    },
+    {
+      "skillId": "hail",
+      "category": "executable"
+    },
+    {
+      "skillId": "ipsae",
+      "category": "reference"
+    },
+    {
+      "skillId": "lab-automation",
+      "category": "workflow"
+    },
+    {
+      "skillId": "ligandmpnn",
+      "category": "reference"
+    },
+    {
+      "skillId": "machine-learning-potentials",
+      "category": "workflow"
+    },
+    {
+      "skillId": "mattergen",
+      "category": "executable"
+    },
+    {
+      "skillId": "mdanalysis",
+      "category": "executable"
+    },
+    {
+      "skillId": "medical-research-skills",
+      "category": "executable"
+    },
+    {
+      "skillId": "molecular-biology",
+      "category": "workflow"
+    },
+    {
+      "skillId": "molecular-conformer",
+      "category": "workflow"
+    },
+    {
+      "skillId": "molecular-dynamics",
+      "category": "workflow"
+    },
+    {
+      "skillId": "molecular-representation",
+      "category": "workflow"
+    },
+    {
+      "skillId": "molecularnodes",
+      "category": "workflow"
+    },
+    {
+      "skillId": "mosaic",
+      "category": "reference"
+    },
+    {
+      "skillId": "ncbi-genome-download",
+      "category": "executable"
+    },
+    {
+      "skillId": "omega-fold",
+      "category": "executable"
+    },
+    {
+      "skillId": "omicverse",
+      "category": "executable"
+    },
+    {
+      "skillId": "openfe",
+      "category": "executable"
+    },
+    {
+      "skillId": "openfermion",
+      "category": "executable"
+    },
+    {
+      "skillId": "openff-toolkit",
+      "category": "executable"
+    },
+    {
+      "skillId": "openfold",
+      "category": "executable"
+    },
+    {
+      "skillId": "openmm",
+      "category": "executable"
+    },
+    {
+      "skillId": "paddlehelix",
+      "category": "executable"
+    },
+    {
+      "skillId": "pdb-structure",
+      "category": "reference"
+    },
+    {
+      "skillId": "pharmacogenomics",
+      "category": "workflow"
+    },
+    {
+      "skillId": "prolif",
+      "category": "executable"
+    },
+    {
+      "skillId": "protein-campaign-manager",
+      "category": "reference"
+    },
+    {
+      "skillId": "protein-design-setup",
+      "category": "reference"
+    },
+    {
+      "skillId": "protein-design-workflow",
+      "category": "reference"
+    },
+    {
+      "skillId": "protein-mpnn",
+      "category": "workflow"
+    },
+    {
+      "skillId": "protein-qc",
+      "category": "reference"
+    },
+    {
+      "skillId": "protenix",
+      "category": "executable"
+    },
+    {
+      "skillId": "proteomics-protein-engineering",
+      "category": "workflow"
+    },
+    {
+      "skillId": "pycirclize",
+      "category": "executable"
+    },
+    {
+      "skillId": "pydeseq2",
+      "category": "executable"
+    },
+    {
+      "skillId": "pyhealth",
+      "category": "executable"
+    },
+    {
+      "skillId": "pymatgen",
+      "category": "executable"
+    },
+    {
+      "skillId": "pysam",
+      "category": "executable"
+    },
+    {
+      "skillId": "pyscenic",
+      "category": "executable"
+    },
+    {
+      "skillId": "quantum-chemistry",
+      "category": "workflow"
+    },
+    {
+      "skillId": "rdkit",
+      "category": "executable"
+    },
+    {
+      "skillId": "reinvent4",
+      "category": "executable"
+    },
+    {
+      "skillId": "rfdiffusion",
+      "category": "executable"
+    },
+    {
+      "skillId": "sa-prot",
+      "category": "executable"
+    },
+    {
+      "skillId": "scanpy",
+      "category": "executable"
+    },
+    {
+      "skillId": "schnetpack",
+      "category": "executable"
+    },
+    {
+      "skillId": "sciagent-scientific-computing",
+      "category": "workflow"
+    },
+    {
+      "skillId": "scientific-agent-skills",
+      "category": "workflow"
+    },
+    {
+      "skillId": "scikit-bio",
+      "category": "executable"
+    },
+    {
+      "skillId": "scvi-tools",
+      "category": "executable"
+    },
+    {
+      "skillId": "solublempnn",
+      "category": "reference"
+    },
+    {
+      "skillId": "squidpy",
+      "category": "executable"
+    },
+    {
+      "skillId": "structural-biology-drug-discovery",
+      "category": "workflow"
+    },
+    {
+      "skillId": "systems-biology-multiomics",
+      "category": "workflow"
+    },
+    {
+      "skillId": "torchdrug",
+      "category": "executable"
+    },
+    {
+      "skillId": "uniprot",
+      "category": "reference"
+    }
+  ]
+}

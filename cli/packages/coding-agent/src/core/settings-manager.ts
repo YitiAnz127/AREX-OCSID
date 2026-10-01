@@ -1,7 +1,7 @@
 import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
 import type { Transport } from "@earendil-works/pi-ai";
 import { randomUUID } from "crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import lockfile from "proper-lockfile";
 import { CONFIG_DIR_NAME, getAgentDir } from "../config.ts";
@@ -128,46 +128,59 @@ export interface Settings {
 	websocketConnectTimeoutMs?: number; // WebSocket connect/open handshake timeout in milliseconds; 0 disables it
 }
 
-/** Deep merge settings: project/overrides take precedence, nested objects merge recursively */
+/**
+ * Deep merge settings: project/overrides take precedence, nested plain objects
+ * merge recursively (so sibling nested fields survive an override — see audit
+ * H3). Arrays and primitives: the override value always wins.
+ */
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function mergeNested(base: unknown, overrides: unknown): unknown {
+	if (isPlainObject(base) && isPlainObject(overrides)) {
+		const result: Record<string, unknown> = { ...base };
+		for (const key of Object.keys(overrides)) {
+			const overrideValue = overrides[key];
+			if (overrideValue === undefined) continue;
+			result[key] = isPlainObject(result[key])
+				? mergeNested(result[key], overrideValue)
+				: overrideValue;
+		}
+		return result;
+	}
+	return overrides;
+}
+
 function deepMergeSettings(base: Settings, overrides: Settings): Settings {
 	const result: Settings = { ...base };
 
 	for (const key of Object.keys(overrides) as (keyof Settings)[]) {
 		const overrideValue = overrides[key];
-		const baseValue = base[key];
-
 		if (overrideValue === undefined) {
 			continue;
 		}
-
-		// For nested objects, merge recursively
-		if (
-			typeof overrideValue === "object" &&
-			overrideValue !== null &&
-			!Array.isArray(overrideValue) &&
-			typeof baseValue === "object" &&
-			baseValue !== null &&
-			!Array.isArray(baseValue)
-		) {
-			(result as Record<string, unknown>)[key] = { ...baseValue, ...overrideValue };
-		} else {
-			// For primitives and arrays, override value wins
-			(result as Record<string, unknown>)[key] = overrideValue;
-		}
+		(result as Record<string, unknown>)[key] = isPlainObject(result[key])
+			? mergeNested(result[key] as Record<string, unknown>, overrideValue)
+			: overrideValue;
 	}
 
 	return result;
 }
 
-function parseTimeoutSetting(value: unknown, settingName: string): number | undefined {
-	const timeoutMs = parseHttpIdleTimeoutMs(value);
-	if (timeoutMs !== undefined) {
-		return timeoutMs;
-	}
-	if (value !== undefined) {
-		throw new Error(`Invalid ${settingName} setting: ${String(value)}`);
-	}
-	return undefined;
+function parseTimeoutSetting(value: unknown): number | undefined {
+	// Malformed/invalid values must NOT throw: this getter runs unguarded at
+	// session bring-up (interactive-mode.ts:1840, sdk.ts:325, main.ts:860), so a
+	// hand-edited or corrupted settings file would otherwise crash interactive
+	// startup instead of degrading to the documented default (audit H1).
+	return parseHttpIdleTimeoutMs(value);
+}
+
+/** Accept "1"/"true"/"yes" (case-insensitive) for DISCO_* boolean toggles (audit H4). */
+function isTruthyEnvFlag(value: string | undefined): boolean {
+	if (!value) return false;
+	const normalized = value.toLowerCase();
+	return normalized === "1" || normalized === "true" || normalized === "yes";
 }
 
 export type SettingsScope = "global" | "project";
@@ -184,6 +197,14 @@ export interface SettingsError {
 	scope: SettingsScope;
 	error: Error;
 }
+
+/**
+ * Credential-adjacent file modes, matching auth-storage.ts. settings.json is
+ * per-user state that can contain a proxy URL with embedded credentials, and
+ * the directory is shared with auth.json — both stay owner-only on POSIX.
+ */
+const SETTINGS_FILE_MODE = 0o600;
+const SETTINGS_DIR_MODE = 0o700;
 
 export class FileSettingsStorage implements SettingsStorage {
 	private globalSettingsPath: string;
@@ -239,12 +260,25 @@ export class FileSettingsStorage implements SettingsStorage {
 			if (next !== undefined) {
 				// Only create directory when we actually need to write
 				if (!existsSync(dir)) {
-					mkdirSync(dir, { recursive: true });
+					mkdirSync(dir, { recursive: true, mode: SETTINGS_DIR_MODE });
 				}
 				if (!release) {
 					release = this.acquireLockSyncWithRetry(path);
 				}
-				writeFileSync(path, next, "utf-8");
+				// Write atomically (tmp sibling + rename) so a crash/power-loss
+				// mid-write cannot truncate settings.json and silently lose every
+				// user setting on the next start (audit B1). Rename is atomic on the
+				// same filesystem.
+				//
+				// Mode is set explicitly for the same reason auth-storage.ts does it:
+				// settings.json can carry an `httpProxy` URL with embedded user:pass,
+				// and the rename replaces the inode, so a umask-derived 0644 default
+				// would both expose the file to other local users and silently undo
+				// any manual chmod on every subsequent write.
+				const tmpPath = `${path}.tmp`;
+				writeFileSync(tmpPath, next, { encoding: "utf-8", mode: SETTINGS_FILE_MODE });
+				chmodSync(tmpPath, SETTINGS_FILE_MODE);
+				renameSync(tmpPath, path);
 			}
 		} finally {
 			if (release) {
@@ -819,7 +853,7 @@ export class SettingsManager {
 	}
 
 	getHttpIdleTimeoutMs(): number {
-		return parseTimeoutSetting(this.settings.httpIdleTimeoutMs, "httpIdleTimeoutMs") ?? DEFAULT_HTTP_IDLE_TIMEOUT_MS;
+		return parseTimeoutSetting(this.settings.httpIdleTimeoutMs) ?? DEFAULT_HTTP_IDLE_TIMEOUT_MS;
 	}
 
 	setHttpIdleTimeoutMs(timeoutMs: number): void {
@@ -840,7 +874,7 @@ export class SettingsManager {
 	}
 
 	getWebSocketConnectTimeoutMs(): number | undefined {
-		return parseTimeoutSetting(this.settings.websocketConnectTimeoutMs, "websocketConnectTimeoutMs");
+		return parseTimeoutSetting(this.settings.websocketConnectTimeoutMs);
 	}
 
 	getHideThinkingBlock(): boolean {
@@ -1095,7 +1129,7 @@ export class SettingsManager {
 		if (this.settings.terminal?.clearOnShrink !== undefined) {
 			return this.settings.terminal.clearOnShrink;
 		}
-		return process.env.DISCO_CLEAR_ON_SHRINK === "1";
+		return isTruthyEnvFlag(process.env.DISCO_CLEAR_ON_SHRINK);
 	}
 
 	setClearOnShrink(enabled: boolean): void {
@@ -1179,7 +1213,7 @@ export class SettingsManager {
 	}
 
 	getShowHardwareCursor(): boolean {
-		return this.settings.showHardwareCursor ?? process.env.DISCO_HARDWARE_CURSOR === "1";
+		return this.settings.showHardwareCursor ?? isTruthyEnvFlag(process.env.DISCO_HARDWARE_CURSOR);
 	}
 
 	setShowHardwareCursor(enabled: boolean): void {

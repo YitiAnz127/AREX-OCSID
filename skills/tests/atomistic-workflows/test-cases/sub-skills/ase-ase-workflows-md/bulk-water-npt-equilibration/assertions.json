@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "ase-ase-workflows-md",
+  "target_capability": "npt-equilibration-md-workflow",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/ase-ase-workflows-md/SKILL.md",
+    "sub-skills/ase-ase-calculators-mace/SKILL.md",
+    "sub-skills/ase-ase-workflows/references/commands-and-workflow.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/ase-ase-workflows-md/SKILL.md",
+    "sub-skills/ase-ase-calculators-mace/SKILL.md",
+    "sub-skills/ase-ase-workflows/references/commands-and-workflow.md"
+  ],
+  "assertions": [
+    "The response routes the request to the ase-ase-workflows-md sub-skill (finite-temperature trajectory), not static/relax/neb.",
+    "The response produces an ASE MD script with a timestep and a total number of steps and an NPT thermostat/barostat at 300 K / 1 atm.",
+    "The response defines a trajectory/output policy and a checkpoint/restart policy.",
+    "The response configures the MACE calculator on the water box and states the device assumption.",
+    "The response states an explicit initial-velocity policy and lists assumptions/unresolved choices.",
+    "The response does not point the user into the original atomistic-workflows source checkout."
+  ]
+}

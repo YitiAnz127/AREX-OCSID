@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "integration",
+  "target_capability": "chord-from-csv-with-polar-axis-and-legend",
+  "difficulty": "advanced",
+  "evidence_basis": [
+    "sub-skills/data-parsers/references/api-reference.md",
+    "sub-skills/data-parsers/references/data-formats.md",
+    "sub-skills/circular-composition/references/api-reference.md",
+    "SKILL.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/data-parsers/SKILL.md",
+    "sub-skills/circular-composition/SKILL.md",
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response loads the comma-delimited matrix.csv with Matrix(path, delimiter=\",\") and builds Circos.chord_diagram with a per-label cmap mapping, matching the data-parsers api-reference.",
+    "The response renders into a caller-owned polar axes via fig.add_subplot(..., projection=\"polar\") and circos.plotfig(ax=polar_ax), following the api-reference lifecycle rules.",
+    "The response adds the legend through circos.ax after plotfig() and saves the returned Figure, explaining that circos.savefig() writes immediately and does not preserve post-render legend edits.",
+    "The response verifies the exported PNG exists and is non-empty, and keeps the run fully local without network dataset helpers.",
+    "The response correctly crosses the data-parsers and circular-composition routes instead of collapsing the task into one sub-skill."
+  ]
+}

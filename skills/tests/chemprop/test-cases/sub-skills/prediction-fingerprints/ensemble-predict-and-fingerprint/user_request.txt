@@ -1,0 +1,3 @@
+I trained an ensemble and my checkpoint directory contains multiple model files. I want to (1) predict property values for a new test CSV of molecules, letting Chemprop average across the individual models and give me per-model outputs, and (2) also extract the post-aggregation learned representation (before the FFN layers) for the same molecules so I can use them as features in another model.
+
+The test CSV's molecule column is named "smiles". Please give me both a `chemprop predict` command and a `chemprop fingerprint` command, including how the output filenames will be named given that there are multiple models.

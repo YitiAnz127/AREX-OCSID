@@ -12,13 +12,27 @@ import {
 
 describe("OAuth environment isolation", () => {
 	it("uses only the DisCo callback-host variable", () => {
+		// The sentinel must be a loopback literal: getDiscoOAuthCallbackHost
+		// refuses anything else so the OAuth callback cannot be published to the
+		// network. `::1` is distinct from the `127.0.0.1` default, so it still
+		// proves the DisCo variable is honoured rather than ignored.
 		expect(getDiscoOAuthCallbackHost({ PI_OAUTH_CALLBACK_HOST: "pi.internal" })).toBe("127.0.0.1");
 		expect(
 			getDiscoOAuthCallbackHost({
 				PI_OAUTH_CALLBACK_HOST: "pi.internal",
-				DISCO_OAUTH_CALLBACK_HOST: "disco.internal",
+				DISCO_OAUTH_CALLBACK_HOST: "::1",
 			}),
-		).toBe("disco.internal");
+		).toBe("::1");
+	});
+
+	it("refuses a non-loopback callback host before it can be listened on", () => {
+		// Binding 0.0.0.0 does not mean localhost: it accepts the OAuth redirect,
+		// authorization code included, from every interface.
+		for (const host of ["0.0.0.0", "disco.internal", "192.168.1.10"]) {
+			expect(() => getDiscoOAuthCallbackHost({ DISCO_OAUTH_CALLBACK_HOST: host }), host).toThrow(
+				/loopback address/i,
+			);
+		}
 	});
 
 	it("filters every PI_* lookup from provider auth contexts", async () => {

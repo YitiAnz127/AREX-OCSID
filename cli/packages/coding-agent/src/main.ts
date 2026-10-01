@@ -39,7 +39,12 @@ import type { InlineExtension } from "./core/extensions/types.ts";
 import { applyHttpProxySettings, configureHttpDispatcher } from "./core/http-dispatcher.ts";
 import { resolveCliModel, resolveModelScope, type ScopedModel } from "./core/model-resolver.ts";
 import { ModelRuntime } from "./core/model-runtime.ts";
-import { restoreStdout, takeOverStdout } from "./core/output-guard.ts";
+import {
+	armGracefulExit,
+	flushRawStdout,
+	restoreStdout,
+	takeOverStdout,
+} from "./core/output-guard.ts";
 import { type AppMode, resolveProjectTrusted } from "./core/project-trust.ts";
 import type { CreateAgentSessionOptions } from "./core/sdk.ts";
 import {
@@ -543,6 +548,32 @@ export interface MainOptions {
 	extensionFactories?: InlineExtension[];
 }
 
+function drainStream(stream: NodeJS.WriteStream): Promise<void> {
+	if (stream.writableLength <= 0) {
+		return Promise.resolve();
+	}
+	return new Promise<void>((resolve) => stream.once("drain", resolve));
+}
+
+/**
+ * Graceful variant of process.exit(): flush pending raw-stdout output and any
+ * buffered stdout/stderr writes, restore the stdout takeover, then exit with
+ * `code` after a short grace. This is the P2-2 fix for libuv's UV_HANDLE_CLOSING
+ * assert (src/win/async.c:76, nodejs/node#56645): a bare process.exit() right
+ * after a fetch() while the dispatcher handle is still closing crashes on
+ * Windows. Letting the event loop drain naturally (via armGracefulExit's unref'd
+ * grace timer) closes those handles first. Callers should `return` right after
+ * `await safeExit(...)`.
+ */
+async function safeExit(code?: number | string | undefined): Promise<void> {
+	await flushRawStdout().catch(() => {});
+	restoreStdout();
+	await drainStream(process.stdout).catch(() => {});
+	await drainStream(process.stderr).catch(() => {});
+	armGracefulExit(code);
+}
+
+
 export async function main(args: string[], options?: MainOptions) {
 	resetTimings();
 	const extensionFactories = [...builtInExtensions, ...(options?.extensionFactories ?? [])];
@@ -572,7 +603,18 @@ export async function main(args: string[], options?: MainOptions) {
 	configureHttpDispatcher();
 
 	if (await handleRepoSkillsCommand(args)) {
-		process.exit(process.exitCode ?? 0);
+		const exitCode = process.exitCode ?? 0;
+		if (process.platform === "win32" && exitCode === 0) {
+			// Same Node-on-Windows teardown race the package path below guards
+			// against (nodejs/node#56645): these commands can fetch (the audit agent
+			// driver calls a model endpoint; install/update reach the remote repo),
+			// and an immediate process.exit(0) during teardown leaves libuv to assert
+			// afterwards — "Assertion failed: !(handle->flags & UV_HANDLE_CLOSING),
+			// src/win/async.c" — which prints after the run has already been persisted
+			// and reads like a crash. Let the event loop drain instead.
+			return;
+		}
+		await safeExit(exitCode);
 		return;
 	}
 
@@ -585,7 +627,7 @@ export async function main(args: string[], options?: MainOptions) {
 			// https://github.com/nodejs/node/issues/56645
 			return;
 		}
-		process.exit(exitCode);
+		await safeExit(exitCode);
 		return;
 	}
 
@@ -604,14 +646,16 @@ export async function main(args: string[], options?: MainOptions) {
 			console.error(color(`${d.type === "error" ? "Error" : "Warning"}: ${d.message}`));
 		}
 		if (parsed.diagnostics.some((d) => d.type === "error")) {
-			process.exit(1);
+			await safeExit(1);
+			return;
 		}
 	}
 	time("parseArgs");
 
 	if (parsed.version) {
 		console.log(VERSION);
-		process.exit(0);
+		await safeExit(0);
+		return;
 	}
 
 	if (parsed.export) {
@@ -622,10 +666,12 @@ export async function main(args: string[], options?: MainOptions) {
 		} catch (error: unknown) {
 			const message = error instanceof Error ? error.message : "Failed to export session";
 			console.error(chalk.red(`Error: ${message}`));
-			process.exit(1);
+			await safeExit(1);
+			return;
 		}
 		console.log(`Exported to: ${result}`);
-		process.exit(0);
+		await safeExit(0);
+		return;
 	}
 
 	let appMode = resolveAppMode(parsed, process.stdin.isTTY, process.stdout.isTTY);
@@ -636,7 +682,8 @@ export async function main(args: string[], options?: MainOptions) {
 
 	if (parsed.mode === "rpc" && parsed.fileArgs.length > 0) {
 		console.error(chalk.red("Error: @file arguments are not supported in RPC mode"));
-		process.exit(1);
+		await safeExit(1);
+		return;
 	}
 
 	validateForkFlags(parsed);
@@ -686,19 +733,22 @@ export async function main(args: string[], options?: MainOptions) {
 		if (appMode === "interactive") {
 			const selectedCwd = await promptForMissingSessionCwd(missingSessionCwdIssue, startupSettingsManager);
 			if (!selectedCwd) {
-				process.exit(0);
+				await safeExit(0);
+				return;
 			}
 			sessionManager = SessionManager.open(missingSessionCwdIssue.sessionFile!, sessionDir, selectedCwd);
 		} else {
 			console.error(chalk.red(new MissingSessionCwdError(missingSessionCwdIssue).message));
-			process.exit(1);
+			await safeExit(1);
+			return;
 		}
 	}
 	if (parsed.name !== undefined) {
 		const name = parsed.name.trim();
 		if (!name) {
 			console.error(chalk.red("Error: --name requires a non-empty value"));
-			process.exit(1);
+			await safeExit(1);
+			return;
 		}
 		sessionManager.appendSessionInfo(name);
 	}
@@ -864,13 +914,17 @@ export async function main(args: string[], options?: MainOptions) {
 			.getExtensions()
 			.extensions.flatMap((extension) => Array.from(extension.flags.values()));
 		printHelp(extensionFlags);
-		process.exit(0);
+		await safeExit(0);
+		return;
 	}
 
 	if (parsed.listModels !== undefined) {
 		const searchPattern = typeof parsed.listModels === "string" ? parsed.listModels : undefined;
 		await listModels(modelRuntime, searchPattern);
-		process.exit(0);
+		// listModels just performed fetches (provider/model discovery); a bare
+		// process.exit(0) here would race the closing fetch handle on Windows.
+		await safeExit(0);
+		return;
 	}
 
 	// Read piped stdin content (if any) - skip for RPC mode which uses stdin for JSON-RPC
@@ -903,19 +957,22 @@ export async function main(args: string[], options?: MainOptions) {
 		if (runtime.diagnostics.some((diagnostic) => diagnostic.message.includes("Failed to load extension"))) {
 			console.error(chalk.yellow(EXTENSION_LOAD_FAILURE_HINT));
 		}
-		process.exit(1);
+		await safeExit(1);
+		return;
 	}
 	time("createAgentSession");
 
 	if (appMode !== "interactive" && !session.model) {
 		console.error(chalk.red(formatNoModelsAvailableMessage()));
-		process.exit(1);
+		await safeExit(1);
+		return;
 	}
 
 	const startupBenchmark = isTruthyEnvFlag(process.env.DISCO_STARTUP_BENCHMARK);
 	if (startupBenchmark && appMode !== "interactive") {
 		console.error(chalk.red("Error: DISCO_STARTUP_BENCHMARK only supports interactive mode"));
-		process.exit(1);
+		await safeExit(1);
+		return;
 	}
 
 	// RPC refreshes catalogs here in the background; interactive mode starts its refresh after TUI initialization.

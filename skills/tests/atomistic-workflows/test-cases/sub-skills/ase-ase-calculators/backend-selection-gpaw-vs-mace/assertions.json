@@ -1,0 +1,26 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "ase-ase-calculators",
+  "target_capability": "backend-selection-comparison",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/ase-ase-calculators/SKILL.md",
+    "sub-skills/ase-ase-calculators-gpaw/SKILL.md",
+    "sub-skills/ase-ase-calculators-mace/SKILL.md",
+    "sub-skills/ase-ase-calculators/references/commands-and-workflow.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/ase-ase-calculators/SKILL.md",
+    "sub-skills/ase-ase-calculators-gpaw/SKILL.md",
+    "sub-skills/ase-ase-calculators-mace/SKILL.md",
+    "sub-skills/ase-ase-calculators/references/commands-and-workflow.md"
+  ],
+  "assertions": [
+    "The response routes the request to the ase-ase-calculators sub-skill (backend selection), not to a workflow sub-skill.",
+    "The response compares the GPAW adapter prerequisites (mode PW/LCAO/FD, XC, k-point policy) and the MACE adapter prerequisites (model checkpoint/path, device cpu/cuda, precision).",
+    "The response makes a recommendation or asks one focused clarification question when the backend is ambiguous, per the calculators router policy.",
+    "The response returns a calculator configuration summary and lists unresolved backend prerequisites.",
+    "The response keeps backend configuration separate from workflow-level logic.",
+    "The response does not point the user into the original atomistic-workflows source checkout."
+  ]
+}

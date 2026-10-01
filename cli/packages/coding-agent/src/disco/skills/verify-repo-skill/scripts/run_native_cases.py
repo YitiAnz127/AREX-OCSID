@@ -57,6 +57,13 @@ def normalize_cases(manifest: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def render_command(command: str, repo_root: Path, python_executable: str) -> str:
+    # NOTE (deferred, P2-05): substitutions are UNQUOTED into a `shell=True`
+    # command. A repo root containing spaces or shell metacharacters (common on
+    # Windows) would be mis-tokenized. This is deliberately left unfixed because
+    # (a) the manifest is agent-classified-as-safe trusted input, not an RCE vector,
+    # and (b) a correct fix needs platform-aware quoting (shlex.quote is POSIX-sh
+    # only and wrong for cmd.exe) and there is no test harness pinning a spaced-path
+    # behavior.
     return command.replace("$REPO_ROOT", str(repo_root)).replace("$PYTHON", python_executable)
 
 

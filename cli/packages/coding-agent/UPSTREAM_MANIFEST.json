@@ -113,7 +113,7 @@
           "upstreamSha256": "d9dce190990ce48a273ad04d06a51baba5c47904f39363521451225dbd3501b2",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/config.ts",
-          "localSha256": "56c06bec00d6d4a5a9dc47063f1d416ace1622aeeeb7c772d434f16d687eeeef"
+          "localSha256": "7374434645b1accdc2f5c8c080a5c0e09dbef36041c2b90be97c910be7dfce98"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/agent-session-runtime.ts",
@@ -146,9 +146,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/core/auth-storage.ts",
           "upstreamSha256": "17ae7838856a9333cf0cde7af0c438c3aaa55375febd59b17d631762c66cdd75",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/auth-storage.ts",
-          "localSha256": "17ae7838856a9333cf0cde7af0c438c3aaa55375febd59b17d631762c66cdd75"
+          "localSha256": "30964b875a6a945aa1144f812f91b40839f609957802341b15865c15dfc838b3"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/bash-executor.ts",
@@ -225,7 +225,7 @@
           "upstreamSha256": "b91285b8dbd14bfbb3fce3775dc4c994a057cf3efa07882fc1bd42c44fbfced5",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/experimental.ts",
-          "localSha256": "d09ed6f537ec9ee1b22e804f62dbcd05377aeeb10268f5d9908781d2c6db7ae0"
+          "localSha256": "95261cccb3f8ec8b6aeb7aaf883d52e82b8ed650e12b27375e77c8ecf27cb9e5"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/export-html/ansi-to-html.ts",
@@ -258,9 +258,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/core/export-html/template.js",
           "upstreamSha256": "1893cdb77587f592eef5717905391269886d6d7a4dc6a488417a73da374d9226",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/export-html/template.js",
-          "localSha256": "1893cdb77587f592eef5717905391269886d6d7a4dc6a488417a73da374d9226"
+          "localSha256": "bff824cfc9f06971ce6cb3e60ea3c5f35161275ae3284b4a0585ac86c3ecd1ab"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/export-html/tool-renderer.ts",
@@ -295,14 +295,14 @@
           "upstreamSha256": "2498fc18f7484485b34b1c23c2338b023d8bd3759bcd34782a3b80776306ecf8",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/extensions/loader.ts",
-          "localSha256": "eda7e443ec46da683b6a8601b3c0f780c412262ef12d3ead5ac2c64344d381d0"
+          "localSha256": "2b6fdb474fc81e712d9259893c69ae8b73a9df49949c432e6bfc3a6a7014bfba"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/extensions/runner.ts",
           "upstreamSha256": "4fbc7d8218eeb07bbdae95a534df5e29caa167b3b3e9c2bf757e1cdee8b9a055",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/extensions/runner.ts",
-          "localSha256": "12c6e2dcc100a25efc403d89a8293c2c182bc0f243b94ba0e07a577e33f92d6c"
+          "localSha256": "e3a693f0388c2b6b517ce21c2a1a25e2dfd0910e9e585eba0039ad42d71dd09e"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/extensions/types.ts",
@@ -384,16 +384,16 @@
         {
           "upstreamPath": "packages/coding-agent/src/core/models-store.ts",
           "upstreamSha256": "889a1e54e44e1d407498f9c2442dbae7afed989ece0857db57eea4be56daad3a",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/models-store.ts",
-          "localSha256": "889a1e54e44e1d407498f9c2442dbae7afed989ece0857db57eea4be56daad3a"
+          "localSha256": "e813e0aeeb823c78255b002a2f421e53b0bff0484b3341498129cc0a5707b48f"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/output-guard.ts",
           "upstreamSha256": "68c0e9a7533f0cf7270bb50a7558185a9f9a0f71304c85bb438dd620161a4f04",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/output-guard.ts",
-          "localSha256": "68c0e9a7533f0cf7270bb50a7558185a9f9a0f71304c85bb438dd620161a4f04"
+          "localSha256": "06ca7687a52a46d0a8c264d11d7f544909131269fb9d0ceff765386f5c1491e0"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/package-manager.ts",
@@ -421,7 +421,7 @@
           "upstreamSha256": "c3d342e08f2297a9bb4bb1dc18066ed9b60a254ffbefc72517cadb2288242235",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/provider-attribution.ts",
-          "localSha256": "76fcbb034d8ac47dbd12585c6d01a41527d6305708e4ca5f0260832ffd39da06"
+          "localSha256": "414a484f51b789c420bcd2b0187205683984122dcd77bc7532508a59f8fd47f8"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/provider-composer.ts",
@@ -442,14 +442,14 @@
           "upstreamSha256": "a1bc79d8dbc6c06f5d4567273c6b050d95706066d02dd4a34a27e11e1028e665",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/remote-catalog-provider.ts",
-          "localSha256": "8f9dce3610b11004f177ecb5ce635473ef3dab8ed14ae78c9e30a0551ede71a5"
+          "localSha256": "d115a8666ca7d201a1a654410121e403b13abfbb6537e220327ce9a48b696c8a"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/resolve-config-value.ts",
           "upstreamSha256": "0f53dad47fe5d5d8837c022b7951ccd3bd5a9b577bd662f0986272110e83bcc7",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/resolve-config-value.ts",
-          "localSha256": "0f53dad47fe5d5d8837c022b7951ccd3bd5a9b577bd662f0986272110e83bcc7"
+          "localSha256": "bf32b020fa21e9daacbd21fe13feda5aa5d4d69665b3cab54bfb28e16abd102f"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/resource-loader.ts",
@@ -484,14 +484,14 @@
           "upstreamSha256": "5ca662efec88c135559630deda469fcf022035ddfb61b4610de8d74cee5c8b39",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/session-manager.ts",
-          "localSha256": "8df4b43bc11567834c7f0909ea27d7d8da7ae0a1ec381f9c45836d9188f2231b"
+          "localSha256": "f33f1d2e9f1dac1eebbcbd46c7809e6c915de702b35617a0905c920df812478d"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/settings-manager.ts",
           "upstreamSha256": "32641adb9b6bc7a245e07b663cab83cc4fa2e3c003f7d208d23a63a99cb85aee",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/settings-manager.ts",
-          "localSha256": "20a5f700f86c4c910a3fd4e888bce55980cad3bf718a8f90ef413e5ace79754f"
+          "localSha256": "e1e52c54ebd4c72201426f0b923ef9dd8f61a5151299d5d12578a49b344e3fdc"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/skills.ts",
@@ -533,7 +533,7 @@
           "upstreamSha256": "55e4d7f31bdf3727baa4e89f361a6abee9ae4a76f64a30369ea157cb37bbc2b2",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/timings.ts",
-          "localSha256": "46c11e5b405d2705c5112c32bdadd99cac145de3bcd9aff284654d637019a80f"
+          "localSha256": "f9432188193440a841632bb71db35f20f29efd94fdbf5113ccead6d408e929d9"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/tools/bash.ts",
@@ -566,16 +566,16 @@
         {
           "upstreamPath": "packages/coding-agent/src/core/tools/find.ts",
           "upstreamSha256": "d64b5fbee7f8fa399adca3f8971ead79a064927b41ed5777501763221ef890de",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/tools/find.ts",
-          "localSha256": "d64b5fbee7f8fa399adca3f8971ead79a064927b41ed5777501763221ef890de"
+          "localSha256": "afacc1d4b04774ebe3190c6895d6672210d1d188f02416ab30b7f652c02a950c"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/tools/grep.ts",
           "upstreamSha256": "9737dcfd27ae56a33fd934c0b336b9f1cb64eaab6b6378a91270dde4b505ba47",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/tools/grep.ts",
-          "localSha256": "9737dcfd27ae56a33fd934c0b336b9f1cb64eaab6b6378a91270dde4b505ba47"
+          "localSha256": "1a3c6174cd49e95e3cff16c908523b11ac35b7be5211a2b6a234dcdd84e192b9"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/tools/index.ts",
@@ -601,16 +601,16 @@
         {
           "upstreamPath": "packages/coding-agent/src/core/tools/path-utils.ts",
           "upstreamSha256": "ab6f420d2388a41366113c17a25e356867820b87b02a169d044cfcf83e1997d3",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/tools/path-utils.ts",
-          "localSha256": "ab6f420d2388a41366113c17a25e356867820b87b02a169d044cfcf83e1997d3"
+          "localSha256": "a1c414caa944ad0ae7e568031ad2858b0bac34b1023dfedf45c2b920c027341a"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/tools/read.ts",
           "upstreamSha256": "1acc6fcb88a29317d4f800fa1e9e1ff3d13d32527dd8c6f1cdbeeab5107ae06d",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/core/tools/read.ts",
-          "localSha256": "1acc6fcb88a29317d4f800fa1e9e1ff3d13d32527dd8c6f1cdbeeab5107ae06d"
+          "localSha256": "5b10299d49a6bafff63550e65936cfc152739cc990a352f4f59a278cbf0a7e72"
         },
         {
           "upstreamPath": "packages/coding-agent/src/core/tools/render-utils.ts",
@@ -657,9 +657,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/extensions/index.ts",
           "upstreamSha256": "29c9dc5de4ec9c895223e8991ff02871f8eb67702435abed64a2b412430b4d7c",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/extensions/index.ts",
-          "localSha256": "29c9dc5de4ec9c895223e8991ff02871f8eb67702435abed64a2b412430b4d7c"
+          "localSha256": "8cfd9c2b3b201a0b7119dfcad896ed22346d11289077bc93a61efec2a5461bc8"
         },
         {
           "upstreamPath": "packages/coding-agent/src/extensions/llama/client.ts",
@@ -708,7 +708,7 @@
           "upstreamSha256": "5460a1b1168714787208004907a95094f7712730a31b0c08becc3674ebda6199",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/main.ts",
-          "localSha256": "0205af51f013f0d35f73988105f9f0e5bd8ff730b87b536e5030cd6235388af6"
+          "localSha256": "9a53204c420c33d7a1c5b004a48d49fc8f16ca7f8acc52c8bf9ecf336df50713"
         },
         {
           "upstreamPath": "packages/coding-agent/src/migrations.ts",
@@ -739,9 +739,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/assistant-message.ts",
           "upstreamSha256": "27eebb41e8ca12581d10cdca494e70ad2697834d3f2e88610fd87cfde49c8fd4",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/modes/interactive/components/assistant-message.ts",
-          "localSha256": "27eebb41e8ca12581d10cdca494e70ad2697834d3f2e88610fd87cfde49c8fd4"
+          "localSha256": "310169c5f59f2f92a8085f88b3762173cc506024498233f37d4a7db65af6a170"
         },
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/bash-execution.ts",
@@ -760,16 +760,16 @@
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/branch-summary-message.ts",
           "upstreamSha256": "45bba986616fc8acaba59c172608f0ff249a20126b3438629447be181b7b5135",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/modes/interactive/components/branch-summary-message.ts",
-          "localSha256": "45bba986616fc8acaba59c172608f0ff249a20126b3438629447be181b7b5135"
+          "localSha256": "fccb6c1d97fc8a6cdfbf3103ef1487c506fe2e8a638a94183ac6f5a8b8328281"
         },
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/compaction-summary-message.ts",
           "upstreamSha256": "f4de3c245423004365f9c22062bdc69d25e4ee5c1df66eb70e4f7f63da01bbd5",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/modes/interactive/components/compaction-summary-message.ts",
-          "localSha256": "f4de3c245423004365f9c22062bdc69d25e4ee5c1df66eb70e4f7f63da01bbd5"
+          "localSha256": "1ace43aaee96825fe959634698066f74aea4a581b87673536dfdfef717090d6f"
         },
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/config-selector.ts",
@@ -802,9 +802,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/custom-message.ts",
           "upstreamSha256": "321af8afdff8da4924a7dbf5623b5637eb160ea7d73a70e6662d8125249bde9b",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/modes/interactive/components/custom-message.ts",
-          "localSha256": "321af8afdff8da4924a7dbf5623b5637eb160ea7d73a70e6662d8125249bde9b"
+          "localSha256": "6aae9cb0ab2b44f3e482a6125b58602197e1e2ec6daded7f2ee9f7c9c0b35b69"
         },
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/daxnuts.ts",
@@ -816,9 +816,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/diff.ts",
           "upstreamSha256": "b43f8d91ba9f19088dc9dc86126091c3fdfca25eac6461f5510f5e1e9ddd6491",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/modes/interactive/components/diff.ts",
-          "localSha256": "b43f8d91ba9f19088dc9dc86126091c3fdfca25eac6461f5510f5e1e9ddd6491"
+          "localSha256": "684158b17f210f3f29e5949a4433b44dbfb3560404e631813fbd7aac2835a42f"
         },
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/dynamic-border.ts",
@@ -940,9 +940,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/skill-invocation-message.ts",
           "upstreamSha256": "86363379c1b1f8a3683f03fc039904f5f67f18c9365ff0f7d9d50b8170deb91a",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/modes/interactive/components/skill-invocation-message.ts",
-          "localSha256": "86363379c1b1f8a3683f03fc039904f5f67f18c9365ff0f7d9d50b8170deb91a"
+          "localSha256": "fcff4ad05df3f9dcd91e3de15b5dca820525395bf661a96a8df323742117a6da"
         },
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/status-indicator.ts",
@@ -996,9 +996,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/user-message.ts",
           "upstreamSha256": "fe8034934a6ec0d30239a27eaf8ebd97cd0f5c505a4e1826cfe02a7bab4b4eb8",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/modes/interactive/components/user-message.ts",
-          "localSha256": "fe8034934a6ec0d30239a27eaf8ebd97cd0f5c505a4e1826cfe02a7bab4b4eb8"
+          "localSha256": "cedafe692aca1e2269c5c705d40981063c28351898a735fb92c800694e5c31f7"
         },
         {
           "upstreamPath": "packages/coding-agent/src/modes/interactive/components/visual-truncate.ts",
@@ -1061,7 +1061,7 @@
           "upstreamSha256": "71190161329ddb87547304a61b8df7bf8db0051d827f20918035f690aff89f66",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/modes/interactive/theme/theme.ts",
-          "localSha256": "2640d8872ca113544064b9158cfbd9b417c1bb804e20b8e3a3cb0c0e9655b28f"
+          "localSha256": "a5a35a01465beef4958c412b2c6257986d061817dab28212f81f2c66ffdb7450"
         },
         {
           "upstreamPath": "packages/coding-agent/src/modes/print-mode.ts",
@@ -1255,16 +1255,16 @@
         {
           "upstreamPath": "packages/coding-agent/src/utils/open-browser.ts",
           "upstreamSha256": "134233cdbc3079566b217a5714461ba8189a1673ea1380e8e081f8d3bc4f00ef",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/utils/open-browser.ts",
-          "localSha256": "134233cdbc3079566b217a5714461ba8189a1673ea1380e8e081f8d3bc4f00ef"
+          "localSha256": "b531e94dabf8ea39ac817da6d918260af4f8e4cfc06fbb52f699c157de7c21ba"
         },
         {
           "upstreamPath": "packages/coding-agent/src/utils/paths.ts",
           "upstreamSha256": "c433bd9f98744aa9a373282fd50ab3657b6e2a366feecbfb177fe648746d1944",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/utils/paths.ts",
-          "localSha256": "c433bd9f98744aa9a373282fd50ab3657b6e2a366feecbfb177fe648746d1944"
+          "localSha256": "710222033431fef88a73627da53ee5eef7233463f60d3414d4678aa11172f6bf"
         },
         {
           "upstreamPath": "packages/coding-agent/src/utils/photon.ts",
@@ -1283,9 +1283,9 @@
         {
           "upstreamPath": "packages/coding-agent/src/utils/shell.ts",
           "upstreamSha256": "dc039983079d843a030bcb755aca2b51b20c8a53c438fe53c58288f5bfceab07",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/utils/shell.ts",
-          "localSha256": "dc039983079d843a030bcb755aca2b51b20c8a53c438fe53c58288f5bfceab07"
+          "localSha256": "08bfcadbefaa4787c8c364e8e948130e842644d44da5f3be79355cc9f80a79b1"
         },
         {
           "upstreamPath": "packages/coding-agent/src/utils/sleep.ts",
@@ -1306,7 +1306,7 @@
           "upstreamSha256": "86e941d1cc9aae878b0bd5d174bf76a9190af16956912c18b118e5a2d0747357",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/src/utils/tools-manager.ts",
-          "localSha256": "60ad2ebe78082d25861957ca04adb2393c0acf8768e9aba0378f7a76a1b0c995"
+          "localSha256": "30e9b9b41465652aa7d2c3085406623a9ff2f7ab1973a3067afadd201c670889"
         },
         {
           "upstreamPath": "packages/coding-agent/src/utils/version-check.ts",
@@ -1577,7 +1577,7 @@
           "upstreamSha256": "4abd9d1a639085e0aa7607239494e5f0de8fa07d7ee6b322bbcc199c276bc7c2",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/test/experimental.test.ts",
-          "localSha256": "0faf4bb6582c315caebfbc249c2752a32d6074f64615c6d5bb03dfee85dcd6cb"
+          "localSha256": "44ae4a1ea3d146197b56255cb9cd0bfc236fa3424e25e17492e3a0744b90380c"
         },
         {
           "upstreamPath": "packages/coding-agent/test/export-html-skill-block.test.ts",
@@ -1596,9 +1596,9 @@
         {
           "upstreamPath": "packages/coding-agent/test/export-html-xss.test.ts",
           "upstreamSha256": "61b68968b6f1f4f0181e3fafaf5e34064e59dae7980f3280d8499d9e8f182454",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/test/export-html-xss.test.ts",
-          "localSha256": "61b68968b6f1f4f0181e3fafaf5e34064e59dae7980f3280d8499d9e8f182454"
+          "localSha256": "38995fbae532b2045fcfd5e47a0e5d97ccac7583960df46cbccb846ad6eea282"
         },
         {
           "upstreamPath": "packages/coding-agent/test/extensions-discovery.test.ts",
@@ -1617,9 +1617,9 @@
         {
           "upstreamPath": "packages/coding-agent/test/extensions-runner.test.ts",
           "upstreamSha256": "bc3b45702db16a0754d13f3ead817d05e7a84c75d7d863ec1ba02b20fdb80a3b",
-          "disposition": "retained_unchanged",
+          "disposition": "retained_modified",
           "localPath": "packages/coding-agent/test/extensions-runner.test.ts",
-          "localSha256": "bc3b45702db16a0754d13f3ead817d05e7a84c75d7d863ec1ba02b20fdb80a3b"
+          "localSha256": "168c34bb126241f58b8fb3cc1504a8e0283bfdbebb95f030c27219cf939d3361"
         },
         {
           "upstreamPath": "packages/coding-agent/test/external-editor.test.ts",
@@ -2319,7 +2319,7 @@
           "upstreamSha256": "434f28867b26b3641985ab5b1933197032d12d65e1a5d6d793b463523311f51b",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/test/settings-manager.test.ts",
-          "localSha256": "e5c99b14472a58d61867cc06d1f162ef89dbe1efc4d6ea73a736d08a1f374091"
+          "localSha256": "44f1b76d8ac77385ab2fc4b22731fd640636738c8065aeb42ccfb75de898dbb4"
         },
         {
           "upstreamPath": "packages/coding-agent/test/skills.test.ts",
@@ -2459,7 +2459,7 @@
           "upstreamSha256": "9bed3fdd1c650408e7ec991023e2eea22278861ac6b6b18ba9a1daadc6697bd7",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/test/suite/regressions/2791-fswatch-error-crash.test.ts",
-          "localSha256": "2bbadaafdbfcf24f94eb3369d81ab1c6fe3d5ab31252b07c5aab10d6deddbc0e"
+          "localSha256": "d0af4906dcffaa9aeb00f78150ca654d70dc9bffc455687a0b59ff8d04246285"
         },
         {
           "upstreamPath": "packages/coding-agent/test/suite/regressions/2835-tools-allowlist-filters-extension-tools.test.ts",
@@ -2802,7 +2802,7 @@
           "upstreamSha256": "4aee8f60b046d2005d9d03120d0499226d75a83ee4ddd534df4e733bc17eb536",
           "disposition": "retained_modified",
           "localPath": "packages/coding-agent/test/tools.test.ts",
-          "localSha256": "4c55a15c483a45442258633b1ecfd8ffb0de7edf8cf8ace5f2c3c1dad508d0cb"
+          "localSha256": "23332c6ece8e66846e210e610cbebddafd10f988fb07603e0f6e7d00ea7aa17a"
         },
         {
           "upstreamPath": "packages/coding-agent/test/tree-selector.test.ts",
@@ -4119,7 +4119,7 @@
       "upstreamSha256": "1f989e989a1d4ebd835aa4b09ab0b08d9a2df73648c3d2cea99c4e075308d2b1",
       "disposition": "retained_modified",
       "localPath": "packages/coding-agent/src/core/oauth/anthropic.ts",
-      "localSha256": "e2413359a1891cc80fac22277d21d2f55cbee44d1452fa3965db03a55c00c483"
+      "localSha256": "ba61625de68a8b83d532c63f302390a23ebb1ee3b2d2cc77ed61ae279b030337"
     },
     {
       "upstreamPath": "packages/ai/src/auth/oauth/device-code.ts",
@@ -4155,7 +4155,7 @@
       "upstreamSha256": "e7c496f5894df234e7ade5c0e30c3d5e2eebe2e01654a049e3e70de3e040a741",
       "disposition": "retained_modified",
       "localPath": "packages/coding-agent/src/core/oauth/openai-codex.ts",
-      "localSha256": "1e254391ecb88f1ebfc6856390e043073777e8c2ef1bd6aff0b957dbcc1dc3ab"
+      "localSha256": "d3c1e2cc2d9b14332827b2bcd376cb1aef5cc590954723666734fd3eeeafbc26"
     },
     {
       "upstreamPath": "packages/ai/src/auth/oauth/openrouter.ts",
@@ -4189,23 +4189,203 @@
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/src/audit/agent-executor.test.ts",
+      "localSha256": "3a914df486fe097abb51adbc7b7e331c9eff3453599da634e592479b9a7ed755",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/agent-executor.ts",
+      "localSha256": "23775cc3020f3cdc8a3ecdebb03659914dcc868a71f76b4f7dec2ab754d92336",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/agent-tools.ts",
+      "localSha256": "970af53fce942e5c551801896e78fcd814ffe7522587097a7792fc7df0d2d940",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/assertion-grader.test.ts",
+      "localSha256": "d2d696cb60ad7d1bfd7fba5fac38c1ecdf70559037eb689a847bb890c9c44cc2",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/assertion-grader.ts",
+      "localSha256": "0662481331c3ffc6360cdb79b264dc82e662d862a32366b463018a06292d1278",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/atomic.ts",
+      "localSha256": "c49bd081091fb83cc7f0648511079fb7d25b9853ad6dff37b00870dec17866ca",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/audit.loader.test.ts",
+      "localSha256": "ca09f987b21feedd6588ce45da5886b75b85d270d5c32d4a29e902d014ff25b1",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/audit.test.ts",
+      "localSha256": "fdfb5d5e6a58724d2f99eb8b424d03017c57a30fd0b5a3a9ccbcdb8eb5b80923",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/execution-states.test.ts",
+      "localSha256": "2657d6b40d05c84381ac3fb0d38154dec98b7e3d87c2fe07c7d6f95264e9dbc3",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/grader.ts",
+      "localSha256": "f051a74992cff0291ac61b4e2995ef8ea1df4dc5898ea4151fe014fbbd255cbd",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/id.test.ts",
+      "localSha256": "7a1396dd716ac4a808643edaba372cde8a5d1693183c0cf548e8cf9a14189462",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/id.ts",
+      "localSha256": "2133d001dfb27f54f3d72a0a2a1d01adf0dd3edb2eb2d82ccf037554d438673c",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/loader.ts",
+      "localSha256": "fc2f6d8817936ba5f368a4bed76116f270bbe4b3656f0a59bf6c74b0872cff2b",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/model-agent-driver.test.ts",
+      "localSha256": "8ce199a465c51f5689a769bc8052da0ffd610450aabdd0d20ce7c5c93d35b566",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/model-agent-driver.ts",
+      "localSha256": "0bc2248784739d2bb22e45dfe80c656556dbbb210757d406c25576b5115d37e6",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/model-grader.test.ts",
+      "localSha256": "e270014f956facb74a3f465fd321c2fb6f4f1b680532b6a90de49c8641dd94c5",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/model-grader.ts",
+      "localSha256": "e7642f05021c63d674286ba673ed75361e8997913b86cf11f339edd29a9e9e14",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/model-judge-grader.test.ts",
+      "localSha256": "3a75374b1c59540d8aa24179d20efc95afe865fcdd1ee1234c04fa0c5c368aa2",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/model-judge-grader.ts",
+      "localSha256": "a00ac61a0011a81e3aa72ca85cef0d4120fb5e0a4c11c55da172417f5fd5224b",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/parse.ts",
+      "localSha256": "199e0053156faec5acc7332ef83fd93861950a9791e7339fd7a6590f2ebd3958",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/records.test.ts",
+      "localSha256": "edc0740f872414c57ac8543111fa939cd30751433848d53206f5f6cda0b4ac15",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/records.ts",
+      "localSha256": "1c5572c9b2106515d5fc814c2d0397d5542489ee44a8a5cc9c0fad8367156c4a",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/runner.ts",
+      "localSha256": "cb5190398e9e2d34aa6d4cd78ea5aa441470d5aa83ea3dff9d7b91ed8b1511e8",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/structure-grader.test.ts",
+      "localSha256": "e843bcc91fd348b7b910108aa055a09c48fdaadcfc417bfb5559a954f9d02357",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/structure-grader.ts",
+      "localSha256": "80139352abc807b0ed4d6b9b8e804ec82daccfaab247c310e0999be372ae379e",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/audit/types.ts",
+      "localSha256": "223a58544a344cb97ee8afc7be9b23402cb719a8ca8691d70b3d51f1c142f86e",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/benchmark/ledger.test.ts",
+      "localSha256": "e51c63281ceef11166f6ff1dd2844727ccde332854b04914bcbc783c54160114",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/benchmark/ledger.ts",
+      "localSha256": "c45f9390c9091d71c64f8c192d890e3104ddd71b7f73790de3a311b81c2747d0",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/benchmark/pilot.test.ts",
+      "localSha256": "da899a669ea6ceaf17dd125e7ef316896906299ddea06b7d52c8e39964a991c4",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/benchmark/pilot.ts",
+      "localSha256": "06efe11bb118ed233e2259a391bcef3cda9e3dd336f8e73412ee3b2158483867",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/benchmark/schema.ts",
+      "localSha256": "49ac0349840fb965bce3a2b564fd9bb3f3fbafad2c682a9aabd7f06b957addab",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/src/cli/pi-environment-isolation.ts",
       "localSha256": "890cee7410e547a2a616c2a7a094a350bcc7f996a3887108d34a1cd5de756031",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/cli/repo-skills.test.ts",
-      "localSha256": "5f9dcd45c843e434d0f4e7e01244b3665406a6f025faeabd61c5f46c238a7012",
+      "localSha256": "448d5c9a12f2d35697120a8c9166995438ba4ffeedb5cbe8084cdc7b66e87ff5",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/cli/repo-skills.ts",
-      "localSha256": "1212d0a354533df1513941f5ed387f1a7f6b9a9263de0eb9122aa74eb0eff9b6",
+      "localSha256": "65a17c6d74ceb4a202e0b4f1f02bfe396c004eda260727855f56ea02cbf77461",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/core/auth-storage.test.ts",
+      "localSha256": "b46f1369a279247664428e13baf2eae38bc9ed0d6e63d2b1530fde9f675a9c04",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/core/experimental.test.ts",
+      "localSha256": "86ca75e88b7b2c352e1523c9c1b5b747deb0068b16bfbea1c3d5d56fdc773ad7",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/core/extensions/loader.test.ts",
+      "localSha256": "811bdc74eea975717c10450487c1f7babd65a346a1b63249fa014181c6faa04d",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/core/models-store.test.ts",
+      "localSha256": "76470f8b5b921332fd615db90d9c7bd840f2320d87f7814d6cefef3418c60c8d",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/core/oauth/callback-host.test.ts",
+      "localSha256": "27b608b5c44ee1af4b6c9030556547c548da4bdccfab06a7ce7bdaddb95e406c",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/core/oauth/callback-host.ts",
-      "localSha256": "73e28a4f0c4ae26fd9758b200c5b343c36b2a99ade3d073ca4da9b17c4f6dbda",
+      "localSha256": "e21c107fed040a79716ff5b2e4335463aee7c28898c1f32f7d88f5807f89f70c",
       "origin": "disco_owned"
     },
     {
@@ -4219,23 +4399,53 @@
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/src/core/remote-catalog-provider.test.ts",
+      "localSha256": "f8b6f4f71a15ef517a4227c110f5ee54a90646d6175ea93558a62f9b53a6130a",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/src/core/repo-skills-library-manager.test.ts",
-      "localSha256": "73b9cb1f65fcc0fed9361338f7b3e94583c25bbe4ad26fe61d6ec89c6dc7b55e",
+      "localSha256": "0460fb03117ec856e78acdbcfd6af4247e0dc4a597ddcbd48cbb6294ef952c57",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/core/repo-skills-library-manager.ts",
-      "localSha256": "5faca72067707708377751a685d38e60492aee21547e20ed1af59096d238f66e",
+      "localSha256": "4c03415f4cbd306de77cdc4c3ff8fdcbfb9dbda5e97de2de22f7f6fae95cd830",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/core/resolve-config-value.test.ts",
+      "localSha256": "5efafbed3323c705f5456b1ebd422d3ab1a80ad06f510f85e93e871dba551576",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/core/settings-manager.test.ts",
+      "localSha256": "15fe529fc63e1be8d151ebd293e5dcb394d794c69a0ced525fb3485eacc6b0b1",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/core/tools/find.test.ts",
+      "localSha256": "b371ff693fc49629098d9aa1d3bbadf813ee59f761895965a9d70079b32b2a81",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/core/tools/path-utils.test.ts",
+      "localSha256": "0ad65c7f21285561648597dc991e8d733466ff0815c341272d5f2721e6ce15dd",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/disco/build_repo_skills_collection.test.ts",
-      "localSha256": "35e32d4058182e86a171946409d570043b9595c0f45fdbe3da43a5845b9cc3d9",
+      "localSha256": "35dd4c11b08be4477a88d45e6fe72b5ec5e171bdd5dd25d5c5cf7bd7c52f8072",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/disco/dynamic-workflows/adversarial-review.test.ts",
+      "localSha256": "d0e8d267c3ffa27d6ffa2e551b86e3c8c0f91265dbaab3fb3edd6346b3920300",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/disco/dynamic-workflows/adversarial-review.ts",
-      "localSha256": "f5e6c3d7507917534f7f725914d3ae8fdd2b8a99eb779d4232954e36f3cffbd2",
+      "localSha256": "e77e6c482699bd5a51929d5d7d9f6d06f50b2a80eceaa8c439640b0676660c8a",
       "origin": "disco_owned"
     },
     {
@@ -4279,8 +4489,13 @@
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/src/disco/dynamic-workflows/deep-research.test.ts",
+      "localSha256": "f39641d2a906cc75193e85073ded6b55aa2df5ed5d660ca40390efbbdddf3bd6",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/src/disco/dynamic-workflows/deep-research.ts",
-      "localSha256": "d4f112cec968d36057d5946218c071b106fe75e413842ec073349d07f57cce2b",
+      "localSha256": "3c3dca0fdbd2b6416db79971d77f305f2d464df727b8a741ba13ca2027ce7c3a",
       "origin": "disco_owned"
     },
     {
@@ -4294,8 +4509,13 @@
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/src/disco/dynamic-workflows/errors.test.ts",
+      "localSha256": "25845d76ddbedde445a8da09a193cc64c8a360f73164d452b9c24686563533ca",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/src/disco/dynamic-workflows/errors.ts",
-      "localSha256": "16819f8d47d27e250cc0694f9ff0c577dd91dc72729b027efa47b2a9bf98e50b",
+      "localSha256": "71552ad53e8e53009e4e17828a00cfb04b7db553a0c47670e1dfea24ff99618a",
       "origin": "disco_owned"
     },
     {
@@ -4329,8 +4549,13 @@
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/src/disco/dynamic-workflows/run-persistence.test.ts",
+      "localSha256": "8f3c5ba1702e8e8fcbea27b24b243672e8259ea6313acadaaae996ba52fa4e4c",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/src/disco/dynamic-workflows/run-persistence.ts",
-      "localSha256": "14cf05e3157989e8f6c5cae654a44385b6b6c40753a09bd2c2743246628a3491",
+      "localSha256": "8fa079d0ba1890cbda5a209968c3591d9434a7100055aed6431b2c0c5ad28498",
       "origin": "disco_owned"
     },
     {
@@ -4354,13 +4579,23 @@
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/src/disco/dynamic-workflows/url-guard.test.ts",
+      "localSha256": "f4efa5a9591867f8dea781b9184c7af6b2b85d67b45531857ee2d189eec8743d",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/disco/dynamic-workflows/url-guard.ts",
+      "localSha256": "6696b06e07047b8ee85ef1f05f7c495ca64bfc0ff440d0caa17965c67c94c18f",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/src/disco/dynamic-workflows/web-tools.ts",
-      "localSha256": "0773c511e2f7e28c170fc5984d9924fad1995b34e7d92dff31325a8eb995d7ff",
+      "localSha256": "ed19808aabf953bcb1898f269f3ec0f47c0c9349f7131d52a7f40af8806bd6e7",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/disco/dynamic-workflows/workflow-commands.ts",
-      "localSha256": "f3a396cf9f2dce648e5670ed3a89d07dd9d2125692cbdd420bd4b512e781645b",
+      "localSha256": "3bc08ce233b783729b786ad5a0ceb6b96f734e9f1a6839a6e4bad9b5b1044214",
       "origin": "disco_owned"
     },
     {
@@ -4384,8 +4619,13 @@
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/src/disco/dynamic-workflows/workflow-settings.test.ts",
+      "localSha256": "9754ca7875abc06b7975c24c28668232d6d6cd8b201f001f35f7c7a297696c0b",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/src/disco/dynamic-workflows/workflow-settings.ts",
-      "localSha256": "abb91bbf8ddab512e3711098d6ed9a8c119d592634f68c3d6dcb6e6bad8c72c6",
+      "localSha256": "19f5b0cd3a273f63342cd4c4ad08eb4c640530a32f48b632a263b168e188ce4a",
       "origin": "disco_owned"
     },
     {
@@ -4400,12 +4640,12 @@
     },
     {
       "localPath": "packages/coding-agent/src/disco/dynamic-workflows/workflow.test.ts",
-      "localSha256": "00c78e8245c0857e84eb261d9b2d8ceefdfcf564b40738d9ddaebcf89fea7da9",
+      "localSha256": "5cb07a3150e989b0979174d5c49e982ec75a295bbd2bfec7a0004f6483691434",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/disco/dynamic-workflows/workflow.ts",
-      "localSha256": "8ca4344ee887a31ba4020068cae31a726395d0a37fdb8137a276d252a0e63048",
+      "localSha256": "183ed9c8461325aa16ae2e550459938b0fc6f96c6ea2fe42418de32739ee499e",
       "origin": "disco_owned"
     },
     {
@@ -4465,7 +4705,7 @@
     },
     {
       "localPath": "packages/coding-agent/src/disco/repo-skill-license-contract.test.ts",
-      "localSha256": "6e290b08dcbf90691804d16d0486181cc5c525a6d4236e3bd866de426a0ba4f9",
+      "localSha256": "67ab1d0f0bacedeba2d1125fd3ff748a0530f24c8d9db166b8a3dfc1537e9df1",
       "origin": "disco_owned"
     },
     {
@@ -4620,7 +4860,7 @@
     },
     {
       "localPath": "packages/coding-agent/src/disco/skills/import-repo-skills-to-agent/scripts/export_repo_skills_to_agent.mjs",
-      "localSha256": "9f5e1b343644848bca92f1c01cf7c5e20120e2ca9a1b6aed3917c8ad5446381d",
+      "localSha256": "752507665e59d31092df3af4d126eb179fe3e14c5ab5e46a5041b3d634fd75a7",
       "origin": "disco_owned"
     },
     {
@@ -4830,7 +5070,7 @@
     },
     {
       "localPath": "packages/coding-agent/src/disco/skills/verify-repo-skill/scripts/build_repo_skills_collection.mjs",
-      "localSha256": "3810f6019d4487350457622b1004c143784059d3afb22d7339f2f80d96b41c0f",
+      "localSha256": "3c62c616d3b9aa186bd42f814b083a589d1cd4b0be2f231848ae95a5cf7f9df5",
       "origin": "disco_owned"
     },
     {
@@ -4840,17 +5080,17 @@
     },
     {
       "localPath": "packages/coding-agent/src/disco/skills/verify-repo-skill/scripts/license-validation.mjs",
-      "localSha256": "e3f563219e80c063fb7c29f080c0d506982436a270a778f75f2dbe19544b09be",
+      "localSha256": "e48774bb769266444ce88cc25f7cb9086f1e574257194549117a2b6b1675fb74",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/disco/skills/verify-repo-skill/scripts/resolve_repo_license.mjs",
-      "localSha256": "eb5266080766f24be2d3a908f5110ae5ac6826ac8c4da5283e39a5d799706659",
+      "localSha256": "4eaa142abe7cad55867134a2c5a451990be311c8003192aca4f92dd80b66e705",
       "origin": "disco_owned"
     },
     {
       "localPath": "packages/coding-agent/src/disco/skills/verify-repo-skill/scripts/run_native_cases.py",
-      "localSha256": "2ad119a09ec61ecb245ba9fef9bc145c42cb8ad40a8d7a1b293b5a5b61cfbd76",
+      "localSha256": "fea4e5fd60a56294d0bd4e84cd4e11e18f780cb283bc2fa234c69d7ef758c011",
       "origin": "disco_owned"
     },
     {
@@ -4860,7 +5100,7 @@
     },
     {
       "localPath": "packages/coding-agent/src/disco/skills/verify-repo-skill/scripts/update_repo_skills_router.mjs",
-      "localSha256": "8fd8b391efa9dfd17159d7a53ce6eace531cf283e183d6ad36d2ad09bacf78be",
+      "localSha256": "f86e1f0858c7f4bba3b76aa43505e57cf74231b2040af8f59b342c7864d7f023",
       "origin": "disco_owned"
     },
     {
@@ -4889,13 +5129,208 @@
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/src/evolution/audit-consistency.test.ts",
+      "localSha256": "3abcbef2ea6f85490c09a649dee11b2e1f1168a2c32d7d62056b5d36a57f1c08",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/audit-consistency.ts",
+      "localSha256": "d8771c0be37d35055da0387e7b16cd2ca523a923f3e659566c9e326604a641d9",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/baseline.test.ts",
+      "localSha256": "f19738e923ee45a6de1836a2dbcc4c61e6afc3588529ec9b301c865a2fecf51a",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/baseline.ts",
+      "localSha256": "fac83d43204404bc9b6980894f5db553704cb1198145d13c64608c8a306017ec",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/candidate-cli.test.ts",
+      "localSha256": "e4d870798ecabee9a62e2ffcb56fe0a09e0ac5a03593345020e8c2374101a3ce",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/candidate-cli.ts",
+      "localSha256": "0cb7b0a42c2265251b7f9def816f549129f1a88a5a56904aa253a5d60f873caa",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/candidate-eval.test.ts",
+      "localSha256": "93e29719c47217fa6555c27c8bb5a1a9751b8093cc5ace1f178ab0a5b3f9f1ef",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/candidate-eval.ts",
+      "localSha256": "56e3ba593baa3a1c2b69bd422a75fde40f20247b47eb90c7b9e3fe752ab9c1ed",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/candidate-pool.test.ts",
+      "localSha256": "8d389ecf27b3b215ddb20e2f8d5abf4333696523db1ac779548c10b268dc464b",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/candidate-pool.ts",
+      "localSha256": "3004681d1b9ad1f0fd1291c499f67d52f8cecfa9c5ce665f5943f1053c4b0dc2",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/candidate-regression.test.ts",
+      "localSha256": "c7ccf67d236768714b8f95594bfdac107ade3cb192f7d389098f5d306815435d",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/candidate-regression.ts",
+      "localSha256": "3def6006cdfe0dcb95b27b0f3209755223aebff36303a2f4dd09ddc7d9c79327",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/controller.ts",
+      "localSha256": "040ba7b8a1312856b020a428b56feded2ac26c55e8e3897598811e5b5bcf7ebf",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/evolution.test.ts",
+      "localSha256": "1ebb3436ccef3348817b4e45b94e3c1dc2fdef5cd79fd3b231f1170b6a528afc",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/grade-inject.test.ts",
+      "localSha256": "f5db70ae4fcb974ac82c0e4447b1731fb59a0e541743148ef684f285eff4e69d",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/grade-inject.ts",
+      "localSha256": "1e5a4ed74b6eeb48d3f257e37ff77228c41bf58c780ec53d267da68d4652e90b",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/judgement-feed.test.ts",
+      "localSha256": "03dcaabc1cd78011641dd7996324d2622a6c25333654aa6fe77ff4a46f6f9fa8",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/judgement-feed.ts",
+      "localSha256": "180c041910f575e34514084710bdd511ba6198cd679c2e7fdcf79addb359c9a1",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/promote.test.ts",
+      "localSha256": "0f31d19a1d7e97d8fbc6f54a2aaa2a30afc9a2273e7ff2cf26d81e0e4c48243f",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/promote.ts",
+      "localSha256": "7d30d6652f8c59fc3b11aaa0e60acc5b5d6652f9d481ed2ae2da7979ecf38057",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/propose-only.ts",
+      "localSha256": "988aeaf21420da22ba510efa6b6524fe2c0ccbeabbea0019ab1ce8df31627dcf",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/score-report.test.ts",
+      "localSha256": "20de8bc2cbd1f86b865d6e2573fddf522aed0741796c0e218ead9be078e7df0d",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/score-report.ts",
+      "localSha256": "a9066156ef252e9d6342275063505f0fc2f09637237d87243eb77e0a8ba9c92e",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/skill-patch.test.ts",
+      "localSha256": "9dcca32dee754df082a5488124fb02b4092bf2cb39c07718cbff89be894ea142",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/skill-patch.ts",
+      "localSha256": "539b5729337e102741d6fb6ad80d62c60b6179fb18dfe0a893d1d6dbe3f6d6c6",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/transact.test.ts",
+      "localSha256": "ea26c553803e4b32845cbb912b1e53a69e1deba6b79e4fea961990f604358326",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/transact.ts",
+      "localSha256": "42057b396473425a153e577eb92f6afe5df36ebbb7bd6e858f49637e6b238382",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/transaction-drill.test.ts",
+      "localSha256": "3cb882dc6859b9770a4ad74f5f95bc63dd7056398d7ad815f095e592c0170f01",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/transaction-drill.ts",
+      "localSha256": "a553dc244747d388049091d200b7617f4def24bef128d4129998ba5ca5eed043",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/evolution/types.ts",
+      "localSha256": "a0f6da2458867b5f4d7970a9cb5f9a47a3029f59488d8cb4c33a311c2c34fbda",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/extensions/repo-skill-observer/classifier.ts",
+      "localSha256": "52b52f321fed7f23ae06407000fcac950b5720e54749591aa6ea218ddf45fc2c",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/extensions/repo-skill-observer/events.ts",
+      "localSha256": "784219086cd9c493627c831147420f06f9431b4e3b8adceb74d4070249303f4b",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/extensions/repo-skill-observer/index.ts",
+      "localSha256": "2eaae75bd2be4e6fff6a4c3987ac96e061964734ae5724f6212bfca60f9d9446",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/extensions/repo-skill-observer/metrics.ts",
+      "localSha256": "161985b9fc301bf86adebd66b78f9abec2c460db750a3971e19ddf8d0347f121",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/extensions/repo-skill-observer/repo-skill-observer.test.ts",
+      "localSha256": "d60e986d1af3b99a2f9dc085595151717b3ad1164aa0628b61fc75f778a97c27",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/extensions/repo-skill-observer/report.ts",
+      "localSha256": "8ecdbe88ccd27d8d12c6c30e2c6b06db9a0ad1657aba5606d9f3b11215c0eb88",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/extensions/repo-skill-observer/storage.ts",
+      "localSha256": "d718a5ab7553ea474da922172ba49892275de1cbf0877bdfd843b81ec55edb28",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/src/modes/interactive/components/disco-splash.ts",
       "localSha256": "d83a7c24c901043b6ed868847ad58bc406cd3fa4e986bac05be2026ab0779e06",
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/src/modes/interactive/components/display-text.ts",
+      "localSha256": "85e810bd885eadf6bcc944f0696202229dc6ac53074879b2dfd549a794a68154",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/src/utils/managed-install.ts",
       "localSha256": "f04483b6f9e6bd0ca5be88c31c716cd3722d177c12b5e3bb9fa86ecf25c1a516",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/src/utils/paths-file-url.test.ts",
+      "localSha256": "bbd1e72c4e858c7e8aa985b265d75903e9295f3b814251df718cbc1477f75c3c",
       "origin": "disco_owned"
     },
     {
@@ -4911,6 +5346,11 @@
     {
       "localPath": "packages/coding-agent/test/disco-splash.test.ts",
       "localSha256": "685cac0e3538c56dee711c1da80124f48256fc79968e78c8c2436f63273eef99",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/test/fixtures/benchmark/skill-profiles.json",
+      "localSha256": "4819ea5b250aa9321a4d343fbc992789a96351ae37c16d862fe503c645bd54c2",
       "origin": "disco_owned"
     },
     {
@@ -4930,7 +5370,12 @@
     },
     {
       "localPath": "packages/coding-agent/test/oauth-environment-isolation.test.ts",
-      "localSha256": "97506e4417c2b45c422161bee097b3c0ddc9017e9557e3436344be943ba2c162",
+      "localSha256": "a211f69d95fe086c04220e7240f91a0c2b0b9db1a5e58ae8b96e0dfda58aca44",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/test/open-browser-scheme.test.ts",
+      "localSha256": "10bae7bdf5bbd8c811046f2ccdd0e6f8722a2740a927c76616a957e8fad3e0a8",
       "origin": "disco_owned"
     },
     {
@@ -4939,13 +5384,33 @@
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/test/read-tool-hint-injection.test.ts",
+      "localSha256": "415042b6c49def7c0719e0bd33e67507a66a976b63199c99efae96692917ff6e",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/test/session-manager/disco-mode.test.ts",
       "localSha256": "eb9069373fb2a73aada5c1c364853af29c8146187525e66893431d49eaea18c6",
       "origin": "disco_owned"
     },
     {
+      "localPath": "packages/coding-agent/test/terminal-escape-injection.test.ts",
+      "localSha256": "555a49affae793332ca94d6a727b31de982a02b59a3c2030fd313cba404883ba",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/test/theme-css-injection.test.ts",
+      "localSha256": "3b0e028041c9dc0fe5462dd98e7a3ecbfaefdbc2861dc80856885c604ff555bd",
+      "origin": "disco_owned"
+    },
+    {
       "localPath": "packages/coding-agent/test/theme-environment-isolation.test.ts",
       "localSha256": "fbc6ea39e9f0d729719629b672560e0cb81765adff9a8ff80849315cc3c2960f",
+      "origin": "disco_owned"
+    },
+    {
+      "localPath": "packages/coding-agent/test/tool-download-containment.test.ts",
+      "localSha256": "50625cb2ba52a0e8f44f12eb97da234d94c6ce6f16acf14b90bb5484f023fbac",
       "origin": "disco_owned"
     }
   ]

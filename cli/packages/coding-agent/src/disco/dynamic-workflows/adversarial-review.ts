@@ -73,19 +73,43 @@ return { total: findings.length, survivors, report }`;
 }
 
 /**
+ * Escape a string for safe inclusion inside a single-quoted JS string literal
+ * in a generated workflow script. Prevents template-injection → arbitrary code
+ * execution when untrusted strings (perspective names, topics) are interpolated
+ * into the returned source. Escapes backslash, quote, CR/LF, and the JS line/
+ * paragraph separators (U+2028/U+2029).
+ */
+function escapeSingleQuoted(value: string): string {
+	return value
+		.replace(/\\/g, "\\\\")
+		.replace(/'/g, "\\'")
+		.replace(/\r/g, "\\r")
+		.replace(/\n/g, "\\n")
+		.replace(/\u2028/g, "\\u2028")
+		.replace(/\u2029/g, "\\u2029");
+}
+
+/**
  * Generate a multi-perspective analysis workflow.
+ *
+ * P0-02 hardening: `topic`/`perspectives` are string-interpolated into the
+ * returned script before it runs; every interpolated literal is escaped via
+ * escapeSingleQuoted so an untrusted value cannot break out of a JS string and
+ * inject arbitrary code. Prefer the args-based static-script pattern (see
+ * generateAdversarialReviewWorkflow) for new workflows though — it has no
+ * interpolation by construction.
  */
 export function generateMultiPerspectiveWorkflow(topic: string, perspectives: string[]): string {
 	const perspectiveAgents = perspectives
 		.map(
 			(p, _i) =>
-				`  () => agent('Analyze from ${p} perspective: ' + topic, { label: '${p.toLowerCase().replace(/\\s+/g, "-")}' }),`,
+				`  () => agent('Analyze from ${escapeSingleQuoted(p)} perspective: ' + topic, { label: '${escapeSingleQuoted(p.toLowerCase())}' }),`,
 		)
 		.join("\n");
 
 	return `export const meta = {
   name: 'multi_perspective_analysis',
-  description: 'Analyze from ${perspectives.length} different perspectives',
+  description: 'Analyze from ${escapeSingleQuoted(String(perspectives.length))} different perspectives',
   phases: [
     { title: 'Perspective Analysis' },
     { title: 'Synthesis' },
@@ -93,7 +117,7 @@ export function generateMultiPerspectiveWorkflow(topic: string, perspectives: st
 };
 
 phase('Perspective Analysis');
-const topic = '${topic.replace(/'/g, "\\'")}';
+const topic = '${escapeSingleQuoted(topic)}';
 const analyses = await parallel([
 ${perspectiveAgents}
 ]);

@@ -73,17 +73,39 @@ return { question, queries, supported: (verdict && verdict.supported) || [], rep
 }
 
 /**
+ * Escape a string for safe inclusion inside a single-quoted JS string literal
+ * in a generated workflow script. Prevents template-injection → arbitrary code
+ * execution when untrusted strings (scope names, check descriptions) are
+ * interpolated into the returned source. Escapes backslash, quote, CR/LF, and
+ * the JS line/paragraph separators (U+2028/U+2029).
+ */
+function escapeSingleQuoted(value: string): string {
+	return value
+		.replace(/\\/g, "\\\\")
+		.replace(/'/g, "\\'")
+		.replace(/\r/g, "\\r")
+		.replace(/\n/g, "\\n")
+		.replace(/\u2028/g, "\\u2028")
+		.replace(/\u2029/g, "\\u2029");
+}
+
+/**
  * Generate a codebase audit workflow.
+ *
+ * P0-02 hardening: `scope`/`checks` are string-interpolated into the returned
+ * script before it runs; every interpolated literal is escaped via
+ * escapeSingleQuoted so an untrusted value cannot break out of a JS string and
+ * inject arbitrary code. (The label retains its own stricter sanitization.)
  */
 export function generateCodebaseAuditWorkflow(scope: string, checks: string[]): string {
-	const escapedScope = scope.replace(/'/g, "\\'").slice(0, 60);
+	const escapedScope = escapeSingleQuoted(scope).slice(0, 60);
 	const checkAgents = checks
 		.map((check) => {
 			const label = check
 				.toLowerCase()
 				.replace(/[^a-z0-9]+/g, "-")
 				.slice(0, 20);
-			return `  () => agent('Audit ${check} across: ' + scope, { label: '${label}' }),`;
+			return `  () => agent('Audit ${escapeSingleQuoted(check)} across: ' + scope, { label: '${label}' }),`;
 		})
 		.join("\n");
 

@@ -1,0 +1,23 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "data-pipeline",
+  "target_capability": "data-layout-preflight-without-mutation",
+  "difficulty": "troubleshooting",
+  "evidence_basis": [
+    "sub-skills/data-pipeline/SKILL.md",
+    "sub-skills/data-pipeline/references/pdb-mmcif-workflows.md",
+    "sub-skills/data-pipeline/scripts/validate_data_layout.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/data-pipeline/SKILL.md",
+    "sub-skills/data-pipeline/scripts/validate_data_layout.py"
+  ],
+  "assertions": [
+    "The response routes to the data-pipeline sub-skill for local structure/MSA/template/crop layout preflight.",
+    "The response uses scripts/validate_data_layout.py and advises running --help first.",
+    "The response states the validator only checks explicitly supplied local paths, extensions, naming/layout conventions, CSV headers/IDs, dates, and crop/config consistency.",
+    "The response states the validator never imports the package, downloads, parses-and-rewrites, filters, clusters, launches workers, starts a server, runs Kalign, or trains.",
+    "The response does not infer whether input is curated PDB vs AFDB from filename alone.",
+    "The response treats networked curation/distillation acquisition interfaces as reference-only until a human approves an acquisition and resource plan."
+  ]
+}

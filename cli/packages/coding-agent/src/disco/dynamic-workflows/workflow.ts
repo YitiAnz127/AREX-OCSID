@@ -1309,6 +1309,11 @@ function hashCheckpoint(promptText: string, options: CheckpointOptions): string 
 		promptText,
 		kind: options.kind ?? "confirm",
 		choices: options.choices ?? null,
+		// BUG (resume gate): headless/default change how an unanswered checkpoint
+		// resolves (abort vs default reply); include them so a changed policy isn't
+		// silently overridden by a journaled reply.
+		headless: options.headless ?? null,
+		default: options.default ?? null,
 	});
 	return createHash("sha256").update(identity).digest("hex");
 }
@@ -1332,6 +1337,13 @@ function hashAgentCall(
 		// this call's cached result on a later resume.
 		agentDef: agentDefKey,
 		schema: options.schema ?? null,
+		// BUG (resume semantics): isolation/timeoutMs/retries change how an agent
+		// executes (cwd/filesystem, timeout window, retry count), so the resume hash
+		// must include them. Otherwise a paused run resumed with different settings
+		// replays a journaled result that the new settings would not have produced.
+		isolation: options.isolation ?? null,
+		timeoutMs: options.timeoutMs ?? null,
+		retries: options.retries ?? null,
 	});
 	return createHash("sha256").update(identity).digest("hex");
 }

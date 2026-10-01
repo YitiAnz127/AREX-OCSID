@@ -1,0 +1,23 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "model-inference",
+  "target_capability": "bounded-model-inference-contract-probe",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "sub-skills/model-inference/SKILL.md",
+    "sub-skills/model-inference/references/model-and-forward-api.md",
+    "sub-skills/model-inference/scripts/smoke_model.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/model-inference/SKILL.md",
+    "sub-skills/model-inference/scripts/smoke_model.py"
+  ],
+  "assertions": [
+    "The response routes to the model-inference sub-skill and does not treat data-pipeline or cli-serving as the primary target.",
+    "The response uses scripts/smoke_model.py with an explicit --device cpu and a reduced model rather than production-scale defaults.",
+    "The response runs --mode signature first and, only for a bounded check, a tiny forward with a small --num-sample-steps (e.g. 2).",
+    "The response states the helper never downloads weights, never enables PLM/NLM encoders, never trains, and proves contract, not structural accuracy or throughput.",
+    "The response recommends init_and_load for a checkpoint saved by this package and verifying version, constructor dimensions, device, and strictness.",
+    "The response requires validating input/index offsets before any forward call."
+  ]
+}

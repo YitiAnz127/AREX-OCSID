@@ -1,0 +1,1 @@
+I found a paper reporting synergy between two drugs and I want to look up the canonical DrugCombDB record for the pair. Please query the DrugCombDB CSV for that drug pair and cell line and return the synergy value, its synergy type, and the PMID. If there may be many matching records, cap the result limit to a reasonable number so I get a compact list.

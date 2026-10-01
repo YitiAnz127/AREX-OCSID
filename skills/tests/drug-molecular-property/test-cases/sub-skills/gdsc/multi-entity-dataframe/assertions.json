@@ -1,0 +1,19 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "gdsc",
+  "target_capability": "multi-entity-query-gdsc-no-match-contract",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/gdsc/SKILL.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/gdsc/SKILL.md"
+  ],
+  "assertions": [
+    "The response shows the multi-entity call mod.query_gdsc([\"Nutlin\", \"A549\", \"EGFR\"]) documented in sub-skills/gdsc/SKILL.md.",
+    "The response explains the per-source result list shape with source, match_count, and matches keys.",
+    "The response states that query_gdsc returns an empty list when no matches are found.",
+    "The response states that query_gdsc returns an {\"error\": \"...\"} dict when the data directory is missing or empty.",
+    "The response does not reference files from the original DrugClaw/drug_molecular_property checkout as the way to run the query."
+  ]
+}

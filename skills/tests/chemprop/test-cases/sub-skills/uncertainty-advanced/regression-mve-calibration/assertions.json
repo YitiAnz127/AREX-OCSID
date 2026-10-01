@@ -1,0 +1,25 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "uncertainty-advanced",
+  "target_capability": "mve-calibration-conformal-prediction",
+  "difficulty": "advanced",
+  "evidence_basis": [
+    "sub-skills/uncertainty-advanced/SKILL.md",
+    "sub-skills/uncertainty-advanced/references/uncertainty.md",
+    "sub-skills/uncertainty-advanced/references/troubleshooting.md",
+    "sub-skills/uncertainty-advanced/scripts/chemprop_uncertainty_args.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/uncertainty-advanced/SKILL.md",
+    "sub-skills/uncertainty-advanced/references/uncertainty.md",
+    "sub-skills/uncertainty-advanced/scripts/chemprop_uncertainty_args.py"
+  ],
+  "assertions": [
+    "The response routes to the chemprop uncertainty-advanced sub-skill.",
+    "The response emits a chemprop predict command with --uncertainty-method mve, --cal-path calibration.csv, --calibration-method zscaling, and --evaluation-methods nll-regression miscalibration_area ence spearman.",
+    "The response explains that the mve estimator is valid only for a regression-mve-trained model.",
+    "The response explains that --evaluation-methods require the prediction/test CSV to contain target labels matching the model output columns.",
+    "The response explains the conformal-alpha 0.1 quantile-regression/conformal-regression path for quantile models, or correctly notes the calibration/evaluation coupling.",
+    "The response does not tell the user to open the original Chemprop source or tests."
+  ]
+}

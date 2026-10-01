@@ -1,0 +1,20 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "fetch-structure-and-analyze-chains",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "SKILL.md",
+    "references/capability-map.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response routes to the pdb-structure root skill for a protein structure fetch/analysis task.",
+    "The response downloads 1M17 via the RCSB download URL https://files.rcsb.org/download/1M17.pdb or via Bio.PDB PDBList.retrieve_pdb_file, both of which appear in SKILL.md.",
+    "The response parses the downloaded PDB with Bio.PDB PDBParser and reports per-chain residue counts using a chain-info loop over structure.get_residues().",
+    "The response supplies the RCSB Search full-text query object with service \"full_text\", value \"EGFR kinase domain\", and return_type \"entry\", posted to https://search.rcsb.org/rcsbsearch/v2/query as documented in SKILL.md.",
+    "The response does not tell the user to open files from the original protein-design-skills/pdb checkout."
+  ]
+}

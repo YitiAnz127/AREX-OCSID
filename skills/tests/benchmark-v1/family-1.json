@@ -1,0 +1,8 @@
+{
+  "runId": "family-cheminformatics",
+  "candidates": [
+    { "candidateId": "cand-A-batch", "text": "Refactor chemprop inference to batch graph batching for throughput" },
+    { "candidateId": "cand-B-cache", "text": "Add a fingerprint cache layer to avoid recompute in the chemprop featurizer" },
+    { "candidateId": "cand-C-docs", "text": "Improve chemprop API documentation with worked examples and CLI reference" }
+  ]
+}

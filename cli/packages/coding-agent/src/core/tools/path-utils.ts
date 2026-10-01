@@ -1,5 +1,6 @@
 import { accessSync, constants } from "node:fs";
 import { access } from "node:fs/promises";
+import { isAbsolute } from "node:path";
 import { normalizePath, resolvePath } from "../../utils/paths.ts";
 
 const NARROW_NO_BREAK_SPACE = "\u202F";
@@ -42,8 +43,44 @@ export function expandPath(filePath: string): string {
 }
 
 /**
+ * Returns true when a path (relative to a search/workspace root) escapes that
+ * root. Used for P0-02 containment: directory-listing/globbing tools must never
+ * surface a result that climbs above their search root (reachable only through
+ * a symlink traversal), so escaping paths are dropped rather than reported.
+ * An empty string (the root itself) and any plain in-root child are contained.
+ */
+export function isEscapingRelative(relativePath: string): boolean {
+	if (isAbsolute(relativePath)) return true;
+	// Track directory depth across both separators (rg/fd can emit POSIX or
+	// Windows forms regardless of host). A path that climbs above the root at
+	// any point — even a mid-path "a/../.." — escapes.
+	let depth = 0;
+	for (const segment of relativePath.replace(/\\/g, "/").split("/")) {
+		if (segment === "" || segment === ".") continue;
+		if (segment === "..") {
+			depth--;
+			if (depth < 0) return true;
+		} else {
+			depth++;
+		}
+	}
+	return false;
+}
+
+/**
  * Resolve a path relative to the given cwd.
  * Handles ~ expansion and absolute paths.
+ *
+ * P2-05 (DEFERRED, audit F1): resolution here is purely lexical (node:path),
+ * with NO realpath canonicalization or workspace containment. A symlink inside
+ * the workspace that points outside is followed verbatim by write/edit/read.
+ * A proper fix must canonicalize the deepest existing ancestor of the resolved
+ * path and verify it stays inside the real cwd, while PRESERVING explicit
+ * absolute paths outside cwd (documented behavior for read/edit/ls). Deferred
+ * because it touches every tool's hot path (per-op realpath cost), needs
+ * careful depth-canonicalization for not-yet-existing write targets, and risks
+ * regressing the live editor tools. F2 (extensions symlink RCE) is the fixed
+ * subset of this same defect class.
  */
 export function resolveToCwd(filePath: string, cwd: string): string {
 	return resolvePath(filePath, cwd, { normalizeUnicodeSpaces: true, stripAtPrefix: true });

@@ -1,6 +1,8 @@
+import { spawnSync } from "node:child_process";
 import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import { applyRepoLicense } from "./skills/verify-repo-skill/scripts/apply_repo_license.mjs";
 import { inspectRepoSkillLicenses } from "./skills/verify-repo-skill/scripts/license-validation.mjs";
@@ -21,22 +23,44 @@ async function writeSkillTree(root: string, rootFrontmatter: string, childFrontm
 }
 
 async function fakeGh(root: string, output: string, exitCode = 0, stderr = ""): Promise<Record<string, string>> {
+	// P1-16: the fake `gh` must be cross-platform (POSIX and Windows). A `#!/bin/sh`
+	// launcher cannot execute on Windows (no /bin/sh), and PATH uses `:` on POSIX but
+	// `;` on Windows. We ship a tiny Node runner plus two launchers and pass the
+	// configured stdout/stderr/exit through environment variables, so no shell
+	// escaping is required and behavior is identical on every platform.
 	const bin = path.join(root, "bin");
 	await mkdir(bin, { recursive: true });
-	const script = path.join(bin, "gh");
+	const runner = path.join(bin, "gh-fake.cjs");
 	await writeFile(
-		script,
+		runner,
 		[
-			"#!/bin/sh",
-			`printf '%b' ${JSON.stringify(output)}`,
-			stderr ? `printf '%b' ${JSON.stringify(stderr)} >&2` : "",
-			`exit ${exitCode}`,
+			"process.stdout.write(process.env.FAKE_GH_STDOUT ?? '');",
+			"process.stderr.write(process.env.FAKE_GH_STDERR ?? '');",
+			"process.exit(Number(process.env.FAKE_GH_EXIT ?? '0'));",
 			"",
-		].filter(Boolean).join("\n"),
+		].join("\n"),
 		"utf8",
 	);
-	await chmod(script, 0o755);
-	return { ...process.env, PATH: `${bin}:${process.env.PATH ?? ""}` };
+	// POSIX launcher (executes on Linux/macOS).
+	await writeFile(
+		path.join(bin, "gh"),
+		["#!/bin/sh", 'exec node "$(dirname "$0")/gh-fake.cjs"', ""].join("\n"),
+		"utf8",
+	);
+	await chmod(path.join(bin, "gh"), 0o755);
+	// Windows launcher (PATHEXT resolves gh.cmd when spawnSync looks up `gh`).
+	await writeFile(
+		path.join(bin, "gh.cmd"),
+		["@ECHO OFF", 'node "%~dp0gh-fake.cjs"', ""].join("\r\n"),
+		"utf8",
+	);
+	return {
+		...process.env,
+		PATH: `${bin}${path.delimiter}${process.env.PATH ?? ""}`,
+		FAKE_GH_STDOUT: output,
+		FAKE_GH_STDERR: stderr,
+		FAKE_GH_EXIT: String(exitCode),
+	};
 }
 
 describe("repo skill license contract", () => {
@@ -207,5 +231,26 @@ describe("repo skill license contract", () => {
 			final_validation: { valid: true, files: 2, value: "Apache-2.0" },
 		});
 		expect(report.warning).toBeNull();
+	});
+
+	it("runs the documented CLI on every platform (Windows-safe main guard)", async () => {
+		// The CLI guard used to compare `path.resolve(process.argv[1])` against
+		// `path.resolve(new URL(import.meta.url).pathname)` — on Windows the latter
+		// is a POSIX-style `/C:/...` that `path.resolve` corrupts to `C:\C:\...`, so
+		// the guard never fired and the documented `node license-validation.mjs --json
+		// <dir>` silently no-opped with exit code 0 (a false clean bill of health).
+		const root = await mkdtemp(path.join(tmpdir(), "disco-license-cli-"));
+		cleanup.push(root);
+		await writeSkillTree(root, 'name: example\ndescription: "Root skill."\nlicense: MIT', 'name: setup\ndescription: "Setup skill."\nlicense: MIT');
+
+		const script = fileURLToPath(new URL("./skills/verify-repo-skill/scripts/license-validation.mjs", import.meta.url));
+		const result = spawnSync(process.execPath, [script, "--json", root], { encoding: "utf8" });
+
+		// The main guard must fire and the CLI must actually report (it ran and
+		// produced a JSON report; a broken guard yields empty stdout + exit 0).
+		expect(result.status).toBe(0);
+		expect(result.stderr).toBe("");
+		const report = JSON.parse(result.stdout);
+		expect(report).toMatchObject({ valid: true, files: 2, value: "MIT", status: "resolved" });
 	});
 });

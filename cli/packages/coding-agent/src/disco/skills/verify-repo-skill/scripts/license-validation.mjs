@@ -2,6 +2,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { parseDocument } from "yaml";
 
 export const NO_LICENSE = "NO_LICENSE";
@@ -107,6 +108,11 @@ function main(argv) {
 	return report.valid ? 0 : 2;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname)) {
+// Main-guard: compare against `fileURLToPath(import.meta.url)` (the real
+// filesystem path) so it works on every platform. Comparing against
+// `new URL(import.meta.url).pathname` yields a POSIX-style `/C:/...` on Windows,
+// which `path.resolve` corrupts to `C:\C:\...` and never matches `process.argv[1]`
+// — silently disabling this documented CLI (false clean, exit 0) on Windows.
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
 	process.exitCode = main(process.argv.slice(2));
 }

@@ -1,0 +1,20 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "integration",
+  "target_capability": "gdsc-offline-data-dir-recovery",
+  "difficulty": "troubleshooting",
+  "evidence_basis": [
+    "SKILL.md",
+    "sub-skills/gdsc/SKILL.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/gdsc/SKILL.md"
+  ],
+  "assertions": [
+    "The response names the default DATA_DIR resources_metadata/drug_molecular_property/GDSC and the GDSC_DATA_DIR environment override from sub-skills/gdsc/SKILL.md.",
+    "The response lists the three manual wget URLs for screened_compounds_rel_8.4.csv, GDSC1_fitted_dose_response_27Oct23.xlsx, and GDSC2_fitted_dose_response_27Oct23.xlsx.",
+    "The response explains the auto-download-on-first-run behavior and the manual download fallback for a compute node without internet.",
+    "The response describes query_gdsc returning an empty list on no match and an {\"error\": \"...\"} result when the data directory is missing or empty.",
+    "The response does not instruct the user to edit files in the original DrugClaw/drug_molecular_property checkout."
+  ]
+}

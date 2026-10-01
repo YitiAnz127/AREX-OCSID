@@ -1,3 +1,12 @@
+// Accept any of "1"/"true"/"yes" (case-insensitive) — mirror the truthy-flag
+// handling used by the other DISCO_* feature toggles so a natural
+// DISCO_EXPERIMENTAL=true is not silently ignored (audit H4).
+function isTruthyEnvFlag(value: string | undefined): boolean {
+	if (!value) return false;
+	const normalized = value.toLowerCase();
+	return normalized === "1" || normalized === "true" || normalized === "yes";
+}
+
 export function areExperimentalFeaturesEnabled(): boolean {
-	return process.env.DISCO_EXPERIMENTAL === "1";
+	return isTruthyEnvFlag(process.env.DISCO_EXPERIMENTAL);
 }

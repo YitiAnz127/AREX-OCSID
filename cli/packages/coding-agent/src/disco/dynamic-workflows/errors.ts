@@ -87,9 +87,17 @@ export function wrapError(error: unknown, context?: { agentLabel?: string }): Wo
 		);
 	}
 
+	// BUG (silent failure): the catch-all MUST be non-recoverable. Only
+	// recognisable hiccups (abort/timeout) and explicitly-flagged conditions
+	// (empty output, env assertion) are retryable. Treating every unknown error —
+	// a TypeError/ReferenceError in the workflow body, a schema/programming bug —
+	// as recoverable makes the agent retry, then `return null` (workflow.ts), which
+	// silently hides the true defect and sends the caller's recovery mechanism into
+	// an infinite loop re-running the identical broken codehare. Unknown errors
+	// should surface and propagate, not degrade to null.
 	return new WorkflowError(
 		error instanceof Error ? error.message : String(error),
 		WorkflowErrorCode.AGENT_EXECUTION_ERROR,
-		{ recoverable: true, agentLabel: context?.agentLabel, details: error },
+		{ recoverable: false, agentLabel: context?.agentLabel, details: error },
 	);
 }

@@ -1,0 +1,26 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "training-cli",
+  "target_capability": "two-file-split-diagnosis",
+  "difficulty": "troubleshooting",
+  "evidence_basis": [
+    "sub-skills/training-cli/SKILL.md",
+    "sub-skills/training-cli/references/data-formats.md",
+    "sub-skills/training-cli/references/troubleshooting.md",
+    "sub-skills/training-cli/scripts/chemprop_train_command_builder.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/training-cli/SKILL.md",
+    "sub-skills/training-cli/references/data-formats.md",
+    "sub-skills/training-cli/references/troubleshooting.md",
+    "sub-skills/training-cli/scripts/chemprop_train_command_builder.py"
+  ],
+  "assertions": [
+    "The response routes to the chemprop training-cli sub-skill.",
+    "The response states that with two --data-path CSVs the second file is the test set and the test split fraction must be 0.0.",
+    "The response recommends --split-sizes 0.9 0.1 0.0 for the two-file trainval/test layout.",
+    "The response explains that the default split would try to carve a test fraction out and fail, and that three separate CSVs map directly to train/val/test.",
+    "The response refers to the bundled chemprop_train_command_builder.py which enforces this rule (error: with two --data-path CSVs, set test split size to 0.0).",
+    "The response does not suggest the removed -k/--num-folds flag."
+  ]
+}

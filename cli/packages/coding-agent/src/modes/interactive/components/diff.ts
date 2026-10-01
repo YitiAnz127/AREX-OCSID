@@ -1,5 +1,6 @@
 import * as Diff from "diff";
 import { theme } from "../theme/theme.ts";
+import { sanitizeForDisplay } from "./display-text.ts";
 
 /**
  * Parse diff line to extract prefix, line number, and content.
@@ -77,7 +78,12 @@ export interface RenderDiffOptions {
  * - Added lines: green, with inverse on changed tokens
  */
 export function renderDiff(diffText: string, _options: RenderDiffOptions = {}): string {
-	const lines = diffText.split("\n");
+	// Diff context and removed lines are copied verbatim from the file on disk,
+	// so a repository controls these bytes. This string is rendered through a
+	// plain Text component (no markdown sanitizing) and written straight to
+	// stdout, so an ESC sequence here would be executed by the terminal — no
+	// model cooperation beyond editing the file. Strip controls first.
+	const lines = sanitizeForDisplay(diffText).split("\n");
 	const result: string[] = [];
 
 	let i = 0;

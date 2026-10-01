@@ -1,0 +1,5 @@
+I'm splitting my data into a trainval CSV and a separate test CSV so the test molecules never leak into training. I run:
+
+chemprop train --data-path trainval.csv test.csv --smiles-columns smiles --target-columns y --task-type regression --epochs 20 --output-dir runs/leak_test
+
+and Chemprop fails with an error about the test split size when I use the default split fractions. What is the correct `--split-sizes` I must pass so the second file is treated as a pure test set, and what does the two-file layout imply about how train/val/test are assigned? Also, why must the fraction be set that way?

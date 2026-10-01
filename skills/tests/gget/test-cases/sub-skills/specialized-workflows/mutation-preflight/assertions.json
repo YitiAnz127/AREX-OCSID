@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "specialized-workflows",
+  "target_capability": "mutate-input-preflight-join-validation",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/specialized-workflows/SKILL.md",
+    "sub-skills/specialized-workflows/references/mutation-contract.md",
+    "sub-skills/specialized-workflows/scripts/validate_mutation_inputs.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/specialized-workflows/SKILL.md",
+    "sub-skills/specialized-workflows/references/mutation-contract.md",
+    "sub-skills/specialized-workflows/scripts/validate_mutation_inputs.py"
+  ],
+  "assertions": [
+    "The response routes the mutation-generation task to the specialized-workflows sub-skill, not to a cancer-mutation lookup.",
+    "The response runs or references the bundled read-only helper scripts/validate_mutation_inputs.py with --fasta, --mutations, --mut-column mutation, and --seq-id-column seq_ID.",
+    "The response reports the preflight result including unmatched sequence ID ENSM1 and matched_row_count 2 for the given fixtures.",
+    "The response explains gget's FASTA join normalization as the first title token with the dot version removed (ENST1 from >ENST1.4 description), per mutation-contract.md.",
+    "The response treats the unmatched row as an input error to fix rather than guessing a join, and does not mutate or overwrite the input files.",
+    "The response does not direct the user to the original gget source repository checkout."
+  ]
+}

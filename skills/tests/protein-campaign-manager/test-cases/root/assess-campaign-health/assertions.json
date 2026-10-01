@@ -1,0 +1,19 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "campaign-health-assessment",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "SKILL.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response computes pass rates against the documented thresholds pLDDT > 0.85, ipTM > 0.50, scRMSD < 2.0 and an overall all-pass rate, matching the assess_campaign function in SKILL.md.",
+    "The response classifies health using the EXCELLENT (>0.15), GOOD (>0.10), MARGINAL (>0.05), POOR tiers from the SKILL.md 'Interpreting results' table.",
+    "For the attached fixture, the response reports an overall pass rate near 0 and a health classification of POOR.",
+    "The response identifies 'Low ipTM - hotspot or interface issue' as the top issue because iptm_pass is below 0.20 for the fixture, pointing to a hotspot or interface problem.",
+    "The response does not reference files from the original protein-design-skills/campaign-manager checkout."
+  ]
+}

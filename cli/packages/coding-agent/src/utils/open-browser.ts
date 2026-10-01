@@ -8,6 +8,15 @@ import { spawn } from "node:child_process";
  * `start` runs, which would make attacker-controlled URLs injectable.
  */
 export function openBrowser(target: string): void {
+	// Only hand http(s) to the OS handler. The target comes from a provider's
+	// auth/device-code response — a custom or compromised provider (or a MITM'd
+	// response) could otherwise pass `file:`/a UNC path, which Windows'
+	// FileProtocolHandler and xdg-open will happily open or execute locally. A
+	// leading "-" is also refused, since xdg-open would read it as an option.
+	if (!target || target.startsWith("-") || !/^https?:\/\//i.test(target)) {
+		return;
+	}
+
 	const [cmd, args]: [string, string[]] =
 		process.platform === "darwin"
 			? ["open", [target]]

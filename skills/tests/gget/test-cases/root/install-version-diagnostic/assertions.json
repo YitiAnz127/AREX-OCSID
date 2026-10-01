@@ -1,0 +1,23 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "install-version-cli-diagnostic",
+  "difficulty": "troubleshooting",
+  "evidence_basis": [
+    "SKILL.md",
+    "references/troubleshooting.md",
+    "scripts/check_install.py"
+  ],
+  "expected_skill_files": [
+    "SKILL.md",
+    "references/troubleshooting.md",
+    "scripts/check_install.py"
+  ],
+  "assertions": [
+    "The response runs or references the read-only bundled diagnostic python scripts/check_install.py.",
+    "The response verifies gget with the same interpreter using pip show and import __version__, and checks gget --version / command -v gget for a shadowing executable, per troubleshooting.md.",
+    "The response recommends a fresh Python 3.12+ environment and explains that gget[cellxgene] is installed only when a CELLxGENE Census query is actually selected.",
+    "The response does not run downloads, gget setup, or a remote query during a pure installation diagnostic.",
+    "The response does not direct the user to the original gget source repository checkout."
+  ]
+}

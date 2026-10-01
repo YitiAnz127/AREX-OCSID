@@ -5,7 +5,7 @@
  * stable without depending on host-internal config shape.
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { MAX_AGENT_RETRIES, MAX_CONCURRENCY } from "./config.ts";
 import { workflowHomeDir, workflowProjectPaths } from "./workflow-paths.ts";
@@ -73,7 +73,11 @@ export function saveWorkflowSettings(
 	if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
 
 	const existing = readObject(path);
-	writeFileSync(path, `${JSON.stringify({ ...existing, ...normalizeSettings(settings) }, null, 2)}\n`, "utf-8");
+	// Write atomically (tmp sibling + rename) so a crash/power-loss mid-write
+	// cannot truncate the workflow settings file (audit B1b).
+	const tmpPath = `${path}.tmp`;
+	writeFileSync(tmpPath, `${JSON.stringify({ ...existing, ...normalizeSettings(settings) }, null, 2)}\n`, "utf-8");
+	renameSync(tmpPath, path);
 }
 
 /** Save a global preference and update an existing project override if one is present. */

@@ -11,6 +11,34 @@ import { workflowProjectPaths } from "./workflow-paths.ts";
 
 export type RunStatus = "pending" | "running" | "paused" | "completed" | "failed" | "aborted";
 
+/**
+ * A run lease is held only for the lifetime of one executeRun() invocation. Any
+ * lock older than this is treated as stale and reclaimed even if its pid appears
+ * alive (SIGKILL + pid-reuse / zombie), so a wedged lock can't block a run forever.
+ */
+const LEASE_STALE_MS = 60 * 60 * 1000; // 60 minutes
+
+/**
+ * P0-02 (audit F1): runId is used to build filesystem paths (`${runId}.json` /
+ * `${runId}.lock`). It must be strictly validated at every persistence boundary,
+ * otherwise an unvalidated runId like "../../x" lets path.join escape runsDir and
+ * read/delete arbitrary .json files in the workspace (reachable from the
+ * /workflows rm & resume commands). Internal ids from generateRunId() are
+ * base36 + "-", so this superset is safe.
+ */
+const SAFE_RUN_ID = /^[0-9a-z][0-9a-z-]{0,71}$/i;
+
+/** Non-throwing form of the runId check, for filtering ids read off disk. */
+export function isSafeRunId(runId: unknown): runId is string {
+	return typeof runId === "string" && SAFE_RUN_ID.test(runId);
+}
+
+function assertSafeRunId(runId: string): void {
+	if (!isSafeRunId(runId)) {
+		throw new Error(`Invalid runId: ${JSON.stringify(runId)}`);
+	}
+}
+
 export interface PersistedAgentAttempt {
 	attempt: number;
 	status: "done" | "error";
@@ -207,23 +235,30 @@ export function createRunPersistence(cwd: string, fsOverride?: Partial<FsLayer>)
 
 	return {
 		save(state: PersistedRunState) {
+			assertSafeRunId(state.runId);
 			ensureDir();
 			state.updatedAt = new Date().toISOString();
 			const path = primaryRunPath(state.runId);
 			const json = JSON.stringify(state, null, 2);
 			// Atomic write: a crash mid-write can't corrupt the live file (tmp+rename is
-			// atomic on the same filesystem). A .bak from the previous good save is the
-			// recovery fallback if the primary is somehow truncated.
+			// atomic on the same filesystem). A .bak holding the PREVIOUS good save is the
+			// recovery fallback if the primary is later truncated.
+			// BUG (.bak redundancy): the backup must be the previous committed state, not
+			// a byte-identical copy of the new primary, or a primary corruption that also
+			// strikes .bak loses the run. Rotate the current primary into .bak first.
+			if (_existsSync(path)) {
+				try {
+					_writeFileSync(`${path}.bak`, _readFileSync(path, "utf8"));
+				} catch {
+					// best-effort; the primary publish below still succeeds
+				}
+			}
 			_writeFileSync(`${path}.tmp`, json);
 			_renameSync(`${path}.tmp`, path);
-			try {
-				_writeFileSync(`${path}.bak`, json);
-			} catch {
-				// backup is best-effort; the primary write already succeeded
-			}
 		},
 
 		load(runId: string): PersistedRunState | null {
+			assertSafeRunId(runId);
 			// Try the primary, then the .bak — so a corrupt primary doesn't lose the run.
 			for (const path of candidateRunPaths(runId)) {
 				for (const candidate of [path, `${path}.bak`]) {
@@ -247,6 +282,13 @@ export function createRunPersistence(cwd: string, fsOverride?: Partial<FsLayer>)
 					for (const file of files) {
 						try {
 							const state = JSON.parse(_readFileSync(join(dir, file), "utf-8")) as PersistedRunState;
+							// runId comes from the FILE CONTENT, not the filename, so a
+							// hand-edited/crafted run file can carry an unsafe id. Drop it
+							// here rather than downstream: callers feed listed ids straight
+							// back into load/acquireRunLease (e.g. recoverStaleRuns), where an
+							// unsafe id now throws — and one such entry would abort the whole
+							// recovery loop from its outer catch.
+							if (!isSafeRunId(state.runId)) continue;
 							if (!byRunId.has(state.runId)) byRunId.set(state.runId, state);
 						} catch {
 							// Skip corrupted files
@@ -256,10 +298,21 @@ export function createRunPersistence(cwd: string, fsOverride?: Partial<FsLayer>)
 					// Skip unreadable directories; another storage location may still work.
 				}
 			}
-			return [...byRunId.values()].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+			// BUG (malformed updatedAt): a valid-JSON entry with an unparseable
+			// updatedAt must not make the comparator return NaN (which leaves the sort
+			// order unspecified). Coerce invalid dates to epoch 0.
+			return [...byRunId.values()].sort((a, b) => {
+				const at = a.updatedAt ? Date.parse(a.updatedAt) : NaN;
+				const bt = b.updatedAt ? Date.parse(b.updatedAt) : NaN;
+				const da = Number.isFinite(at) ? at : 0;
+				const db = Number.isFinite(bt) ? bt : 0;
+				const d = db - da;
+				return Number.isNaN(d) ? 0 : d;
+			});
 		},
 
 		delete(runId: string): boolean {
+			assertSafeRunId(runId);
 			let deleted = false;
 			try {
 				for (const path of candidateRunPaths(runId)) {
@@ -287,6 +340,7 @@ export function createRunPersistence(cwd: string, fsOverride?: Partial<FsLayer>)
 		},
 
 		acquireRunLease(runId: string): RunLease | null {
+			assertSafeRunId(runId);
 			ensureDir();
 			const path = primaryRunPath(runId);
 			const lock = primaryLockPath(runId);
@@ -307,6 +361,21 @@ export function createRunPersistence(cwd: string, fsOverride?: Partial<FsLayer>)
 					if (code !== "EEXIST") throw err;
 					const existing = readLock(runId);
 					if (existing && existing.runPath === path && pidIsAlive(existing.pid)) {
+						// BUG (stale-lock TTL): a lock whose pid is alive can permanently block a
+						// run when the owning process was SIGKILLed and its pid was reused by an
+						// unrelated long-lived process, or is a zombie on the same node. Without a
+						// TTL every subsequent acquire returns null forever. Reclaim the lock when
+						// it has outlived any plausible in-flight lease duration.
+						const started = existing.startedAt ? Date.parse(existing.startedAt) : NaN;
+						const ageMs = Number.isFinite(started) ? Date.now() - started : NaN;
+						if (Number.isFinite(ageMs) && ageMs > LEASE_STALE_MS) {
+							try {
+								_unlinkSync(lock);
+							} catch {
+								return null;
+							}
+							continue;
+						}
 						return null;
 					}
 					try {
@@ -339,6 +408,8 @@ export function createRunPersistence(cwd: string, fsOverride?: Partial<FsLayer>)
  */
 export function generateRunId(): string {
 	const timestamp = Date.now().toString(36);
-	const random = Math.random().toString(36).slice(2, 8);
+	// BUG (collision): include the pid so two runs started in the same millisecond
+	// by different processes can't share a runId (which would cross their saves/leases).
+	const random = `${process.pid.toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 	return `${timestamp}-${random}`;
 }

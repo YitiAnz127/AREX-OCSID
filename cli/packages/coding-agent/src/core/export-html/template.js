@@ -950,9 +950,15 @@
 
             let pathHtml = filePath === null ? invalidArg : escapeHtml(shortenPath(filePath || ''));
             if (filePath !== null && (offset !== undefined || limit !== undefined)) {
-              const startLine = offset ?? 1;
-              const endLine = limit !== undefined ? startLine + limit - 1 : '';
-              pathHtml += `<span class="line-numbers">:${startLine}${endLine ? '-' + endLine : ''}</span>`;
+              // offset/limit are tool arguments read straight out of the session
+              // file. They are typed as numbers but nothing validates them, and a
+              // model can emit them as strings — so coerce for the arithmetic and
+              // escape before the value enters markup.
+              const startLineNumber = Number(offset ?? 1);
+              const startLine = Number.isFinite(startLineNumber) ? startLineNumber : 1;
+              const limitNumber = limit === undefined ? undefined : Number(limit);
+              const endLine = limitNumber !== undefined && Number.isFinite(limitNumber) ? startLine + limitNumber - 1 : '';
+              pathHtml += `<span class="line-numbers">:${escapeHtml(String(startLine))}${endLine ? '-' + escapeHtml(String(endLine)) : ''}</span>`;
             }
 
             html += `<div class="tool-header"><span class="tool-name">read</span> <span class="tool-path">${pathHtml}</span></div>`;
@@ -1294,8 +1300,8 @@
         if (entry.type === 'compaction') {
           return `<div class="compaction" id="${entryDomId}" onclick="if(window.getSelection().toString())return;this.classList.toggle('expanded')">
             <div class="compaction-label">[compaction]</div>
-            <div class="compaction-collapsed">Compacted from ${entry.tokensBefore.toLocaleString()} tokens</div>
-            <div class="compaction-content"><strong>Compacted from ${entry.tokensBefore.toLocaleString()} tokens</strong>\n\n${escapeHtml(entry.summary)}</div>
+            <div class="compaction-collapsed">Compacted from ${escapeHtml(String(entry.tokensBefore))} tokens</div>
+            <div class="compaction-content"><strong>Compacted from ${escapeHtml(String(entry.tokensBefore))} tokens</strong>\n\n${escapeHtml(entry.summary)}</div>
           </div>`;
         }
 

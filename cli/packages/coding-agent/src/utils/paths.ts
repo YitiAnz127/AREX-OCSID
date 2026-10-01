@@ -72,7 +72,35 @@ export function normalizePath(input: string, options: PathInputOptions = {}): st
 	}
 
 	if (/^file:\/\//.test(normalized)) {
-		return fileURLToPath(normalized);
+		// `file://` names a LOCAL file, so a non-empty host is either a mistake
+		// or an attack. On Windows, fileURLToPath turns the authority into a UNC
+		// path (`file://attacker.example/share/x` -> `\\attacker.example\share\x`),
+		// which sends the current user's NTLM challenge-response to that host the
+		// moment a tool touches it — a credential-disclosure primitive reachable
+		// from a path string in a README, an AGENTS.md, or any tool argument.
+		// POSIX fileURLToPath rejects this already; enforce it on every platform.
+		let fileUrl: URL;
+		try {
+			fileUrl = new URL(normalized);
+		} catch {
+			throw new Error(`Invalid file:// path: ${input}`);
+		}
+		if (fileUrl.hostname !== "" && fileUrl.hostname !== "localhost") {
+			throw new Error(
+				`Refusing file:// path with remote host "${fileUrl.hostname}": only local file:// paths are accepted.`,
+			);
+		}
+		// A bare "file://" (or "file://localhost") names nothing, but the WHATWG
+		// parser rewrites its empty path to "/", so the parsed pathname cannot
+		// distinguish "no path was given" from "the filesystem root" — and on POSIX
+		// fileURLToPath then returns "/", silently resolving a malformed URL to the
+		// filesystem root. Detect it on the raw input instead. Windows'
+		// fileURLToPath rejects the bare form for a different reason (no drive
+		// letter), which is why this contract previously held only there.
+		if (/^file:\/\/(?:localhost)?$/i.test(normalized)) {
+			throw new Error(`Invalid file:// path (no file path component): ${input}`);
+		}
+		return fileURLToPath(fileUrl);
 	}
 
 	return normalized;

@@ -212,8 +212,13 @@ async function exchangeAuthorizationCode(
 	try {
 		tokenData = JSON.parse(responseBody) as { access_token: string; refresh_token: string; expires_in: number };
 	} catch (error) {
+		// Never interpolate the token-endpoint body: this is the success path, so
+		// a body that fails to parse can still be carrying access/refresh tokens
+		// (proxy interstitial, truncated 200). Report its size instead — the
+		// message is rendered in the TUI, lands in scrollback, and is captured in
+		// non-interactive runs.
 		throw new Error(
-			`Token exchange returned invalid JSON. url=${TOKEN_URL}; body=${responseBody}; details=${formatErrorDetails(error)}`,
+			`Token exchange returned invalid JSON. url=${TOKEN_URL}; responseBytes=${responseBody.length}; details=${formatErrorDetails(error)}`,
 		);
 	}
 
@@ -328,8 +333,10 @@ async function refreshAnthropicToken(refreshToken: string): Promise<OAuthCredent
 			scope?: string;
 		};
 	} catch (error) {
+		// Same as the exchange path: a 200 that does not parse may still contain
+		// the rotated access/refresh tokens, so report the size, not the body.
 		throw new Error(
-			`Anthropic token refresh returned invalid JSON. url=${TOKEN_URL}; body=${responseBody}; details=${formatErrorDetails(error)}`,
+			`Anthropic token refresh returned invalid JSON. url=${TOKEN_URL}; responseBytes=${responseBody.length}; details=${formatErrorDetails(error)}`,
 		);
 	}
 

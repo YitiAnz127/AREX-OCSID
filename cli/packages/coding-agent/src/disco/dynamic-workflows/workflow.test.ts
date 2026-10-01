@@ -170,7 +170,7 @@ describe("workflow agent lifecycle", () => {
 			attempts++;
 			options.onLiveUsage?.(usage(100 + attempts));
 			options.onUsage?.(usage(attempts === 1 ? 10 : 20));
-			if (attempts === 1) throw new Error("retryable provider error");
+			if (attempts === 1) throw new WorkflowError("retryable provider error", WorkflowErrorCode.AGENT_EXECUTION_ERROR, { recoverable: true });
 			return "ok";
 		});
 

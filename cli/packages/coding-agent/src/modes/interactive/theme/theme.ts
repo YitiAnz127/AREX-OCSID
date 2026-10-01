@@ -1015,6 +1015,26 @@ function ansi256ToHex(index: number): string {
 }
 
 /**
+ * Shapes a theme color value may take in CSS and nothing else: hex, a
+ * functional rgb/hsl notation restricted to digits and separators, or a bare
+ * keyword (which also covers every CSS named color).
+ *
+ * The exported document writes these values raw into a `<style>` block
+ * (`--accent: <value>;`), so any value that can carry `<`, `>`, `/`, `;` or a
+ * quote can close `</style>` and inject markup. Theme files are supplied by
+ * users and by trusted projects (`.disco/themes/*.json`), and the exported HTML
+ * is normally handed to other people — so this is a value that crosses into
+ * someone else's browser.
+ */
+const SAFE_CSS_COLOR = /^(?:#[0-9a-fA-F]{3,8}|(?:rgb|rgba|hsl|hsla)\([0-9.,%\/\s]+\)|[A-Za-z]+)$/;
+
+/** Return `value` when it is a plain CSS color, otherwise `fallback`. */
+function toSafeCssColor(value: string, fallback: string): string {
+	const trimmed = value.trim();
+	return SAFE_CSS_COLOR.test(trimmed) ? trimmed : fallback;
+}
+
+/**
  * Get resolved theme colors as CSS-compatible hex strings.
  * Used by HTML export to generate CSS custom properties.
  */
@@ -1035,7 +1055,9 @@ export function getResolvedThemeColors(themeName?: string): Record<string, strin
 			// Empty means default terminal color - use sensible fallback for HTML
 			cssColors[key] = defaultText;
 		} else {
-			cssColors[key] = value;
+			// Validated, not passed through: this value is interpolated raw into
+			// the export's <style> block (see SAFE_CSS_COLOR).
+			cssColors[key] = toSafeCssColor(value, defaultText);
 		}
 	}
 	return cssColors;
@@ -1070,7 +1092,9 @@ export function getThemeExportColors(themeName?: string): {
 			const resolved = resolveVarRefs(value, vars);
 			if (typeof resolved === "number") return ansi256ToHex(resolved);
 			if (resolved === "") return undefined;
-			return resolved;
+			// Same CSS-context validation as getResolvedThemeColors: a rejected
+			// value resolves to undefined so the caller derives a safe default.
+			return SAFE_CSS_COLOR.test(resolved.trim()) ? resolved.trim() : undefined;
 		};
 
 		return {

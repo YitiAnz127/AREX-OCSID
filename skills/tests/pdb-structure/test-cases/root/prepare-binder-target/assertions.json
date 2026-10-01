@@ -1,0 +1,19 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "chain-select-and-trim-binder-target",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "SKILL.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response keeps only chain A using a Bio.PDB Select subclass with accept_chain returning chain.id == chain_id and PDBIO.set_structure/save, as shown in SKILL.md.",
+    "The response trims around residues 45, 67, 89 with a buffer by computing the mean center coordinates of those residues and keeping residues whose atoms are within the buffer, matching the trim_around_residues pattern.",
+    "The response orders the target-prep checklist as: download -> identify target chain -> remove waters/ligands -> trim to binding region + buffer -> identify hotspots -> renumber if needed, per the SKILL.md 'Common Tasks for Binder Design'.",
+    "The response warns that the PDB ID must be formatted as 4 characters when re-downloading.",
+    "The response does not reference files from the original protein-design-skills/pdb checkout."
+  ]
+}

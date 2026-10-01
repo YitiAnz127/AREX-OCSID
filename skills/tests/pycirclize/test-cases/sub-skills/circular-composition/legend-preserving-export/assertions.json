@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "circular-composition",
+  "target_capability": "circos-composition-and-legend-export",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "sub-skills/circular-composition/SKILL.md",
+    "sub-skills/circular-composition/references/api-reference.md",
+    "sub-skills/circular-composition/references/workflows.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/circular-composition/SKILL.md",
+    "sub-skills/circular-composition/references/api-reference.md"
+  ],
+  "assertions": [
+    "The response routes the general Circos composition/legend/export task to the circular-composition sub-skill.",
+    "The response constructs Circos with a tuple range for sector B and explains the tuple endpoints are data coordinates (x in 100..130), matching the api-reference coordinate model.",
+    "The response uses get_group_sectors_deg_lim([\"A\",\"B\"]) to place a group band rect, matching the api-reference/workflows group band recipe.",
+    "The response adds a directed link with x endpoints in each sector's own range, e.g. circos.link((\"A\",2,7),(\"B\",120,110),direction=1).",
+    "The response calls fig = circos.plotfig(), then circos.ax.legend(...), then fig.savefig(...), and explains that circos.savefig() does not preserve post-render legend edits.",
+    "The response does not claim circos.ax is available before plotfig(), consistent with the documented ValueError behavior.",
+    "The response does not route track-local drawing to this sub-skill as if it owned track data."
+  ]
+}

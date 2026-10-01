@@ -5,7 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const NO_LICENSE = "NO_LICENSE";
-const REPOSITORY = /^[^/\s]+\/[^/\s]+$/;
+const REPOSITORY = /^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/;
 const COMMIT = /^[0-9a-f]{40}$/i;
 
 function unavailable(repository, sourceCommit, reason) {
@@ -30,7 +30,13 @@ export function resolveRepoLicense(repository, sourceCommit, env = process.env) 
 	const result = spawnSync(
 		"gh",
 		["api", `repos/${repository}/license?ref=${sourceCommit}`, "--jq", ".license.spdx_id // empty"],
-		{ encoding: "utf8", env },
+		// P1-16: on Windows, `gh` is commonly installed as a gh.cmd/gh.bat shim
+		// (scoop, some winget bundles) that Node's spawnSync will not run without a
+		// shell. `repository` and `sourceCommit` are validated against a safe
+		// charset above (no shell metacharacters), so deploying through cmd.exe is
+		// injection-safe here. POSIX keeps shell:false so the real gh binary or an
+		// executable shim is invoked directly.
+		{ encoding: "utf8", env, shell: process.platform === "win32" },
 	);
 	if (result.error?.code === "ENOENT") {
 		return unavailable(repository, sourceCommit, "GitHub CLI (gh) is not installed");
@@ -38,6 +44,12 @@ export function resolveRepoLicense(repository, sourceCommit, env = process.env) 
 	if (result.error) return unavailable(repository, sourceCommit, "GitHub CLI could not be executed");
 	if (result.status !== 0) {
 		const stderr = String(result.stderr ?? "").toLowerCase();
+		// P1-16: with shell:true on Windows, a missing gh surfaces as cmd.exe's
+		// "not recognized" error (exit code 1) instead of an ENOENT; POSIX shells
+		// print "command not found". Report both as "not installed".
+		if (stderr.includes("not recognized") || stderr.includes("command not found")) {
+			return unavailable(repository, sourceCommit, "GitHub CLI (gh) is not installed");
+		}
 		if (stderr.includes("not logged in") || stderr.includes("authentication") || stderr.includes("auth login")) {
 			return unavailable(repository, sourceCommit, "GitHub CLI is not authenticated");
 		}

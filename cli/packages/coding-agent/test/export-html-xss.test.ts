@@ -64,4 +64,22 @@ describe("export HTML markdown link sanitization", () => {
 		expect(templateJs).not.toMatch(/\$\{globalStats\.models\.join\(', '\) \|\| 'unknown'\}/);
 		expect(templateJs).toMatch(/\$\{escapeHtml\(globalStats\.models\.join\(', '\) \|\| 'unknown'\)\}/);
 	});
+
+	it("escapes the read tool's offset/limit line numbers", () => {
+		// offset/limit are tool arguments taken verbatim from the session file. They
+		// are typed as numbers but never validated, and a model can send a string —
+		// `{"path":"README.md","offset":"<img src=x onerror=...>"}` — which used to
+		// reach the markup raw inside <span class="line-numbers">.
+		expect(templateJs).not.toMatch(/\$\{startLine\}\$\{endLine/);
+		expect(templateJs).toMatch(/escapeHtml\(String\(startLine\)\)/);
+		expect(templateJs).toMatch(/escapeHtml\(String\(endLine\)\)/);
+	});
+
+	it("escapes the compaction token count", () => {
+		// toLocaleString() returns a non-numeric argument unchanged, so a session
+		// file carrying {"type":"compaction","tokensBefore":"<img onerror=...>"}
+		// injected markup at both interpolation sites.
+		expect(templateJs).not.toMatch(/\$\{entry\.tokensBefore\.toLocaleString\(\)\}/);
+		expect(templateJs).toMatch(/escapeHtml\(String\(entry\.tokensBefore\)\)/);
+	});
 });

@@ -1,0 +1,21 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "compose-multiobjective-loss",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "SKILL.md",
+    "references/capability-map.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response routes to the mosaic root skill for a custom multi-objective protein design task.",
+    "The response builds the design loss from mosaic.losses.structure_prediction LossTerm objects using Python arithmetic, naming BinderTargetContact, WithinBinderContact, TargetBinderPAE, BinderTargetPAE, IPTMLoss, and PLDDTLoss with scalar weights as in SKILL.md.",
+    "The response recommends simplex_APGM (proximal gradient / mirror descent) as the default optimizer.",
+    "The response recommends a step size about 0.1 * sqrt(binder_length), approximately 0.77 for a 60-residue binder.",
+    "The response notes that JIT compilation makes the first call slow and later calls fast.",
+    "The response does not direct the user to the original escalante-bio/mosaic repository checkout."
+  ]
+}

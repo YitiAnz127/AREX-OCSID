@@ -1,0 +1,19 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "troubleshoot-optimization-failures",
+  "difficulty": "troubleshooting",
+  "evidence_basis": [
+    "SKILL.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response routes to the mosaic root skill and matches each symptom to the SKILL.md troubleshooting table.",
+    "The response says designs failing simple in-silico checks come from an under-constrained objective and recommends adding inverse-folding and confidence terms and filtering with protein-qc.",
+    "The response says unstable optimization comes from a step size that is too large and recommends lowering the simplex_APGM step size.",
+    "The response explains first-call slowness as JIT compilation and recommends reusing the compiled loss across designs, and OOM as several large predictors in one loss fixed by smaller predictors or a larger GPU.",
+    "The response does not direct the user to the original escalante-bio/mosaic repository checkout."
+  ]
+}

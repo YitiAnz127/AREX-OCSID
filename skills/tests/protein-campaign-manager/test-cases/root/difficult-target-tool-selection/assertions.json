@@ -1,0 +1,21 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "difficult-target-tool-and-variant-selection",
+  "difficulty": "advanced",
+  "evidence_basis": [
+    "SKILL.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response classifies the target as difficult using indicators from the SKILL.md Target difficulty table (flat/convex surface, low conservation, no known binders, flexible).",
+    "The response ties the 4% overall pass rate and failing interface predictions to the documented 'Low ipTM - hotspot or interface issue' diagnosis from the campaign health section.",
+    "The response recommends a tool from the SKILL.md 'When to use each tool' table (e.g. Mosaic for difficult target, BoltzGen for all-atom precision, or BindCraft for a harder integrated loop) and justifies it with the documented reason.",
+    "The response gives the high-throughput variant as inference.num_designs=2000 plus Modal ligandmpnn with --number_of_batches 4 --temperature 0.2, matching the SKILL.md Pipeline variants block.",
+    "The response gives the high-quality variant as inference.num_designs=200 plus Modal ligandmpnn with --number_of_batches 32 --temperature 0.1, matching the SKILL.md Pipeline variants block.",
+    "The response explains the diversity-vs-per-design-quality tradeoff between the two variants rather than presenting only one command set.",
+    "The response does not reference files from the original protein-design-skills/campaign-manager checkout."
+  ]
+}

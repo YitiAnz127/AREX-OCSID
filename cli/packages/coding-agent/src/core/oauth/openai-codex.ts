@@ -27,7 +27,8 @@ const CLIENT_ID = "app_EMoamEEZ73f0CkXaXp7hrann";
 const AUTH_BASE_URL = "https://auth.openai.com";
 const AUTHORIZE_URL = `${AUTH_BASE_URL}/oauth/authorize`;
 const TOKEN_URL = `${AUTH_BASE_URL}/oauth/token`;
-const REDIRECT_URI = "http://localhost:1455/auth/callback";
+const CALLBACK_PORT = 1455;
+const REDIRECT_URI = `http://localhost:${CALLBACK_PORT}/auth/callback`;
 const DEVICE_USER_CODE_URL = `${AUTH_BASE_URL}/api/accounts/deviceauth/usercode`;
 const DEVICE_TOKEN_URL = `${AUTH_BASE_URL}/api/accounts/deviceauth/token`;
 const DEVICE_VERIFICATION_URI = `${AUTH_BASE_URL}/codex/device`;
@@ -136,7 +137,17 @@ async function readTokenResponse(response: Response, operation: TokenOperation):
 		expires_in?: number;
 	} | null;
 	if (!json?.access_token || !json.refresh_token || typeof json.expires_in !== "number") {
-		throw new Error(`OpenAI Codex token ${operation} response missing fields: ${JSON.stringify(json)}`);
+		// Name the missing fields rather than dumping the payload: a 200 whose
+		// body carries the tokens but does not satisfy the shape check (a proxy
+		// interstitial, a truncated-but-successful response) would otherwise put
+		// live access/refresh tokens into a message rendered on screen, into
+		// terminal scrollback, and into captured stderr on CI.
+		const missing = [
+			!json?.access_token ? "access_token" : undefined,
+			!json?.refresh_token ? "refresh_token" : undefined,
+			typeof json?.expires_in !== "number" ? "expires_in" : undefined,
+		].filter((field): field is string => field !== undefined);
+		throw new Error(`OpenAI Codex token ${operation} response missing or invalid: ${missing.join(", ")}`);
 	}
 
 	return {
@@ -366,7 +377,7 @@ function startLocalOAuthServer(state: string): Promise<OAuthServerInfo> {
 
 	return new Promise((resolve) => {
 		server
-			.listen(1455, getCallbackHost(), () => {
+			.listen(CALLBACK_PORT, getCallbackHost(), () => {
 				resolve({
 					close: () => server.close(),
 					cancelWait: () => {
@@ -375,8 +386,18 @@ function startLocalOAuthServer(state: string): Promise<OAuthServerInfo> {
 					waitForCode: () => waitForCodePromise,
 				});
 			})
-			.on("error", (_err: NodeJS.ErrnoException) => {
+			.on("error", (err: NodeJS.ErrnoException) => {
 				settleWait?.(null);
+				// Port 1455 is fixed and needs no privilege, so another local process
+				// can hold it first. Reporting that as "no code" silently dropped the
+				// login into the manual-paste prompt while the browser kept sending
+				// the real redirect (code and state) to the squatter. Fail the login
+				// instead, so the conflict is visible and the flow is not silently
+				// downgraded to a path where the state check is optional.
+				const reason =
+					err?.code === "EADDRINUSE"
+						? `OAuth callback port ${CALLBACK_PORT} is already in use by another process; refusing to continue login because the authorization code would be delivered to that process instead. Free the port and retry.`
+						: `OAuth callback server failed to start: ${err?.message ?? String(err)}`;
 				resolve({
 					close: () => {
 						try {
@@ -386,7 +407,9 @@ function startLocalOAuthServer(state: string): Promise<OAuthServerInfo> {
 						}
 					},
 					cancelWait: () => {},
-					waitForCode: async () => null,
+					waitForCode: async () => {
+						throw new Error(reason);
+					},
 				});
 			});
 	});

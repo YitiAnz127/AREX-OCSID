@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "ase-ase-workflows-static",
+  "target_capability": "static-single-point-as-ase-workflow",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "sub-skills/ase-ase-workflows-static/SKILL.md",
+    "sub-skills/ase-ase-calculators-gpaw/SKILL.md",
+    "sub-skills/ase-ase-calculators/references/commands-and-workflow.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/ase-ase-workflows-static/SKILL.md",
+    "sub-skills/ase-ase-calculators-gpaw/SKILL.md",
+    "sub-skills/ase-ase-calculators/references/commands-and-workflow.md"
+  ],
+  "assertions": [
+    "The response routes the request to the ase-ase-workflows-static sub-skill (single-point evaluation), not relax/md/neb.",
+    "The response produces an ASE static workflow script that attaches a GPAW calculator and evaluates the potential energy and forces.",
+    "The response configures the GPAW backend with a mode (PW/LCAO/FD), an XC choice and a k-point policy.",
+    "The response lists the requested properties (energy/force/stress) as a checklist and states unresolved backend choices.",
+    "The response keeps workflow logic separate from the backend adapter configuration.",
+    "The response does not point the user into the original atomistic-workflows source checkout."
+  ]
+}

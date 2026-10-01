@@ -1,0 +1,19 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "decision-tree-routing-vs-bindcraft",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "SKILL.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response routes to the mosaic root skill and states Mosaic fits a custom objective across multiple models in one differentiable loss, and notes it may require substantial hand-holding such as tuning learning rates.",
+    "The response recommends bindcraft for a one-click binder run with default filters rather than Mosaic.",
+    "The response surfaces the SKILL.md decision tree: custom objective -> Mosaic; one-click binders -> bindcraft; all-atom diffusion -> boltzgen; backbone-only diversity -> rfdiffusion + proteinmpnn.",
+    "The response does not present Mosaic as a turnkey default for simple binder requests.",
+    "The response does not direct the user to the original escalante-bio/mosaic repository checkout."
+  ]
+}

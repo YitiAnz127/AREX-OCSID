@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "integration",
+  "target_capability": "opentargets-to-g2p-join-boundary",
+  "difficulty": "advanced",
+  "evidence_basis": [
+    "sub-skills/disease-structure/SKILL.md",
+    "sub-skills/disease-structure/references/opentargets.md",
+    "sub-skills/disease-structure/references/g2p.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/disease-structure/SKILL.md",
+    "sub-skills/disease-structure/references/opentargets.md",
+    "sub-skills/disease-structure/references/g2p.md"
+  ],
+  "assertions": [
+    "The response routes both calls to the disease-structure sub-skill of gget.",
+    "The response uses gget.opentargets(id, resource=\"diseases\", limit=N) and reports disease rows as EFO-mapped associations (score, disease.id), per opentargets.md.",
+    "The response resolves the gene to an explicit UniProt accession (e.g. gget.g2p(gene, uniprot_id=..., resource=\"features\", residues=[...])) and labels the gene-to-UniProt join as a separate step.",
+    "The response explicitly states that public G2P rows do not include the G2P portal's gnomAD, ClinVar, or HGMD overlays.",
+    "The response keeps the Open Targets and G2P result tables as separate artifacts and does not imply a disease row is a residue-level causal annotation.",
+    "The response does not misroute PDB retrieval or AlphaFold into answering the G2P annotation, and does not point to the original gget source checkout."
+  ]
+}

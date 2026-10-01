@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "environment-check-and-route-dispatch",
+  "difficulty": "troubleshooting",
+  "evidence_basis": [
+    "SKILL.md",
+    "references/troubleshooting.md",
+    "scripts/check_environment.py"
+  ],
+  "expected_skill_files": [
+    "SKILL.md",
+    "scripts/check_environment.py",
+    "references/troubleshooting.md"
+  ],
+  "assertions": [
+    "The response explains the ModuleNotFoundError: pycirclize fix by installing into the interpreter that will execute the script and verifying with python -c \"import pycirclize; print(pycirclize.__version__)\", matching the shared troubleshooting guide.",
+    "The response explains that Bio/numpy/pandas/Matplotlib are base runtime dependencies and that ipympl/pycirclize[tooltip] is only for live Jupyter tooltips, not static plotting.",
+    "The response explains the blank-PNG cause and recommends matplotlib.use(\"Agg\") for headless work plus verifying a non-empty output, matching SKILL.md and the shared troubleshooting guide.",
+    "The response routes a general three-sector composition to the circular-composition sub-skill and a chord diagram to the data-parsers sub-skill, matching the SKILL.md 'Route by task' section.",
+    "The response recommends running the bundled scripts/check_environment.py as the offline import-and-render environment check.",
+    "The response does not fetch a network example dataset for the check."
+  ]
+}

@@ -86,7 +86,11 @@ function parseConfigValueReference(config: string): ConfigValueReference {
 }
 
 function resolveEnvConfigValue(name: string, env?: Record<string, string>): string | undefined {
-	return env?.[name] || process.env[name] || undefined;
+	// Use nullish chaining so an explicitly-set empty-string value ("") is
+	// preserved as a RESOLVED empty value rather than treated as "unset"
+	// (audit H2). `||` made a valid empty value indistinguishable from missing
+	// and masked misconfiguration downstream.
+	return (env?.[name] ?? process.env[name]) ?? undefined;
 }
 
 function getTemplateEnvVarNames(parts: TemplatePart[]): string[] {
@@ -261,7 +265,9 @@ export function resolveHeaders(
 	const resolved: Record<string, string> = {};
 	for (const [key, value] of Object.entries(headers)) {
 		const resolvedValue = resolveConfigValue(value, env);
-		if (resolvedValue) {
+		// Preserve a resolved empty-string value (audit H2) — only skip truly
+		// unconfigured (undefined) headers.
+		if (resolvedValue !== undefined) {
 			resolved[key] = resolvedValue;
 		}
 	}

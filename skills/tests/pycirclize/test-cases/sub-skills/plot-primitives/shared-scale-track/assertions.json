@@ -1,0 +1,23 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "plot-primitives",
+  "target_capability": "track-primitives-shared-scale",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/plot-primitives/SKILL.md",
+    "sub-skills/plot-primitives/references/api-reference.md",
+    "sub-skills/plot-primitives/references/workflows.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/plot-primitives/SKILL.md",
+    "sub-skills/plot-primitives/references/api-reference.md"
+  ],
+  "assertions": [
+    "The response routes Sector/Track-local drawing to the plot-primitives sub-skill.",
+    "The response adds a padded track with sector.add_track((70,100), r_pad_ratio=0.1, ...) and explains that data maps into track.r_plot_lim after padding.",
+    "The response passes the same explicit vmin=0 and vmax=1 to the line, scatter, and fill_between calls and explains that an omitted vmax is inferred per call and breaks visual comparability.",
+    "The response keeps x values inside the sector range 1..19 and states that x_to_rad() is for inspection/custom integration, not for pre-converting public primitive arguments.",
+    "The response adds a grid and ticks using Track.grid / xticks_by_interval / yticks as documented in the api-reference.",
+    "The response does not route this workflow to circular-composition or data-parsers as its owner."
+  ]
+}

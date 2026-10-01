@@ -1,0 +1,5 @@
+solute,solvent,target
+CCO,CC,0.52
+CCN,O,0.48
+CCC,CCCC,0.61
+CCO,CCC,0.55

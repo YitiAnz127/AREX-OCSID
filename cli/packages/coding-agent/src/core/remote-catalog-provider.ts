@@ -47,6 +47,24 @@ export function withRemoteCatalog(
 ): Provider {
 	if (!catalogBaseUrl) return provider;
 
+	// Security gate (audit F1): the remote catalog can define arbitrary per-model
+	// baseUrl/headers, and resolved API keys are streamed to whatever baseUrl the
+	// selected model carries. Serving that over plaintext http:// would let any
+	// network observer (or a MITM) redirect the user's key to an attacker host.
+	// Require https and a parseable URL; fail loudly on insecure/malformed config
+	// rather than silently proceeding. Note (P2-05 deferral): catalog-supplied
+	// baseUrl/headers per model are still NOT allow-listed against the provider —
+	// https enforcement closes the plaintext vector but a https catalog that is
+	// itself compromised could still redirect keys; that residual trust surface is
+	// deferred (allow-list design has compatibility implications with legit custom
+	// gateway catalogs).
+	const parsedCatalogUrl = new URL(catalogBaseUrl);
+	if (parsedCatalogUrl.protocol !== "https:") {
+		throw new Error(
+			`Refusing to load remote model catalog: DISCO_MODEL_CATALOG_URL must use https:// (got "${parsedCatalogUrl.protocol}//") so that resolved API keys are never sent to an insecure endpoint.`,
+		);
+	}
+
 	let dynamicModels: readonly Model<Api>[] = [];
 	let inflightRefresh: Promise<void> | undefined;
 

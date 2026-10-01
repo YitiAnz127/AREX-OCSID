@@ -3,7 +3,15 @@
  * Enable with DISCO_TIMING=1 environment variable.
  */
 
-const ENABLED = process.env.DISCO_TIMING === "1";
+function isTruthyEnvFlag(value: string | undefined): boolean {
+	if (!value) return false;
+	const normalized = value.toLowerCase();
+	return normalized === "1" || normalized === "true" || normalized === "yes";
+}
+
+// Accept "1"/"true"/"yes" (case-insensitive) so a natural DISCO_TIMING=true is
+// honored like the other DISCO_* toggles (audit H4).
+const ENABLED = isTruthyEnvFlag(process.env.DISCO_TIMING);
 interface TimingNamespace {
 	timings: Array<{ label: string; ms: number }>;
 	lastTime: number;

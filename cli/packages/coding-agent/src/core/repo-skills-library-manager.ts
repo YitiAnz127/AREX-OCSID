@@ -62,7 +62,9 @@ const ASSIGNMENT_INDEX_FIELDS = new Set([
 	"area",
 	"family",
 	"confidence",
+	"confidence_basis",
 ]);
+const CONFIDENCE_BASIS = new Set(["committed", "materialized-unpinned", "external-verified"]);
 const MANUAL_INSTALL_URL =
 	"https://github.com/YitiAnz127/ocsid-repo-skill#install-the-published-repository-collection";
 
@@ -260,6 +262,11 @@ function shortOutput(value: string): string {
 	return trimmed.length > 4_000 ? `${trimmed.slice(0, 4_000)}\n...` : trimmed;
 }
 
+// P2-05 (DEFERRED, audit F4): runProcess has NO execution timeout — a hung
+// child (e.g. an updater that never exits) holds the live library lock
+// indefinitely. A safe fix needs a configurable timeout + kill and a
+// regression test; deferred because a wrong default could turn slow-but-valid
+// git operations into flaky failures in the suite.
 async function runProcess(
 	command: string,
 	args: string[],
@@ -828,6 +835,7 @@ function routerCoverageIssues(routerDir: string, expectedSkillIds: Set<string>, 
 				typeof record.area !== "string" ||
 				typeof record.family !== "string" ||
 				!new Set(["high", "medium", "low"]).has(record.confidence as string) ||
+				(record.confidence_basis !== undefined && (typeof record.confidence_basis !== "string" || !CONFIDENCE_BASIS.has(record.confidence_basis))) ||
 				!taxonomyPaths.has(`${record.area}\0${record.family}`)
 			) throw new Error("invalid assignment identity or taxonomy path");
 			const key = `${record.repo_id}\0${record.area}\0${record.family}`;
@@ -1208,6 +1216,11 @@ export class RepoSkillsLibraryManager {
 			visibility,
 		];
 		if (templateDir) args.push("--template-dir", templateDir);
+		// P2-05 (DEFERRED, audit F3): this.env (defaulting to process.env) is passed
+		// verbatim to the bundled .mjs updater child, unlike git which gets a curated
+		// env via getGitProcessEnv. Deferred: needs a curated-env helper + test, and
+		// the updater legitimately depends on some inherited vars, so an over-tight
+		// sanitization could break routing in the field.
 		const result = await runProcess(process.execPath, args, { env: this.env });
 		if (result.code !== 0) {
 			throw new RepoSkillsLibraryError(

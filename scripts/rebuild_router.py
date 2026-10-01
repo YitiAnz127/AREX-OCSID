@@ -7,7 +7,7 @@ Usage:
   python rebuild_router.py --output-dir DIR # isolated generation
   python rebuild_router.py --write-live     # update live router and root index
 """
-import json, os, sys, hashlib, re
+import json, os, sys, hashlib, re, unicodedata
 
 try:
     from .domain_common import load_json_file, parse_frontmatter, read_bytes
@@ -38,15 +38,33 @@ if WRITE_LIVE and OUTPUT:
     raise SystemExit("use either --write-live or --output-dir, not both")
 CHECK = not WRITE_LIVE and OUTPUT is None
 
+CONFIDENCE_MODE = "legacy"
+if "--confidence-mode" in sys.argv:
+    CONFIDENCE_MODE = sys.argv[sys.argv.index("--confidence-mode") + 1]
+    if CONFIDENCE_MODE not in ("legacy", "strict"):
+        raise SystemExit("--confidence-mode must be 'legacy' or 'strict'")
+
 # ---------------------------------------------------------------- utils
 def slug(s):
-    return re.sub(r"[^a-zA-Z0-9]+", "-", s).strip("-").lower()
+    # Must match update_repo_skills_router.mjs slug(): NFKD normalize, lowercase,
+    # collapse non-alphanumerics to '-', trim leading/trailing '-', fall back to
+    # "item" on empty (empty slugs otherwise produce a broken page filename).
+    normalized = unicodedata.normalize("NFKD", s)
+    return re.sub(r"[^a-z0-9]+", "-", normalized.lower()).strip("-") or "item"
 
 def markdown_escape(s):
-    return s.replace("|", "\\|").replace("\n", " ").replace("`", "\\`")
+    # Must match update_repo_skills_router.mjs markdownEscape() plus backtick
+    # escaping: trim, then escape '|', newline->space, and backtick->'\`'.
+    return s.strip().replace("|", "\\|").replace("\n", " ").replace("`", "\\`")
 
 def stable_json(obj):
     return json.dumps(obj, ensure_ascii=False, indent=2) + "\n"
+
+def stable_json_sorted(obj):
+    # For build-metadata only: recursive key-sorted serialization, matching the
+    # mjs stableJsonValue. The taxonomy and per-record jsonl keep insertion
+    # order (compact), so they must NOT go through this function.
+    return json.dumps(obj, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
 
 tax = load_json_file(TAX_PATH, "router taxonomy")
 TAX_SHA = hashlib.sha256(read_bytes(TAX_PATH, "router taxonomy")).hexdigest()
@@ -84,13 +102,67 @@ tax_order={}; o=0
 for a in tax["areas"]:
     for f in a["families"]:
         tax_order[f"{a['name']}\0{f['name']}"]=o; o+=1
+VALID_CONFIDENCE = ("high", "medium", "low")
+missing_confidence_count = [0]
+
+def resolve_confidence(repo_id, asg):
+    """Return the assignment confidence for the central assignment index.
+
+    Contract (mirrors update_repo_skills_router.mjs): confidence must come from a
+    routing decision ledger and never be silently defaulted. In `strict` mode a
+    missing/invalid confidence aborts the build; in `legacy` mode it is still
+    surfaced as a counted warning at the end (toplines are logged, not silently
+    fabricated).
+    """
+    val = asg.get("confidence")
+    if val in VALID_CONFIDENCE:
+        return val
+    if CONFIDENCE_MODE == "strict":
+        raise SystemExit(
+            f"assignment for {repo_id} is missing a valid confidence (high/medium/low); "
+            "confidence must come from the central routing decision ledger, never a default. "
+            "Reimport with explicit confidence and add the record to the ledger."
+        )
+    missing_confidence_count[0] += 1
+    return "high"
+
 assign_records=[]
+VALID_CONFIDENCE_BASIS = ("committed", "materialized-unpinned", "external-verified")
+invalid_confidence_basis_count = [0]
+
+def resolve_confidence_basis(repo_id, asg):
+    """Return the assignment confidence_basis for the central assignment index.
+
+    BUG-P1-17: the official mjs writer propagates `confidence_basis` (schema
+    schema-evolved in v40/v42) so provenance survives every generate/export.
+    The Python rebuild must not silently drop it. It is OPTIONAL: omit it when
+    the source carries none, and in `strict` mode reject an unknown value so
+    the index never records a basis the consumers cannot parse.
+    """
+    val = asg.get("confidence_basis")
+    if val is None:
+        return None
+    if val in VALID_CONFIDENCE_BASIS:
+        return val
+    if CONFIDENCE_MODE == "strict":
+        raise SystemExit(
+            f"assignment for {repo_id} has an invalid confidence_basis ({val!r}); "
+            "must be one of committed/materialized-unpinned/external-verified. "
+            "Reimport with a valid basis or drop the field."
+        )
+    invalid_confidence_basis_count[0] += 1
+    return None
+
 for s in skills:
     for asg in s["assignments"]:
-        assign_records.append({
+        rec = {
             "repo_id":s["repo_id"], "legacy_repo_id":None, "skill_id":s["id"],
-            "area":asg["area"], "family":asg["family"], "confidence":asg.get("confidence","high"),
-        })
+            "area":asg["area"], "family":asg["family"], "confidence":resolve_confidence(s["repo_id"], asg),
+        }
+        basis = resolve_confidence_basis(s["repo_id"], asg)
+        if basis is not None:
+            rec["confidence_basis"] = basis
+        assign_records.append(rec)
 assign_records.sort(key=lambda r:(tax_order.get(f"{r['area']}\0{r['family']}",999), r["repo_id"], r["skill_id"]))
 
 # ---------------------------------------------------------------- digests
@@ -193,7 +265,7 @@ files[os.path.join("references","index","assignments.jsonl")] = assignments_cont
 # digests MUST be sha256 of the exact bytes that will be written to disk
 repo_file_digest = "sha256:"+hashlib.sha256(repositories_content.encode("utf-8")).hexdigest()
 assign_file_digest = "sha256:"+hashlib.sha256(assignments_content.encode("utf-8")).hexdigest()
-files[os.path.join("references","index","build-metadata.json")] = stable_json({
+files[os.path.join("references","index","build-metadata.json")] = stable_json_sorted({
     "schema_version":1, "area_count":len(tax["areas"]), "assignment_count":len(assign_records),
     "repository_count":len(repo_records),
     "family_count":sum(len(a["families"]) for a in tax["areas"]),
@@ -213,6 +285,22 @@ def content_matches(path, expected):
         return False
     except (OSError, UnicodeError) as exc:
         raise SystemExit(f"failed to compare generated file at {path}: {exc}") from exc
+
+if missing_confidence_count[0] > 0:
+    print(
+        f"warning: {missing_confidence_count[0]} assignment(s) carry no confidence and were "
+        f"defaulted to 'high' in legacy mode; record them in the central routing decision "
+        f"ledger (or use --confidence-mode=strict to require explicit confidence)",
+        file=sys.stderr,
+    )
+
+if invalid_confidence_basis_count[0] > 0:
+    print(
+        f"warning: {invalid_confidence_basis_count[0]} assignment(s) carry a non-empty "
+        f"confidence_basis outside {{committed, materialized-unpinned, external-verified}} "
+        f"and were dropped in legacy mode; use --confidence-mode=strict to require a valid basis",
+        file=sys.stderr,
+    )
 
 if CHECK:
     mismatches = []

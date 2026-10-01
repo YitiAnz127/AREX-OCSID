@@ -1,0 +1,22 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "disease-structure",
+  "target_capability": "enrichr-ensembl-background-topn",
+  "difficulty": "advanced",
+  "evidence_basis": [
+    "sub-skills/disease-structure/SKILL.md",
+    "sub-skills/disease-structure/references/enrichr.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/disease-structure/SKILL.md",
+    "sub-skills/disease-structure/references/enrichr.md"
+  ],
+  "assertions": [
+    "The response routes the enrichment task to the disease-structure sub-skill of gget.",
+    "The response sets ensembl=True with a list of versioned Ensembl IDs and explains the version-at-first-dot strip plus Ensembl info lookup to symbols, per enrichr.md.",
+    "The response uses database=\"KEGG_2021_Human\" (or the pathway shortcut) with background_list and ensembl_bkg=True for an explicit experimental background.",
+    "The response lists the exact returned Enrichr DataFrame columns rank, path_name, p_val, z_score, combined_score, overlapping_genes, adj_p_val, database and selects top-N locally because there is no limit parameter.",
+    "The response notes unknown Ensembl IDs are warned and skipped, and that pykegg is needed only for kegg_out pathway rendering.",
+    "The response does not direct the user to the original gget source repository checkout."
+  ]
+}

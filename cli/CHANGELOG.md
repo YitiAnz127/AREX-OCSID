@@ -1,5 +1,62 @@
 # Changelog
 
+## Unreleased — P0-3 step 2 (real graders)
+
+- **[P0-3 step 2] Replace the pure word-overlap proxy with real graders** in
+  `packages/coding-agent/src/audit/`, injected through the existing `CaseGrader`
+  seam so the runner is unchanged.
+  - **Route A — `assertionGrader()` (assertion-level, deterministic).** Grades
+    structured assertions (`file-exists` / `command-output` / `numeric-range`)
+    for real and free-form string assertions by required-token coverage. It
+    self-declares `gradedBy: "assertion"` (the `programmatic_assertion` source)
+    and hard-fails (score 0) both an EMPTY artifact and an artifact with zero
+    token relevance to every assertion — so a confident but hollow/off-topic
+    blob can never collect ~0.5 "attempt" credit.
+  - **Route B — `modelJudgeGrader()` (real model judge).** Sends
+    `(user_request, assertions, artifact)` to a model and asks it to return, per
+    assertion, an explicit pass/fail plus a one-line reason. Declares
+    `gradedBy: "model_grader"` and records the judge model id + rubric version on
+    every `GradeSpec`, which the runner lifts onto the ledger row as `judge`
+    (`{ modelVersion, rubricVersion }`) so a number is traceable to its exact
+    judge. Empty artifacts short-circuit to an all-fail zero with NO model call.
+    An injected `fetchImpl` keeps it offline (`DISCO_OFFLINE=1`) for tests.
+  - **Ledger provenance:** `QualityLedgerRow` gains an optional `judge` field
+    (additive, backward compatible); the runner persists it when a real grader
+    produced the score. Deterministic proxies and human rows omit it.
+- **Note:** `grade-inject`'s append-only grade revision mechanism is unchanged —
+  original scores are never overwritten in place; revisions are journaled.
+
+## Unreleased — P1-4 (held-out access control, BREAKING)
+
+- **[P1-4] Held-out access control (breaking).** Candidate-selection entries now
+  forbid the held-out split at the type level and at runtime:
+  `runCandidateEval`, `runCandidateRegression`, and `compareBaselines` take a
+  `split` of only `"train" | "dev"` (`RankingSplit`) and throw if a caller passes
+  `"heldout"`. The independent, post-freeze held-out final evaluation is a
+  separate entry point, `runHeldoutFinalEval` (CLI:
+  `repo-skills heldout-final-eval`), which requires a frozen candidate (a
+  recorded train/dev `candidate-eval` run pinned to the same digest), loads only
+  the held-out terminal set, and writes a distinct `heldout-final-eval` run kind
+  that pool/evalreport keep separate from train/dev aggregation. Any script that
+  previously passed `--split heldout` to a ranking path (`audit` with a
+  candidate, `baseline`, `family`) must switch to `heldout-final-eval`.
+
+## Unreleased — P0-3 step 1 (gradedBy honesty)
+
+- **Break point (grading-source labelling):** the deterministic token-overlap
+  grader (`tokenGrader` in `packages/coding-agent/src/audit/grader.ts`) now
+  truthfully declares `gradedBy: "token_overlap"` instead of the misleading
+  `"model_grader"`. `GradedBy` in `benchmark/schema.ts` gains the
+  `token_overlap` value, and both `GRADE_SOURCE_CATEGORY` and
+  `gradeSourceCategory` map `token_overlap` to the same `deterministic_proxy`
+  source as legacy `model_grader`.
+- **Migration note:** historical ledger rows recorded under `model_grader` (from
+  the deterministic token/proxy path) and new `token_overlap` rows are
+  considered the SAME scoring source (a word-overlap proxy) at projection /
+  report boundaries. The separate negative-aware `modelGrader()` proxy in
+  `model-grader.ts` intentionally keeps its `model_grader` label and is
+  unaffected by this change.
+
 ## 0.2.1 - 2026-09-02
 
 - Fix the default npm registry endpoint used by startup version checks and

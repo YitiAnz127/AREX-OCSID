@@ -1,0 +1,27 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "prediction-fingerprints",
+  "target_capability": "ensemble-predict-and-fingerprint",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/prediction-fingerprints/SKILL.md",
+    "sub-skills/prediction-fingerprints/references/model-artifacts.md",
+    "sub-skills/prediction-fingerprints/references/fingerprint-workflows.md",
+    "sub-skills/prediction-fingerprints/scripts/chemprop_predict_command_builder.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/prediction-fingerprints/SKILL.md",
+    "sub-skills/prediction-fingerprints/references/model-artifacts.md",
+    "sub-skills/prediction-fingerprints/scripts/chemprop_predict_command_builder.py"
+  ],
+  "assertions": [
+    "The response routes to the chemprop prediction-fingerprints sub-skill.",
+    "The response provides a chemprop predict command accepting one or more model paths and --smiles-columns smiles.",
+    "The response explains that directory model paths are searched recursively for .pt files only and that .ckpt files must be passed explicitly.",
+    "The response states that multiple models produce averaged predictions plus a <output_stem>_individual<suffix> file with per-model columns.",
+    "The response provides a chemprop fingerprint command with the required --ffn-block-index 0 and --output fingerprints.npz.",
+    "The response explains --ffn-block-index 0 returns the post-aggregation representation before FFN layers.",
+    "The response explains that fingerprint outputs append a model index (e.g. fingerprints_0.npz).",
+    "The response does not tell the user to open model files or source from the original Chemprop checkout."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "ase-ase-workflows-relax",
+  "target_capability": "geometry-optimization-relax-workflow",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/ase-ase-workflows-relax/SKILL.md",
+    "sub-skills/ase-ase-calculators-mace/SKILL.md",
+    "sub-skills/ase-ase-workflows/references/commands-and-workflow.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/ase-ase-workflows-relax/SKILL.md",
+    "sub-skills/ase-ase-calculators-mace/SKILL.md",
+    "sub-skills/ase-ase-workflows/references/commands-and-workflow.md"
+  ],
+  "assertions": [
+    "The response routes the request to the ase-ase-workflows-relax sub-skill (geometry optimization), not static/md/neb.",
+    "The response produces an ASE relaxation script using an optimizer such as BFGS or FIRE with fmax=0.02 and a max-steps policy.",
+    "The response configures the MACE calculator with a model checkpoint/path and a device policy, per the MACE adapter sub-skill.",
+    "The response discusses convergence failure: how to switch the optimizer to FIRE or raise the maximum step limit.",
+    "The response returns an optimizer/convergence summary and lists assumptions and unresolved choices per the relax sub-skill contract.",
+    "The response does not point the user into the original atomistic-workflows source checkout."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "sequence-tools",
+  "target_capability": "blat-explicit-type-genome-location",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/sequence-tools/SKILL.md",
+    "sub-skills/sequence-tools/references/api-reference.md",
+    "sub-skills/sequence-tools/references/workflows.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/sequence-tools/SKILL.md",
+    "sub-skills/sequence-tools/references/api-reference.md",
+    "sub-skills/sequence-tools/references/workflows.md"
+  ],
+  "assertions": [
+    "The response routes the genome-location task to the sequence-tools sub-skill.",
+    "The response sets BLAT seqtype=\"protein\" and assembly=\"mouse\" (mapped to mm39) because the DNA-only peptide would otherwise be auto-detected as nucleotide.",
+    "The response lists the normalized BLAT result columns including genome, %_matched, chromosome, strand, start, and end from api-reference.md.",
+    "The response tells the user to inspect the returned genome column because an unrecognized assembly can fall back to UCSC's default genome.",
+    "The response does not direct the user to the original gget source repository checkout."
+  ]
+}

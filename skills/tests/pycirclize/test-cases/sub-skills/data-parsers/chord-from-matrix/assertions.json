@@ -1,0 +1,25 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "data-parsers",
+  "target_capability": "matrix-chord-preparation-and-delimiter-diagnosis",
+  "difficulty": "troubleshooting",
+  "evidence_basis": [
+    "sub-skills/data-parsers/SKILL.md",
+    "sub-skills/data-parsers/references/api-reference.md",
+    "sub-skills/data-parsers/references/data-formats.md",
+    "sub-skills/data-parsers/scripts/validate_matrix_and_radar.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/data-parsers/SKILL.md",
+    "sub-skills/data-parsers/references/data-formats.md",
+    "sub-skills/data-parsers/scripts/validate_matrix_and_radar.py"
+  ],
+  "assertions": [
+    "The response routes matrix/chord data preparation to the data-parsers sub-skill.",
+    "The response explains that a comma delimiter on a tab-delimited file yields one malformed column of compound labels and recommends inspecting Matrix.dataframe.shape and row_names/col_names, matching the data-formats and api-reference text.",
+    "The response builds the chord from the local TSV using Matrix(path) with the tab delimiter and Circos.chord_diagram, or via Matrix.to_sectors()/to_links() + circos.link.",
+    "The response explains Matrix.parse_fromto_table reads the first three columns by position (from, to, value) and that zero/negative cells are skipped, matching the api-reference.",
+    "The response runs or references the bundled scripts/validate_matrix_and_radar.py parser/export check, which is local and no-network.",
+    "The response does not fetch a network example dataset for the chord input."
+  ]
+}

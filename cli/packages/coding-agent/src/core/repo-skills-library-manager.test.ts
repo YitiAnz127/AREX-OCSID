@@ -352,4 +352,27 @@ describe("RepoSkillsLibraryManager", () => {
 		);
 		await expect(manager(agentDir, source).update()).rejects.toBeInstanceOf(RepoSkillsLibraryConflictError);
 	});
+
+	it("accepts an optional confidence_basis and rejects an unknown one in the assignment index", async () => {
+		const root = await makeRoot();
+		const source = await createSourceRepository(root);
+		const agentDir = path.join(root, "agent");
+		await manager(agentDir, source).install();
+		const assignmentsPath = path.join(agentDir, "skills", "repositories", "repo-skills-router", "references", "index", "assignments.jsonl");
+		const lastLine = readFileSync(assignmentsPath, "utf8").split(/\r?\n/).filter(Boolean).pop();
+		const record = JSON.parse(lastLine as string);
+		// Valid basis must not add issues.
+		record.confidence_basis = "materialized-unpinned";
+		await writeFile(assignmentsPath, `${[...readFileSync(assignmentsPath, "utf8").split(/\r?\n/).filter(Boolean).slice(0, -1), JSON.stringify(record)].join("\n")}\n`, "utf8");
+		expect(manager(agentDir, source).status().issues).not.toEqual(expect.arrayContaining([
+			expect.stringContaining("invalid assignment index line"),
+		]));
+		// Unknown basis must be flagged.
+		record.confidence_basis = "made-up-basis";
+		await writeFile(assignmentsPath, `${[...readFileSync(assignmentsPath, "utf8").split(/\r?\n/).filter(Boolean).slice(0, -1), JSON.stringify(record)].join("\n")}\n`, "utf8");
+		const issues = manager(agentDir, source).status().issues;
+		expect(issues).toEqual(expect.arrayContaining([
+			expect.stringContaining("invalid assignment index line"),
+		]));
+	});
 });

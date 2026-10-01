@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "ase-ase-workflows-neb",
+  "target_capability": "climbing-image-neb-workflow",
+  "difficulty": "advanced",
+  "evidence_basis": [
+    "sub-skills/ase-ase-workflows-neb/SKILL.md",
+    "sub-skills/ase-ase-calculators-mace/SKILL.md",
+    "sub-skills/ase-ase-workflows/references/commands-and-workflow.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/ase-ase-workflows-neb/SKILL.md",
+    "sub-skills/ase-ase-calculators-mace/SKILL.md",
+    "sub-skills/ase-ase-workflows/references/commands-and-workflow.md"
+  ],
+  "assertions": [
+    "The response routes the request to the ase-ase-workflows-neb sub-skill (reaction path / transition-state pathway).",
+    "The response produces an ASE NEB script that interpolates between the initial and final structures with a defined number of images.",
+    "The response includes a climbing-image setting and an optimizer/spring-constant convergence policy.",
+    "The response configures the MACE calculator for the images in the band.",
+    "The response provides a plan to extract the reaction barrier and path energies from the optimized band.",
+    "The response does not point the user into the original atomistic-workflows source checkout."
+  ]
+}

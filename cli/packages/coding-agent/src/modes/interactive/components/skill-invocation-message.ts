@@ -1,4 +1,5 @@
 import { Box, Markdown, type MarkdownTheme, Text } from "@earendil-works/pi-tui";
+import { sanitizeForDisplay } from "./display-text.ts";
 import type { ParsedSkillBlock } from "../../../core/agent-session.ts";
 import { getMarkdownTheme, theme } from "../theme/theme.ts";
 import { keyText } from "./keybinding-hints.ts";
@@ -39,7 +40,9 @@ export class SkillInvocationMessageComponent extends Box {
 			this.addChild(new Text(label, 0, 0));
 			const header = `**${this.skillBlock.name}**\n\n`;
 			this.addChild(
-				new Markdown(header + this.skillBlock.content, 0, 0, this.markdownTheme, {
+				// Skill content comes from repository SKILL.md files — the most
+				// directly attacker-controlled text that reaches the renderer.
+				new Markdown(header + sanitizeForDisplay(this.skillBlock.content), 0, 0, this.markdownTheme, {
 					color: (text: string) => theme.fg("customMessageText", text),
 				}),
 			);

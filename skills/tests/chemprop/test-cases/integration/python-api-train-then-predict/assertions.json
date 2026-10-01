@@ -1,0 +1,29 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "integration",
+  "target_capability": "python-api-train-then-cli-predict",
+  "difficulty": "advanced",
+  "evidence_basis": [
+    "sub-skills/python-api-modeling/SKILL.md",
+    "sub-skills/python-api-modeling/references/api-reference.md",
+    "sub-skills/python-api-modeling/references/python-workflows.md",
+    "sub-skills/python-api-modeling/scripts/chemprop_api_smoke.py",
+    "sub-skills/prediction-fingerprints/SKILL.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/python-api-modeling/SKILL.md",
+    "sub-skills/python-api-modeling/references/python-workflows.md",
+    "sub-skills/python-api-modeling/scripts/chemprop_api_smoke.py",
+    "sub-skills/prediction-fingerprints/SKILL.md"
+  ],
+  "assertions": [
+    "The response routes across the python-api-modeling and prediction-fingerprints sub-skills.",
+    "The response builds data.MoleculeDataset from data.MoleculeDatapoint.from_smi datapoints.",
+    "The response wires nn.BondMessagePassing, nn.MeanAggregation and nn.RegressionFFN into a models.MPNN with metrics.",
+    "The response trains with a lightning.pytorch.Trainer and keeps the prediction loader with shuffle=False.",
+    "The response saves the model with chemprop.models.save_model including output_columns and mentions load_output_columns / load_model.",
+    "The response hands off to a chemprop predict command using the saved artifact as --model-path.",
+    "The response points to the bundled chemprop_api_smoke.py as a runnable CPU smoke script.",
+    "The response does not tell the user to open the original Chemprop source repository."
+  ]
+}

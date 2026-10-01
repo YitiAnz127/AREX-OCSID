@@ -20,6 +20,7 @@ const DEFAULT_EXPECTED_ASSIGNMENTS = 2209;
 const TAXONOMY_SHA256 = "30f8aa8934db13c613e6dfea053acb0023543cb9d5c3990e348ecf100479c985";
 const REPO_ID = /^[^/\s]+\/[^/\s]+$/;
 const SKILL_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const CONFIDENCE_BASIS = new Set(["committed", "materialized-unpinned", "external-verified"]);
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const SCRIPT_DIR = path.dirname(SCRIPT_PATH);
 const BUNDLED_TEMPLATE = path.resolve(SCRIPT_DIR, "../../repo-skills-router");
@@ -344,11 +345,12 @@ function validateAssignments(records, repositoryById, taxonomy, expectedCount, s
 		if (!repositoryById.has(record.repo_id)) throw new BuilderError(`${source} references a repo absent from the repository manifest: ${record.repo_id}`);
 		if (typeof record.area !== "string" || typeof record.family !== "string" || !taxonomy.paths.has(`${record.area}\0${record.family}`)) throw new BuilderError(`${source} contains an invalid taxonomy path`);
 		if (!new Set(["high", "medium", "low"]).has(record.confidence)) throw new BuilderError(`${source}.confidence must be high, medium, or low`);
+		if (record.confidence_basis !== undefined && (typeof record.confidence_basis !== "string" || !CONFIDENCE_BASIS.has(record.confidence_basis))) throw new BuilderError(`${source}.confidence_basis is invalid`);
 		const key = `${record.repo_id}\0${record.area}\0${record.family}`;
 		if (seen.has(key)) throw new BuilderError(`${source} duplicates assignment ${record.repo_id} -> ${record.area} -> ${record.family}`);
 		seen.add(key);
 		if (!byRepo.has(record.repo_id)) byRepo.set(record.repo_id, []);
-		byRepo.get(record.repo_id).push({ area: record.area, family: record.family, confidence: record.confidence });
+		byRepo.get(record.repo_id).push({ area: record.area, family: record.family, confidence: record.confidence, confidence_basis: record.confidence_basis });
 	}
 	for (const repoId of repositoryById.keys()) if (!byRepo.has(repoId)) throw new BuilderError(`classified repository has no taxonomy assignment: ${repoId}`);
 	for (const assignments of byRepo.values()) assignments.sort((left, right) => taxonomy.order.get(`${left.area}\0${left.family}`) - taxonomy.order.get(`${right.area}\0${right.family}`));
@@ -444,11 +446,12 @@ function validateOutput(outputDir, repositoryById, assignmentByRepo, expectedAss
 		foldedRepositoryIds.add(foldedRepoId);
 	}
 	for (const record of assignmentIndex) {
-		const unknownField = Object.keys(record).find((key) => !new Set(["repo_id", "legacy_repo_id", "skill_id", "area", "family", "confidence"]).has(key));
+		const unknownField = Object.keys(record).find((key) => !new Set(["repo_id", "legacy_repo_id", "skill_id", "area", "family", "confidence", "confidence_basis"]).has(key));
 		if (unknownField) throw new BuilderError(`generated assignment index contains unknown field ${unknownField}`);
 		const repository = repositoryIndexByRepo.get(record.repo_id);
 		if (!repository || record.skill_id !== repository.skill_id || record.legacy_repo_id !== repository.legacy_repo_id) throw new BuilderError(`generated assignment index contains stale repository identity: ${record.repo_id}`);
 		if (!new Set(["high", "medium", "low"]).has(record.confidence)) throw new BuilderError(`generated assignment index contains invalid confidence: ${record.repo_id}`);
+		if (record.confidence_basis !== undefined && (typeof record.confidence_basis !== "string" || !CONFIDENCE_BASIS.has(record.confidence_basis))) throw new BuilderError(`generated assignment index contains invalid confidence_basis: ${record.repo_id}`);
 	}
 	const actualAssignments = new Set(assignmentIndex.map((record) => `${record.repo_id}\0${record.area}\0${record.family}`));
 	const expected = new Set([...assignmentByRepo.entries()].flatMap(([repoId, assignments]) => assignments.map((assignment) => `${repoId}\0${assignment.area}\0${assignment.family}`)));
@@ -577,6 +580,7 @@ function build(args) {
 			area: assignment.area,
 			family: assignment.family,
 			confidence: assignment.confidence,
+			confidence_basis: assignment.confidence_basis,
 		})));
 		writeJsonLines(path.join(routerDir, "references", "index", "assignments.jsonl"), centralAssignments);
 		const environment = {};

@@ -1,0 +1,21 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "integration",
+  "target_capability": "cross-database-synergy-comparison",
+  "difficulty": "advanced",
+  "evidence_basis": [
+    "sub-skills/drugcomb/SKILL.md",
+    "sub-skills/drugcombdb/SKILL.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/drugcomb/SKILL.md",
+    "sub-skills/drugcombdb/SKILL.md"
+  ],
+  "assertions": [
+    "The response routes the request to both the drugcomb and drugcombdb sub-skills.",
+    "The response uses the DrugComb schema (drug_row/drug_col, cell_line_name, synergy_zip, synergy_bliss) for the DrugComb source and the DrugCombDB schema (Drug1/Drug2/Cell, Synergy, SynergyType, PMID) for the DrugCombDB source.",
+    "The response names distinct per-source API functions (e.g. drugcomb search/summarize vs drugcombdb search_drug_pair/search).",
+    "The response explicitly contrasts the two schemas and does not merge them into a single column set.",
+    "The response compares the consistency of the combination and cell line across the two sources."
+  ]
+}

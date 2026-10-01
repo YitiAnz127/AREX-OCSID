@@ -628,3 +628,34 @@ export function getSessionsDir(): string {
 export function getDebugLogPath(): string {
 	return join(getAgentDir(), `${APP_NAME}-debug.log`);
 }
+
+/** Root of the managed repository-skill trees: .../skills/repositories */
+export function getRepoSkillsRoot(): string {
+	return join(getAgentDir(), "skills", "repositories");
+}
+
+/** Local RSI state directory: .../agent/rsi */
+export function getRsiDir(): string {
+	return join(getAgentDir(), "rsi");
+}
+
+/** Directory where RSI observation event JSONL files are rotated. */
+export function getRsiEventsDir(): string {
+	return join(getRsiDir(), "events");
+}
+
+/** Directory for local benchmark / quality evaluation records. */
+export function getRsiQualityDir(): string {
+	return join(getRsiDir(), "quality");
+}
+
+/** Directory for frozen benchmark manifests and audit records (.v1 runs). */
+export function getRsiBenchmarkDir(): string {
+	return join(getRsiQualityDir(), "benchmark-v1");
+}
+
+/** Health snapshot path used by CLI `repo-skills report`. */
+export function getRsiHealthPath(): string {
+	return join(getRsiEventsDir(), "health.json");
+}
+

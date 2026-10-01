@@ -1,0 +1,22 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "expression-omics",
+  "target_capability": "archs4-correlation-tissue-atlas",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "sub-skills/expression-omics/SKILL.md",
+    "sub-skills/expression-omics/references/workflows.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/expression-omics/SKILL.md",
+    "sub-skills/expression-omics/references/workflows.md",
+    "sub-skills/expression-omics/references/api-signatures.md"
+  ],
+  "assertions": [
+    "The response routes the gene-expression query to the expression-omics sub-skill of gget.",
+    "The response uses gget.archs4(\"STAT4\", which=\"correlation\", gene_count=N) for bulk co-expression and gget.archs4(\"STAT4\", which=\"tissue\", species=\"mouse\") for the tissue atlas, per workflows.md.",
+    "The response explains correlation drops the queried gene and returns gene_symbol/pearson_correlation columns, and that tissue mode is sorted by decreasing median with a required human or mouse species.",
+    "The response states an invalid which or species fails before the request and a missing gene returns None after an error log.",
+    "The response does not direct the user to the original gget source repository checkout."
+  ]
+}

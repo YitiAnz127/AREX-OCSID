@@ -1,0 +1,20 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "ipsae-boltz2-ranking",
+  "difficulty": "advanced",
+  "evidence_basis": [
+    "SKILL.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response routes to the mosaic root skill for Boltz-2 candidate ranking.",
+    "The response builds the ranking loss as a method on the Boltz2 model: from mosaic.models.boltz2 import Boltz2, then boltz2.build_multisample_loss(...), not as a free function.",
+    "The response composes the multisample loss from 1.00 * IPTMLoss() plus TargetBinderIPSAE() and BinderTargetIPSAE() terms with features, num_samples, and recycling_steps arguments as in the SKILL.md Nipah recipe.",
+    "The response carries over the practices of letting the optimizer choose the epitope and matching filter stringency to assay throughput.",
+    "The response includes the caveat that the published result is a small, expert-tuned sample on one target, not a guarantee across targets.",
+    "The response does not direct the user to the original escalante-bio/mosaic repository checkout."
+  ]
+}

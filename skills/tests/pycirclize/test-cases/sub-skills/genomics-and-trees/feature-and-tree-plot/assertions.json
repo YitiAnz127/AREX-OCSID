@@ -1,0 +1,24 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "genomics-and-trees",
+  "target_capability": "gff-feature-gc-and-tree-plotting",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/genomics-and-trees/SKILL.md",
+    "sub-skills/genomics-and-trees/references/api-reference.md",
+    "sub-skills/genomics-and-trees/references/data-formats.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/genomics-and-trees/SKILL.md",
+    "sub-skills/genomics-and-trees/references/api-reference.md",
+    "sub-skills/genomics-and-trees/references/data-formats.md"
+  ],
+  "assertions": [
+    "The response routes biological GFF feature / GC / tree plotting to the genomics-and-trees sub-skill.",
+    "The response uses pycirclize.parser.Gff for the GFF fixture and converts the 1-based closed GFF rows to 0-based half-open Biopython locations, without re-subtracting one from a SeqFeature location.",
+    "The response draws the CDS feature with Track.genomic_features(..., plotstyle=...) and adds a GC-content/skew fill from calc_gc_content/calc_gc_skew(seq=...) via Track.fill_between.",
+    "The response initializes the tree with Circos.initialize_from_tree on the local Newick and styles it with TreeViz highlight/marker, inspecting leaf/innode labels before querying.",
+    "The response explains that load_prokaryote_example_file, load_eukaryote_example_dataset, and fetch_genbank_by_accid are network/cache-backed helpers that must not be called automatically in an offline run, and instead uses the local fixtures.",
+    "The response does not claim the parsers auto-download data or require the source checkout."
+  ]
+}

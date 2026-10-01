@@ -1,12 +1,12 @@
 {
-  "schema_version": 1,
   "area_count": 2,
   "assignment_count": 127,
-  "repository_count": 109,
+  "assignment_index_sha256": "sha256:7becad06e63384d0c443d463a774ee4ae318ab3e3743fd5c93ba326ba0c5a025",
   "family_count": 10,
   "non_empty_family_count": 10,
-  "taxonomy_sha256": "30f8aa8934db13c613e6dfea053acb0023543cb9d5c3990e348ecf100479c985",
+  "repository_count": 109,
   "repository_index_sha256": "sha256:9e8ee694b78bef19319b491c43fe3b6bdf8268cd2970d0e01685e2ad090bb6db",
-  "assignment_index_sha256": "sha256:7becad06e63384d0c443d463a774ee4ae318ab3e3743fd5c93ba326ba0c5a025",
-  "source_router_run_id": "router-chem-subset-20260906T000000Z"
+  "schema_version": 1,
+  "source_router_run_id": "router-chem-subset-20260906T000000Z",
+  "taxonomy_sha256": "30f8aa8934db13c613e6dfea053acb0023543cb9d5c3990e348ecf100479c985"
 }

@@ -58,7 +58,9 @@ const ASSIGNMENT_INDEX_FIELDS = new Set([
 	"area",
 	"family",
 	"confidence",
+	"confidence_basis",
 ]);
+const CONFIDENCE_BASIS = new Set(["committed", "materialized-unpinned", "external-verified"]);
 const TRANSACTION_PHASES = new Set([
 	"staging",
 	"validated",
@@ -561,7 +563,8 @@ function validateAssignmentRecords(records, repositoryRecords, label) {
 		const key = `${record.repo_id}\0${record.area}\0${record.family}`;
 		if (unknown || typeof record.skill_id !== "string" || !repositories.has(record.skill_id) ||
 			record.repo_id !== repositories.get(record.skill_id).repo_id || typeof record.area !== "string" ||
-			typeof record.family !== "string" || !["high", "medium", "low"].includes(record.confidence)) {
+			typeof record.family !== "string" || !["high", "medium", "low"].includes(record.confidence) ||
+			(record.confidence_basis !== undefined && (typeof record.confidence_basis !== "string" || !CONFIDENCE_BASIS.has(record.confidence_basis)))) {
 			throw new ExportError(`${label} assignment record ${index + 1} is invalid${unknown ? ` (unknown field ${unknown})` : ""}`);
 		}
 		if (seen.has(key)) throw new ExportError(`${label} contains duplicate assignment ${key.replaceAll("\0", " -> ")}`);

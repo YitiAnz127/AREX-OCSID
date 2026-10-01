@@ -1,0 +1,19 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "drugcomb",
+  "target_capability": "drug-and-cellline-synergy-search",
+  "difficulty": "basic",
+  "evidence_basis": [
+    "sub-skills/drugcomb/SKILL.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/drugcomb/SKILL.md"
+  ],
+  "assertions": [
+    "The response routes the request to the drugcomb sub-skill, not drugcombdb.",
+    "The response uses a case-insensitive substring match on drug_row/drug_col for the drug name 5-FU and on cell_line_name for MCF-7, per the drugcomb SKILL.md pattern table.",
+    "The response uses the drugcomb search/summarize API (search(data, entity) and summarize(hits, entity)) and reports synergy_zip and synergy_bliss columns.",
+    "The response references the DrugComb key columns drug_row, drug_col, cell_line_name, synergy_zip, synergy_bliss.",
+    "The response does not use the DrugCombDB columns (Drug1, Drug2, Cell, Synergy, SynergyType, PMID)."
+  ]
+}

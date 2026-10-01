@@ -1,0 +1,12 @@
+{
+  "grades": [
+    {
+      "runId": "family-cheminformatics-cand-C-docs",
+      "skillId": "alphafold3-pytorch",
+      "caseId": "sub-skills/cli-serving/multimolecule-command-preflight",
+      "score": 1,
+      "gradedBy": "human",
+      "note": "manual verification: CLI preflight passes (deep-check probe)"
+    }
+  ]
+}

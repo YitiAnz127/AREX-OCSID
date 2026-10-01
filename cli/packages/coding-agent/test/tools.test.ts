@@ -812,8 +812,14 @@ describe("Coding Agent Tools", () => {
 			chmodSync(payload, 0o755);
 			writeFileSync(testFile, "target\n");
 
+			// The path is embedded in a REGEX pattern. On Windows it contains
+			// backslashes (`C:\Users\...`), and `\U` is an invalid regex escape, so
+			// ripgrep rejected the whole pattern ("invalid hexadecimal digit") and the
+			// tool correctly surfaced rg's error instead of returning "No matches".
+			// Escape the separators so the pattern stays a valid regex on every
+			// platform; the flag-like `--pre=` prefix under test is unchanged.
 			const result = await grepTool.execute("test-call-grep-injection", {
-				pattern: `--pre=${payload}`,
+				pattern: `--pre=${payload.replace(/\\/g, "\\\\")}`,
 				path: testDir,
 			});
 

@@ -9,7 +9,7 @@ import { keyHint } from "../../modes/interactive/components/keybinding-hints.ts"
 import type { Theme } from "../../modes/interactive/theme/theme.ts";
 import { ensureTool } from "../../utils/tools-manager.ts";
 import type { ToolDefinition, ToolRenderResultOptions } from "../extensions/types.ts";
-import { resolveToCwd } from "./path-utils.ts";
+import { isEscapingRelative, resolveToCwd } from "./path-utils.ts";
 import { getTextOutput, invalidArgText, shortenPath, str } from "./render-utils.ts";
 import { wrapToolDefinition } from "./tool-definition-wrapper.ts";
 import {
@@ -187,12 +187,15 @@ export function createGrepToolDefinition(
 
 						const contextValue = context && context > 0 ? context : 0;
 						const effectiveLimit = Math.max(1, limit ?? DEFAULT_LIMIT);
-						const formatPath = (filePath: string): string => {
+						const formatPath = (filePath: string): string | null => {
 							if (isDirectory) {
 								const relative = path.relative(searchPath, filePath);
-								if (relative && !relative.startsWith("..")) {
-									return relative.replace(/\\/g, "/");
-								}
+								// Containment: a result that escapes the search root (reachable
+								// only through a symlink traversal) is dropped rather than masked
+								// as a bare basename — otherwise an escape would be silently
+								// hidden in the output. (P0-02)
+								if (isEscapingRelative(relative)) return null;
+								if (relative) return relative.replace(/\\/g, "/");
 							}
 							return path.basename(filePath);
 						};
@@ -215,7 +218,22 @@ export function createGrepToolDefinition(
 						const args: string[] = ["--json", "--line-number", "--color=never", "--hidden"];
 						if (ignoreCase) args.push("--ignore-case");
 						if (literal) args.push("--fixed-strings");
-						if (glob) args.push("--glob", glob);
+						if (glob) {
+							// Mirror the find-tool fix: rg's --glob matches against the
+							// path relative to the search root, so path-containing globs
+							// need a leading **/ (verified: 'src/**/*.spec.ts' returns
+							// nothing on Windows; '**/src/**/*.spec.ts' matches).
+							let effectiveGlob = glob;
+							if (
+								glob.includes("/") &&
+								!glob.startsWith("/") &&
+								!glob.startsWith("**") &&
+								!glob.startsWith("!")
+							) {
+								effectiveGlob = `**/${glob}`;
+							}
+							args.push("--glob", effectiveGlob);
+						}
 						args.push("--", pattern, searchPath);
 
 						const child = spawn(rgPath, args, { stdio: ["ignore", "pipe", "pipe"] });
@@ -249,6 +267,7 @@ export function createGrepToolDefinition(
 
 						const formatBlock = async (filePath: string, lineNumber: number): Promise<string[]> => {
 							const relativePath = formatPath(filePath);
+							if (relativePath === null) return [];
 							const lines = await getFileLines(filePath);
 							if (!lines.length) return [`${relativePath}:${lineNumber}: (unable to read file)`];
 							const block: string[] = [];
@@ -317,6 +336,7 @@ export function createGrepToolDefinition(
 							for (const match of matches) {
 								if (contextValue === 0 && match.lineText !== undefined) {
 									const relativePath = formatPath(match.filePath);
+									if (relativePath === null) continue;
 									const sanitized = match.lineText
 										.replace(/\r\n/g, "\n")
 										.replace(/\r/g, "")

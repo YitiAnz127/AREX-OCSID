@@ -30,7 +30,15 @@ export class FileModelsStore implements ModelsStore {
 	}
 
 	private parse(content: string | undefined): StoredModels {
-		return content ? (JSON.parse(content) as StoredModels) : {};
+		if (!content) return {};
+		try {
+			return JSON.parse(content) as StoredModels;
+		} catch {
+			// Corrupt/truncated store file (e.g. a pre-F2 crash, or a manual edit):
+			// return an empty map so catalog refresh degrades gracefully instead of
+			// throwing out of read/write/delete (mirrors AuthStorage.reload).
+			return {};
+		}
 	}
 
 	async read(providerId: string): Promise<ModelsStoreEntry | undefined> {

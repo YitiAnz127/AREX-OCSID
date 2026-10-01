@@ -1,0 +1,25 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "data-featurization",
+  "target_capability": "component-indexed-descriptor-validation",
+  "difficulty": "troubleshooting",
+  "evidence_basis": [
+    "sub-skills/data-featurization/SKILL.md",
+    "sub-skills/data-featurization/references/extra-features-descriptors.md",
+    "sub-skills/data-featurization/references/troubleshooting.md",
+    "sub-skills/data-featurization/scripts/validate_chemprop_tabular_inputs.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/data-featurization/SKILL.md",
+    "sub-skills/data-featurization/references/extra-features-descriptors.md",
+    "sub-skills/data-featurization/scripts/validate_chemprop_tabular_inputs.py"
+  ],
+  "assertions": [
+    "The response routes to the chemprop data-featurization sub-skill.",
+    "The response explains that component 0 maps to the first molecule column (solute) and component 1 to the second (solvent) for component-indexed descriptor paths.",
+    "The response recommends running validate_chemprop_tabular_inputs.py with --csv multicomponent.csv --smiles-columns solute solvent and repeatable --component-descriptors 0 ... and --component-descriptors 1 ... flags.",
+    "The response states that a row-level descriptor .npz must contain exactly one row per CSV data row (n_rows x n_descriptors), so a file with one fewer row fails the row-count check.",
+    "The response distinguishes per-row molecule descriptors from per-atom/per-bond matrices that must match RDKit atom/bond counts.",
+    "The response does not tell the user to open the original Chemprop source repository."
+  ]
+}

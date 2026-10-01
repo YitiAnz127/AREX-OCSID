@@ -1,0 +1,19 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "root",
+  "target_capability": "troubleshoot-fetch-models-and-gaps",
+  "difficulty": "troubleshooting",
+  "evidence_basis": [
+    "SKILL.md"
+  ],
+  "expected_skill_files": [
+    "SKILL.md"
+  ],
+  "assertions": [
+    "The response explains that a PDB ID must be exactly 4 characters and that \"1abcD\" is invalid, matching the SKILL.md troubleshooting note 'Check PDB ID format (4 characters)'.",
+    "The response says to select the first model for design when multiple models are present, matching SKILL.md 'Multiple models: Select first model for design'.",
+    "The response checks for gaps in residue numbering and iterates residues of the selected model when computing interface residues, matching the SKILL.md troubleshooting 'Missing residues: Check for gaps in structure'.",
+    "The response gives an interface scan between two chains with a distance cutoff (default 4.0) returning both residue sets, matching the find_interface_residues(pdb_file, chain_a, chain_b, distance=4.0) pattern.",
+    "The response does not reference the original protein-design-skills/pdb checkout or installed package internals."
+  ]
+}

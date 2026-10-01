@@ -1,0 +1,19 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "drugcombdb",
+  "target_capability": "canonical-drug-pair-synergy-query",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/drugcombdb/SKILL.md"
+  ],
+  "expected_skill_files": [
+    "sub-skills/drugcombdb/SKILL.md"
+  ],
+  "assertions": [
+    "The response routes the request to the drugcombdb sub-skill, not drugcomb.",
+    "The response queries the canonical DrugCombDB CSV using one of load_data, search_drug_pair, search_cell_line, search, or search_batch per the drugcombdb SKILL.md API.",
+    "The response reports the canonical DrugCombDB columns Drug1, Drug2, Cell, Synergy, SynergyType, PMID.",
+    "The response applies a result limit to return a compact list of records.",
+    "The response does not use the DrugComb columns synergy_zip/synergy_bliss/drug_row/drug_col."
+  ]
+}

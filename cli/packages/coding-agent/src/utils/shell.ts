@@ -135,11 +135,20 @@ export function getShellEnv(): NodeJS.ProcessEnv {
 
 /**
  * Sanitize binary output for display/storage.
- * Removes characters that crash string-width or cause display issues:
- * - Control characters (except tab, newline, carriage return)
- * - Lone surrogates
- * - Unicode Format characters (crash string-width due to a bug)
- * - Characters with undefined code points
+ *
+ * Removes characters that are dangerous or meaningless to a terminal:
+ * - C0 controls (0x00-0x1F except tab, newline, carriage return) — includes ESC,
+ *   so an attacker-supplied string cannot emit escape sequences
+ * - DEL (0x7F)
+ * - C1 controls (0x80-0x9F) — 0x9B/0x9D are single-byte CSI/OSC on 8-bit terminals
+ * - Bidirectional and zero-width format characters, which let a name render in a
+ *   different order than it is stored (`gnp.exe` displayed as `exe.png`)
+ * - Unicode format characters that crash string-width, and lone surrogates
+ *
+ * Anything reaching a pi-tui component is written straight to stdout
+ * (`pi-tui/dist/terminal.js` write() is a bare process.stdout.write), so this is
+ * the last thing standing between a repository file, a model response, or a
+ * command's output and the user's terminal.
  */
 export function sanitizeBinaryOutput(str: string): string {
 	// Use Array.from to properly iterate over code points (not code units)
@@ -147,13 +156,6 @@ export function sanitizeBinaryOutput(str: string): string {
 	// codePointAt() might return undefined
 	return Array.from(str)
 		.filter((char) => {
-			// Filter out characters that cause string-width to crash
-			// This includes:
-			// - Unicode format characters
-			// - Lone surrogates (already filtered by Array.from)
-			// - Control chars except \t \n \r
-			// - Characters with undefined code points
-
 			const code = char.codePointAt(0);
 
 			// Skip if code point is undefined (edge case with invalid strings)
@@ -162,10 +164,29 @@ export function sanitizeBinaryOutput(str: string): string {
 			// Allow tab, newline, carriage return
 			if (code === 0x09 || code === 0x0a || code === 0x0d) return true;
 
-			// Filter out control characters (0x00-0x1F, except 0x09, 0x0a, 0x0x0d)
-			if (code <= 0x1f) return false;
+			// C0 controls (includes ESC 0x1B) and DEL
+			if (code <= 0x1f || code === 0x7f) return false;
 
-			// Filter out Unicode format characters
+			// C1 controls: 8-bit CSI (0x9B) and OSC (0x9D) live here
+			if (code >= 0x80 && code <= 0x9f) return false;
+
+			// Bidi overrides/embeddings/isolates, directional marks and ZWSP.
+			//
+			// ZWNJ (U+200C) and ZWJ (U+200D) are deliberately NOT in this set:
+			// neither reorders text, and both are load-bearing content — ZWNJ
+			// changes spelling in Persian/Arabic/Indic scripts, and ZWJ is what
+			// joins multi-codepoint emoji (👨‍👩‍👧, 👩‍💻, 🏳️‍🌈) into one glyph.
+			// Stripping them corrupts legitimate text on every tool output and
+			// bash result rendered through this filter. The spoofing vector the
+			// test pins (`gnp<RLO>exe`) is the overrides, which are still removed.
+			if (code === 0x061c) return false; // ARABIC LETTER MARK
+			if (code === 0x200b) return false; // ZWSP
+			if (code === 0x200e || code === 0x200f) return false; // LRM / RLM
+			if (code >= 0x202a && code <= 0x202e) return false; // LRE..RLO
+			if (code >= 0x2066 && code <= 0x2069) return false; // LRI..PDI
+			if (code === 0xfeff) return false; // ZWNBSP / BOM
+
+			// Interlinear annotation and other format characters that crash string-width
 			if (code >= 0xfff9 && code <= 0xfffb) return false;
 
 			return true;

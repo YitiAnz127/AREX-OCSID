@@ -1,0 +1,23 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "cli-serving",
+  "target_capability": "cli-safe-multimolecule-command-preflight",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/cli-serving/SKILL.md",
+    "sub-skills/cli-serving/references/cli-reference.md",
+    "sub-skills/cli-serving/scripts/build_cli_command.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/cli-serving/SKILL.md",
+    "sub-skills/cli-serving/scripts/build_cli_command.py"
+  ],
+  "assertions": [
+    "The response routes to the cli-serving sub-skill and does not route to model-inference or input-representation as the primary target.",
+    "The response constructs the omnimolecule command by validating a command specification with build_cli_command.py and states it never imports the package or runs inference.",
+    "The response repeats --protein and --rna once per entity and passes --use-cuda as an explicit Click boolean.",
+    "The response states the CLI writes an mmCIF structure file, and does not attribute the per-session PDB output (the Gradio app) to the CLI.",
+    "The response does not claim the --precision argument enables mixed precision, quantization, or CUDA on the GPU.",
+    "The response requires that the checkpoint be an existing regular file before constructing the command."
+  ]
+}

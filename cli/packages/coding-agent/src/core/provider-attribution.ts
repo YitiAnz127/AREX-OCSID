@@ -17,6 +17,14 @@ function matchesHost(baseUrl: string, expectedHost: string): boolean {
 }
 
 function isOpenRouterModel(model: Model<Api>): boolean {
+	// Substring match is deliberate and covered by
+	// test/sdk-openrouter-attribution.test.ts ("preserves legacy ... substring
+	// attribution matching"): provider configs exist whose baseUrl is not a
+	// parseable URL. Unlike the OCaml/Pi variants below this cannot use
+	// matchesHost() without breaking that contract. The blast radius is
+	// attribution headers only — `HTTP-Referer`/`X-OpenRouter-*` carry no
+	// credential — so a baseUrl that merely contains "openrouter.ai" earns
+	// cosmetic headers on a request to an unrelated host, nothing more.
 	return model.provider === "openrouter" || model.baseUrl.includes(OPENROUTER_HOST);
 }
 

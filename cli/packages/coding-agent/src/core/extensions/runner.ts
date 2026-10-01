@@ -942,13 +942,29 @@ export class ExtensionRunner {
 			if (!handlers || handlers.length === 0) continue;
 
 			for (const handler of handlers) {
-				const handlerResult = await handler(event, ctx);
+				try {
+					const handlerResult = (await handler(event, ctx)) as ToolCallEventResult | undefined;
 
-				if (handlerResult) {
-					result = handlerResult as ToolCallEventResult;
-					if (result.block) {
-						return result;
+					if (handlerResult) {
+						result = handlerResult;
+						if (result.block) {
+							return result;
+						}
 					}
+				} catch (err) {
+					// FAIL-CLOSED: a throwing tool_call handler must block the
+					// tool. `tool_call` is a security gate (see docs/extensions.md:
+					// "tool_call errors block the tool (fail-safe)"). Re-throw so
+					// agent-session.ts blocks execution. Extensions that must not
+					// break the turn (e.g. the observer) catch their own errors
+					// inside their handler and must never throw here.
+					this.emitError({
+						extensionPath: ext.path,
+						event: "tool_call",
+						error: err instanceof Error ? err.message : String(err),
+						stack: err instanceof Error ? err.stack : undefined,
+					});
+					throw err;
 				}
 			}
 		}

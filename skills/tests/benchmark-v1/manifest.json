@@ -1,0 +1,35 @@
+{
+  "schema": "disco.benchmark.v1",
+  "name": "pilot-v1",
+  "frozenAt": "2026-01-01T00:00:00Z",
+  "splitHash": "fabcb729156e295afed6b395f1905939f18857158351c0945c0c93525a7c7a05",
+  "contentHash": "15202b56f704a8a4df61070c896b46802f0482d8f0af5e401dd7baa9dae35767",
+  "contentHashes": {
+    "train": "2bffa8aec5ee5cc7f726f2855a43f4405afba89f9b648243b10fc4a4c8ca0a55",
+    "dev": "da693963b0256869979055ab12d813f6f44736bd51de36fcae1c974911e6e5ae",
+    "heldout": "83403930d5e4137ca2ea99ea98a778783fdf31a650b2a25b3b3ed39e73916b72"
+  },
+  "splits": {
+    "train": [
+      "alphafold3-pytorch",
+      "atomistic-workflows",
+      "chemprop",
+      "drug-combination"
+    ],
+    "dev": [
+      "drug-molecular-property",
+      "gget",
+      "mosaic"
+    ],
+    "heldout": [
+      "pdb-structure",
+      "protein-campaign-manager",
+      "pycirclize"
+    ]
+  },
+  "skillCounts": {
+    "train": 4,
+    "dev": 3,
+    "heldout": 3
+  }
+}

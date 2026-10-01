@@ -1,0 +1,26 @@
+{
+  "schema": "disco.usability-case.v1",
+  "target_skill_area": "training-cli",
+  "target_capability": "binary-classification-train-command",
+  "difficulty": "intermediate",
+  "evidence_basis": [
+    "sub-skills/training-cli/SKILL.md",
+    "sub-skills/training-cli/references/cli-reference.md",
+    "sub-skills/training-cli/references/training-workflows.md",
+    "sub-skills/training-cli/scripts/chemprop_train_command_builder.py"
+  ],
+  "expected_skill_files": [
+    "sub-skills/training-cli/SKILL.md",
+    "sub-skills/training-cli/references/cli-reference.md",
+    "sub-skills/training-cli/scripts/chemprop_train_command_builder.py"
+  ],
+  "assertions": [
+    "The response routes to the chemprop training-cli sub-skill rather than any other route.",
+    "The response emits a chemprop train command with --task-type classification, --smiles-columns smiles, and --target-columns tox_a tox_b tox_c.",
+    "The response includes --metrics roc prc accuracy f1 and --tracking-metric prc, matching the training-cli SKILL.md explicit classification example.",
+    "The response includes --class-balance and explains it is valid only for --task-type classification.",
+    "The response uses CPU-safe smoke flags (--accelerator cpu, --epochs 3, --num-workers 0) and an explicit --output-dir.",
+    "The response states the checkpoint output layout as <output-dir>/model_0/best.pt and config.toml as documented in training-cli SKILL.md.",
+    "The response does not tell the user to open the original Chemprop source repository."
+  ]
+}

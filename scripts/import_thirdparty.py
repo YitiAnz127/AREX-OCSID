@@ -12,7 +12,7 @@ The source root may also be supplied through AREX_THIRD_PARTY_SKILLS_ROOT.
 
 Router rebuild is a separate step (see rebuild_router.py).
 """
-import json, os, sys, hashlib, re
+import json, os, sys, hashlib, re, datetime
 
 try:
     from .domain_common import FrontmatterError, copy_companion_resources, load_json_file, parse_frontmatter, read_bytes
@@ -132,6 +132,21 @@ Frontmatter normalized to AREX repo-skill schema; references/ added; body retain
 ## Status
 - Routable AREX repo-skill at `skills/repositories/repo-skills/{skill_id}/`.
 """
+    # Machine-readable block required by the upstream router verify tool
+    # (update_repo_skills_router.mjs readProvenance), which extracts the first
+    # ```json block as the authoritative source snapshot for
+    # repository.remote_url / commit / generated_skill.root. Without it the
+    # router falls back to fabricating a GitHub URL from the repo_id.
+    prov_json = {
+        "schema": "arex.repo-provenance.v1",
+        "generated_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "repository": {
+            "remote_url": repo_url if isinstance(repo_url, str) and repo_url else None,
+            "commit": None,
+        },
+        "generated_skill": {"root": f"skills/repositories/repo-skills/{skill_id}/"},
+    }
+    prov += "\n```json\n" + json.dumps(prov_json, ensure_ascii=False, indent=2) + "\n```\n"
     open(os.path.join(d, "references", "capability-map.md"), "w", encoding="utf-8").write(cap)
     open(os.path.join(d, "references", "repo-provenance.md"), "w", encoding="utf-8").write(prov)
     meta = {"schema_version": "2.0", "repo_id": repo_id, "skill_id": skill_id,
