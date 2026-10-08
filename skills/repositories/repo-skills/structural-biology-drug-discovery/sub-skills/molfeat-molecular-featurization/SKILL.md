@@ -3,7 +3,7 @@ name: molfeat-molecular-featurization
 description: "Molecular featurization hub (100+ featurizers) for ML."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # molfeat-molecular-featurization — structural-biology-drug-discovery sub-skill

@@ -3,7 +3,7 @@ name: zinc-database
 description: "&quot;Query the ZINC22 virtual compound library (CartBlanche API, billions of make-on-demand + purchasable molecules)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # zinc-database — structural-biology-drug-discovery sub-skill

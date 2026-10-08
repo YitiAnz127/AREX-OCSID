@@ -4,7 +4,7 @@ description: "Use AnnData to build, inspect, combine, store, lazily read, and
   extend annotated data matrices in memory and on disk."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 
@@ -47,7 +47,7 @@ PY
 
 - Read [`references/troubleshooting.md`](references/troubleshooting.md) for cross-cutting install/import, optional dependency, data validation, API misuse, storage backend, and workflow-routing issues before diving into sub-skill-specific troubleshooting.
 - Read [`references/repo-provenance.md`](references/repo-provenance.md) when deciding whether this generated skill is stale against a newer AnnData checkout or release.
-- [`references/repo-routing-metadata.json`](references/repo-routing-metadata.json) is structured metadata used by DisCo's managed `repo-skills-router` import.
+- [`references/repo-routing-metadata.json`](references/repo-routing-metadata.json) is structured metadata used by OCSID's managed `repo-skills-router` import.
 - Run [`scripts/smoke_anndata_core.py`](scripts/smoke_anndata_core.py) to validate import, core object construction, concat behavior, and optional H5AD/Zarr round-trips with tiny temporary fixtures.
 
 ## Decision Points

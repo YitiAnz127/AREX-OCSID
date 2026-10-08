@@ -3,7 +3,7 @@ name: pytdc-therapeutics-data-commons
 description: "Therapeutics Data Commons (TDC) AI-ready drug discovery datasets."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pytdc-therapeutics-data-commons — structural-biology-drug-discovery sub-skill

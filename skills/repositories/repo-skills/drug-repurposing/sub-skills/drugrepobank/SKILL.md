@@ -3,7 +3,7 @@ name: drugrepobank
 description: "Query the DrugRepoBank drug repurposing evidence database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drugrepobank — drug-repurposing sub-skill

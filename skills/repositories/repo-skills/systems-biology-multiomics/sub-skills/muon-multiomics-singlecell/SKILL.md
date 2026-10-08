@@ -3,7 +3,7 @@ name: muon-multiomics-singlecell
 description: "&quot;Multi-modal single-cell analysis with muon/MuData."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # muon-multiomics-singlecell — systems-biology-multiomics sub-skill

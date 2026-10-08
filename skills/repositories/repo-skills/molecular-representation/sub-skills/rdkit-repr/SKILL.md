@@ -3,7 +3,7 @@ name: rdkit-repr
 description: "A standardized CLI wrapper for RDKit molecular featurization workflows that handles physicochemical descriptor computation (outputs .csv) and molecular fingerprint extraction (outp"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rdkit-repr — molecular-representation sub-skill

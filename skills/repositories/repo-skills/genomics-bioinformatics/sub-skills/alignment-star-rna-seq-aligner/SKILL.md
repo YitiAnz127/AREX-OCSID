@@ -3,7 +3,7 @@ name: alignment-star-rna-seq-aligner
 description: "&quot;Splice-aware RNA-seq aligner producing sorted BAM and splice junction tables."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # alignment-star-rna-seq-aligner — genomics-bioinformatics sub-skill

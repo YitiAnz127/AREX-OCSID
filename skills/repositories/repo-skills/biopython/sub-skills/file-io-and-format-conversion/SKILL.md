@@ -5,7 +5,7 @@ description: "Use Biopython SeqIO and AlignIO for offline sequence/alignment
   compressed/BGZF tradeoffs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

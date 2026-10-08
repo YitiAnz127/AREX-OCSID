@@ -1,18 +1,18 @@
 /**
  * Input Transform Example - demonstrates the `input` event for intercepting user input.
  *
- * Start disco with this extension:
- *   disco -e ./examples/extensions/input-transform.ts
+ * Start ocsid with this extension:
+ *   ocsid -e ./examples/extensions/input-transform.ts
  *
- * Then type these inside disco:
+ * Then type these inside ocsid:
  *   ?quick What is TypeScript?  → "Respond briefly: What is TypeScript?"
  *   ping                        → "pong" (instant, no LLM)
  *   time                        → current time (instant, no LLM)
  */
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
-	disco.on("input", async (event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("input", async (event, ctx) => {
 		// Source-based logic: skip processing for extension-injected messages
 		if (event.source === "extension") {
 			return { action: "continue" };

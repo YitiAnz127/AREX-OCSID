@@ -5,7 +5,7 @@ description: "Load static MolecularNodes structures, compose geometry-node
   converter-backed molecule imports in a Blender 5.2 host."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

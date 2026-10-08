@@ -105,13 +105,13 @@ describe("createAgentSession session manager defaults", () => {
 		});
 		expect(session.sessionFile).toBeTruthy();
 		expect(session.systemPrompt).toContain(
-			"Inspect DISCO_* environment variables for current model and session details.",
+			"Inspect OCSID_* environment variables for current model and session details.",
 		);
 
 		const bashTool = session.agent.state.tools.find((tool) => tool.name === "bash");
 		expect(bashTool).toBeTruthy();
 		const result = await bashTool!.execute("test", {
-			command: `printf '%s\\n' "$DISCO_SESSION_ID" "$DISCO_SESSION_FILE" "$DISCO_PROVIDER" "$DISCO_MODEL" "$DISCO_REASONING_LEVEL"`,
+			command: `printf '%s\\n' "$OCSID_SESSION_ID" "$OCSID_SESSION_FILE" "$OCSID_PROVIDER" "$OCSID_MODEL" "$OCSID_REASONING_LEVEL"`,
 		});
 		const output = result.content
 			.filter((item): item is { type: "text"; text: string } => item.type === "text")

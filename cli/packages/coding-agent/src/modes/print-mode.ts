@@ -2,8 +2,8 @@
  * Print mode (single-shot): Send prompts, output result, exit.
  *
  * Used for:
- * - `disco -p "prompt"` - text output
- * - `disco --mode json "prompt"` - JSON event stream
+ * - `ocsid -p "prompt"` - text output
+ * - `ocsid --mode json "prompt"` - JSON event stream
  */
 
 import type { AssistantMessage, ImageContent } from "@earendil-works/pi-ai";

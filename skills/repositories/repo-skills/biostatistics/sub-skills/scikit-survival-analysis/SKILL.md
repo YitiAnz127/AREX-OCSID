@@ -3,7 +3,7 @@ name: scikit-survival-analysis
 description: "&quot;Time-to-event modeling with scikit-survival: Cox PH (elastic net), Random Survival Forests, Boosting, SVMs for censored data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # scikit-survival-analysis — biostatistics sub-skill

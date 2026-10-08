@@ -3,7 +3,7 @@ name: biopython-molecular-biology
 description: "&quot;Molecular biology toolkit: sequence manipulation, FASTA/GenBank/PDB I/O, NCBI Entrez, BLAST automation, pairwise/MSA alignment, Bio.PDB, phylogenetic trees."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # biopython-molecular-biology — genomics-bioinformatics sub-skill

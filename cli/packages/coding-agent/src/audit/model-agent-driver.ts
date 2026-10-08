@@ -192,7 +192,7 @@ interface ChatCompletionResponse {
 
 /** Narrow the OpenAI usage block into our own counters, ignoring junk. */
 function usageFrom(raw: ChatCompletionResponse["usage"]): Pick<ExecutionUsage, "inputTokens" | "outputTokens" | "totalTokens"> {
-	const num = (value: unknown): number | undefined => (typeof value === "number" && Number.isFinite(value) ? value : undefined);
+	const num = (value: unknown): number | undefined => (typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : undefined);
 	const inputTokens = num(raw?.prompt_tokens);
 	const outputTokens = num(raw?.completion_tokens);
 	const totalTokens = num(raw?.total_tokens) ?? (inputTokens !== undefined && outputTokens !== undefined ? inputTokens + outputTokens : undefined);
@@ -270,6 +270,7 @@ export class ModelAgentDriver implements AgentDriver {
 		let accumulatedInput = 0;
 		let accumulatedOutput = 0;
 		let accumulatedTotal = 0;
+		let usageComplete = true;
 		let lastContent: string | null = null;
 		const trace: ToolTraceEntry[] = [];
 		// P2-1: structured record of which budget cap stopped the loop, if any.
@@ -278,6 +279,8 @@ export class ModelAgentDriver implements AgentDriver {
 
 		async function send(): Promise<ChatCompletionResponse> {
 			const body: Record<string, unknown> = { ...bodyBase, messages };
+			const remainingTokens = config.tokenBudget - Math.max(accumulatedTotal, accumulatedInput + accumulatedOutput);
+			body.max_tokens = Math.max(1, Math.min(typeof bodyBase.max_tokens === "number" ? bodyBase.max_tokens : remainingTokens, remainingTokens));
 			let response: Response;
 			try {
 				response = await doFetch(`${baseUrl.replace(/\/+$/, "")}/chat/completions`, {
@@ -339,6 +342,7 @@ export class ModelAgentDriver implements AgentDriver {
 			const payload = await send();
 			callsMade += 1;
 			const u = usageFrom(payload.usage);
+			if (u.totalTokens === undefined) usageComplete = false;
 			if (typeof u.inputTokens === "number") accumulatedInput += u.inputTokens;
 			if (typeof u.outputTokens === "number") accumulatedOutput += u.outputTokens;
 			if (typeof u.totalTokens === "number") accumulatedTotal += u.totalTokens;
@@ -352,6 +356,10 @@ export class ModelAgentDriver implements AgentDriver {
 
 			// Model produced a final answer and requested no more tools → done.
 			if (!callPayloads || callPayloads.length === 0) break;
+			if (!usageComplete || Math.max(accumulatedTotal, accumulatedInput + accumulatedOutput) >= config.tokenBudget) {
+				budgetStop = { reason: "tokenBudget", rounds: callsMade };
+				break;
+			}
 
 			// P2-1 hard round cap: this round wants tools but has no follow-up
 			// round left — stop before executing (clean, no half-done tool state).
@@ -399,9 +407,9 @@ export class ModelAgentDriver implements AgentDriver {
 			modelCalls: rounds,
 			rounds,
 			toolCalls: executedToolCalls,
-			inputTokens: accumulatedInput || undefined,
-			outputTokens: accumulatedOutput || undefined,
-			totalTokens: accumulatedTotal || undefined,
+			inputTokens: usageComplete ? accumulatedInput || undefined : undefined,
+			outputTokens: usageComplete ? accumulatedOutput || undefined : undefined,
+			totalTokens: usageComplete ? accumulatedTotal || undefined : undefined,
 			wallMs,
 			...(trace.length > 0 ? { toolTrace: trace } : {}),
 		};
@@ -417,7 +425,7 @@ export class ModelAgentDriver implements AgentDriver {
 
 		if (typeof artifact !== "string" || artifact.trim().length === 0) {
 			return {
-				schema: "disco.execution-result.v1",
+				schema: "ocsid.execution-result.v1",
 				status: "failed",
 				artifact: null,
 				artifactSha256: null,
@@ -432,7 +440,7 @@ export class ModelAgentDriver implements AgentDriver {
 		}
 
 		return {
-			schema: "disco.execution-result.v1",
+			schema: "ocsid.execution-result.v1",
 			status: "succeeded",
 			artifact,
 			// Digest the artifact here so the ledger records what was actually

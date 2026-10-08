@@ -4,7 +4,7 @@ description: "Core OmicVerse AnnData IO, datasets, preprocessing, plotting,
   reporting, reproducibility, and registry discovery workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

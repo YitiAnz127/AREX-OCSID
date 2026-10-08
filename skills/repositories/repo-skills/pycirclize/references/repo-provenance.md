@@ -8,7 +8,7 @@ differ, run a refresh workflow before relying on detailed claims.
 
 ```json
 {
-  "schema": "disco.repo-provenance.v1",
+  "schema": "ocsid.repo-provenance.v1",
   "generated_at_utc": "2026-08-21T09:00:00Z",
   "repository": {
     "name": "pyCirclize",

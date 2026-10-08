@@ -23,20 +23,20 @@ export function isCredentialPrintHelp(args: string[]): boolean {
 
 export function printCredentialPrintHelp(): void {
 	console.log(`Usage:
-  disco auth print-api-key --model <model> [--provider <provider>]
-  disco auth print-bearer-token --model <model> [--provider <provider>] [--min-expiry <duration>]
+  ocsid auth print-api-key --model <model> [--provider <provider>]
+  ocsid auth print-bearer-token --model <model> [--provider <provider>] [--min-expiry <duration>]
 
 Prints the configured credential alone on stdout. Provider inference uses configured credentials; specify --provider to select explicitly. Bearer tokens have a 30-minute minimum expiry by default. --min-expiry accepts ms, s, m, or h (for example, 30m).`);
 }
 
-/** Parse the small, extensible `disco auth` command surface before normal startup. */
+/** Parse the small, extensible `ocsid auth` command surface before normal startup. */
 export function parseCredentialPrintCommand(args: string[]): CredentialPrintCommand | undefined {
 	if (args[0] !== "auth") return undefined;
 
 	const kind = args[1] === "print-api-key" ? "api_key" : args[1] === "print-bearer-token" ? "bearer_token" : undefined;
 	if (!kind) {
 		throw new CredentialPrintError(
-			`Unknown auth command "${args[1] ?? ""}". Use "disco auth print-api-key" or "disco auth print-bearer-token".`,
+			`Unknown auth command "${args[1] ?? ""}". Use "ocsid auth print-api-key" or "ocsid auth print-bearer-token".`,
 		);
 	}
 

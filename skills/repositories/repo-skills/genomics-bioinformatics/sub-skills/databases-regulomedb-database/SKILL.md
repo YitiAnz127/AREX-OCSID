@@ -3,7 +3,7 @@ name: databases-regulomedb-database
 description: "&quot;Query RegulomeDB v2 GET REST API to score variants for regulatory function and retrieve overlapping evidence (TF binding, histone marks, DNase peaks, footprints, motifs, eQTLs, ch"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-regulomedb-database — genomics-bioinformatics sub-skill

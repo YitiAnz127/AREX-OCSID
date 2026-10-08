@@ -5,7 +5,7 @@ description: "Guide pyCirclize biological circular plots from local GenBank,
   features, GC summaries, and TreeViz annotation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

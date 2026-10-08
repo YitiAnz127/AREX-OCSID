@@ -4,10 +4,11 @@ import path from "node:path";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { runCandidateRegression } from "./candidate-regression.ts";
+import { OFFICIAL_BENCHMARK_DIR } from "../benchmark/freeze.ts";
 
 const srcEvol = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(srcEvol, "..", "..", "..", "..", "..");
-const benchmarkRoot = path.join(repoRoot, "skills", "tests", "benchmark-v1");
+const benchmarkRoot = path.join(repoRoot, "skills", "tests", OFFICIAL_BENCHMARK_DIR);
 
 const candidates = [
 	{ candidateId: "a", text: "candidate A with build_cli_command.py", generation: 0 },

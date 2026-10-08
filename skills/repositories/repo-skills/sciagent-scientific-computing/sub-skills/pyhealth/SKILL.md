@@ -3,7 +3,7 @@ name: pyhealth
 description: "&quot;Python library for healthcare ML on EHR data: process MIMIC-III/IV, eICU, OMOP-CDM; encode medical codes (ICD, ATC, NDC); build patient-level datasets; train Transformer, RETAIN, "
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pyhealth — sciagent-scientific-computing sub-skill

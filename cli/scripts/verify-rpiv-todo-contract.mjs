@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { createJiti } from "jiti";
 
 const TODO_VERSION = "2.7.1";
-const tempRoot = mkdtempSync(join(tmpdir(), "disco-rpiv-todo-contract-"));
+const tempRoot = mkdtempSync(join(tmpdir(), "ocsid-rpiv-todo-contract-"));
 
 function runNpm(args) {
 	const npmExecPath = process.env.npm_execpath;

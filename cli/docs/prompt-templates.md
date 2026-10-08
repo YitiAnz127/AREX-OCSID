@@ -1,4 +1,4 @@
-> disco can create prompt templates. Ask it to build one for your workflow.
+> ocsid can create prompt templates. Ask it to build one for your workflow.
 
 # Prompt Templates
 
@@ -6,11 +6,11 @@ Prompt templates are Markdown snippets that expand into full prompts. Type `/nam
 
 ## Locations
 
-DisCo loads prompt templates from:
+OCSID loads prompt templates from:
 
-- Global: `~/.disco/agent/prompts/*.md`
-- Project: `.disco/prompts/*.md` (only after the project is trusted)
-- Packages: `prompts/` directories or `disco.prompts` entries in `package.json`
+- Global: `~/.ocsid/agent/prompts/*.md`
+- Project: `.ocsid/prompts/*.md` (only after the project is trusted)
+- Packages: `prompts/` directories or `ocsid.prompts` entries in `package.json`
 - Settings: `prompts` array with files or directories
 - CLI: `--prompt-template <path>` (repeatable)
 

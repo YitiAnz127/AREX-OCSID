@@ -4,7 +4,7 @@ description: "Evaluate and summarize Boltz prediction outputs, benchmark result
   tables, and legacy OpenStructure-based evaluation workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

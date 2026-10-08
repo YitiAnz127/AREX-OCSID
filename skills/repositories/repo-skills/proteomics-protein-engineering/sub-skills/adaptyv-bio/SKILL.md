@@ -3,7 +3,7 @@ name: adaptyv-bio
 description: "&quot;API + Python SDK for ordering cell-free protein expression and binding assays."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # adaptyv-bio — proteomics-protein-engineering sub-skill

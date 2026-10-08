@@ -3,7 +3,7 @@ name: arboreto-grn-inference
 description: "&quot;GRN inference from expression via GRNBoost2 (gradient boosting) or GENIE3 (Random Forest)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # arboreto-grn-inference — genomics-bioinformatics sub-skill

@@ -4,7 +4,7 @@ description: "Convert protein structures into SaProt structure-aware amino-acid
   plus 3Di sequences and diagnose Foldseek and pLDDT masking issues."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

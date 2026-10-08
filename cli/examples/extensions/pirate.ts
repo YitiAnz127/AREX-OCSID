@@ -5,18 +5,18 @@
  * change agent behavior based on extension state.
  *
  * Usage:
- * 1. Copy this file to ~/.disco/agent/extensions/ or your project's .disco/extensions/
+ * 1. Copy this file to ~/.ocsid/agent/extensions/ or your project's .ocsid/extensions/
  * 2. Use /pirate to toggle pirate mode
  * 3. When enabled, the agent will respond like a pirate
  */
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function pirateExtension(disco: ExtensionAPI) {
+export default function pirateExtension(ocsid: ExtensionAPI) {
 	let pirateMode = false;
 
 	// Register /pirate command to toggle pirate mode
-	disco.registerCommand("pirate", {
+	ocsid.registerCommand("pirate", {
 		description: "Toggle pirate mode (agent speaks like a pirate)",
 		handler: async (_args, ctx) => {
 			pirateMode = !pirateMode;
@@ -25,7 +25,7 @@ export default function pirateExtension(disco: ExtensionAPI) {
 	});
 
 	// Append to system prompt when pirate mode is enabled
-	disco.on("before_agent_start", async (event) => {
+	ocsid.on("before_agent_start", async (event) => {
 		if (pirateMode) {
 			return {
 				systemPrompt:

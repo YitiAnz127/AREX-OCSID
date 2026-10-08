@@ -22,7 +22,7 @@ afterAll(() => {
 	for (const d of tmpRoots) rmSync(d, { recursive: true, force: true });
 });
 
-const ROOT = "/home/u/.disco/agent/skills/repositories";
+const ROOT = "/home/u/.ocsid/agent/skills/repositories";
 
 function routerRow(over: Partial<RepoSkillEvent> = {}): RepoSkillEvent {
 	return {
@@ -416,13 +416,13 @@ describe("BUG-P1-06: relative paths resolve against the handler cwd", () => {
 		const dir = join(makeTmp(), "relread");
 		const cwd = "/home/u/work";
 		const obs = new RepoSkillObserver({ eventsDir: dir, repoSkillsRoot: ROOT, flushIntervalMs: 0 });
-		// `../.disco` from /home/u/work lands in /home/u then under the repos root.
+		// `../.ocsid` from /home/u/work lands in /home/u then under the repos root.
 		obs.onToolCall(
 			{
 				type: "tool_call",
 				toolCallId: "c1",
 				toolName: "read",
-				input: { path: `../.disco/agent/skills/repositories/repo-skills/rdkit/SKILL.md` },
+				input: { path: `../.ocsid/agent/skills/repositories/repo-skills/rdkit/SKILL.md` },
 			} as never,
 			cwd,
 		);
@@ -442,7 +442,7 @@ describe("BUG-P1-06: relative paths resolve against the handler cwd", () => {
 				type: "tool_result",
 				toolCallId: "c2",
 				toolName: "bash",
-				input: { command: `python ../.disco/agent/skills/repositories/repo-skills/rdkit/scripts/fingerprint_smoke.py` },
+				input: { command: `python ../.ocsid/agent/skills/repositories/repo-skills/rdkit/scripts/fingerprint_smoke.py` },
 				content: [],
 				isError: false,
 			} as never,

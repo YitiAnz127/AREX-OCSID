@@ -3,7 +3,7 @@ name: ase-ase-calculators-mace
 description: "Configure ASE MACE calculator adapter settings for ASE workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ase-ase-calculators-mace — atomistic-workflows sub-skill

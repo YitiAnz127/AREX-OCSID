@@ -3,7 +3,7 @@ name: rnaseq-featurecounts-rna-counting
 description: "&quot;Counts RNA-seq reads overlapping GTF gene features."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rnaseq-featurecounts-rna-counting — genomics-bioinformatics sub-skill

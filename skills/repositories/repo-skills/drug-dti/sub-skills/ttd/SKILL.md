@@ -3,7 +3,7 @@ name: ttd
 description: "Query the Therapeutic Target Database (TTD) for drug-target-disease interaction data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ttd — drug-dti sub-skill

@@ -1,6 +1,6 @@
 # Repo Provenance
 
-- Schema: `disco.repo-provenance.v1`
+- Schema: `ocsid.repo-provenance.v1`
 
 ## Source Snapshot
 

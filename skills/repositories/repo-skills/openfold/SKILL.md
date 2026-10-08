@@ -5,7 +5,7 @@ description: "Route OpenFold protein-structure prediction, data preparation,
   guidance."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 
@@ -69,5 +69,5 @@ python scripts/check_openfold_imports.py --json
 
 - `references/capability-map.md` maps capabilities to sub-skill owners and safe helpers.
 - `references/troubleshooting.md` covers cross-cutting install/import/runtime failures.
-- `references/repo-routing-metadata.json` is structured metadata consumed by DisCo import tooling.
+- `references/repo-routing-metadata.json` is structured metadata consumed by OCSID import tooling.
 - `scripts/check_openfold_imports.py` performs lightweight import/config/module availability checks without model execution.

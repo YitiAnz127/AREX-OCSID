@@ -5,7 +5,7 @@ description: "Inspect and control PyDESeq2 staged model-fitting internals,
   DefaultInference behavior."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

@@ -4,7 +4,7 @@ description: "Plan safe SaProt pretraining, fine-tuning, zero-shot mutation
   benchmarks, ClinVar AUC aggregation, and trainer config changes."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

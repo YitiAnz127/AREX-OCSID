@@ -1,0 +1,6 @@
+ARG TASK_IMAGE
+FROM ${TASK_IMAGE}
+COPY --from=ocsid-eval-runtime-frozen:20261002 /usr/local/bin/node /usr/local/bin/node
+COPY --from=ocsid-eval-runtime-frozen:20261002 /opt/ocsid /opt/ocsid
+COPY runtime-audit.mjs /opt/eval/runtime-audit.mjs
+WORKDIR /root

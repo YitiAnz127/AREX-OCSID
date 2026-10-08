@@ -8,7 +8,7 @@ Read this before deciding whether this skill is current for a checkout of CellTy
 
 ```json
 {
-  "schema": "disco.repo-provenance.v1",
+  "schema": "ocsid.repo-provenance.v1",
   "generated_at_utc": "2026-06-29T16:13:34Z",
   "repository": {
     "name": "celltypist",

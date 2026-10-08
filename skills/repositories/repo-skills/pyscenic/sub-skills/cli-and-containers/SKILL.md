@@ -4,7 +4,7 @@ description: "Orchestrate safe pySCENIC CLI, command-file, container, and HPC
   workflows across GRN, motif pruning, and AUCell."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

@@ -1,5 +1,5 @@
 {
-  "name": "disco-extension-with-deps",
+  "name": "ocsid-extension-with-deps",
   "private": true,
   "version": "0.83.0",
   "type": "module",
@@ -8,7 +8,7 @@
     "build": "echo 'nothing to build'",
     "check": "echo 'nothing to check'"
   },
-  "disco": {
+  "ocsid": {
     "extensions": [
       "./index.ts"
     ]

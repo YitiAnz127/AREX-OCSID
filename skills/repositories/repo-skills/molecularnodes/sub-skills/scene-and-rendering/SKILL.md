@@ -5,7 +5,7 @@ description: "Configure MolecularNodes Blender scenes, cameras, engines,
   host-aware recovery."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

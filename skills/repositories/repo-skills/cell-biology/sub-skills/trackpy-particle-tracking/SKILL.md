@@ -3,7 +3,7 @@ name: trackpy-particle-tracking
 description: "&quot;Python library for single-particle tracking (SPT) in video microscopy via the Crocker-Grier algorithm."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # trackpy-particle-tracking — cell-biology sub-skill

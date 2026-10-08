@@ -3,7 +3,7 @@ name: dft-siesta
 description: "Route SIESTA requests to task-specific subskills based on user intent."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-siesta — quantum-chemistry sub-skill

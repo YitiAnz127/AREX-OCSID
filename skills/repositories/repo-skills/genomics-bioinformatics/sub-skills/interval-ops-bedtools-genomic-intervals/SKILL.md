@@ -3,7 +3,7 @@ name: interval-ops-bedtools-genomic-intervals
 description: "&quot;Genomic interval ops on BED/BAM/GFF/VCF."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # interval-ops-bedtools-genomic-intervals — genomics-bioinformatics sub-skill

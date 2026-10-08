@@ -3,7 +3,7 @@ name: etetoolkit
 description: "&quot;ETE Toolkit (ETE3): Python phylogenetic tree analysis and visualization."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # etetoolkit — genomics-bioinformatics sub-skill

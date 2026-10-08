@@ -1,6 +1,19 @@
-# Pilot Benchmark v1 (Step 2)
+# Pilot Benchmark v1 (Step 2) — ARCHIVED
 
-A frozen evaluation surface for the Agent-RSI loop over AREX-ocsid's repository
+> **Retired (P1-01, 2026-10-03).** This manifest is kept exactly as frozen; its
+> stored digests no longer match the on-disk case trees, because the case files
+> under `skills/tests/` were edited after the `2026-01-01T00:00:00Z` freeze and
+> `skills/tests/` is untracked, so the original revision cannot be restored.
+> It is **not** the corpus the RSI loop measures: use
+> [`../benchmark-v2`](../benchmark-v2/README.md) (`pilot-v2`, same skill split,
+> current case revision) with `ocsid repo-skills benchmark verify|diff|freeze`.
+>
+> Do not "fix" this directory by re-freezing it in place. The mismatch is the
+> evidence that tells you which revision an earlier v1 run measured; rewriting
+> it would destroy that identity. `src/benchmark/benchmark-versions.test.ts`
+> asserts both the archived digests and this deliberate drift.
+
+A frozen evaluation surface for the Agent-RSI loop over OCSID's repository
 skills. This directory pins *which* skills are measured and *how* the
 train/dev/held-out split is drawn. It does **not** claim any result — the
 quality ledger and any downstream statistics live elsewhere and are produced
@@ -10,9 +23,9 @@ only after observations exist.
 
 | File | Role |
 |---|---|
-| `manifest.json` | Frozen `disco.benchmark.v1` manifest: 10 pilot skills split into train(4)/dev(3)/heldout(3), with split membership and case-tree content digests. |
+| `manifest.json` | Frozen `ocsid.benchmark.v1` manifest: 10 pilot skills split into train(4)/dev(3)/heldout(3), with split membership and case-tree content digests. |
 | `skill-profiles.json` | The 109 classified repo-skills with a deterministic content-derived category, used as input to selection. Reproduction requires this exact file. |
-| `../` (test-cases) | Per-skill `disco.usability-case.v1` case trees (43 cases). |
+| `../` (test-cases) | Per-skill `ocsid.usability-case.v1` case trees (43 cases). |
 
 ## How the pilot was selected (deterministic, reproducible)
 
@@ -39,7 +52,7 @@ train/dev run never needs to read held-out case content.
   *measurement scope*.
 - Test cases and their `assertions.json` are **evaluation artifacts with real
   evidence, never synthetic guesses**. Every pilot skill now has ≥3
-  evidence-anchored `disco.usability-case.v1` cases (43 total across 10 skills),
+  evidence-anchored `ocsid.usability-case.v1` cases (43 total across 10 skills),
   each with `evidence_basis` paths that physically exist in the source skill and
   whose assertions are derivable from the request plus the real skill files.
   These are validated by
@@ -47,7 +60,7 @@ train/dev run never needs to read held-out case content.
 
 ## Next (Step 2 completion)
 
-- Wire the observer's `task_judgement` events into the `disco.quality-ledger.v1`
+- Wire the observer's `task_judgement` events into the `ocsid.quality-ledger.v1`
   rows (done — `src/benchmark/ledger.ts` + `ocsid repo-skills ledger`) so
   `task_success_rate` becomes meaningful (non-null) once graded observations
   exist.

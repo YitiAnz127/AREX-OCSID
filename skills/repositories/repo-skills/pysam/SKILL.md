@@ -5,7 +5,7 @@ description: "Routes agents using pysam for SAM/BAM/CRAM, VCF/BCF, tabix-indexed
   build troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

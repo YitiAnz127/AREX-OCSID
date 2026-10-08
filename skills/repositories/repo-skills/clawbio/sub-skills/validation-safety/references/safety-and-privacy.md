@@ -89,7 +89,7 @@ check for the generated skill tree. It verifies:
 
 - each root or sub-skill `SKILL.md` has the required exact frontmatter shape,
   including a double-quoted description, matching `name`,
-  `disable-model-invocation: true`, and `metadata.disco-role: operating`;
+  `disable-model-invocation: true`, and `metadata.ocsid-role: operating`;
 - relative Markdown links resolve inside the generated root skill tree (or are
   reported as missing during an intentionally incomplete draft); and
 - obvious absolute checkout paths, local environment markers, credential-like

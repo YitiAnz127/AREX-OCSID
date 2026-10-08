@@ -27,11 +27,11 @@ describe("normalizeChangelogLinks", () => {
 		);
 	});
 
-	test("pins DisCo repository links without rewriting upstream or external links", () => {
+	test("pins OCSID repository links without rewriting upstream or external links", () => {
 		const markdown = [
 			"[#5167](https://github.com/earendil-works/pi-mono/pull/5167)",
 			"[#4163](https://github.com/badlogic/pi-mono/issues/4163)",
-			"[DisCo README](https://github.com/VectorSpaceLab/AREX-Skill/blob/main/cli/README.md)",
+			"[OCSID README](https://github.com/VectorSpaceLab/AREX-Skill/blob/main/cli/README.md)",
 			"[External](https://example.com/docs)",
 			"[Local anchor](#settings)",
 		].join("\n");
@@ -40,7 +40,7 @@ describe("normalizeChangelogLinks", () => {
 			[
 				"[#5167](https://github.com/earendil-works/pi-mono/pull/5167)",
 				"[#4163](https://github.com/badlogic/pi-mono/issues/4163)",
-				"[DisCo README](https://github.com/VectorSpaceLab/AREX-Skill/blob/v0.1.1/cli/README.md)",
+				"[OCSID README](https://github.com/VectorSpaceLab/AREX-Skill/blob/v0.1.1/cli/README.md)",
 				"[External](https://example.com/docs)",
 				"[Local anchor](#settings)",
 			].join("\n"),

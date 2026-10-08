@@ -3,7 +3,7 @@ name: drug-repurposing
 description: "Use drug-repurposing for drug discovery and development workflows: drug_repurposing."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

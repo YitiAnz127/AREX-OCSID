@@ -5,7 +5,7 @@ description: "Diversify an existing RFdiffusion backbone or complex with partial
   sequence preservation, deterministic smoke checks, and output validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

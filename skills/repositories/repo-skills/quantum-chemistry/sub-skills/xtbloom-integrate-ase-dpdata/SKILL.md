@@ -3,7 +3,7 @@ name: xtbloom-integrate-ase-dpdata
 description: "Integrate xTBloom with ASE or dpdata for molecular energy, force, charge, labeling, relaxation, optimizer, or dynamics workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # xtbloom-integrate-ase-dpdata — quantum-chemistry sub-skill

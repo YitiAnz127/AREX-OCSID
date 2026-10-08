@@ -1,11 +1,12 @@
-# AREX 化学与生物化学技能库
+# OCSID 化学与生物化学技能库
 
-[English](README.md) · [实现说明](README-arex-test.md)
+[English](README.md)
 
 本仓库是
 [VectorSpaceLab/AREX-Skill](https://github.com/VectorSpaceLab/AREX-Skill)
 的领域裁剪版本。当前文件夹保留化学、生物化学、分子科学、制药及相邻生物医学方向的
-repository skills，同时包含经过局部适配的 DisCo CLI 源码。
+repository skills，同时包含 OCSID CLI 源码（上游 AREX-Skill CLI（`@arex-skill/disco`）
+的改名分支，含本地适配）。
 
 ## 当前实际范围
 
@@ -38,7 +39,7 @@ router 入口、CLI 资源和 staging 材料。
 ## 目录结构
 
 ```text
-arex-test/
+OCSID/
 ├── skills/
 │   ├── repositories/
 │   │   ├── repo-skills/          # 109 个 live repository-skill
@@ -49,7 +50,7 @@ arex-test/
 │   ├── import_thirdparty.py      # 从外部源目录导入
 │   ├── rebuild_router.py         # 检查或重建 router
 │   └── tests/                    # 领域脚本回归测试
-├── cli/                          # ocsid 0.2.1，派生自 DisCo
+├── cli/                          # ocsid 0.2.1（上游 CLI 的改名分支）
 ├── docs/
 └── examples/
 ```
@@ -104,8 +105,8 @@ npm run build
 node dist/cli.js --version
 ```
 
-根目录的 `scripts/install-disco.*` 仍安装上游已发布的
-`@arex-skill/disco`，不会安装本地 `ocsid` 构建。
+根目录的 `scripts/install-disco.*` 安装的是上游已发布的 `@arex-skill/disco`，
+不会安装本地 `ocsid` 构建；要链接本地构建，运行 `scripts/build-from-source-link.sh`。
 
 ## 来源边界
 
@@ -118,7 +119,7 @@ node dist/cli.js --version
 ## 文档入口
 
 从 [文档索引](docs/README.md) 开始；准确的当前覆盖范围见
-[Repository Catalog](docs/repository-catalog.md)。仓库仍保留部分上游 DisCo
+[Repository Catalog](docs/repository-catalog.md)。仓库仍保留部分上游（DisCo / AREX-Skill）
 开发文档，其中有关原版 1,000 个 repository 的说明不代表本领域子集。
 
 ## 许可证

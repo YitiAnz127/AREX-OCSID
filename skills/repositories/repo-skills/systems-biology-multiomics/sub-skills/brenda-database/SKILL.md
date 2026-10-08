@@ -3,7 +3,7 @@ name: brenda-database
 description: "&quot;BRENDA Enzyme DB SOAP/REST queries: kinetic parameters (Km, Vmax, kcat, Ki), EC classes, substrate specificity, inhibitors, cofactors, organism data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # brenda-database — systems-biology-multiomics sub-skill

@@ -3,7 +3,7 @@ name: deepmd-python-inference
 description: "Run Python inference with DeePMD-kit models using the DeepPot API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # deepmd-python-inference — machine-learning-potentials sub-skill

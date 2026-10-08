@@ -3,7 +3,7 @@ name: databases-mouse-phenome-database
 description: "&quot;Retrieve mouse phenotype data from the Jackson Laboratory Mouse Phenome Database (MPD) via its REST API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-mouse-phenome-database — genomics-bioinformatics sub-skill

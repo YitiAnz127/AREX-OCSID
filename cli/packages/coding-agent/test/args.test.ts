@@ -293,10 +293,10 @@ describe("parseArgs", () => {
 		});
 	});
 
-	test("parses the bundled DisCo skill compatibility flag", () => {
-		const result = parseArgs(["--disco-no-builtin-skills"]);
+	test("parses the bundled OCSID skill compatibility flag", () => {
+		const result = parseArgs(["--ocsid-no-builtin-skills"]);
 
-		expect(result.discoNoBuiltinSkills).toBe(true);
+		expect(result.ocsidNoBuiltinSkills).toBe(true);
 		expect(result.noSkills).toBeUndefined();
 	});
 

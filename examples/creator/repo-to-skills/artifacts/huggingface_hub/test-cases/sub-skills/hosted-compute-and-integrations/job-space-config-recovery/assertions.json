@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "hosted-compute-and-integrations",
   "target_capability": "Jobs and Space configuration recovery",
   "difficulty": "troubleshooting",

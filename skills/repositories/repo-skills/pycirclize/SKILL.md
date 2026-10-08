@@ -5,7 +5,7 @@ description: "Use pyCirclize 1.10.1 for circular visualization, Circos plots,
   parser-driven layouts, and deterministic Matplotlib export."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

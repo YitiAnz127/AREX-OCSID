@@ -5,7 +5,7 @@ description: "Plan and run ColabFold batch structure prediction workflows,
   export, outputs, and prediction dependency failures."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

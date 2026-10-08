@@ -5,7 +5,7 @@ description: "Use optional RDKit Contrib utilities safely: SA Score, NP Score,
   recipes, while distinguishing them from core RDKit APIs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

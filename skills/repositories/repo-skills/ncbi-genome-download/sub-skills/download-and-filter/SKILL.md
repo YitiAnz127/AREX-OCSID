@@ -5,7 +5,7 @@ description: "Route NCBI genome download requests through the
   format, assembly and taxonomy filters before a verified dry run."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

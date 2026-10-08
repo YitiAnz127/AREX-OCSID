@@ -3,7 +3,7 @@ name: annotation-prokka-genome-annotation
 description: "&quot;Annotate prokaryotic genomes (bacteria, archaea, viruses) via Prokka's BLAST/HMM pipeline."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # annotation-prokka-genome-annotation — genomics-bioinformatics sub-skill

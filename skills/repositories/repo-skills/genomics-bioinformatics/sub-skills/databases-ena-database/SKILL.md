@@ -3,7 +3,7 @@ name: databases-ena-database
 description: "&quot;ENA REST API for sequences, reads, assemblies, and annotations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-ena-database — genomics-bioinformatics sub-skill

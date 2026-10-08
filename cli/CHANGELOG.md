@@ -19,7 +19,7 @@
     every `GradeSpec`, which the runner lifts onto the ledger row as `judge`
     (`{ modelVersion, rubricVersion }`) so a number is traceable to its exact
     judge. Empty artifacts short-circuit to an all-fail zero with NO model call.
-    An injected `fetchImpl` keeps it offline (`DISCO_OFFLINE=1`) for tests.
+    An injected `fetchImpl` keeps it offline (`OCSID_OFFLINE=1`) for tests.
   - **Ledger provenance:** `QualityLedgerRow` gains an optional `judge` field
     (additive, backward compatible); the runner persists it when a real grader
     produced the score. Deterministic proxies and human rows omit it.
@@ -60,7 +60,7 @@
 ## 0.2.1 - 2026-09-02
 
 - Fix the default npm registry endpoint used by startup version checks and
-  `disco update` to point to `@arex-skill/disco` after the package rename.
+  `ocsid update` after the upstream package rename.
 
 ## 0.2.0 - 2026-08-31
 
@@ -92,7 +92,7 @@
   are validated and updated together under a shared lock, with staging,
   rollback, stale-file removal, and preservation of unrelated local skills.
 - Preserve router visibility control through
-  `disco repo-skills router enable|disable`. Disabling adds
+  `ocsid repo-skills router enable|disable`. Disabling adds
   `disable-model-invocation: true` to the live `repo-skills-router` so it is no
   longer selected automatically; explicit
   `/skill:repo-skills-router` invocation remains available. The setting is
@@ -120,7 +120,7 @@
   fields are normalized with visible deprecation warnings, parser diagnostics
   point to fragile Markdown-rich script payloads, and finalized usage now
   distinguishes terminal totals, live observations, estimated fallback, cache
-  reads, and cache writes. The implementation remains an inline DisCo adaptation
+  reads, and cache writes. The implementation remains an inline OCSID adaptation
   and adds no workflow npm runtime dependency.
 - Rework `import-repo-skills-to-agent` around a bundled transactional export
   helper for Codex, Claude Code, and agent-neutral skill roots. Full and
@@ -137,10 +137,10 @@
   repository indexes. Whole-index integrity digests and transaction-only
   source snapshots remain available for safe export recovery, while the
   one-time `skill_content_sha256` handoff check remains in verified imports.
-- Include DisCo's built-in extension packages in startup update discovery and
-  `disco update --extensions` / `disco update --extension` processing without
+- Include OCSID's built-in extension packages in startup update discovery and
+  `ocsid update --extensions` / `ocsid update --extension` processing without
   persisting them into user settings or installing missing defaults as an
-  update side effect. Legacy global npm installs are migrated into DisCo's
+  update side effect. Legacy global npm installs are migrated into OCSID's
   managed npm root when updated.
 - Add source-commit-bound GitHub license resolution to repository-skill creation,
   refresh, extension, verification, collection build, and cross-agent export.
@@ -163,19 +163,19 @@
 
 ## 0.1.1 - 2026-08-03
 
-- Fork Pi coding-agent v0.83.0 into the DisCo package.
-- Supersede the legacy DisCo `0.0.x` release line and the internal
-  `@auto-ml-skills/disco-agent-core`, `@auto-ml-skills/disco-ai`, and
-  `@auto-ml-skills/disco-tui` packages. Users should upgrade to
-  `@auto-ml-skills/disco@latest`.
-- Isolate DisCo configuration and resources under `.disco` and `DISCO_*`.
+- Fork Pi coding-agent v0.83.0 into the OCSID package.
+- Supersede the legacy OCSID `0.0.x` release line and the internal
+  `@auto-ml-skills/ocsid-agent-core`, `@auto-ml-skills/ocsid-ai`, and
+  `@auto-ml-skills/ocsid-tui` packages. Users should upgrade to
+  `@auto-ml-skills/ocsid@latest`.
+- Isolate OCSID configuration and resources under `.ocsid` and `OCSID_*`.
 - Preserve Creator/Researcher modes, dynamic workflows, bundled skills, SDK
   exports, and the interactive splash experience.
-- Add `disco repo-skills install|update|status` for commit-tracked installation
+- Add `ocsid repo-skills install|update|status` for commit-tracked installation
   and safe updates of the published repository collection while preserving
   Creator/user repo skills and backing up forced conflict resolution; offline
   status checks include managed drift and live router coverage.
-- Add `disco repo-skills router enable|disable`; disabled routers leave automatic
+- Add `ocsid repo-skills router enable|disable`; disabled routers leave automatic
   model selection but remain explicitly invocable, and the setting persists
   across individual imports and full collection updates.
 
@@ -204,11 +204,11 @@
 
 ## 0.0.2
 
-- Initial DisCo release under the `@auto-ml-skills` npm scope.
-- Derived from PI `0.79.1`; DisCo uses its own package version series
+- Initial OCSID release under the `@auto-ml-skills` npm scope.
+- Derived from PI `0.79.1`; OCSID uses its own package version series
   starting at `0.0.2`.
-- Rebranded the adapted coding-agent runtime as DisCo.
-- Bundled DisCo meta-skills for repo skill creation, environment
+- Rebranded the adapted coding-agent runtime as OCSID.
+- Bundled OCSID meta-skills for repo skill creation, environment
   preparation, repo-drift refresh, existing skill extension, imported
   repo-skill routing, and explicit export into other agent tools.
 - Generated and refreshed repo skills now include `references/repo-provenance.md`
@@ -218,9 +218,9 @@
   subagents, canonical sub-skill id/name consistency, and main-agent review
   against explicit depth, evidence, routing, self-containment, and artifact
   boundary rubrics before integration.
-- Added structured import confirmation and DisCo-first
+- Added structured import confirmation and OCSID-first
   `repo-skills-router` updates after a user approves importing a verified
-  repo-specific skill. Exporting DisCo's managed skill library into other
+  repo-specific skill. Exporting OCSID's managed skill library into other
   agent tools is handled by the explicit `import-repo-skills-to-agent` meta skill.
 - Removed default calls to upstream update and install telemetry endpoints.
 - Fixed source builds when the optional interactive assets directory is absent

@@ -5,7 +5,7 @@ description: "Operate MolecularNodes density-grid and ensemble workflows in a
   RELION or cisTEM STAR metadata."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

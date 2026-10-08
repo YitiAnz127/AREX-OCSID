@@ -5,7 +5,7 @@ description: "Design and debug Scanpy neighborhood graphs, embeddings,
   graph metrics on AnnData objects."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

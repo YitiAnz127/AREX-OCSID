@@ -5,7 +5,7 @@ description: "Select and use scvi-tools built-in core model families, including
   MULTIVI, AUTOZI, LinearSCVI, CondSCVI, DestVI, AmortizedLDA, and mlxSCVI."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

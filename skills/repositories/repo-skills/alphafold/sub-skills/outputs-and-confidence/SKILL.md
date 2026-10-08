@@ -4,7 +4,7 @@ description: "Inspect AlphaFold output folders, confidence JSON, ranked
   structures, AFDB files, and AlphaFold Server JSON schemas."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

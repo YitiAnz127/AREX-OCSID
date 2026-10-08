@@ -3,7 +3,7 @@ name: dft-vasp
 description: "Route VASP DFT requests to task-specific subskills based on user intent."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-vasp — quantum-chemistry sub-skill

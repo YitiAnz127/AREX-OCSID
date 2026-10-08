@@ -6,7 +6,7 @@ import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
 import chalk from "chalk";
 import { APP_NAME, CONFIG_DIR_NAME, ENV_AGENT_DIR, ENV_SESSION_DIR } from "../config.ts";
 import type { ExtensionFlag } from "../core/extensions/types.ts";
-import { type DiscoAgentMode, isDiscoAgentMode } from "../disco/modes/types.ts";
+import { type OcsidAgentMode, isOcsidAgentMode } from "../ocsid/modes/types.ts";
 
 export type Mode = "text" | "json" | "rpc";
 
@@ -14,7 +14,7 @@ export interface Args {
 	provider?: string;
 	model?: string;
 	apiKey?: string;
-	agentMode?: DiscoAgentMode;
+	agentMode?: OcsidAgentMode;
 	systemPrompt?: string;
 	appendSystemPrompt?: string[];
 	thinking?: ThinkingLevel;
@@ -36,7 +36,7 @@ export interface Args {
 	noBuiltinTools?: boolean;
 	extensions?: string[];
 	noExtensions?: boolean;
-	discoNoBuiltinSkills?: boolean;
+	ocsidNoBuiltinSkills?: boolean;
 	print?: boolean;
 	export?: string;
 	noSkills?: boolean;
@@ -64,7 +64,7 @@ export function isValidThinkingLevel(level: string): level is ThinkingLevel {
 }
 
 function parseAgentMode(value: string, result: Args): void {
-	if (!isDiscoAgentMode(value)) {
+	if (!isOcsidAgentMode(value)) {
 		result.diagnostics.push({
 			type: "error",
 			message: `Invalid agent mode "${value}". Valid values: creator, researcher`,
@@ -190,8 +190,8 @@ export function parseArgs(args: string[]): Args {
 			result.extensions.push(args[++i]);
 		} else if (arg === "--no-extensions" || arg === "-ne") {
 			result.noExtensions = true;
-		} else if (arg === "--disco-no-builtin-skills") {
-			result.discoNoBuiltinSkills = true;
+		} else if (arg === "--ocsid-no-builtin-skills") {
+			result.ocsidNoBuiltinSkills = true;
 		} else if (arg === "--skill" && i + 1 < args.length) {
 			result.skills = result.skills ?? [];
 			result.skills.push(args[++i]);
@@ -309,7 +309,7 @@ ${chalk.bold("Options:")}
   --extension, -e <path>         Load an extension file (can be used multiple times)
   --no-extensions, -ne           Disable extension discovery (explicit -e paths still work)
   --skill <path>                 Load a skill file or directory (can be used multiple times)
-  --disco-no-builtin-skills      Disable bundled ocsid skills; keep user and explicit skills
+  --ocsid-no-builtin-skills      Disable bundled ocsid skills; keep user and explicit skills
   --no-skills, -ns               Disable skills discovery and loading
   --prompt-template <path>       Load a prompt template file or directory (can be used multiple times)
   --no-prompt-templates, -np     Disable prompt template discovery and loading
@@ -321,7 +321,7 @@ ${chalk.bold("Options:")}
   --verbose                      Force verbose startup (overrides quietStartup setting)
   --approve, -a                  Trust project-local files for this run
   --no-approve, -na              Ignore project-local files for this run
-  --offline                      Disable startup network operations (same as DISCO_OFFLINE=1)
+  --offline                      Disable startup network operations (same as OCSID_OFFLINE=1)
   --help, -h                     Show this help
   --version, -v                  Show version number
 
@@ -449,14 +449,14 @@ ${chalk.bold("Environment Variables:")}
   AWS_REGION                       - AWS region for Amazon Bedrock (e.g., us-east-1)
   ${ENV_AGENT_DIR.padEnd(32)} - Config directory (default: ~/${CONFIG_DIR_NAME}/agent)
   ${ENV_SESSION_DIR.padEnd(32)} - Session storage directory (overridden by --session-dir)
-  DISCO_PACKAGE_DIR           - Override package directory (for Nix/Guix store paths)
-  DISCO_OFFLINE               - Disable startup network operations when set to 1/true/yes
-  DISCO_SKIP_VERSION_CHECK    - Disable the automatic npm registry version check
-  DISCO_CACHE_RETENTION       - Provider prompt cache policy: none, short (default), or long
-  DISCO_OAUTH_CALLBACK_HOST   - OAuth callback listener host (default: 127.0.0.1)
-  DISCO_TELEMETRY             - Override telemetry/attribution when set to 1/true/yes or 0/false/no
-  DISCO_SHARE_VIEWER_URL      - Base URL for /share command
-  DISCO_NO_SPLASH             - Disable the interactive startup animation
+  OCSID_PACKAGE_DIR           - Override package directory (for Nix/Guix store paths)
+  OCSID_OFFLINE               - Disable startup network operations when set to 1/true/yes
+  OCSID_SKIP_VERSION_CHECK    - Disable the automatic npm registry version check
+  OCSID_CACHE_RETENTION       - Provider prompt cache policy: none, short (default), or long
+  OCSID_OAUTH_CALLBACK_HOST   - OAuth callback listener host (default: 127.0.0.1)
+  OCSID_TELEMETRY             - Override telemetry/attribution when set to 1/true/yes or 0/false/no
+  OCSID_SHARE_VIEWER_URL      - Base URL for /share command
+  OCSID_NO_SPLASH             - Disable the interactive startup animation
 
 ${chalk.bold("Built-in Tool Names:")}
   read   - Read file contents

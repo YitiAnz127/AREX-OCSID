@@ -5,7 +5,7 @@ description: "Routes biomedical research questions into ethically aware,
   power, validation, and translational planning."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

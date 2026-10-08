@@ -29,7 +29,7 @@ the local refresh before the final release verification:
 npm run refresh:provenance
 ```
 
-When intentionally adding a new DisCo-owned file, approve it explicitly:
+When intentionally adding a new OCSID-owned file, approve it explicitly:
 
 ```bash
 npm run refresh:provenance -- --add-local docs/dynamic-workflows.md
@@ -55,7 +55,7 @@ an external Pi checkout merely to release the current `cli` package.
 release check. Before publishing, run `npm run prepublishOnly` or the release
 dry-run and inspect the resulting package checks.
 
-The AREX-Skill Git worktree does not have to be clean, and `git add`/`git commit`
+The OCSID Git worktree does not have to be clean, and `git add`/`git commit`
 are not technical prerequisites for npm release. Nevertheless, commit or tag
 the reviewed release state before a real publish when possible so the published
 package can be traced back to an exact source revision.

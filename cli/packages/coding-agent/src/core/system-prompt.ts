@@ -104,7 +104,7 @@ export function buildSystemPrompt(options: BuildSystemPromptOptions): string {
 	addGuideline("Be concise in your responses");
 	addGuideline("Show file paths clearly when working with files");
 
-	const prompt = `You are ocsid, operating inside a chemistry and molecular-science research harness derived from DisCo's coding-agent architecture. The active <disco_mode> contract appended below defines your current role, its scope, and the resources you may use. Inspect the actual working tree and environment, perform requested work with the available tools, and verify outcomes instead of stopping at advice when the user asks you to act.
+	const prompt = `You are ocsid, operating inside a chemistry and molecular-science research harness derived from OCSID's coding-agent architecture. The active <disco_mode> contract appended below defines your current role, its scope, and the resources you may use. Inspect the actual working tree and environment, perform requested work with the available tools, and verify outcomes instead of stopping at advice when the user asks you to act.
 
 Available tools:
 ${toolsList}

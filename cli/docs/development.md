@@ -1,6 +1,6 @@
 # Development
 
-This document describes the standalone `@arex-skill/disco` package. The
+This document describes the standalone `ocsid` package. The
 runtime source lives in `packages/coding-agent/src`; there is no second wrapper
 implementation and no runtime dependency on `@earendil-works/pi-coding-agent`.
 
@@ -24,15 +24,15 @@ node dist/cli.js --help
 node dist/cli.js
 ```
 
-The caller's current working directory remains the DisCo project directory.
-Use `DISCO_CODING_AGENT_DIR` to point development runs at a temporary config
-directory when they must not use your normal `~/.disco/agent` state.
+The caller's current working directory remains the OCSID project directory.
+Use `OCSID_CODING_AGENT_DIR` to point development runs at a temporary config
+directory when they must not use your normal `~/.ocsid/agent` state.
 
 ## Source layout
 
 ```text
 packages/coding-agent/src/   runtime, CLI, SDK, modes, workflows, and TUI glue
-packages/coding-agent/test/  upstream-derived and DisCo regression tests
+packages/coding-agent/test/  upstream-derived and OCSID regression tests
 docs/                        documentation shipped in the npm package
 examples/                    extension, SDK, and RPC examples shipped in npm
 scripts/                     build asset copying and package verification
@@ -63,7 +63,7 @@ source-tree symlink. The managed curl and PowerShell installers live at the
 repository root and are attached to GitHub Releases separately from the npm
 tarball.
 
-When the pinned Pi baseline has not changed and a local DisCo source, test, docs,
+When the pinned Pi baseline has not changed and a local OCSID source, test, docs,
 or example file has intentionally changed, refresh only the local provenance:
 
 ```bash
@@ -98,17 +98,17 @@ HTML export assets into `dist/`; npm's package file list includes README, docs,
 examples, and notices directly from the package root.
 
 Source-mode, built, packed, and globally installed runs must all resolve the
-same DisCo package root and `.disco` configuration semantics.
+same OCSID package root and `.ocsid` configuration semantics.
 
 ## Debug log
 
-The hidden `/debug` command writes `~/.disco/agent/disco-debug.log`. It can
+The hidden `/debug` command writes `~/.ocsid/agent/ocsid-debug.log`. It can
 contain rendered terminal output and recent model messages; inspect and share
 it as potentially sensitive data.
 
 ## Upstream synchronization
 
-For ordinary local DisCo work, do not use an external Pi checkout. Run
+For ordinary local OCSID work, do not use an external Pi checkout. Run
 `npm run refresh:provenance -- --add-local <path>` after the local source change
 is complete, then review `UPSTREAM_MANIFEST.json` and run
 `npm run verify:provenance`.
@@ -120,7 +120,7 @@ When importing a later Pi coding-agent version:
    `node scripts/upstream-provenance.mjs --write --upstream-root /path/to/pi`
    and review every disposition change across source, tests, docs, examples,
    package assets, and the narrow OAuth exception.
-3. Reapply DisCo ownership boundaries for `.disco`, `DISCO_*`, self-update,
+3. Reapply OCSID ownership boundaries for `.ocsid`, `OCSID_*`, self-update,
    package discovery, Creator/Researcher filtering, SDK exports, and branding.
 4. Run the complete deterministic, packed-install, coexistence, proxy, splash,
    and real-model regression gates before release.
@@ -130,4 +130,4 @@ full upstream provenance audit. It is not a dependency of `npm run
 verify:provenance`, `npm run prepublishOnly`, or the release script.
 
 Do not copy upstream `node_modules`, `dist`, install locks, monorepo links, or
-the Pi executable into the DisCo package.
+the Pi executable into the OCSID package.

@@ -11,7 +11,7 @@ import { getResolvedThemeColors, getThemeExportColors } from "../src/modes/inter
  *     :root { --accent: <value>; }
  *
  * A theme file is user- and project-supplied (a trusted project can ship
- * `.disco/themes/*.json`), and the exported HTML is normally handed to other
+ * `.ocsid/themes/*.json`), and the exported HTML is normally handed to other
  * people — so a value that is not a plain CSS color closes `</style>` and runs
  * script in the recipient's browser, with the whole session readable from the
  * page. Every value that reaches that block must therefore be markup-free.
@@ -34,7 +34,7 @@ describe("theme colors in the exported CSS", () => {
 	let previousAgentDir: string | undefined;
 
 	beforeEach(() => {
-		tempRoot = mkdtempSync(join(tmpdir(), "disco-theme-css-"));
+		tempRoot = mkdtempSync(join(tmpdir(), "ocsid-theme-css-"));
 		previousAgentDir = process.env[ENV_AGENT_DIR];
 		process.env[ENV_AGENT_DIR] = join(tempRoot, "agent");
 		mkdirSync(join(process.env[ENV_AGENT_DIR]!, "themes"), { recursive: true });

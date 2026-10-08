@@ -3,7 +3,7 @@ name: germinal
 description: "De novo antibody and nanobody (VHH) design with Germinal."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

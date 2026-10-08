@@ -4,7 +4,7 @@ description: "Routes Graphormer users to fairseq training, dataset
   customization, pretrained evaluation, model extension, and DiG workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

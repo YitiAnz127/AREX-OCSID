@@ -3,7 +3,7 @@ name: ase-ase-workflows-md
 description: "Prepare ASE molecular-dynamics workflow tasks with backend-agnostic controls."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ase-ase-workflows-md — atomistic-workflows sub-skill

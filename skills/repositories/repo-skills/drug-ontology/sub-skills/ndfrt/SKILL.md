@@ -3,7 +3,7 @@ name: ndfrt
 description: "Query NDF-RT (National Drug File Reference Terminology) via the NCI EVS REST API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ndfrt — drug-ontology sub-skill

@@ -5,7 +5,7 @@ description: "Use ProteinMPNN to design protein sequences from backbones,
   models, and use custom checkpoints in a local ProteinMPNN checkout."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

@@ -1,7 +1,7 @@
 # MolecularNodes provenance
 
 ```yaml
-schema: disco.repo-provenance.v1
+schema: ocsid.repo-provenance.v1
 ```
 
 - **Package/repository:** MolecularNodes

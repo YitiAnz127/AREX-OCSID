@@ -5,7 +5,7 @@ description: "Guide CUDA-enabled BindCraft protein-binder design from target PDB
   and conservative troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "integration",
   "target_capability": "opentargets-to-g2p-join-boundary",
   "difficulty": "advanced",

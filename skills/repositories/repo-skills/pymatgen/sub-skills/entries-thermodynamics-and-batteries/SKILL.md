@@ -4,7 +4,7 @@ description: "Prepare pymatgen computed entries, compatibility-corrected
   thermodynamics, battery electrode objects, and Borg VASP assimilation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

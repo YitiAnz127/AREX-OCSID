@@ -3,7 +3,7 @@ name: single-cell-cellxgene-census
 description: "&quot;Query CELLxGENE Census (61M+ cells)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # single-cell-cellxgene-census — genomics-bioinformatics sub-skill

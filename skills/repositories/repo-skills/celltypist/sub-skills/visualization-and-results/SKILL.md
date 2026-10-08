@@ -4,7 +4,7 @@ description: "Handle CellTypist AnnotationResult exports, AnnData insertion,
   UMAP plots, and dotplots safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

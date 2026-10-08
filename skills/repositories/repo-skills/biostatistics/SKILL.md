@@ -3,7 +3,7 @@ name: biostatistics
 description: "Use biostatistics for genomics and bioinformatics workflows: biostatistics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

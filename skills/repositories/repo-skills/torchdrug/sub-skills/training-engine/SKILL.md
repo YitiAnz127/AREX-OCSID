@@ -5,7 +5,7 @@ description: "Assemble TorchDrug models and tasks into core.Engine training,
   CPU/GPU/distributed settings, and safe smoke tests."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

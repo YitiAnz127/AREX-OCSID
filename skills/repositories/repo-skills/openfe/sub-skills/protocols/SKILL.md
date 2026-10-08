@@ -5,7 +5,7 @@ description: "Choose and configure OpenFE protocol classes, default settings,
   simulation failure modes."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

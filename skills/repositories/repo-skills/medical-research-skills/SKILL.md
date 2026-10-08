@@ -6,7 +6,7 @@ description: "Route medical and biomedical research requests across the aipoch
   preserve explicit safety and verification boundaries."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

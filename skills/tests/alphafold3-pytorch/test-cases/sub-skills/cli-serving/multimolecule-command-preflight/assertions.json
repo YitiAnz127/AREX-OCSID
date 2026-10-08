@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "cli-serving",
   "target_capability": "cli-safe-multimolecule-command-preflight",
   "difficulty": "intermediate",

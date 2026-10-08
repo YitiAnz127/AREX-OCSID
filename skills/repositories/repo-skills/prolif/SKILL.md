@@ -5,7 +5,7 @@ description: "Use ProLIF to prepare molecular inputs, define protein-ligand
   outputs for chemistry and molecular-simulation workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

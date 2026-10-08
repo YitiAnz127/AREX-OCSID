@@ -5,7 +5,7 @@ description: "Compose and export general pyCirclize circular layouts with Circos
   lifecycle."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

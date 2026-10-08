@@ -3,7 +3,7 @@ name: chembl
 description: "Query the ChEMBL database for drug molecules, bioactivity data, and drug targets via the ChEMBL REST API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # chembl — drug-dti sub-skill

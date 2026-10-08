@@ -3,7 +3,7 @@ name: databases-ensembl-database
 description: "&quot;Ensembl REST API for gene/transcript/variant annotations in 300+ species."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-ensembl-database — genomics-bioinformatics sub-skill

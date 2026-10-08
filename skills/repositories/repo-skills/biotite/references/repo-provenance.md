@@ -8,7 +8,7 @@ Read this before deciding whether this Biotite skill is current for a checkout o
 
 ```json
 {
-  "schema": "disco.repo-provenance.v1",
+  "schema": "ocsid.repo-provenance.v1",
   "generated_at_utc": "2026-06-29T16:45:12Z",
   "repository": {
     "name": "biotite",

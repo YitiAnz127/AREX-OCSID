@@ -54,10 +54,10 @@ function createTestPackageManager(options: {
 	cwd: string;
 	agentDir: string;
 	settingsManager: SettingsManager;
-	includeDisCoDefaults?: boolean;
+	includeOCSIDDefaults?: boolean;
 }): DefaultPackageManager {
-	const { includeDisCoDefaults = false, ...managerOptions } = options;
-	return new DefaultPackageManager({ ...managerOptions, includeDisCoDefaults });
+	const { includeOCSIDDefaults = false, ...managerOptions } = options;
+	return new DefaultPackageManager({ ...managerOptions, includeOCSIDDefaults });
 }
 
 // Helper to check if a resource is enabled
@@ -86,8 +86,8 @@ describe("DefaultPackageManager", () => {
 	let previousHome: string | undefined;
 
 	beforeEach(() => {
-		previousOfflineEnv = process.env.DISCO_OFFLINE;
-		delete process.env.DISCO_OFFLINE;
+		previousOfflineEnv = process.env.OCSID_OFFLINE;
+		delete process.env.OCSID_OFFLINE;
 		tempDir = join(tmpdir(), `pm-test-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 		mkdirSync(tempDir, { recursive: true });
 		previousHome = process.env.HOME;
@@ -105,9 +105,9 @@ describe("DefaultPackageManager", () => {
 
 	afterEach(() => {
 		if (previousOfflineEnv === undefined) {
-			delete process.env.DISCO_OFFLINE;
+			delete process.env.OCSID_OFFLINE;
 		} else {
-			process.env.DISCO_OFFLINE = previousOfflineEnv;
+			process.env.OCSID_OFFLINE = previousOfflineEnv;
 		}
 		if (previousHome === undefined) {
 			delete process.env.HOME;
@@ -161,7 +161,7 @@ Content`,
 			expect(result.skills.some((r) => r.path === skillFile && r.enabled)).toBe(true);
 		});
 
-		it("should auto-discover root markdown skills from .disco skill dirs", async () => {
+		it("should auto-discover root markdown skills from .ocsid skill dirs", async () => {
 			const skillFile = join(agentDir, "skills", "single-file.md");
 			mkdirSync(join(agentDir, "skills"), { recursive: true });
 			writeFileSync(
@@ -177,8 +177,8 @@ Content`,
 			expect(result.skills.some((r) => r.path === skillFile && r.enabled)).toBe(true);
 		});
 
-		it("should resolve project paths relative to .disco", async () => {
-			const extDir = join(tempDir, ".disco", "extensions");
+		it("should resolve project paths relative to .ocsid", async () => {
+			const extDir = join(tempDir, ".ocsid", "extensions");
 			mkdirSync(extDir, { recursive: true });
 			const extPath = join(extDir, "project-ext.ts");
 			writeFileSync(extPath, "export default function() {}");
@@ -230,15 +230,15 @@ Content`,
 				writeFileSync(join(sharedThemesDir, "shared.json"), JSON.stringify({ name: "shared-theme" }));
 
 				mkdirSync(join(agentDir), { recursive: true });
-				mkdirSync(join(tempDir, ".disco"), { recursive: true });
+				mkdirSync(join(tempDir, ".ocsid"), { recursive: true });
 				symlinkSync(sharedExtensionsDir, join(agentDir, "extensions"), "dir");
 				symlinkSync(sharedSkillsDir, join(agentDir, "skills"), "dir");
 				symlinkSync(sharedPromptsDir, join(agentDir, "prompts"), "dir");
 				symlinkSync(sharedThemesDir, join(agentDir, "themes"), "dir");
-				symlinkSync(sharedExtensionsDir, join(tempDir, ".disco", "extensions"), "dir");
-				symlinkSync(sharedSkillsDir, join(tempDir, ".disco", "skills"), "dir");
-				symlinkSync(sharedPromptsDir, join(tempDir, ".disco", "prompts"), "dir");
-				symlinkSync(sharedThemesDir, join(tempDir, ".disco", "themes"), "dir");
+				symlinkSync(sharedExtensionsDir, join(tempDir, ".ocsid", "extensions"), "dir");
+				symlinkSync(sharedSkillsDir, join(tempDir, ".ocsid", "skills"), "dir");
+				symlinkSync(sharedPromptsDir, join(tempDir, ".ocsid", "prompts"), "dir");
+				symlinkSync(sharedThemesDir, join(tempDir, ".ocsid", "themes"), "dir");
 
 				const result = await packageManager.resolve();
 
@@ -270,7 +270,7 @@ Content`,
 		});
 
 		it("should auto-discover project prompts with overrides", async () => {
-			const promptsDir = join(tempDir, ".disco", "prompts");
+			const promptsDir = join(tempDir, ".ocsid", "prompts");
 			mkdirSync(promptsDir, { recursive: true });
 			const promptPath = join(promptsDir, "is.md");
 			writeFileSync(promptPath, "Is prompt");
@@ -317,7 +317,7 @@ Content`,
 	});
 
 	describe("auto-discovered skill metadata", () => {
-		it("should use the agent dir as baseDir for user .disco/agent skills", async () => {
+		it("should use the agent dir as baseDir for user .ocsid/agent skills", async () => {
 			const skillPath = join(agentDir, "skills", "user-pi", "SKILL.md");
 			mkdirSync(join(agentDir, "skills", "user-pi"), { recursive: true });
 			writeFileSync(skillPath, "---\nname: user-pi\ndescription: user pi\n---\n");
@@ -330,8 +330,8 @@ Content`,
 			expect(skill?.metadata.baseDir).toBe(agentDir);
 		});
 
-		it("should use the project .disco dir as baseDir for project .disco skills", async () => {
-			const projectBaseDir = join(tempDir, ".disco");
+		it("should use the project .ocsid dir as baseDir for project .ocsid skills", async () => {
+			const projectBaseDir = join(tempDir, ".ocsid");
 			const skillPath = join(projectBaseDir, "skills", "project-pi", "SKILL.md");
 			mkdirSync(join(projectBaseDir, "skills", "project-pi"), { recursive: true });
 			writeFileSync(skillPath, "---\nname: project-pi\ndescription: project pi\n---\n");
@@ -485,7 +485,7 @@ Content`,
 
 			try {
 				const cwd = join(tempDir, "scratch", "nested");
-				const localAgentDir = join(tempDir, ".disco", "agent");
+				const localAgentDir = join(tempDir, ".ocsid", "agent");
 				const localSettingsManager = SettingsManager.inMemory();
 				mkdirSync(cwd, { recursive: true });
 				mkdirSync(localAgentDir, { recursive: true });
@@ -515,7 +515,7 @@ Content`,
 			}
 		});
 
-		it("should dedupe user skill entries when ~/.disco/agent/skills is a symlink to ~/.agents/skills", async () => {
+		it("should dedupe user skill entries when ~/.ocsid/agent/skills is a symlink to ~/.agents/skills", async () => {
 			const previousHome = process.env.HOME;
 			process.env.HOME = tempDir;
 
@@ -566,10 +566,10 @@ Content`,
 			expect(result.skills.some((r) => r.path.includes("venv") && r.enabled)).toBe(false);
 		});
 
-		it("should not apply parent .gitignore to .disco auto-discovery", async () => {
-			writeFileSync(join(tempDir, ".gitignore"), ".disco\n");
+		it("should not apply parent .gitignore to .ocsid auto-discovery", async () => {
+			writeFileSync(join(tempDir, ".gitignore"), ".ocsid\n");
 
-			const skillDir = join(tempDir, ".disco", "skills", "auto-skill");
+			const skillDir = join(tempDir, ".ocsid", "skills", "auto-skill");
 			mkdirSync(skillDir, { recursive: true });
 			const skillPath = join(skillDir, "SKILL.md");
 			writeFileSync(skillPath, "---\nname: auto-skill\ndescription: Auto\n---\nContent");
@@ -698,7 +698,7 @@ Content`,
 			const managerWithInternals = packageManager as unknown as {
 				runCommandSync(command: string, args: string[]): string;
 			};
-			const valueWithSpace = "C:\\Users\\A B\\.disco\\npm";
+			const valueWithSpace = "C:\\Users\\A B\\.ocsid\\npm";
 			const output = managerWithInternals.runCommandSync(process.execPath, [
 				"-e",
 				"console.log(process.argv[1])",
@@ -918,7 +918,7 @@ Content`,
 
 		it("should update git package dependencies with --omit=dev", async () => {
 			const source = "git:github.com/user/repo";
-			const targetDir = join(tempDir, ".disco", "git", "github.com", "user", "repo");
+			const targetDir = join(tempDir, ".ocsid", "git", "github.com", "user", "repo");
 			mkdirSync(targetDir, { recursive: true });
 			writeFileSync(join(targetDir, "package.json"), JSON.stringify({ name: "repo", version: "1.0.0" }));
 			settingsManager.setProjectPackages([source]);
@@ -954,7 +954,7 @@ Content`,
 			});
 
 			const source = "git:github.com/user/repo";
-			const targetDir = join(tempDir, ".disco", "git", "github.com", "user", "repo");
+			const targetDir = join(tempDir, ".ocsid", "git", "github.com", "user", "repo");
 			mkdirSync(targetDir, { recursive: true });
 			writeFileSync(join(targetDir, "package.json"), JSON.stringify({ name: "repo", version: "1.0.0" }));
 			settingsManager.setProjectPackages([source]);
@@ -1270,7 +1270,7 @@ Content`,
 			expect(settings.packages?.[0]).toBe(expected);
 		});
 
-		it("should store project local packages relative to .disco settings base", () => {
+		it("should store project local packages relative to .ocsid settings base", () => {
 			const projectPkgDir = join(tempDir, "project-local-pkg");
 			mkdirSync(join(projectPkgDir, "extensions"), { recursive: true });
 			writeFileSync(join(projectPkgDir, "extensions", "index.ts"), "export default function() {}");
@@ -1279,7 +1279,7 @@ Content`,
 			expect(added).toBe(true);
 
 			const settings = settingsManager.getProjectSettings();
-			const rel = relative(join(tempDir, ".disco"), projectPkgDir);
+			const rel = relative(join(tempDir, ".ocsid"), projectPkgDir);
 			const expected = rel.startsWith(".") ? rel : `./${rel}`;
 			expect(settings.packages?.[0]).toBe(expected);
 		});
@@ -1765,7 +1765,7 @@ Content`,
 			writeFileSync(join(pkgDir, "extensions", "bar.ts"), "export default function() {}");
 			writeFileSync(join(pkgDir, "skills", "foo", "SKILL.md"), "# Foo\n");
 			settingsManager.setProjectPackages([
-				{ source: relative(join(tempDir, ".disco"), pkgDir), autoload: false, extensions: ["+extensions/foo.ts"] },
+				{ source: relative(join(tempDir, ".ocsid"), pkgDir), autoload: false, extensions: ["+extensions/foo.ts"] },
 			]);
 
 			const result = await packageManager.resolve();
@@ -2161,7 +2161,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 
 	describe("offline mode and network timeouts", () => {
 		it("should update npm range packages using the configured spec", async () => {
-			const installedPath = join(tempDir, ".disco", "npm", "node_modules", "example");
+			const installedPath = join(tempDir, ".ocsid", "npm", "node_modules", "example");
 			mkdirSync(installedPath, { recursive: true });
 			writeFileSync(join(installedPath, "package.json"), JSON.stringify({ name: "example", version: "1.0.0" }));
 			settingsManager.setProjectPackages(["npm:example@^1.0.0"]);
@@ -2180,13 +2180,13 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 			);
 			expect(runCommandSpy).toHaveBeenCalledWith(
 				"npm",
-				["install", "example@^1.0.0", "--prefix", join(tempDir, ".disco", "npm"), "--legacy-peer-deps"],
+				["install", "example@^1.0.0", "--prefix", join(tempDir, ".ocsid", "npm"), "--legacy-peer-deps"],
 				undefined,
 			);
 		});
 
 		it("should skip project npm update when installed version matches latest", async () => {
-			const installedPath = join(tempDir, ".disco", "npm", "node_modules", "example");
+			const installedPath = join(tempDir, ".ocsid", "npm", "node_modules", "example");
 			mkdirSync(installedPath, { recursive: true });
 			writeFileSync(join(installedPath, "package.json"), JSON.stringify({ name: "example", version: "1.3.1" }));
 			settingsManager.setProjectPackages(["npm:example@^1.0.0"]);
@@ -2248,8 +2248,8 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 			const userOldPath = join(agentDir, "npm", "node_modules", "user-old");
 			const userCurrentPath = join(agentDir, "npm", "node_modules", "user-current");
 			const userUnknownPath = join(agentDir, "npm", "node_modules", "user-unknown");
-			const projectOldPath = join(tempDir, ".disco", "npm", "node_modules", "project-old");
-			const projectCurrentPath = join(tempDir, ".disco", "npm", "node_modules", "project-current");
+			const projectOldPath = join(tempDir, ".ocsid", "npm", "node_modules", "project-old");
+			const projectCurrentPath = join(tempDir, ".ocsid", "npm", "node_modules", "project-current");
 			const installPaths = [userOldPath, userCurrentPath, userUnknownPath, projectOldPath, projectCurrentPath];
 			for (const installPath of installPaths) {
 				mkdirSync(installPath, { recursive: true });
@@ -2355,7 +2355,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 					"project-old@latest",
 					"project-missing@latest",
 					"--prefix",
-					join(tempDir, ".disco", "npm"),
+					join(tempDir, ".ocsid", "npm"),
 					"--legacy-peer-deps",
 				],
 				undefined,
@@ -2382,7 +2382,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 		});
 
 		it("should skip installing missing package sources when offline", async () => {
-			process.env.DISCO_OFFLINE = "1";
+			process.env.OCSID_OFFLINE = "1";
 			settingsManager.setProjectPackages(["npm:missing-package", "git:github.com/example/missing-repo"]);
 
 			const installParsedSourceSpy = vi.spyOn(packageManager as any, "installParsedSource");
@@ -2394,7 +2394,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 		});
 
 		it("should skip refreshing temporary git sources when offline", async () => {
-			process.env.DISCO_OFFLINE = "1";
+			process.env.OCSID_OFFLINE = "1";
 			const gitSource = "git:github.com/example/repo";
 			const parsedGitSource = (packageManager as any).parseSource(gitSource);
 			const installedPath = (packageManager as any).getGitInstallPath(parsedGitSource, "temporary") as string;
@@ -2410,8 +2410,8 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 		});
 
 		it("should not run npm view during resolve for installed unpinned packages", async () => {
-			process.env.DISCO_OFFLINE = "1";
-			const installedPath = join(tempDir, ".disco", "npm", "node_modules", "example");
+			process.env.OCSID_OFFLINE = "1";
+			const installedPath = join(tempDir, ".ocsid", "npm", "node_modules", "example");
 			mkdirSync(join(installedPath, "extensions"), { recursive: true });
 			writeFileSync(join(installedPath, "package.json"), JSON.stringify({ name: "example", version: "1.0.0" }));
 			writeFileSync(join(installedPath, "extensions", "index.ts"), "export default function() {};");
@@ -2425,7 +2425,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 		});
 
 		it("should reinstall pinned npm packages when installed version does not match", async () => {
-			const installedPath = join(tempDir, ".disco", "npm", "node_modules", "example");
+			const installedPath = join(tempDir, ".ocsid", "npm", "node_modules", "example");
 			mkdirSync(installedPath, { recursive: true });
 			writeFileSync(join(installedPath, "package.json"), JSON.stringify({ name: "example", version: "1.0.0" }));
 			settingsManager.setProjectPackages(["npm:example@2.0.0"]);
@@ -2443,7 +2443,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 				cwd: tempDir,
 				agentDir,
 				settingsManager,
-				includeDisCoDefaults: true,
+				includeOCSIDDefaults: true,
 			});
 			const installedPath = join(agentDir, "npm", "node_modules", "@juicesharp", "rpiv-todo");
 			mkdirSync(installedPath, { recursive: true });
@@ -2478,7 +2478,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 		});
 
 		it("should not check package updates when offline", async () => {
-			process.env.DISCO_OFFLINE = "1";
+			process.env.OCSID_OFFLINE = "1";
 			const runCommandCaptureSpy = vi.spyOn(packageManager as any, "runCommandCapture");
 
 			const updates = await packageManager.checkForAvailableUpdates();
@@ -2487,7 +2487,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 		});
 
 		it("should report updates for installed unpinned npm packages", async () => {
-			const installedPath = join(tempDir, ".disco", "npm", "node_modules", "example");
+			const installedPath = join(tempDir, ".ocsid", "npm", "node_modules", "example");
 			mkdirSync(installedPath, { recursive: true });
 			writeFileSync(join(installedPath, "package.json"), JSON.stringify({ name: "example", version: "1.0.0" }));
 			settingsManager.setProjectPackages(["npm:example"]);
@@ -2510,7 +2510,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 				cwd: tempDir,
 				agentDir,
 				settingsManager,
-				includeDisCoDefaults: true,
+				includeOCSIDDefaults: true,
 			});
 			const installedPath = join(agentDir, "npm", "node_modules", "@juicesharp", "rpiv-todo");
 			mkdirSync(installedPath, { recursive: true });
@@ -2542,7 +2542,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 				cwd: tempDir,
 				agentDir,
 				settingsManager,
-				includeDisCoDefaults: true,
+				includeOCSIDDefaults: true,
 			});
 			const installedPath = join(agentDir, "npm", "node_modules", "@juicesharp", "rpiv-todo");
 			mkdirSync(installedPath, { recursive: true });
@@ -2580,7 +2580,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 				cwd: tempDir,
 				agentDir,
 				settingsManager,
-				includeDisCoDefaults: true,
+				includeOCSIDDefaults: true,
 			});
 			const legacyRoot = join(tempDir, "legacy-global", "node_modules");
 			const legacyPath = join(legacyRoot, "@juicesharp", "rpiv-todo");
@@ -2628,7 +2628,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 				cwd: tempDir,
 				agentDir,
 				settingsManager,
-				includeDisCoDefaults: true,
+				includeOCSIDDefaults: true,
 			});
 			const getInstalledPathSpy = vi.spyOn(defaultPackageManager, "getInstalledPath").mockReturnValue(undefined);
 			const runCommandSpy = vi.spyOn(defaultPackageManager as any, "runCommand");
@@ -2646,7 +2646,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 				cwd: tempDir,
 				agentDir,
 				settingsManager,
-				includeDisCoDefaults: true,
+				includeOCSIDDefaults: true,
 			});
 			const installedPath = join(agentDir, "npm", "node_modules", "@juicesharp", "rpiv-todo");
 			mkdirSync(installedPath, { recursive: true });
@@ -2671,7 +2671,7 @@ export default function(api) { api.registerTool({ name: "test", description: "te
 		});
 
 		it("should skip pinned packages when checking for updates", async () => {
-			const installedNpmPath = join(tempDir, ".disco", "npm", "node_modules", "example");
+			const installedNpmPath = join(tempDir, ".ocsid", "npm", "node_modules", "example");
 			mkdirSync(installedNpmPath, { recursive: true });
 			writeFileSync(join(installedNpmPath, "package.json"), JSON.stringify({ name: "example", version: "1.0.0" }));
 			const parsedGitSource = (packageManager as any).parseSource("git:github.com/example/repo@v1");

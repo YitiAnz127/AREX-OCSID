@@ -5,7 +5,7 @@ description: "Inspect AiZynthFinder output files, route collections, reaction
   rerunning a search."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

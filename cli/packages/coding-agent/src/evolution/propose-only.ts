@@ -39,7 +39,7 @@ export interface ProposeInput {
 export function makeProposal(input: ProposeInput): EvolveProposal {
 	const empirical = input.evidence.empirical === true;
 	const proposal: EvolveProposal = {
-		schema: "disco.evolution-proposal.v1",
+		schema: "ocsid.evolution-proposal.v1",
 		roundId: input.roundId,
 		targetSkillId: input.targetSkillId,
 		hypothesis: input.hypothesis,

@@ -3,7 +3,7 @@ name: atc
 description: "Query the WHO ATC/DDD Classification System."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # atc — drug-ontology sub-skill

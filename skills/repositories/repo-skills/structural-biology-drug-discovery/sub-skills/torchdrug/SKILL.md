@@ -3,7 +3,7 @@ name: torchdrug
 description: "&quot;PyTorch-based ML platform for drug discovery: graph molecular representation learning, property prediction (ADMET, activity), retrosynthesis, drug-target interaction (DTI), and pr"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # torchdrug — structural-biology-drug-discovery sub-skill

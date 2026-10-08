@@ -3,7 +3,7 @@ name: open_targets
 description: "Query the Open Targets Platform for drug-target-disease associations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # open_targets — drug-dti sub-skill

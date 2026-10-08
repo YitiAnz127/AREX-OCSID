@@ -3,7 +3,7 @@ name: drugbank
 description: "Query a locally downloaded DrugBank database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drugbank — drug-knowledgebase sub-skill

@@ -5,7 +5,7 @@ description: "Route PyDESeq2 bulk RNA-seq differential expression analysis tasks
   internals."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 
@@ -54,7 +54,7 @@ results_df = stat_res.results_df
 - `references/package-overview.md`: package scope, supported Python/dependencies, object model, and when PyDESeq2 is or is not a fit.
 - `references/troubleshooting.md`: cross-cutting install/import, dependency, plotting, CPU, data, and package-scope failures.
 - `references/repo-provenance.md`: source snapshot and evidence baseline for deciding whether this skill is stale.
-- `references/repo-routing-metadata.json`: structured import metadata consumed by DisCo's `repo-skills-router` update process.
+- `references/repo-routing-metadata.json`: structured import metadata consumed by OCSID's `repo-skills-router` update process.
 
 ## Shared Script
 

@@ -3,7 +3,7 @@ name: dft-abinit-md
 description: "Prepare ABINIT molecular-dynamics task inputs from a user-provided structure and MD controls."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-abinit-md — quantum-chemistry sub-skill

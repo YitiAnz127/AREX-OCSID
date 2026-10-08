@@ -4,7 +4,7 @@ description: "Compute, interpret, export, and troubleshoot PyDESeq2 statistical
   results after fitting a DeseqDataSet."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

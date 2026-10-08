@@ -3,7 +3,7 @@ name: drugs_com_reviews
 description: "Query the DrugLib.com Drug Review Dataset (UCI #461)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drugs_com_reviews — drug-review sub-skill

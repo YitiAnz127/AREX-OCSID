@@ -1,10 +1,10 @@
-> disco can create TUI components. Ask it to build one for your use case.
+> ocsid can create TUI components. Ask it to build one for your use case.
 
 # TUI Components
 
-> **Upstream dependency reference:** DisCo uses
+> **Upstream dependency reference:** OCSID uses
 > `@earendil-works/pi-tui@0.83.0`. GitHub source links on this page point to
-> that Pi baseline; DisCo's integration behavior is documented here.
+> that Pi baseline; OCSID's integration behavior is documented here.
 
 Extensions and custom tools can render custom TUI components for interactive user interfaces. This page covers the component system and available building blocks.
 
@@ -93,7 +93,7 @@ Without this propagation, typing with an IME (Chinese, Japanese, Korean, etc.) w
 **In extensions** via `ctx.ui.custom()`:
 
 ```typescript
-disco.on("session_start", async (_event, ctx) => {
+ocsid.on("session_start", async (_event, ctx) => {
   const result = await ctx.ui.custom<string | null>((tui, theme, keybindings, done) =>
     new MyComponent({
       theme,
@@ -389,7 +389,7 @@ class MySelector {
 Usage in an extension:
 
 ```typescript
-disco.registerCommand("pick", {
+ocsid.registerCommand("pick", {
   description: "Pick an item",
   handler: async (_args, ctx) => {
     const items = ["Option A", "Option B", "Option C"];
@@ -453,7 +453,7 @@ renderResult(result, options, theme, context) {
 **For Markdown**, use `getMarkdownTheme()`:
 
 ```typescript
-import { getMarkdownTheme } from "@arex-skill/disco";
+import { getMarkdownTheme } from "ocsid";
 import { Markdown } from "@earendil-works/pi-tui";
 
 renderResult(result, options, theme, context) {
@@ -473,10 +473,10 @@ interface MyTheme {
 
 ## Debug logging
 
-Set `DisCo TUI diagnostics` to capture the raw ANSI stream written to stdout.
+Set `OCSID TUI diagnostics` to capture the raw ANSI stream written to stdout.
 
 ```bash
-DisCo TUI diagnostics=/tmp/tui-ansi.log npx tsx packages/tui/test/chat-simple.ts
+OCSID TUI diagnostics=/tmp/tui-ansi.log npx tsx packages/tui/test/chat-simple.ts
 ```
 
 ## Performance
@@ -618,11 +618,11 @@ These patterns cover the most common UI needs in extensions. **Copy these patter
 For letting users pick from a list of options. Use `SelectList` from `@earendil-works/pi-tui` with `DynamicBorder` for framing.
 
 ```typescript
-import type { ExtensionAPI } from "@arex-skill/disco";
-import { DynamicBorder } from "@arex-skill/disco";
+import type { ExtensionAPI } from "ocsid";
+import { DynamicBorder } from "ocsid";
 import { Container, type SelectItem, SelectList, Text } from "@earendil-works/pi-tui";
 
-disco.registerCommand("pick", {
+ocsid.registerCommand("pick", {
   handler: async (_args, ctx) => {
     const items: SelectItem[] = [
       { value: "opt1", label: "Option 1", description: "First option" },
@@ -678,9 +678,9 @@ disco.registerCommand("pick", {
 For operations that take time and should be cancellable. `BorderedLoader` shows a spinner and handles escape to cancel.
 
 ```typescript
-import { BorderedLoader } from "@arex-skill/disco";
+import { BorderedLoader } from "ocsid";
 
-disco.registerCommand("fetch", {
+ocsid.registerCommand("fetch", {
   handler: async (_args, ctx) => {
     const result = await ctx.ui.custom<string | null>((tui, theme, _kb, done) => {
       const loader = new BorderedLoader(tui, theme, "Fetching data...");
@@ -710,10 +710,10 @@ disco.registerCommand("fetch", {
 For toggling multiple settings. Use `SettingsList` from `@earendil-works/pi-tui` with `getSettingsListTheme()`.
 
 ```typescript
-import { getSettingsListTheme } from "@arex-skill/disco";
+import { getSettingsListTheme } from "ocsid";
 import { Container, type SettingItem, SettingsList, Text } from "@earendil-works/pi-tui";
 
-disco.registerCommand("settings", {
+ocsid.registerCommand("settings", {
   handler: async (_args, ctx) => {
     const items: SettingItem[] = [
       { id: "verbose", label: "Verbose mode", currentValue: "off", values: ["on", "off"] },
@@ -765,7 +765,7 @@ ctx.ui.setStatus("my-ext", undefined);
 
 ### Pattern 4b: Working Indicator Customization
 
-Customize the inline working indicator shown while disco is streaming a response.
+Customize the inline working indicator shown while ocsid is streaming a response.
 
 ```typescript
 // Static indicator
@@ -785,7 +785,7 @@ ctx.ui.setWorkingIndicator({
 // Hide the indicator entirely
 ctx.ui.setWorkingIndicator({ frames: [] });
 
-// Restore disco's default spinner
+// Restore ocsid's default spinner
 ctx.ui.setWorkingIndicator();
 ```
 
@@ -850,7 +850,7 @@ Token stats available via `ctx.sessionManager.getBranch()` and `ctx.model`.
 Replace the main input editor with a custom implementation. Useful for modal editing (vim), different keybindings (emacs), or specialized input handling.
 
 ```typescript
-import { CustomEditor, type ExtensionAPI } from "@arex-skill/disco";
+import { CustomEditor, type ExtensionAPI } from "ocsid";
 import { matchesKey, truncateToWidth } from "@earendil-works/pi-tui";
 
 type Mode = "normal" | "insert";
@@ -902,8 +902,8 @@ class VimEditor extends CustomEditor {
   }
 }
 
-export default function (disco: ExtensionAPI) {
-  disco.on("session_start", (_event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+  ocsid.on("session_start", (_event, ctx) => {
     // Factory receives the TUI, theme, and keybindings from the app
     ctx.ui.setEditorComponent((tui, theme, keybindings) =>
       new VimEditor(tui, theme, keybindings)

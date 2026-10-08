@@ -6,7 +6,7 @@ description: "Build, validate, convert, and troubleshoot AlphaFold 3 input JSON
   MSAs/templates/user CCD/bonds, or explaining schema versions."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

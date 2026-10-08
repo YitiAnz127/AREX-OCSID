@@ -4,7 +4,7 @@ description: "Run MDAnalysis analysis classes, custom AnalysisBase workflows,
   numerical distance analyses, and analysis backend validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

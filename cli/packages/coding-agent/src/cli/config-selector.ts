@@ -1,5 +1,5 @@
 /**
- * TUI config selector for the `disco config` command.
+ * TUI config selector for the `ocsid config` command.
  */
 
 import { ProcessTerminal, TUI } from "@earendil-works/pi-tui";

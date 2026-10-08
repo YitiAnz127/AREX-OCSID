@@ -8,12 +8,12 @@
 import type { ExtensionAPI, ExtensionContext } from "@arex-skill/disco";
 
 async function checkDirtyRepo(
-	disco: ExtensionAPI,
+	ocsid: ExtensionAPI,
 	ctx: ExtensionContext,
 	action: string,
 ): Promise<{ cancel: boolean } | undefined> {
 	// Check for uncommitted changes
-	const { stdout, code } = await disco.exec("git", ["status", "--porcelain"]);
+	const { stdout, code } = await ocsid.exec("git", ["status", "--porcelain"]);
 
 	if (code !== 0) {
 		// Not a git repo, allow the action
@@ -44,13 +44,13 @@ async function checkDirtyRepo(
 	}
 }
 
-export default function (disco: ExtensionAPI) {
-	disco.on("session_before_switch", async (event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("session_before_switch", async (event, ctx) => {
 		const action = event.reason === "new" ? "new session" : "switch session";
-		return checkDirtyRepo(disco, ctx, action);
+		return checkDirtyRepo(ocsid, ctx, action);
 	});
 
-	disco.on("session_before_fork", async (_event, ctx) => {
-		return checkDirtyRepo(disco, ctx, "fork");
+	ocsid.on("session_before_fork", async (_event, ctx) => {
+		return checkDirtyRepo(ocsid, ctx, "fork");
 	});
 }

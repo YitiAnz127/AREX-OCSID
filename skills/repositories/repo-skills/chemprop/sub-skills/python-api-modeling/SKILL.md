@@ -5,7 +5,7 @@ description: "Build Chemprop v2 Python API workflows for data objects,
   transforms, metrics/losses, ensembling, and save/load."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

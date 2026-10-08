@@ -7,7 +7,7 @@
 
 import type { Server } from "node:http";
 import type { AuthInteraction, OAuthAuth, OAuthCredential } from "@earendil-works/pi-ai";
-import { getDiscoOAuthCallbackHost } from "./callback-host.ts";
+import { getOcsidOAuthCallbackHost } from "./callback-host.ts";
 import { oauthErrorHtml, oauthSuccessHtml } from "./oauth-page.ts";
 import { generateOAuthState, generatePKCE } from "./pkce.ts";
 
@@ -153,7 +153,7 @@ async function startCallbackServer(expectedState: string): Promise<CallbackServe
 			reject(err);
 		});
 
-		server.listen(CALLBACK_PORT, getDiscoOAuthCallbackHost(), () => {
+		server.listen(CALLBACK_PORT, getOcsidOAuthCallbackHost(), () => {
 			resolve({
 				server,
 				redirectUri: REDIRECT_URI,

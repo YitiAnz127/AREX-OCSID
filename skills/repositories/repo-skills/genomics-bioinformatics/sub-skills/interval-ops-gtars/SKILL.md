@@ -3,7 +3,7 @@ name: interval-ops-gtars
 description: "&quot;Rust-backed Python library for fast genomic token arithmetic and BED processing."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # interval-ops-gtars — genomics-bioinformatics sub-skill

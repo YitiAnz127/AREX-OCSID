@@ -22,7 +22,7 @@ import { appendFileSync, existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import lockfile from "proper-lockfile";
 import type { GradedBy } from "../benchmark/schema.ts";
-import { gradeSourceCategory, isCandidateRunKind } from "../benchmark/schema.ts";
+import { CANDIDATE_RUN_KINDS, gradeSourceCategory, isCandidateRunKind } from "../benchmark/schema.ts";
 import { assertCanonicalId, assertCaseId, resolveRunDir } from "../audit/id.ts";
 import { atomicWriteFileSync } from "../audit/atomic.ts";
 
@@ -219,7 +219,7 @@ function injectGradeLocked(req: InjectGradeRequest, dir: string, summaryPath: st
 		return { applied: false, reason: `run ${req.runId} has an unreadable summary.json`, updatedScore: null, taskSuccessRate: null, ledgerRowCount: 0 };
 	}
 	if (!isCandidateRunKind(summary.kind)) {
-		return { applied: false, reason: `run ${req.runId} has kind "${summary.kind}"; grade injection only applies to candidate-eval or candidate-agent-eval runs`, updatedScore: null, taskSuccessRate: null, ledgerRowCount: 0 };
+		return { applied: false, reason: `run ${req.runId} has kind "${summary.kind}"; grade injection only applies to candidate runs (${CANDIDATE_RUN_KINDS.join(", ")})`, updatedScore: null, taskSuccessRate: null, ledgerRowCount: 0 };
 	}
 
 	const at = req.at ?? new Date().toISOString(); // BUG-P1-10: real UTC default
@@ -268,7 +268,7 @@ function injectGradeLocked(req: InjectGradeRequest, dir: string, summaryPath: st
 				const before = JSON.parse(line) as Record<string, unknown>;
 				revisions.push(
 					JSON.stringify({
-						schema: "disco.grade-revision.v1",
+						schema: "ocsid.grade-revision.v1",
 						gradeId,
 						// B3: record the normative source category (separate from the
 						// legacy gradedBy label) so a human_review / llm_judge override
@@ -318,7 +318,7 @@ function injectGradeLocked(req: InjectGradeRequest, dir: string, summaryPath: st
 	if (revisions.length > 0) {
 		appendFileSync(
 			journalPath,
-			JSON.stringify({ journal: "disco.grade-journal.v1", phase: "intent", gradeId, at, runId: req.runId, skillId: req.skillId, caseId: req.caseId, sourceCategory: gradeSourceCategory(req.gradedBy) }) + "\n",
+			JSON.stringify({ journal: "ocsid.grade-journal.v1", phase: "intent", gradeId, at, runId: req.runId, skillId: req.skillId, caseId: req.caseId, sourceCategory: gradeSourceCategory(req.gradedBy) }) + "\n",
 			"utf8",
 		);
 		appendFileSync(journalPath, revisions.join("\n") + "\n", "utf8");
@@ -348,7 +348,7 @@ function injectGradeLocked(req: InjectGradeRequest, dir: string, summaryPath: st
 	// B3: mark the transaction as fully applied in the append-only journal. A
 	// journal entry carrying `phase: "done"` is the commit marker for recovery.
 	if (revisions.length > 0) {
-		appendFileSync(path.join(dir, "grades.jsonl"), JSON.stringify({ journal: "disco.grade-journal.v1", phase: "done", gradeId, at }) + "\n", "utf8");
+		appendFileSync(path.join(dir, "grades.jsonl"), JSON.stringify({ journal: "ocsid.grade-journal.v1", phase: "done", gradeId, at }) + "\n", "utf8");
 	}
 
 	return { applied: true, updatedScore, taskSuccessRate: newRate, ledgerRowCount: out.length };

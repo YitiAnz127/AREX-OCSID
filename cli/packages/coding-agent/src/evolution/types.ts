@@ -49,7 +49,7 @@ export interface ProposalEvidence {
 }
 
 export interface EvolveProposal {
-	schema: "disco.evolution-proposal.v1";
+	schema: "ocsid.evolution-proposal.v1";
 	roundId: string;
 	targetSkillId: string;
 	/** One-line hypothesis about what change might help. */

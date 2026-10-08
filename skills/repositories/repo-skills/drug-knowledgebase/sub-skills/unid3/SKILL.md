@@ -3,7 +3,7 @@ name: unid3
 description: "Sub-skill unid3 for drug-knowledgebase."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # unid3 — drug-knowledgebase sub-skill

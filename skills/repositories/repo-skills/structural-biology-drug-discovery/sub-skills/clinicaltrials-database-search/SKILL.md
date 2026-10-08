@@ -3,7 +3,7 @@ name: clinicaltrials-database-search
 description: "Query ClinicalTrials.gov API v2 for trial data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # clinicaltrials-database-search — structural-biology-drug-discovery sub-skill

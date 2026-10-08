@@ -5,7 +5,7 @@ description: "Analyze OpenFE result JSONs, gather RBFE/ABFE/SepTop outputs,
   result sets safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

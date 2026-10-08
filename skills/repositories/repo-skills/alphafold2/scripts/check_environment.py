@@ -37,7 +37,7 @@ MODULES = (
 
 
 def main() -> int:
-    print("DisCo alphafold2 environment inspection (read-only)")
+    print("OCSID alphafold2 environment inspection (read-only)")
     for name in DISTRIBUTIONS:
         try:
             print(f"distribution {name}={metadata.version(name)}")

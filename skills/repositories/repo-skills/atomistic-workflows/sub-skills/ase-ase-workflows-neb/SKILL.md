@@ -3,7 +3,7 @@ name: ase-ase-workflows-neb
 description: "Prepare ASE NEB workflow tasks with backend-agnostic controls."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ase-ase-workflows-neb — atomistic-workflows sub-skill

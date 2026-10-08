@@ -3,7 +3,7 @@ name: single-cell-anndata-data-structure
 description: "&quot;Annotated matrices for single-cell genomics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # single-cell-anndata-data-structure — genomics-bioinformatics sub-skill

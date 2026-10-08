@@ -4,7 +4,7 @@ description: "Prepare, load, orient, and validate PyDESeq2 count and metadata
   inputs before differential expression modeling."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

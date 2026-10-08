@@ -5,7 +5,7 @@ description: "Guides agents using pysam VariantFile, VariantHeader, and
   and coordinate/header troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

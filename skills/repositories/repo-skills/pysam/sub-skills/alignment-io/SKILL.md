@@ -6,7 +6,7 @@ description: "Guides agents using pysam for SAM/BAM/CRAM AlignmentFile I/O,
   conventions."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

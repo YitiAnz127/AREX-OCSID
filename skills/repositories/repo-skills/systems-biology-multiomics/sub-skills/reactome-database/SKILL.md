@@ -3,7 +3,7 @@ name: reactome-database
 description: "&quot;Query Reactome pathways via REST: pathway queries, entity lookup, keyword search, gene list enrichment, hierarchy, cross-refs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # reactome-database — systems-biology-multiomics sub-skill

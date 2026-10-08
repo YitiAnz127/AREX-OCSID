@@ -4,7 +4,7 @@ description: "Use the Folding@home coronavirus repository conventions to curate
   molecular structures, prepare bounded OpenMM systems, and preserve target,
   publication, and provenance notes."
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 disable-model-invocation: true
 license: CC BY 4.0
 ---
@@ -39,4 +39,4 @@ The required backend for this selected scope is CPU OpenMM. CUDA is optional: pl
 - Target/publication/provenance records: [project-context](sub-skills/project-context/SKILL.md).
 - Cross-cutting failures and scientific-limit reporting: [troubleshooting](references/troubleshooting.md).
 
-Use [repo-provenance.md](references/repo-provenance.md) to anchor claims to the source revision and evidence paths. This generated skill is intentionally left in the repository-local output tree and is **not imported** into the managed DisCo skill library.
+Use [repo-provenance.md](references/repo-provenance.md) to anchor claims to the source revision and evidence paths. This generated skill is intentionally left in the repository-local output tree and is **not imported** into the managed OCSID skill library.

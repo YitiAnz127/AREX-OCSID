@@ -3,7 +3,7 @@ name: sar-analysis
 description: "Structure-activity relationship (SAR) analysis guide for drug discovery including molecular descriptor analysis, scaffold analysis, and activity cliff detection."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # sar-analysis — structural-biology-drug-discovery sub-skill

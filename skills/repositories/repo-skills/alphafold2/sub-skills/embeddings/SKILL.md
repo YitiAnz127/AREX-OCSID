@@ -5,7 +5,7 @@ description: "Guides ESM, MSA Transformer, ProtTrans/ProtBERT, and precomputed
   caches, downloads, Apex, and OOM diagnosis."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

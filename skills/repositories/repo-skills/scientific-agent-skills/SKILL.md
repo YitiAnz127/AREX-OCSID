@@ -10,7 +10,7 @@ description: "Maintains the Scientific Agent Skills repository: adding or
   scanner findings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

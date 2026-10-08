@@ -4,7 +4,7 @@ description: "Choose TorchDrug graph neural network layers/models, readouts,
   variadic tensor utilities, and custom layer/model extension patterns."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

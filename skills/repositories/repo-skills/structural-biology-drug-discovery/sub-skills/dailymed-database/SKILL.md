@@ -3,7 +3,7 @@ name: dailymed-database
 description: "&quot;Query FDA drug labels (DailyMed) via REST API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dailymed-database — structural-biology-drug-discovery sub-skill

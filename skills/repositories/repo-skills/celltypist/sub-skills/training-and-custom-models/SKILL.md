@@ -5,7 +5,7 @@ description: "Plan and preflight custom CellTypist model training, including
   model save/use handoff."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

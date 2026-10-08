@@ -9,7 +9,20 @@ import type {
 } from "../core/repo-skills-library-manager.ts";
 import { RepoSkillsLibraryConflictError } from "../core/repo-skills-library-manager.ts";
 import { ENV_AGENT_DIR } from "../config.ts";
-import { handleRepoSkillsCommand, parseRepoSkillsCommand, readFamilyManifest, readGradeManifest } from "./repo-skills.ts";
+import { handleRepoSkillsCommand, parseRepoSkillsCommand, readFamilyManifest, readGradeManifest, resolveAgentGateway } from "./repo-skills.ts";
+
+it("uses the external runner's DISCO gateway variables", () => {
+	const gateway = resolveAgentGateway({}, {
+		DISCO_GATEWAY_URL: "http://example.test/v1",
+		DISCO_GATEWAY_MODEL: "test-model",
+		DISCO_GATEWAY_KEY: "test-key",
+	});
+	expect(gateway).toEqual({ baseUrl: "http://example.test/v1", model: "test-model", apiKey: "test-key", maxTokens: 1500 });
+	expect(resolveAgentGateway({ agentModel: "override" }, {
+		DISCO_GATEWAY_URL: "http://example.test/v1", DISCO_GATEWAY_MODEL: "old",
+		DISCO_GATEWAY_KEY: "test-key", DISCO_GATEWAY_MAX_TOKENS: "900",
+	}).model).toBe("override");
+});
 
 function installResult(overrides: Partial<RepoSkillsInstallResult> = {}): RepoSkillsInstallResult {
 	return {
@@ -139,11 +152,19 @@ describe("repo-skills CLI", () => {
 		expect(parseRepoSkillsCommand([
 			"repo-skills", "audit", "--benchmark", "bench", "--run", "candidate-run",
 			"--executor", "agent", "--skill", "skill-a", "--case", "c1",
-			"--skill-root", "live", "--candidate-manifest", "candidate.json", "--candidate-root", "staged",
+			"--skill-root", "live", "--candidate-manifest", "candidate.json", "--candidate-root", "staged", "--verifier", "private.json",
 		])).toMatchObject({
 			type: "audit", executor: "agent", skillRoot: "live",
-			candidateManifestFile: "candidate.json", candidateRoot: "staged",
+			candidateManifestFile: "candidate.json", candidateRoot: "staged", verifierFile: "private.json",
 		});
+		expect(parseRepoSkillsCommand(["repo-skills", "diagnose", "--evidence", "visible.json", "--probe-budget", "--json"])).toEqual({
+			type: "diagnose", evidenceFile: "visible.json", json: true, probeBudget: true,
+		});
+		expect(parseRepoSkillsCommand([
+			"repo-skills", "audit", "--benchmark", "bench", "--run", "pair", "--executor", "agent",
+			"--skill", "skill-a", "--case", "c1", "--candidate-manifest", "candidate.json",
+			"--candidate-root", "staged", "--verifier", "private.json", "--paired",
+		])).toMatchObject({ type: "audit", paired: true, verifierFile: "private.json" });
 		expect(() => parseRepoSkillsCommand([
 			"repo-skills", "audit", "--benchmark", "bench", "--run", "r", "--executor", "agent",
 			"--skill", "skill-a", "--case", "c1", "--candidate-manifest", "candidate.json",
@@ -289,6 +310,97 @@ describe("repo-skills CLI", () => {
 		expect(() => parseRepoSkillsCommand(["repo-skills", "evolve", "--propose", "--round", "r1", "--skill", "gget", "--hypothesis", "h", "--plan", "a", "--source"])).toThrow("--source requires a value");
 		expect(() => parseRepoSkillsCommand(["repo-skills", "evolve", "--propose", "--round", "r1", "--skill", "gget", "--hypothesis", "h", "--plan", "a", "--finding"])).toThrow("--finding requires a value");
 		expect(() => parseRepoSkillsCommand(["repo-skills", "baseline", "--benchmark", "b", "--seed"])).toThrow("--seed requires a value");
+		// P1-01: benchmark freeze/verify/diff — an audited freeze is never silent.
+		expect(parseRepoSkillsCommand(["repo-skills", "benchmark", "verify", "--root", "skills/tests/benchmark-v2"])).toEqual({
+			type: "benchmark",
+			action: "verify",
+			root: "skills/tests/benchmark-v2",
+			json: false,
+			name: undefined,
+			frozenAt: undefined,
+			reason: undefined,
+			from: undefined,
+			dryRun: false,
+		});
+		expect(parseRepoSkillsCommand(["repo-skills", "benchmark", "diff", "--root", "b", "--json"])).toMatchObject({ action: "diff", root: "b", json: true });
+		expect(
+			parseRepoSkillsCommand([
+				"repo-skills",
+				"benchmark",
+				"freeze",
+				"--root",
+				"skills/tests/benchmark-v2",
+				"--from",
+				"skills/tests/benchmark-v1",
+				"--name",
+				"pilot-v2",
+				"--frozen-at",
+				"2026-10-03T00:00:00Z",
+				"--reason",
+				"case-2 assertions corrected after review",
+				"--dry-run",
+			]),
+		).toEqual({
+			type: "benchmark",
+			action: "freeze",
+			root: "skills/tests/benchmark-v2",
+			json: false,
+			name: "pilot-v2",
+			frozenAt: "2026-10-03T00:00:00Z",
+			reason: "case-2 assertions corrected after review",
+			from: "skills/tests/benchmark-v1",
+			dryRun: true,
+		});
+		expect(() => parseRepoSkillsCommand(["repo-skills", "benchmark", "--root", "b"])).toThrow("benchmark requires an action: freeze | verify | diff.");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "benchmark", "verify"])).toThrow("benchmark verify: --root <benchmark-dir> is required.");
+		// Re-freezing without a recorded reason is how an old experiment's identity gets lost.
+		expect(() => parseRepoSkillsCommand(["repo-skills", "benchmark", "freeze", "--root", "b"])).toThrow('benchmark freeze requires --reason "<why>"');
+		expect(() => parseRepoSkillsCommand(["repo-skills", "benchmark", "freeze", "--root", "b", "--reason", "  "])).toThrow('benchmark freeze requires --reason "<why>"');
+		// verify/diff stay readable without a reason.
+		expect(parseRepoSkillsCommand(["repo-skills", "benchmark", "verify", "--root", "b"])).toMatchObject({ reason: undefined });
+		expect(() => parseRepoSkillsCommand(["repo-skills", "benchmark", "freeze", "--root", "b", "--reason"])).toThrow("--reason requires a value");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "benchmark", "freeze", "--root", "b", "--reason", "why", "--bogus"])).toThrow("Unknown option for benchmark: --bogus");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "benchmark", "seal", "--root", "b"])).toThrow("Unknown option for benchmark: seal");
+		// P1-02: verify-archive replays a run's recorded verdict from its archived workspace evidence.
+		expect(parseRepoSkillsCommand(["repo-skills", "verify-archive", "--run", "run-1"])).toEqual({ type: "verifyArchive", runId: "run-1", json: false });
+		expect(parseRepoSkillsCommand(["repo-skills", "verify-archive", "--run", "run-1", "--json"])).toEqual({ type: "verifyArchive", runId: "run-1", json: true });
+		expect(() => parseRepoSkillsCommand(["repo-skills", "verify-archive"])).toThrow("verify-archive requires --run <run-id>.");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "verify-archive", "--run"])).toThrow("verify-archive: --run requires a run-id.");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "verify-archive", "--run", "run-1", "--bogus"])).toThrow("Unknown option for verify-archive: --bogus");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "verify-archive", "--run", "../escape"])).toThrow("is not a valid id");
+		// P1-04: episode run/status — the loop is one persistent, auditable episode.
+		const episodeRun = parseRepoSkillsCommand([
+			"repo-skills", "episode", "run", "--episode", "ep-1", "--skill", "gget", "--case", "case-1",
+			"--skill-root", "skills", "--evidence", "ev.json", "--request", "req.txt", "--patch", "p.json",
+			"--reference", "ref.md", "--assertions", "a.json", "--probe-pairs", "2",
+		]);
+		expect(episodeRun).toMatchObject({ type: "episode", action: "run", json: false, executor: "agent", episodeId: "ep-1", skillId: "gget", caseId: "case-1", skillRoot: "skills", evidenceFile: "ev.json", requestFile: "req.txt", patchFile: "p.json", referenceFile: "ref.md", assertionsFile: "a.json", probePairs: 2 });
+		expect(parseRepoSkillsCommand(["repo-skills", "episode", "status", "--episode", "ep-1", "--json"])).toMatchObject({ type: "episode", action: "status", json: true });
+		expect(parseRepoSkillsCommand(["repo-skills", "episode", "run", "--episode", "ep-1", "--skill", "gget", "--case", "case-1", "--skill-root", "skills", "--evidence", "ev.json", "--request", "req.txt", "--patch", "p.json", "--executor", "native", "--agent-provider", "openai-codex", "--agent-model", "gpt-5.5", "--session-mode", "researcher"])).toMatchObject({ executor: "native", agentProvider: "openai-codex", agentModel: "gpt-5.5", sessionMode: "researcher" });
+		const extraCases = ["repo-skills", "episode", "run", "--episode", "ep-1", "--skill", "gget", "--case", "case-1", "--skill-root", "skills", "--evidence", "ev.json", "--request", "req.txt", "--patch", "p.json", "--cases", "case-2"];
+		expect(() => parseRepoSkillsCommand(extraCases)).toThrow(/--cases-root/);
+		expect(parseRepoSkillsCommand([...extraCases, "--cases-root", "cases"])).toMatchObject({ cases: ["case-2"], casesRoot: "cases" });
+		expect(() => parseRepoSkillsCommand(["repo-skills", "episode"])).toThrow("episode requires an action: run | status.");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "episode", "run", "--skill", "gget"])).toThrow("episode requires --episode <id>.");
+		// A partial episode would silently probe without a patch to apply, so the whole input set is required.
+		expect(() => parseRepoSkillsCommand(["repo-skills", "episode", "run", "--episode", "ep-1", "--skill", "gget", "--case", "case-1"])).toThrow("episode run requires --skill, --case, --skill-root, --evidence, --request and --patch");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "episode", "run", "--episode", "ep-1", "--skill", "gget", "--case", "case-1", "--skill-root", "s", "--evidence", "e", "--request", "r", "--patch", "p", "--reference", "a", "--reference-text", "b"])).toThrow("--reference (file) and --reference-text are mutually exclusive");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "episode", "run", "--episode", "ep-1", "--skill", "gget", "--case", "case-1", "--skill-root", "s", "--evidence", "e", "--request", "r", "--patch", "p", "--probe-pairs", "-1"])).toThrow("--probe-pairs must be a non-negative integer");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "episode", "run", "--episode", "ep-1", "--skill", "gget", "--case", "case-1", "--skill-root", "s", "--evidence", "e", "--request", "r", "--patch", "p", "--bogus"])).toThrow("Unknown option for episode: --bogus");
+		// P1-05: promotion is human-gated — an unreferenced approval is not an approval.
+		expect(parseRepoSkillsCommand(["repo-skills", "promote", "--episode", "ep-1", "--approval", "review 2026-10-03", "--verify-request", "req.txt", "--verifier", "v.json", "--note", "reviewed the diff"])).toMatchObject({ type: "promote", episodeId: "ep-1", approval: "review 2026-10-03", approvalNote: "reviewed the diff", noVerify: false, verifyRequestFile: "req.txt", verifierFile: "v.json", executor: "agent" });
+		expect(parseRepoSkillsCommand(["repo-skills", "promote", "--episode", "ep-1", "--approval", "ok", "--no-verify"])).toMatchObject({ type: "promote", noVerify: true });
+		expect(() => parseRepoSkillsCommand(["repo-skills", "promote", "--episode", "ep-1"])).toThrow('promote requires --approval "<who approved and where>"');
+		expect(() => parseRepoSkillsCommand(["repo-skills", "promote", "--episode", "ep-1", "--approval", "   "])).toThrow('promote requires --approval "<who approved and where>"');
+		// Without a fresh-session verification the commit must not be reported as a success.
+		expect(() => parseRepoSkillsCommand(["repo-skills", "promote", "--episode", "ep-1", "--approval", "ok"])).toThrow("promote: --verify-request <file> is required");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "promote", "--episode", "ep-1", "--approval", "ok", "--verify-request", "r"])).toThrow("promote: post-promotion verification needs --verifier <file>");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "promote", "--episode", "ep-1", "--approval", "ok", "--verify-request", "r", "--assertions", "assertions.json"])).toThrow(/text assertions alone are proxy/);
+		expect(() => parseRepoSkillsCommand(["repo-skills", "promote", "--approval", "ok", "--no-verify"])).toThrow("promote requires --episode <id>.");
+		expect(parseRepoSkillsCommand(["repo-skills", "rollback", "--episode", "ep-1", "--reason", "post-verify failed", "--json"])).toMatchObject({ type: "rollback", episodeId: "ep-1", reason: "post-verify failed", json: true });
+		expect(() => parseRepoSkillsCommand(["repo-skills", "rollback", "--episode", "ep-1"])).toThrow('rollback requires --reason "<why>"');
+		expect(() => parseRepoSkillsCommand(["repo-skills", "rollback", "--reason", "why"])).toThrow("rollback requires --episode <id>.");
+		expect(() => parseRepoSkillsCommand(["repo-skills", "rollback", "--episode", "ep-1", "--reason", "why", "--bogus"])).toThrow("Unknown option for rollback: --bogus");
 	});
 
 	it("reads and validates the grade manifest", () => {
@@ -453,5 +565,113 @@ describe("repo-skills CLI", () => {
 				rmSync(agentDir, { recursive: true, force: true });
 			}
 		});
+	});
+});
+
+describe("repo-skills CLI — P1-03 native session options", () => {
+	it("parses the native audit executor with its session controls", () => {
+		expect(parseRepoSkillsCommand([
+			"repo-skills", "audit", "--benchmark", "bench", "--run", "run-1", "--executor", "native",
+			"--skill", "chemprop", "--case", "case-1", "--tools", "read_file,write_file,execute_command",
+			"--write-dirs", "@workspace/output,@workspace/scratch", "--session-mode", "researcher",
+			"--acceptance", "heldout", "--agent-provider", "openai-codex", "--agent-model", "gpt-5.5",
+		])).toEqual({
+			type: "audit", json: false, benchmarkRoot: "bench", runId: "run-1", candidate: undefined, source: undefined,
+			split: undefined, executor: "native", skillId: "chemprop", caseId: "case-1", skillRoot: undefined,
+			candidateManifestFile: undefined, candidateRoot: undefined, verifierFile: undefined, agentBaseUrl: undefined,
+			agentModel: "gpt-5.5", agentApiKeyEnv: undefined, agentProvider: "openai-codex", sessionMode: "researcher",
+			tools: ["read_file", "write_file", "execute_command"], writeDirs: ["@workspace/output", "@workspace/scratch"],
+			acceptance: "heldout",
+		});
+	});
+
+	it("parses an ad-hoc native request instead of a benchmark case", () => {
+		const parsed = parseRepoSkillsCommand(["repo-skills", "audit", "--benchmark", "bench", "--run", "run-2", "--executor", "native", "--skill", "huggingface-hub", "--request", "req.txt"]);
+		expect(parsed).toMatchObject({ type: "audit", executor: "native", requestFile: "req.txt", caseId: undefined });
+	});
+
+	it("parses the native execution budget overrides and rejects them on other executors", () => {
+		expect(parseRepoSkillsCommand([
+			"repo-skills", "audit", "--benchmark", "bench", "--run", "run-3", "--executor", "native",
+			"--skill", "pycirclize", "--case", "integration/x", "--wall-ms", "900000", "--token-budget", "400000",
+		])).toMatchObject({ type: "audit", executor: "native", wallMs: 900_000, tokenBudget: 400_000 });
+		const exitCodeOf = (args: string[]): number | undefined => {
+			try {
+				parseRepoSkillsCommand(args);
+				return undefined;
+			} catch (error) {
+				return (error as { exitCode?: number }).exitCode;
+			}
+		};
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--executor", "agent", "--skill", "s", "--case", "c-1", "--wall-ms", "1000"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--run", "r", "--executor", "native", "--skill", "s", "--case", "c-1", "--token-budget", "0"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--run", "r", "--executor", "native", "--skill", "s", "--case", "c-1", "--wall-ms", "soon"])).toBe(2);
+	});
+
+	it("rejects native misuse and agent-only options mixed with native", () => {
+		const exitCodeOf = (args: string[]): number | undefined => {
+			try {
+				parseRepoSkillsCommand(args);
+				return undefined;
+			} catch (error) {
+				return (error as { exitCode?: number }).exitCode;
+			}
+		};
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--run", "r", "--executor", "native", "--case", "c-1"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--run", "r", "--executor", "native", "--skill", "s"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--executor", "agent", "--skill", "s", "--case", "c-1", "--tools", "read_file"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--run", "r", "--executor", "native", "--skill", "s", "--case", "c-1", "--request", "req.txt"])).toBe(2);
+	});
+
+	it("parses creator-researcher with and without a frozen case", () => {
+		expect(parseRepoSkillsCommand([
+			"repo-skills", "creator-researcher", "--source", "src", "--out", "out", "--skill", "huggingface-hub",
+			"--request", "req.txt", "--run", "cr-1", "--model", "gpt-5.5", "--thinking", "low", "--wall-ms", "600000",
+		])).toEqual({
+			type: "creatorResearcher", json: false, source: "src", outputDir: "out", skillId: "huggingface-hub",
+			requestFile: "req.txt", runId: "cr-1", model: "gpt-5.5", thinking: "low", wallMs: 600000,
+		});
+		expect(parseRepoSkillsCommand([
+			"repo-skills", "creator-researcher", "--source", "src", "--out", "out", "--skill", "s", "--request", "req.txt",
+			"--run", "cr-2", "--benchmark", "bench", "--case", "case-1", "--verifier", "v.json", "--acceptance", "heldout", "--skill-root", "root",
+		])).toMatchObject({ type: "creatorResearcher", benchmarkRoot: "bench", caseId: "case-1", verifierFile: "v.json", acceptance: "heldout", skillRoot: "root" });
+	});
+
+	it("rejects an incomplete creator-researcher invocation", () => {
+		const exitCodeOf = (args: string[]): number | undefined => {
+			try {
+				parseRepoSkillsCommand(args);
+				return undefined;
+			} catch (error) {
+				return (error as { exitCode?: number }).exitCode;
+			}
+		};
+		expect(exitCodeOf(["repo-skills", "creator-researcher", "--out", "out", "--skill", "s", "--request", "req.txt", "--run", "r"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "creator-researcher", "--source", "src", "--out", "out", "--skill", "s", "--request", "req.txt", "--run", "r", "--benchmark", "bench"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "creator-researcher", "--source", "src", "--out", "out", "--skill", "s", "--request", "req.txt", "--run", "r", "--wall-ms", "0"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "creator-researcher", "--source", "src", "--out", "out", "--skill", "s", "--request", "req.txt", "--run", "r", "--bogus"])).toBe(2);
+	});
+});
+
+describe("repo-skills CLI — ad-hoc case assertions", () => {
+	it("parses --assertions for a native ad-hoc audit and for creator-researcher", () => {
+		expect(parseRepoSkillsCommand(["repo-skills", "audit", "--benchmark", "b", "--run", "r", "--executor", "native", "--skill", "s", "--request", "req.txt", "--assertions", "a.json"]))
+			.toMatchObject({ type: "audit", executor: "native", requestFile: "req.txt", assertionsFile: "a.json" });
+		expect(parseRepoSkillsCommand(["repo-skills", "creator-researcher", "--source", "s", "--out", "o", "--skill", "k", "--request", "req.txt", "--run", "r", "--assertions", "a.json"]))
+			.toMatchObject({ type: "creatorResearcher", assertionsFile: "a.json" });
+	});
+
+	it("rejects --assertions without an ad-hoc request, on a non-native executor, or without a value", () => {
+		const exitCodeOf = (args: string[]): number | undefined => {
+			try {
+				parseRepoSkillsCommand(args);
+				return undefined;
+			} catch (error) {
+				return (error as { exitCode?: number }).exitCode;
+			}
+		};
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--run", "r", "--executor", "native", "--skill", "s", "--case", "c-1", "--assertions", "a.json"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--executor", "agent", "--skill", "s", "--case", "c-1", "--assertions", "a.json"])).toBe(2);
+		expect(exitCodeOf(["repo-skills", "audit", "--benchmark", "b", "--run", "r", "--executor", "native", "--skill", "s", "--request", "req.txt", "--assertions"])).toBe(2);
 	});
 });

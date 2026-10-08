@@ -3,7 +3,7 @@ name: dft-siesta-static
 description: "Prepare SIESTA single-point (static) task inputs from a user-provided structure and essential DFT settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-siesta-static — quantum-chemistry sub-skill

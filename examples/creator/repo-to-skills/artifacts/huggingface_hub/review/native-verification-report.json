@@ -1,5 +1,5 @@
 {
-  "schema": "disco.native-verification.v1",
+  "schema": "ocsid.native-verification.v1",
   "repository": "huggingface/huggingface_hub",
   "sourceCommit": "4237d95c603db491cb1070898c74c97e4d7c2582",
   "environment": {

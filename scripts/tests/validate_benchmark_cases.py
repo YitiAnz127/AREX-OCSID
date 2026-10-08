@@ -2,7 +2,7 @@
 """Validate benchmark usability-case artifacts against the honesty contract.
 
 Walks `skills/tests/<skill-id>/test-cases/` and, for every `assertions.json`:
-  - verifies the required disco.usability-case.v1 fields are present and valid,
+  - verifies the required ocsid.usability-case.v1 fields are present and valid,
   - verifies every `evidence_basis` path actually exists under
     `skills/repositories/repo-skills/<skill-id>/`,
   - verifies every `expected_skill_files` path actually exists inside the
@@ -52,7 +52,7 @@ def validate_case(case_dir, skill_id):
         return
     for field in REQUIRED:
         check(field in data, f"{rel}: assertions.json missing field {field!r}")
-    check(data.get("schema") == "disco.usability-case.v1", f"{rel}: schema != disco.usability-case.v1")
+    check(data.get("schema") == "ocsid.usability-case.v1", f"{rel}: schema != ocsid.usability-case.v1")
     check(data.get("difficulty") in VALID_DIFFICULTY, f"{rel}: difficulty {data.get('difficulty')!r} invalid")
     check(isinstance(data.get("assertions"), list) and len(data["assertions"]) > 0,
           f"{rel}: assertions must be a non-empty list")

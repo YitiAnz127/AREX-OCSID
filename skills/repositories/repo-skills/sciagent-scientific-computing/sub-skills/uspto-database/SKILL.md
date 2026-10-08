@@ -3,7 +3,7 @@ name: uspto-database
 description: "&quot;Access USPTO patent data via PatentsView REST API and Google Patents Public Data (BigQuery)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # uspto-database — sciagent-scientific-computing sub-skill

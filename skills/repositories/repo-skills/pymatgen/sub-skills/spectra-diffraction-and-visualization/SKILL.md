@@ -4,7 +4,7 @@ description: "Use pymatgen diffraction calculators, spectrum objects, plotting
   helpers, FEFF plotting expectations, and optional visualization APIs safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

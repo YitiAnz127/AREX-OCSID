@@ -1,6 +1,6 @@
 # Contributing
 
-AREX-Skill treats skills as operating guidance that future agents may load
+OCSID treats skills as operating guidance that future agents may load
 and follow. Good contributions are evidence-grounded, easy to audit, and clear
 about how the skill was produced.
 
@@ -13,8 +13,8 @@ You can contribute:
 - improvements to existing repo skills;
 - router, catalog, provenance, and documentation updates;
 - bundled workflow skills under
-  `cli/packages/coding-agent/src/disco/skills/`;
-- DisCo CLI source changes under `cli/`.
+  `cli/packages/coding-agent/src/ocsid/skills/`;
+- OCSID CLI source changes under `cli/`.
 
 ## New Repo Skills
 
@@ -96,7 +96,7 @@ For every PR that adds or modifies generated repo skills, include:
 - the model and provider used to produce the skill;
 - the reasoning or thinking level used, such as `low`, `medium`, `high`, or the
   provider-specific equivalent;
-- whether the skill was produced by DisCo, by copied workflow skills, or by
+- whether the skill was produced by OCSID, by copied workflow skills, or by
   manual editing;
 - the verification commands or review steps that were run;
 - any known gaps, skipped checks, unavailable credentials, or environment
@@ -109,8 +109,8 @@ example generation, review, refinement, or verification.
 
 ## Documentation Changes
 
-The root README, installation guide, architecture guide, DisCo meta-skills
-guide, repository-skill refresh guide, contribution guide, and AREX-Skill
+The root README, installation guide, architecture guide, OCSID meta-skills
+guide, repository-skill refresh guide, contribution guide, and OCSID
 Library guide are bilingual. When
 changing one side of a paired page, update the other side in the same change.
 The repository catalog is one shared data page covering 1,000 roots and
@@ -141,12 +141,12 @@ PY
 
 ## Workflow Skill Changes
 
-`cli/packages/coding-agent/src/disco/skills/` is the single source of truth for
-workflow skills bundled with DisCo and optionally copied into external agents.
-The separate [DisCo Meta Skills guide](docs/disco-meta-skills.md) defines
+`cli/packages/coding-agent/src/ocsid/skills/` is the single source of truth for
+workflow skills bundled with OCSID and optionally copied into external agents.
+The separate [OCSID Meta Skills guide](docs/ocsid-meta-skills.md) defines
 which Creator-only directories may be copied; do not copy the operating router
 or repository collection as meta skills.
-Keep portable instructions understandable without DisCo-only extensions.
+Keep portable instructions understandable without OCSID-only extensions.
 
 When updating workflow skills:
 
@@ -160,17 +160,17 @@ When updating workflow skills:
   project's `.agents/skills/`; managed scope requires evidence of cross-project
   reuse, and one graph must stay in one scope.
 - Keep repository graphs on their specialized
-  `~/.disco/agent/skills/repositories/repo-skills/` import path with the sibling router
+  `~/.ocsid/agent/skills/repositories/repo-skills/` import path with the sibling router
   rebuild; do not pass repo routing metadata through the generic graph importer.
-- Update the [workflow README](cli/packages/coding-agent/src/disco/skills/README.md)
+- Update the [workflow README](cli/packages/coding-agent/src/ocsid/skills/README.md)
   when names, paths, defaults, or workflow boundaries change.
 - Update generated templates and their generators together. In particular,
   router behavior rendered by `update_repo_skills_router.mjs` must not be
   changed only in a checked-in Markdown output.
 
-## DisCo Source Changes
+## OCSID Source Changes
 
-The DisCo CLI source lives under `cli/`.
+The OCSID CLI source lives under `cli/`.
 
 Common checks:
 
@@ -193,7 +193,7 @@ Repository-library router rebuilds use the canonical collection and sibling
 router explicitly:
 
 ```bash
-node cli/packages/coding-agent/src/disco/skills/verify-repo-skill/scripts/update_repo_skills_router.mjs \
+node cli/packages/coding-agent/src/ocsid/skills/verify-repo-skill/scripts/update_repo_skills_router.mjs \
   --library-root skills/repositories
 ```
 
@@ -214,11 +214,11 @@ not as files inside the npm tarball. From the repository root, prepare the
 auditable assets with:
 
 ```bash
-python3 scripts/prepare-disco-release-assets.py
+python3 scripts/prepare-ocsid-release-assets.py
 ```
 
-The command writes `install-disco.sh`, `install-disco.ps1`, `SHA256SUMS`, and
-`release-metadata.json` to `dist/disco-release-assets/`. Attach the two
+The command writes `install-ocsid.sh`, `install-ocsid.ps1`, `SHA256SUMS`, and
+`release-metadata.json` to `dist/ocsid-release-assets/`. Attach the two
 installer files and `SHA256SUMS` to the matching GitHub Release, then verify the
 stable `releases/latest/download` URLs before updating public documentation.
 The npm release helper prepares these files by default but never uploads them

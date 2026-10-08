@@ -3,7 +3,7 @@ name: dft-vasp-band
 description: "Prepare VASP band-structure workflow inputs from existing SCF context and user-specified band-path settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-vasp-band — quantum-chemistry sub-skill

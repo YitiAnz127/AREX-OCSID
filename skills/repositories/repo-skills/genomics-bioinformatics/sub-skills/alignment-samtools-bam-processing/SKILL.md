@@ -3,7 +3,7 @@ name: alignment-samtools-bam-processing
 description: "&quot;CLI toolkit for SAM/BAM/CRAM: sort, index, convert, filter, QC alignments."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # alignment-samtools-bam-processing — genomics-bioinformatics sub-skill

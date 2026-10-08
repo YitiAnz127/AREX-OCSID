@@ -5,7 +5,7 @@ description: "Operate ClawBio's optional MCP stdio server, messaging and web
   safety, credential, network, and preflight boundaries."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

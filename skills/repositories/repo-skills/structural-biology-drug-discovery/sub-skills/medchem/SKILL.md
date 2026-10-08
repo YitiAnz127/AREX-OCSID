@@ -3,7 +3,7 @@ name: medchem
 description: "Medicinal chemistry filters for compound triage."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # medchem — structural-biology-drug-discovery sub-skill

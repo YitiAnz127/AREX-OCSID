@@ -8,7 +8,7 @@ paths differ materially, run the repo-skill refresh workflow.
 
 ```json
 {
-  "schema": "disco.repo-provenance.v1",
+  "schema": "ocsid.repo-provenance.v1",
   "generated_at_utc": "2026-08-20T00:00:00Z",
   "repository": {
     "name": "OpenFermion",

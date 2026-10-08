@@ -5,7 +5,7 @@ description: "Use DIG's 2D molecular graph generation stack for QM9/ZINC/MOSES
   property-optimization workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

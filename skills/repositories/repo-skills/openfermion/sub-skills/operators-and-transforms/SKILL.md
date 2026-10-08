@@ -4,7 +4,7 @@ description: "Operate on OpenFermion's symbolic and tensor operator
   representations, normalize and validate terms, and choose or apply
   fermion-to-qubit mappings."
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 disable-model-invocation: true
 license: Apache 2.0
 ---

@@ -40,20 +40,20 @@ describe("ProjectTrustStore", () => {
 		const originalHome = process.env.HOME;
 		process.env.HOME = tempDir;
 		try {
-			mkdirSync(join(tempDir, ".disco", "agent"), { recursive: true });
+			mkdirSync(join(tempDir, ".ocsid", "agent"), { recursive: true });
 			mkdirSync(join(tempDir, ".agents", "skills"), { recursive: true });
 			expect(hasTrustRequiringProjectResources(tempDir)).toBe(false);
 			expect(hasTrustRequiringProjectResources(cwd)).toBe(false);
 
-			writeFileSync(join(tempDir, ".disco", "settings.json"), "{}");
+			writeFileSync(join(tempDir, ".ocsid", "settings.json"), "{}");
 			expect(hasTrustRequiringProjectResources(tempDir)).toBe(true);
-			rmSync(join(tempDir, ".disco", "settings.json"), { force: true });
+			rmSync(join(tempDir, ".ocsid", "settings.json"), { force: true });
 
-			mkdirSync(join(cwd, ".disco"), { recursive: true });
-			writeFileSync(join(cwd, ".disco", "settings.json"), "{}");
+			mkdirSync(join(cwd, ".ocsid"), { recursive: true });
+			writeFileSync(join(cwd, ".ocsid", "settings.json"), "{}");
 			expect(hasTrustRequiringProjectResources(cwd)).toBe(true);
 
-			rmSync(join(cwd, ".disco"), { recursive: true, force: true });
+			rmSync(join(cwd, ".ocsid"), { recursive: true, force: true });
 			mkdirSync(join(cwd, ".agents", "skills"), { recursive: true });
 			expect(hasTrustRequiringProjectResources(cwd)).toBe(true);
 		} finally {

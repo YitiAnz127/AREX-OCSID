@@ -3,7 +3,7 @@ name: medlineplus
 description: "Query MedlinePlus for consumer-oriented drug and health-topic information."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # medlineplus — drug-labeling sub-skill

@@ -5,7 +5,7 @@ description: "Explain and validate AlphaFold 3 output directories,
   output-oriented troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

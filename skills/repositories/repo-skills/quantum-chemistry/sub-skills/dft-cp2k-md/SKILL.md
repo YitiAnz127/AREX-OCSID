@@ -3,7 +3,7 @@ name: dft-cp2k-md
 description: "Prepare CP2K molecular-dynamics task inputs from a user-provided structure and MD controls."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-cp2k-md — quantum-chemistry sub-skill

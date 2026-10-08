@@ -7,26 +7,26 @@
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	const checkpoints = new Map<string, string>();
 	let currentEntryId: string | undefined;
 
 	// Track the current entry ID when user messages are saved
-	disco.on("tool_result", async (_event, ctx) => {
+	ocsid.on("tool_result", async (_event, ctx) => {
 		const leaf = ctx.sessionManager.getLeafEntry();
 		if (leaf) currentEntryId = leaf.id;
 	});
 
-	disco.on("turn_start", async () => {
+	ocsid.on("turn_start", async () => {
 		// Create a git stash entry before LLM makes changes
-		const { stdout } = await disco.exec("git", ["stash", "create"]);
+		const { stdout } = await ocsid.exec("git", ["stash", "create"]);
 		const ref = stdout.trim();
 		if (ref && currentEntryId) {
 			checkpoints.set(currentEntryId, ref);
 		}
 	});
 
-	disco.on("session_before_fork", async (event, ctx) => {
+	ocsid.on("session_before_fork", async (event, ctx) => {
 		const ref = checkpoints.get(event.entryId);
 		if (!ref) return;
 
@@ -41,12 +41,12 @@ export default function (disco: ExtensionAPI) {
 		]);
 
 		if (choice?.startsWith("Yes")) {
-			await disco.exec("git", ["stash", "apply", ref]);
+			await ocsid.exec("git", ["stash", "apply", ref]);
 			ctx.ui.notify("Code restored to checkpoint", "info");
 		}
 	});
 
-	disco.on("agent_end", async () => {
+	ocsid.on("agent_end", async () => {
 		// Clear checkpoints after agent completes
 		checkpoints.clear();
 	});

@@ -29,7 +29,7 @@ import ignore from "ignore";
 import { minimatch } from "minimatch";
 import { maxSatisfying, rcompare, satisfies, valid, validRange } from "semver";
 import { CONFIG_DIR_NAME, getBundledSkillsDir } from "../config.ts";
-import { DEFAULT_DISCO_AGENT_MODE, type DiscoAgentMode } from "../disco/modes/types.ts";
+import { DEFAULT_OCSID_AGENT_MODE, type OcsidAgentMode } from "../ocsid/modes/types.ts";
 import { getGitProcessEnv, spawnProcess, spawnProcessSync } from "../utils/child-process.ts";
 import { type GitSource, parseGitUrl } from "../utils/git.ts";
 import { canonicalizePath, isLocalPath, markPathIgnoredByCloudSync, resolvePath } from "../utils/paths.ts";
@@ -41,7 +41,7 @@ const UPDATE_CHECK_CONCURRENCY = 4;
 const GIT_UPDATE_CONCURRENCY = 4;
 
 function isOfflineModeEnabled(): boolean {
-	const value = process.env.DISCO_OFFLINE;
+	const value = process.env.OCSID_OFFLINE;
 	if (!value) return false;
 	return value === "1" || value.toLowerCase() === "true" || value.toLowerCase() === "yes";
 }
@@ -121,9 +121,9 @@ interface PackageManagerOptions {
 	cwd: string;
 	agentDir: string;
 	settingsManager: SettingsManager;
-	includeDisCoDefaults?: boolean;
-	includeDisCoBuiltinSkills?: boolean;
-	discoMode?: DiscoAgentMode;
+	includeOCSIDDefaults?: boolean;
+	includeOCSIDBuiltinSkills?: boolean;
+	ocsidMode?: OcsidAgentMode;
 }
 
 type SourceScope = "user" | "project" | "temporary";
@@ -165,14 +165,14 @@ interface GitUpdateTarget extends ConfiguredUpdateSource {
 	parsed: GitSource;
 }
 
-interface DisCoManifest {
+interface OCSIDManifest {
 	extensions?: string[];
 	skills?: string[];
 	prompts?: string[];
 	themes?: string[];
 }
 
-const DEFAULT_DISCO_PACKAGES: PackageSource[] = [
+const DEFAULT_OCSID_PACKAGES: PackageSource[] = [
 	"npm:@juicesharp/rpiv-ask-user-question",
 	"npm:@juicesharp/rpiv-todo@^2.7.1",
 	"npm:pi-subagents",
@@ -196,7 +196,7 @@ interface ResourceAccumulator {
  *   2  user + settings entry (source: "local", scope: "user")
  *   3  user + auto-discovered (source: "auto", scope: "user")
  *   4  package resource (origin: "package")
- *   5  DisCo bundled defaults (source: "builtin")
+ *   5  OCSID bundled defaults (source: "builtin")
  */
 function resourcePrecedenceRank(m: PathMetadata): number {
 	if (m.source === "builtin") return 5;
@@ -362,7 +362,7 @@ function collectFiles(
 	return files;
 }
 
-type SkillDiscoveryMode = "disco" | "agents";
+type SkillDiscoveryMode = "ocsid" | "agents";
 
 const REPOSITORY_SKILL_ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -479,7 +479,7 @@ function collectSkillEntries(
 			}
 
 			const relPath = toPosixPath(relative(root, fullPath));
-			if (mode === "disco" && dir === root && isFile && entry.name.endsWith(".md") && !ig.ignores(relPath)) {
+			if (mode === "ocsid" && dir === root && isFile && entry.name.endsWith(".md") && !ig.ignores(relPath)) {
 				entries.push(fullPath);
 				continue;
 			}
@@ -609,11 +609,11 @@ function collectAutoThemeEntries(dir: string): string[] {
 	return entries;
 }
 
-function readDisCoManifestFile(packageJsonPath: string): DisCoManifest | null {
+function readOCSIDManifestFile(packageJsonPath: string): OCSIDManifest | null {
 	try {
 		const content = readFileSync(packageJsonPath, "utf-8");
-		const pkg = JSON.parse(content) as { disco?: DisCoManifest; pi?: DisCoManifest };
-		return pkg.disco ?? pkg.pi ?? null;
+		const pkg = JSON.parse(content) as { ocsid?: OCSIDManifest; pi?: OCSIDManifest };
+		return pkg.ocsid ?? pkg.pi ?? null;
 	} catch {
 		return null;
 	}
@@ -622,7 +622,7 @@ function readDisCoManifestFile(packageJsonPath: string): DisCoManifest | null {
 function resolveExtensionEntries(dir: string): string[] | null {
 	const packageJsonPath = join(dir, "package.json");
 	if (existsSync(packageJsonPath)) {
-		const manifest = readDisCoManifestFile(packageJsonPath);
+		const manifest = readOCSIDManifestFile(packageJsonPath);
 		if (manifest?.extensions?.length) {
 			const entries: string[] = [];
 			for (const extPath of manifest.extensions) {
@@ -709,7 +709,7 @@ function collectAutoExtensionEntries(dir: string): string[] {
  */
 function collectResourceFiles(dir: string, resourceType: ResourceType): string[] {
 	if (resourceType === "skills") {
-		return collectSkillEntries(dir, "disco");
+		return collectSkillEntries(dir, "ocsid");
 	}
 	if (resourceType === "extensions") {
 		return collectAutoExtensionEntries(dir);
@@ -872,9 +872,9 @@ export class DefaultPackageManager implements PackageManager {
 	private cwd: string;
 	private agentDir: string;
 	private settingsManager: SettingsManager;
-	private includeDisCoDefaults: boolean;
-	private includeDisCoBuiltinSkills: boolean;
-	private discoMode: DiscoAgentMode;
+	private includeOCSIDDefaults: boolean;
+	private includeOCSIDBuiltinSkills: boolean;
+	private ocsidMode: OcsidAgentMode;
 	private globalNpmRoot: string | undefined;
 	private globalNpmRootCommandKey: string | undefined;
 	private progressCallback: ProgressCallback | undefined;
@@ -883,9 +883,9 @@ export class DefaultPackageManager implements PackageManager {
 		this.cwd = resolvePath(options.cwd);
 		this.agentDir = resolvePath(options.agentDir);
 		this.settingsManager = options.settingsManager;
-		this.includeDisCoDefaults = options.includeDisCoDefaults ?? true;
-		this.includeDisCoBuiltinSkills = options.includeDisCoBuiltinSkills ?? this.includeDisCoDefaults;
-		this.discoMode = options.discoMode ?? DEFAULT_DISCO_AGENT_MODE;
+		this.includeOCSIDDefaults = options.includeOCSIDDefaults ?? true;
+		this.includeOCSIDBuiltinSkills = options.includeOCSIDBuiltinSkills ?? this.includeOCSIDDefaults;
+		this.ocsidMode = options.ocsidMode ?? DEFAULT_OCSID_AGENT_MODE;
 	}
 
 	setProgressCallback(callback: ProgressCallback | undefined): void {
@@ -1786,8 +1786,8 @@ export class DefaultPackageManager implements PackageManager {
 		for (const pkg of globalSettings.packages ?? []) {
 			allPackages.push({ pkg, scope: "user", isDefault: false });
 		}
-		if (this.includeDisCoDefaults) {
-			for (const pkg of DEFAULT_DISCO_PACKAGES) {
+		if (this.includeOCSIDDefaults) {
+			for (const pkg of DEFAULT_OCSID_PACKAGES) {
 				allPackages.push({ pkg, scope: "user", isDefault: true });
 			}
 		}
@@ -1851,10 +1851,10 @@ export class DefaultPackageManager implements PackageManager {
 
 	private getNpmInstallArgs(specs: string[], installRoot: string): string[] {
 		const packageManagerName = this.getPackageManagerName();
-		// Extension packages run inside DisCo and resolve DisCo APIs through loader aliases/virtual modules.
+		// Extension packages run inside OCSID and resolve OCSID APIs through loader aliases/virtual modules.
 		// Disable peer dependency resolution for managed installs (npm's --legacy-peer-deps, and
 		// equivalent bun/pnpm settings) so package managers do not install or solve host-provided
-		// DisCo peers. Stale auto-installed peers can otherwise block updates.
+		// OCSID peers. Stale auto-installed peers can otherwise block updates.
 		if (packageManagerName === "bun") {
 			return ["install", ...specs, "--cwd", installRoot, "--omit=peer"];
 		}
@@ -2022,7 +2022,7 @@ export class DefaultPackageManager implements PackageManager {
 		this.ensureGitIgnore(installRoot);
 		const packageJsonPath = join(installRoot, "package.json");
 		if (!existsSync(packageJsonPath)) {
-			const pkgJson = { name: "disco-extensions", private: true };
+			const pkgJson = { name: "ocsid-extensions", private: true };
 			writeFileSync(packageJsonPath, JSON.stringify(pkgJson, null, 2), "utf-8");
 		}
 	}
@@ -2186,10 +2186,10 @@ export class DefaultPackageManager implements PackageManager {
 			return true;
 		}
 
-		const manifest = this.readDisCoManifest(packageRoot);
+		const manifest = this.readOCSIDManifest(packageRoot);
 		if (manifest) {
 			for (const resourceType of RESOURCE_TYPES) {
-				const entries = manifest[resourceType as keyof DisCoManifest];
+				const entries = manifest[resourceType as keyof OCSIDManifest];
 				this.addManifestEntries(
 					entries,
 					packageRoot,
@@ -2222,8 +2222,8 @@ export class DefaultPackageManager implements PackageManager {
 		target: Map<string, { metadata: PathMetadata; enabled: boolean }>,
 		metadata: PathMetadata,
 	): void {
-		const manifest = this.readDisCoManifest(packageRoot);
-		const entries = manifest?.[resourceType as keyof DisCoManifest];
+		const manifest = this.readOCSIDManifest(packageRoot);
+		const entries = manifest?.[resourceType as keyof OCSIDManifest];
 		if (entries) {
 			this.addManifestEntries(entries, packageRoot, resourceType, target, metadata);
 			return;
@@ -2291,8 +2291,8 @@ export class DefaultPackageManager implements PackageManager {
 		packageRoot: string,
 		resourceType: ResourceType,
 	): { allFiles: string[]; enabledByManifest: Set<string> } {
-		const manifest = this.readDisCoManifest(packageRoot);
-		const entries = manifest?.[resourceType as keyof DisCoManifest];
+		const manifest = this.readOCSIDManifest(packageRoot);
+		const entries = manifest?.[resourceType as keyof OCSIDManifest];
 		if (entries && entries.length > 0) {
 			const allFiles = this.collectFilesFromManifestEntries(entries, packageRoot, resourceType);
 			const manifestPatterns = entries.filter(isOverridePattern);
@@ -2309,7 +2309,7 @@ export class DefaultPackageManager implements PackageManager {
 		return { allFiles, enabledByManifest: new Set(allFiles) };
 	}
 
-	private readDisCoManifest(packageRoot: string): DisCoManifest | null {
+	private readOCSIDManifest(packageRoot: string): OCSIDManifest | null {
 		const packageJsonPath = join(packageRoot, "package.json");
 		if (!existsSync(packageJsonPath)) {
 			return null;
@@ -2317,8 +2317,8 @@ export class DefaultPackageManager implements PackageManager {
 
 		try {
 			const content = readFileSync(packageJsonPath, "utf-8");
-			const pkg = JSON.parse(content) as { disco?: DisCoManifest; pi?: DisCoManifest };
-			return pkg.disco ?? pkg.pi ?? null;
+			const pkg = JSON.parse(content) as { ocsid?: OCSIDManifest; pi?: OCSIDManifest };
+			return pkg.ocsid ?? pkg.pi ?? null;
 		} catch {
 			return null;
 		}
@@ -2434,7 +2434,7 @@ export class DefaultPackageManager implements PackageManager {
 		const projectAgentsSkillDirs = projectTrusted
 			? collectAncestorAgentsSkillDirs(this.cwd).filter((dir) => resolve(dir) !== resolve(userAgentsSkillsDir))
 			: [];
-		const builtinSkillsDir = this.includeDisCoBuiltinSkills ? getBundledSkillsDir() : undefined;
+		const builtinSkillsDir = this.includeOCSIDBuiltinSkills ? getBundledSkillsDir() : undefined;
 		const builtinSkillsMetadata: PathMetadata = {
 			source: "builtin",
 			scope: "user",
@@ -2457,7 +2457,7 @@ export class DefaultPackageManager implements PackageManager {
 		};
 
 		if (projectTrusted) {
-			// Project extensions from the project DisCo config directory
+			// Project extensions from the project OCSID config directory
 			addResources(
 				"extensions",
 				collectAutoExtensionEntries(projectDirs.extensions),
@@ -2467,7 +2467,7 @@ export class DefaultPackageManager implements PackageManager {
 			);
 			addResources(
 				"skills",
-				collectAutoSkillEntries(projectDirs.skills, "disco"),
+				collectAutoSkillEntries(projectDirs.skills, "ocsid"),
 				projectMetadata,
 				projectOverrides.skills,
 				projectBaseDir,
@@ -2506,7 +2506,7 @@ export class DefaultPackageManager implements PackageManager {
 			);
 		}
 
-		// User extensions from the DisCo agent directory
+		// User extensions from the OCSID agent directory
 		addResources(
 			"extensions",
 			collectAutoExtensionEntries(userDirs.extensions),
@@ -2516,7 +2516,7 @@ export class DefaultPackageManager implements PackageManager {
 		);
 		addResources(
 			"skills",
-			collectAutoSkillEntries(userDirs.skills, "disco"),
+			collectAutoSkillEntries(userDirs.skills, "ocsid"),
 			userMetadata,
 			userOverrides.skills,
 			globalBaseDir,
@@ -2537,7 +2537,7 @@ export class DefaultPackageManager implements PackageManager {
 
 		const builtinSkillEntries = builtinSkillsDir ? collectAutoSkillEntries(builtinSkillsDir, "agents") : [];
 		if (
-			this.discoMode === "researcher" &&
+			this.ocsidMode === "researcher" &&
 			!managedRepositorySkillKeys.has("repo-skills-router") &&
 			builtinSkillEntries.some((path) => isManagedRouterEntry(path, builtinSkillsDir!))
 		) {
@@ -2550,7 +2550,7 @@ export class DefaultPackageManager implements PackageManager {
 			baseDir: userAgentsBaseDir,
 		};
 		const externalAgentSkillEntries = collectAutoSkillEntries(userAgentsSkillsDir, "agents").filter((path) => {
-			if (this.discoMode !== "researcher") return true;
+			if (this.ocsidMode !== "researcher") return true;
 			if (isForceIncludedByOverrides(path, userOverrides.skills, userAgentsBaseDir)) return true;
 			const repositoryKey = getRepositoryExportKey(path, userAgentsSkillsDir);
 			return !repositoryKey || !managedRepositorySkillKeys.has(repositoryKey);
@@ -2581,7 +2581,7 @@ export class DefaultPackageManager implements PackageManager {
 			const hasEnabledManagedRouter = Array.from(accumulator.skills.entries()).some(
 				([path, resource]) =>
 					resource.enabled &&
-					(this.discoMode === "researcher"
+					(this.ocsidMode === "researcher"
 						? isManagedRouterEntry(path, userDirs.skills)
 						: isRouterSkillEntry(path)),
 			);

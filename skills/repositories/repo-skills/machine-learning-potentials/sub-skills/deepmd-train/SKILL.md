@@ -3,7 +3,7 @@ name: deepmd-train
 description: "Train DeePMD-kit models with progressive disclosure."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # deepmd-train — machine-learning-potentials sub-skill

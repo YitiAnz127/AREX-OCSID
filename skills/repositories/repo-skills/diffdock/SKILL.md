@@ -4,7 +4,7 @@ description: "Route DiffDock docking, web UI, training/data preparation, and
   benchmark evaluation tasks to focused repo-specific guidance."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 
@@ -45,5 +45,5 @@ The generated skill is self-contained for planning, validation, troubleshooting,
 
 - [install-and-runtime.md](references/install-and-runtime.md) covers setup, Docker/conda expectations, optional dependencies, and environment checks.
 - [troubleshooting.md](references/troubleshooting.md) covers cross-cutting failure modes shared by sub-skills.
-- [repo-routing-metadata.json](references/repo-routing-metadata.json) is consumed by DisCo's managed repo-skills-router during import.
+- [repo-routing-metadata.json](references/repo-routing-metadata.json) is consumed by OCSID's managed repo-skills-router during import.
 - [repo-provenance.md](references/repo-provenance.md) records the source snapshot and evidence baseline.

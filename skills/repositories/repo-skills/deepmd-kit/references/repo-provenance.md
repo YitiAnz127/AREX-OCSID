@@ -1,7 +1,7 @@
 # Repo Provenance
 
 ```yaml
-schema: disco.repo-provenance.v1
+schema: ocsid.repo-provenance.v1
 skill_id: deepmd-kit
 source:
   vcs: git

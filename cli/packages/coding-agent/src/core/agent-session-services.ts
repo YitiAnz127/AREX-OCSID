@@ -2,7 +2,7 @@ import { join } from "node:path";
 import type { ThinkingLevel } from "@earendil-works/pi-agent-core";
 import type { Model } from "@earendil-works/pi-ai";
 import { getAgentDir } from "../config.ts";
-import { type DiscoAgentMode, resolveDiscoAgentMode } from "../disco/modes/types.ts";
+import { type OcsidAgentMode, resolveOcsidAgentMode } from "../ocsid/modes/types.ts";
 import { resolvePath } from "../utils/paths.ts";
 import type { SessionStartEvent, ToolDefinition } from "./extensions/index.ts";
 import { ModelRuntime } from "./model-runtime.ts";
@@ -41,8 +41,8 @@ export interface CreateAgentSessionServicesOptions {
 	settingsManager?: SettingsManager;
 	modelRuntime?: ModelRuntime;
 	extensionFlagValues?: Map<string, boolean | string>;
-	discoMode?: unknown;
-	resourceLoaderOptions?: Omit<DefaultResourceLoaderOptions, "cwd" | "agentDir" | "settingsManager" | "discoMode">;
+	ocsidMode?: unknown;
+	resourceLoaderOptions?: Omit<DefaultResourceLoaderOptions, "cwd" | "agentDir" | "settingsManager" | "ocsidMode">;
 	resourceLoaderReloadOptions?: ResourceLoaderReloadOptions;
 }
 
@@ -77,7 +77,7 @@ export interface AgentSessionServices {
 	modelRuntime: ModelRuntime;
 	settingsManager: SettingsManager;
 	resourceLoader: ResourceLoader;
-	discoMode: DiscoAgentMode;
+	ocsidMode: OcsidAgentMode;
 	diagnostics: AgentSessionRuntimeDiagnostic[];
 }
 
@@ -139,7 +139,7 @@ export async function createAgentSessionServices(
 ): Promise<AgentSessionServices> {
 	const cwd = resolvePath(options.cwd);
 	const agentDir = options.agentDir ? resolvePath(options.agentDir) : getAgentDir();
-	const modeResolution = resolveDiscoAgentMode(options.discoMode);
+	const modeResolution = resolveOcsidAgentMode(options.ocsidMode);
 	const modelRuntime =
 		options.modelRuntime ??
 		(await ModelRuntime.create({
@@ -152,7 +152,7 @@ export async function createAgentSessionServices(
 		cwd,
 		agentDir,
 		settingsManager,
-		discoMode: modeResolution.mode,
+		ocsidMode: modeResolution.mode,
 	});
 	await resourceLoader.reload(options.resourceLoaderReloadOptions);
 
@@ -160,7 +160,7 @@ export async function createAgentSessionServices(
 	if (modeResolution.invalidValue !== undefined) {
 		diagnostics.push({
 			type: "warning",
-			message: `Invalid session discoMode ${JSON.stringify(modeResolution.invalidValue)}; using researcher`,
+			message: `Invalid session ocsidMode ${JSON.stringify(modeResolution.invalidValue)}; using researcher`,
 		});
 	}
 	const extensionsResult = resourceLoader.getExtensions();
@@ -197,7 +197,7 @@ export async function createAgentSessionServices(
 		modelRuntime,
 		settingsManager,
 		resourceLoader,
-		discoMode: modeResolution.mode,
+		ocsidMode: modeResolution.mode,
 		diagnostics,
 	};
 }
@@ -218,7 +218,7 @@ export async function createAgentSessionFromServices(
 		modelRuntime: options.services.modelRuntime,
 		settingsManager: options.services.settingsManager,
 		resourceLoader: options.services.resourceLoader,
-		discoMode: options.services.discoMode,
+		ocsidMode: options.services.ocsidMode,
 		sessionManager: options.sessionManager,
 		model: options.model,
 		thinkingLevel: options.thinkingLevel,

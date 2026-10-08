@@ -25,7 +25,7 @@ import {
 
 const OFFICIAL_PACKAGE_NAME = "ocsid";
 const OFFICIAL_APP_NAME = "ocsid";
-const OFFICIAL_CONFIG_DIR_NAME = ".disco";
+const OFFICIAL_CONFIG_DIR_NAME = ".ocsid";
 
 interface DistributionMetadata {
 	packageName: string;
@@ -107,8 +107,8 @@ async function clearStartupTui(ui: TUI): Promise<void> {
 
 /**
  * First-time setup runs when all of these hold:
-	* - this is the official DisCo distribution
- * - experimental features are enabled (DISCO_EXPERIMENTAL=1)
+	* - this is the official OCSID distribution
+ * - experimental features are enabled (OCSID_EXPERIMENTAL=1)
  * - the default agent directory is used (no custom agent dir override)
  * - setup was not completed before (settings.json does not exist)
  */

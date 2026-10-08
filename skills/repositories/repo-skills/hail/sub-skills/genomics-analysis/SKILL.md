@@ -5,7 +5,7 @@ description: "Use dense Hail MatrixTable workflows for VCF, PLINK, BGEN,
   VEP/Nirvana-style annotation, and reference genome or locus/call handling."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

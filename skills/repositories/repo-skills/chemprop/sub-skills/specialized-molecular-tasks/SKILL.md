@@ -6,7 +6,7 @@ description: "Use this Chemprop sub-skill for reaction SMILES,
   schemas."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

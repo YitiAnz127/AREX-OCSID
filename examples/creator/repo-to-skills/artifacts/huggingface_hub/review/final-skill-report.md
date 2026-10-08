@@ -110,4 +110,4 @@ limits rather than hidden failures.
 - Recommended follow-up: after a future package upgrade, re-run live signatures,
   `hf --help`, provider mapping checks, and a focused refresh; if import is
   later desired, use the dedicated locked repo-skill importer with the external
-  routing handoff at `skills/disco/routing_decision/classification.json`.
+  routing handoff at `skills/ocsid/routing_decision/classification.json`.

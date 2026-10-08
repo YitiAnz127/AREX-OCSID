@@ -3,7 +3,7 @@ name: phonopy
 description: "General phonon-workflow skill built around phonopy, independent of force backend."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # phonopy — compchem-analysis sub-skill

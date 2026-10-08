@@ -3,7 +3,7 @@ name: solublempnn
 description: "Solubility-optimized protein sequence design using SolubleMPNN."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

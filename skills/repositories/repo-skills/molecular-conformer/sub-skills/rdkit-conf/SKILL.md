@@ -3,7 +3,7 @@ name: rdkit-conf
 description: "A standardized CLI wrapper for RDKit 3D/2D conformer generation that samples multiple conformers per molecule (ETKDGv3, default 10), optimizes each with a force field (MMFF94s/UFF)"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rdkit-conf — molecular-conformer sub-skill

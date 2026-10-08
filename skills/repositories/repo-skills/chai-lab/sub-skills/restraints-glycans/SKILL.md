@@ -4,7 +4,7 @@ description: "Author, validate, and troubleshoot Chai-1 restraint CSVs, covalent
   bonds, and glycan inputs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

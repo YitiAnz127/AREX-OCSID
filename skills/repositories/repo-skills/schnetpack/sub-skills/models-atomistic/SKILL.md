@@ -4,7 +4,7 @@ description: "Build, inspect, customize, and troubleshoot SchNetPack atomistic
   neural network components in Python and Hydra configs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

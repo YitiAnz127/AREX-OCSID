@@ -4,7 +4,7 @@ description: "Use anndata reference accessors for validation, plotting, data
   selection, and typed AnnData extension namespaces."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

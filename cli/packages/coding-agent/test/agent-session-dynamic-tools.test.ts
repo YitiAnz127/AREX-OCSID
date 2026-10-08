@@ -35,7 +35,7 @@ describe("AgentSession dynamic tool registration", () => {
 			cwd: tempDir,
 			agentDir,
 			settingsManager,
-			includeDisCoDefaults: false,
+			includeOCSIDDefaults: false,
 			extensionFactories: [
 				(pi) => {
 					pi.registerTool(
@@ -75,24 +75,24 @@ describe("AgentSession dynamic tool registration", () => {
 
 		const bashTool = session.agent.state.tools.find((tool) => tool.name === "bash")!;
 		expect(session.systemPrompt).toContain(
-			"Inspect DISCO_* environment variables for current model and session details.",
+			"Inspect OCSID_* environment variables for current model and session details.",
 		);
 		await bashTool.execute("bash-env", { command: "printf ok" });
 		expect(sessionEnv).toMatchObject({
-			DISCO_SESSION_ID: session.sessionId,
-			DISCO_SESSION_FILE: session.sessionFile,
-			DISCO_PROVIDER: model.provider,
-			DISCO_MODEL: model.id,
-			DISCO_REASONING_LEVEL: session.thinkingLevel,
+			OCSID_SESSION_ID: session.sessionId,
+			OCSID_SESSION_FILE: session.sessionFile,
+			OCSID_PROVIDER: model.provider,
+			OCSID_MODEL: model.id,
+			OCSID_REASONING_LEVEL: session.thinkingLevel,
 		});
 
 		const optedOutBashTool = session.agent.state.tools.find((tool) => tool.name === "bash_without_session_env")!;
 		await optedOutBashTool.execute("bash-no-env", { command: "printf ok" });
-		expect(optedOutEnv).not.toHaveProperty("DISCO_SESSION_ID");
-		expect(optedOutEnv).not.toHaveProperty("DISCO_SESSION_FILE");
-		expect(optedOutEnv).not.toHaveProperty("DISCO_PROVIDER");
-		expect(optedOutEnv).not.toHaveProperty("DISCO_MODEL");
-		expect(optedOutEnv).not.toHaveProperty("DISCO_REASONING_LEVEL");
+		expect(optedOutEnv).not.toHaveProperty("OCSID_SESSION_ID");
+		expect(optedOutEnv).not.toHaveProperty("OCSID_SESSION_FILE");
+		expect(optedOutEnv).not.toHaveProperty("OCSID_PROVIDER");
+		expect(optedOutEnv).not.toHaveProperty("OCSID_MODEL");
+		expect(optedOutEnv).not.toHaveProperty("OCSID_REASONING_LEVEL");
 
 		session.dispose();
 	});
@@ -105,7 +105,7 @@ describe("AgentSession dynamic tool registration", () => {
 			cwd: tempDir,
 			agentDir,
 			settingsManager,
-			includeDisCoDefaults: false,
+			includeOCSIDDefaults: false,
 			extensionFactories: [
 				(pi) => {
 					pi.on("session_start", () => {
@@ -174,7 +174,7 @@ describe("AgentSession dynamic tool registration", () => {
 			cwd: tempDir,
 			agentDir,
 			settingsManager,
-			includeDisCoDefaults: false,
+			includeOCSIDDefaults: false,
 		});
 		await resourceLoader.reload();
 

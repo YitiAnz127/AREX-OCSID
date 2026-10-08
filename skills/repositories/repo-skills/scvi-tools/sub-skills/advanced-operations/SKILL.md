@@ -5,7 +5,7 @@ description: "Advanced scvi-tools operations: Ray/autotune, MLflow, optional
   distributions, constraints, and neural building blocks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

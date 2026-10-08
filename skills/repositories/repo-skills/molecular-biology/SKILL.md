@@ -3,7 +3,7 @@ name: molecular-biology
 description: "Use molecular-biology for genomics and bioinformatics workflows: molecular-biology."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

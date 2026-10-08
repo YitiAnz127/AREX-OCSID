@@ -5,7 +5,7 @@ description: "Use for RDKit data-file discovery, pharmacophore
   database helpers, and public CLI-style integration workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

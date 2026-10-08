@@ -1,13 +1,13 @@
-# AREX chemistry and biochemistry skill collection
+# OCSID chemistry and biochemistry skill collection
 
-[简体中文](README.zh-CN.md) · [Implementation notes (Chinese)](README-arex-test.md)
+[简体中文](README.zh-CN.md)
 
 This repository is a domain-focused derivative of
 [VectorSpaceLab/AREX-Skill](https://github.com/VectorSpaceLab/AREX-Skill). The
 checked-out collection keeps repository skills relevant to chemistry,
 biochemistry, molecular science, pharmaceutical research, and nearby biomedical
-workflows. It also contains the upstream DisCo CLI source with local integration
-changes.
+workflows. It also contains the OCSID CLI source: a local rename-fork of the upstream
+AREX-Skill CLI (`@arex-skill/disco`), with local integration changes.
 
 ## Current scope
 
@@ -44,7 +44,7 @@ may belong to more than one family.
 ## Repository layout
 
 ```text
-arex-test/
+OCSID/
 ├── skills/
 │   ├── repositories/
 │   │   ├── repo-skills/          # 109 live repository-skill roots
@@ -55,7 +55,7 @@ arex-test/
 │   ├── import_thirdparty.py      # optional import from an external source tree
 │   ├── rebuild_router.py         # check or rebuild the live router
 │   └── tests/                    # regression tests for the domain scripts
-├── cli/                          # ocsid 0.2.1, derived from DisCo
+├── cli/                          # ocsid 0.2.1 (rename-fork of the upstream CLI)
 ├── docs/
 └── examples/
 ```
@@ -114,9 +114,9 @@ npm run build
 node dist/cli.js --version
 ```
 
-The managed installers under `scripts/install-disco.*` still target the
-published upstream `@arex-skill/disco` package. They do not install this local
-`ocsid` build.
+The managed installers under `scripts/install-disco.*` target the published
+upstream `@arex-skill/disco` package; they do not install this local `ocsid`
+build. To link the local build, run `scripts/build-from-source-link.sh`.
 
 ## Provenance boundaries
 
@@ -131,7 +131,7 @@ index is not a commit-pinned reproduction manifest.
 
 Start with [the documentation index](docs/README.md), then use the generated
 [repository catalog](docs/repository-catalog.md) for exact coverage. Upstream
-DisCo workflow documents remain in the repository for CLI development, but
+OCSID workflow documents remain in the repository for CLI development, but
 statements about the original 1,000-repository AREX collection do not describe
 this domain subset.
 

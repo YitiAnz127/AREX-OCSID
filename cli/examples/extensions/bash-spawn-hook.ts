@@ -4,24 +4,24 @@
  * Adjusts command, cwd, and env before execution.
  *
  * Usage:
- *   disco -e ./bash-spawn-hook.ts
+ *   ocsid -e ./bash-spawn-hook.ts
  */
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 import { createBashTool } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	const cwd = process.cwd();
 
 	const bashTool = createBashTool(cwd, {
 		spawnHook: ({ command, cwd, env }) => ({
 			command: `source ~/.profile\n${command}`,
 			cwd,
-			env: { ...env, DISCO_SPAWN_HOOK: "1" },
+			env: { ...env, OCSID_SPAWN_HOOK: "1" },
 		}),
 	});
 
-	disco.registerTool({
+	ocsid.registerTool({
 		...bashTool,
 		execute: async (id, params, signal, onUpdate, _ctx) => {
 			return bashTool.execute(id, params, signal, onUpdate);

@@ -4,7 +4,7 @@ description: "Run OmegaFold CLI inference from FASTA to PDB safely, including
   devices, weights, resources, dry-run validation, and troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

@@ -13,7 +13,7 @@ describe("discoverExtensionsInDir symlink policy", () => {
 	});
 
 	function makeExtensionsDir(): { extensions: string; outside: string } {
-		const root = fs.mkdtempSync(path.join(os.tmpdir(), "disco-ext-loader-"));
+		const root = fs.mkdtempSync(path.join(os.tmpdir(), "ocsid-ext-loader-"));
 		roots.push(root);
 		const extensions = path.join(root, "extensions");
 		const outside = path.join(root, "outside");
@@ -80,7 +80,7 @@ describe("discoverExtensionsInDir symlink policy", () => {
 	});
 
 	it("returns [] for a missing extensions directory", () => {
-		const root = fs.mkdtempSync(path.join(os.tmpdir(), "disco-ext-loader-"));
+		const root = fs.mkdtempSync(path.join(os.tmpdir(), "ocsid-ext-loader-"));
 		roots.push(root);
 		expect(discoverExtensionsInDir(path.join(root, "does-not-exist"))).toEqual([]);
 	});

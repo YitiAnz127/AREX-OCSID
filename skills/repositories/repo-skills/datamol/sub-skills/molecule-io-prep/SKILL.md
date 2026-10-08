@@ -5,7 +5,7 @@ description: "Guides agents using datamol to construct, standardize, convert,
   SELFIES, SDF, CSV, Excel, and dataframe inputs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

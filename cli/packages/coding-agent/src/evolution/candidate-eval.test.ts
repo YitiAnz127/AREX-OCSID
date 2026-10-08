@@ -4,10 +4,11 @@ import path from "node:path";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { runCandidateEval, candidateDigest, runHeldoutFinalEval, HELDOUT_FINAL_EVAL_KIND } from "./candidate-eval.ts";
+import { OFFICIAL_BENCHMARK_DIR } from "../benchmark/freeze.ts";
 
 const srcEvol = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(srcEvol, "..", "..", "..", "..", "..");
-const benchmarkRoot = path.join(repoRoot, "skills", "tests", "benchmark-v1");
+const benchmarkRoot = path.join(repoRoot, "skills", "tests", OFFICIAL_BENCHMARK_DIR);
 
 describe("candidate evaluation run-batch", () => {
 	it("persists candidate-eval ledger with candidateSha256 and deterministic summary", async () => {

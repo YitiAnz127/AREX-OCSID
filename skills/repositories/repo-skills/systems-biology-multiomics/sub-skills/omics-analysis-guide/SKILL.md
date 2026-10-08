@@ -3,7 +3,7 @@ name: omics-analysis-guide
 description: "Three-tiered approach to omics data analysis (transcriptomics, proteomics) covering validated pipelines, standard workflows, and custom methods"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # omics-analysis-guide — systems-biology-multiomics sub-skill

@@ -3,7 +3,7 @@ name: chembl-database-bioactivity
 description: "Query ChEMBL (2M+ compounds, 19M+ bioactivity measurements, 13K+ targets) via the public REST/JSON API with plain `requests` — no SDK install required."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # chembl-database-bioactivity — structural-biology-drug-discovery sub-skill

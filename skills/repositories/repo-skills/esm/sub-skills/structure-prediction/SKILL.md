@@ -4,7 +4,7 @@ description: "Predict protein structures from sequences or FASTA files with
   ESMFold Python APIs and the esm-fold CLI."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

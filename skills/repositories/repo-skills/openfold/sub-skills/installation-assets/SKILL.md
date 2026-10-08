@@ -5,7 +5,7 @@ description: "Plan and troubleshoot OpenFold installation, package builds,
   environment validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

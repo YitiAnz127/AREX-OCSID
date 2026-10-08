@@ -3,7 +3,7 @@ name: fda-database
 description: "&quot;Query openFDA REST API for adverse events (FAERS), labeling, product info, recalls, enforcement."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # fda-database — structural-biology-drug-discovery sub-skill

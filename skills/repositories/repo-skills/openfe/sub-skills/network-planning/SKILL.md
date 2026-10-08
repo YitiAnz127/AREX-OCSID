@@ -4,7 +4,7 @@ description: "Plan OpenFE components, atom mappings, ligand networks, and
   RBFE/RHFE alchemical networks before execution."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

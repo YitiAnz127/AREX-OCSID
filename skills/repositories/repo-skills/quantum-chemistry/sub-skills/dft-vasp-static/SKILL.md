@@ -3,7 +3,7 @@ name: dft-vasp-static
 description: "Prepare VASP static SCF input tasks from a user-provided structure and essential DFT settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-vasp-static — quantum-chemistry sub-skill

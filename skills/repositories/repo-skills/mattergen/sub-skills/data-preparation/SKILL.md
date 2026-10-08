@@ -5,7 +5,7 @@ description: "Prepare and validate MatterGen crystal CSV data, released MP-20 or
   fine-tuning, or evaluation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

@@ -5,7 +5,7 @@ description: "Single-cell biological analysis workflows for annotation,
   metabolism, CNV, SCENIC, and lazy scRNA orchestration."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

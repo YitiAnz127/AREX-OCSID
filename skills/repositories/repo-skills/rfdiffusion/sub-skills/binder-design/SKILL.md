@@ -5,7 +5,7 @@ description: "Design protein-protein binders with RFdiffusion, including
   scaffold-guided PPI runs, and downstream backbone assessment boundaries."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

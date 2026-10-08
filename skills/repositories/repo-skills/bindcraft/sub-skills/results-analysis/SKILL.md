@@ -5,7 +5,7 @@ description: "Inspect BindCraft output folders and CSVs, explain filter outcomes
   reporting or scoring failures."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

@@ -73,8 +73,8 @@ def validate(root: Path) -> list[str]:
         if str(data.get("disable-model-invocation", "")).lower() != "true":
             errors.append(f"{path.relative_to(root)}: disable-model-invocation must be true")
         metadata = data.get("metadata", {})
-        if not isinstance(metadata, dict) or metadata.get("disco-role") != "operating":
-            errors.append(f"{path.relative_to(root)}: metadata.disco-role must be operating")
+        if not isinstance(metadata, dict) or metadata.get("ocsid-role") != "operating":
+            errors.append(f"{path.relative_to(root)}: metadata.ocsid-role must be operating")
 
     index_path = root / "references" / "catalog-index.json"
     try:

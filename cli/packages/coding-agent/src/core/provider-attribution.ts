@@ -81,7 +81,7 @@ function getSessionHeaders(model: Model<Api>, sessionId: string | undefined): Re
 	) {
 		return undefined;
 	}
-	return { "x-opencode-session": sessionId, "x-opencode-client": "disco" };
+	return { "x-opencode-session": sessionId, "x-opencode-client": "ocsid" };
 }
 
 export function mergeProviderAttributionHeaders(

@@ -5,7 +5,7 @@ description: "Guides agents using datamol to compute molecular fingerprints and
   SMARTS, and graph matches."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

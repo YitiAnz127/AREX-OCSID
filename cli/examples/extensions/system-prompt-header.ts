@@ -5,13 +5,13 @@
  */
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
-	disco.on("agent_start", (_event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("agent_start", (_event, ctx) => {
 		const prompt = ctx.getSystemPrompt();
 		ctx.ui.setStatus("system-prompt", `System: ${prompt.length} chars`);
 	});
 
-	disco.on("session_shutdown", (_event, ctx) => {
+	ocsid.on("session_shutdown", (_event, ctx) => {
 		ctx.ui.setStatus("system-prompt", undefined);
 	});
 }

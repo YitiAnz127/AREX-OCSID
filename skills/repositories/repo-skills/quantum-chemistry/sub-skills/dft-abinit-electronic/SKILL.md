@@ -3,7 +3,7 @@ name: dft-abinit-electronic
 description: "Prepare ABINIT electronic-analysis task inputs from prior converged context."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-abinit-electronic — quantum-chemistry sub-skill

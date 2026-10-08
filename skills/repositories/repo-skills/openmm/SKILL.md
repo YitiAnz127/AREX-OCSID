@@ -5,7 +5,7 @@ description: "Use OpenMM for molecular simulation workflows, force-field/model
   maintainer extension work."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT, GPL, LGPL
 ---
 

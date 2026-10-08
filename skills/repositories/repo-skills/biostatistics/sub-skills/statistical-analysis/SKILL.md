@@ -3,7 +3,7 @@ name: statistical-analysis
 description: "Guided statistical analysis: test choice, assumption checks, effect sizes, power, APA reporting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # statistical-analysis — biostatistics sub-skill

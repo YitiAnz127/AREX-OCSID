@@ -19,7 +19,7 @@ import { createSyntheticSourceInfo } from "../src/core/source-info.ts";
 import { createModelRegistry } from "./model-runtime-test-utils.ts";
 
 function createIsolatedResourceLoader(options: DefaultResourceLoaderOptions): DefaultResourceLoader {
-	return new DefaultResourceLoader({ ...options, includeDisCoDefaults: false });
+	return new DefaultResourceLoader({ ...options, includeOCSIDDefaults: false });
 }
 
 describe("DefaultResourceLoader", () => {
@@ -74,7 +74,7 @@ Skill content here.`,
 		});
 
 		it("should ignore extra markdown files in auto-discovered skill dirs", async () => {
-			const skillDir = join(agentDir, "skills", "disco-skills", "browser-tools");
+			const skillDir = join(agentDir, "skills", "ocsid-skills", "browser-tools");
 			mkdirSync(skillDir, { recursive: true });
 			writeFileSync(
 				join(skillDir, "SKILL.md"),
@@ -114,7 +114,7 @@ Prompt content.`,
 
 		it("should prefer project resources over user on name collisions", async () => {
 			const userPromptsDir = join(agentDir, "prompts");
-			const projectPromptsDir = join(cwd, ".disco", "prompts");
+			const projectPromptsDir = join(cwd, ".ocsid", "prompts");
 			mkdirSync(userPromptsDir, { recursive: true });
 			mkdirSync(projectPromptsDir, { recursive: true });
 			const userPromptPath = join(userPromptsDir, "commit.md");
@@ -123,7 +123,7 @@ Prompt content.`,
 			writeFileSync(projectPromptPath, "Project prompt");
 
 			const userSkillDir = join(agentDir, "skills", "collision-skill");
-			const projectSkillDir = join(cwd, ".disco", "skills", "collision-skill");
+			const projectSkillDir = join(cwd, ".ocsid", "skills", "collision-skill");
 			mkdirSync(userSkillDir, { recursive: true });
 			mkdirSync(projectSkillDir, { recursive: true });
 			const userSkillPath = join(userSkillDir, "SKILL.md");
@@ -150,9 +150,9 @@ Project skill`,
 			) as { name: string; vars?: Record<string, string> };
 			baseTheme.name = "collision-theme";
 			const userThemePath = join(agentDir, "themes", "collision.json");
-			const projectThemePath = join(cwd, ".disco", "themes", "collision.json");
+			const projectThemePath = join(cwd, ".ocsid", "themes", "collision.json");
 			mkdirSync(join(agentDir, "themes"), { recursive: true });
-			mkdirSync(join(cwd, ".disco", "themes"), { recursive: true });
+			mkdirSync(join(cwd, ".ocsid", "themes"), { recursive: true });
 			writeFileSync(userThemePath, JSON.stringify(baseTheme, null, 2));
 			if (baseTheme.vars) {
 				baseTheme.vars.accent = "#ff00ff";
@@ -186,9 +186,9 @@ Project skill`,
 			);
 
 			mkdirSync(agentDir, { recursive: true });
-			mkdirSync(join(cwd, ".disco"), { recursive: true });
+			mkdirSync(join(cwd, ".ocsid"), { recursive: true });
 			symlinkSync(sharedExtDir, join(agentDir, "extensions"), "dir");
-			symlinkSync(sharedExtDir, join(cwd, ".disco", "extensions"), "dir");
+			symlinkSync(sharedExtDir, join(cwd, ".ocsid", "extensions"), "dir");
 
 			const loader = createIsolatedResourceLoader({ cwd, agentDir });
 			await loader.reload();
@@ -199,12 +199,12 @@ Project skill`,
 
 			// mergePaths processes project paths before user paths, so the project
 			// alias is the canonical survivor.
-			expect(extensionsResult.extensions[0].path).toBe(join(cwd, ".disco", "extensions", "shared.ts"));
+			expect(extensionsResult.extensions[0].path).toBe(join(cwd, ".ocsid", "extensions", "shared.ts"));
 		});
 
 		it("should load user extensions before trust and reuse them after trust resolves", async () => {
 			const userExtDir = join(agentDir, "extensions");
-			const projectExtDir = join(cwd, ".disco", "extensions");
+			const projectExtDir = join(cwd, ".ocsid", "extensions");
 			mkdirSync(userExtDir, { recursive: true });
 			mkdirSync(projectExtDir, { recursive: true });
 			const loadCountKey = `__piTrustPreloadCount_${Date.now()}_${Math.random().toString(36).slice(2)}`;
@@ -243,7 +243,7 @@ export default function(pi) {
 
 			const extensionsResult = loader.getExtensions();
 			expect(extensionsResult.extensions.map((extension) => extension.path)).toEqual([
-				join(cwd, ".disco", "extensions", "project.ts"),
+				join(cwd, ".ocsid", "extensions", "project.ts"),
 				join(userExtDir, "user.ts"),
 			]);
 			expect(globalState[loadCountKey]).toBe(1);
@@ -251,7 +251,7 @@ export default function(pi) {
 
 		it("should keep both extensions loaded when command names collide", async () => {
 			const userExtDir = join(agentDir, "extensions");
-			const projectExtDir = join(cwd, ".disco", "extensions");
+			const projectExtDir = join(cwd, ".ocsid", "extensions");
 			mkdirSync(userExtDir, { recursive: true });
 			mkdirSync(projectExtDir, { recursive: true });
 
@@ -396,10 +396,10 @@ Content`,
 			expect(agentsFiles).toEqual([]);
 		});
 
-		it("should discover SYSTEM.md from cwd/.disco", async () => {
-			const discoDir = join(cwd, ".disco");
-			mkdirSync(discoDir, { recursive: true });
-			writeFileSync(join(discoDir, "SYSTEM.md"), "You are a helpful assistant.");
+		it("should discover SYSTEM.md from cwd/.ocsid", async () => {
+			const ocsidDir = join(cwd, ".ocsid");
+			mkdirSync(ocsidDir, { recursive: true });
+			writeFileSync(join(ocsidDir, "SYSTEM.md"), "You are a helpful assistant.");
 
 			const loader = createIsolatedResourceLoader({ cwd, agentDir });
 			await loader.reload();
@@ -407,31 +407,31 @@ Content`,
 			expect(loader.getSystemPrompt()).toBe("You are a helpful assistant.");
 		});
 
-		it("should ignore .pi resources while loading the matching .disco resources", async () => {
+		it("should ignore .pi resources while loading the matching .ocsid resources", async () => {
 			const piDir = join(cwd, ".pi");
-			const discoDir = join(cwd, ".disco");
+			const ocsidDir = join(cwd, ".ocsid");
 			mkdirSync(join(piDir, "skills", "pi-poison"), { recursive: true });
-			mkdirSync(join(discoDir, "skills", "disco-positive"), { recursive: true });
+			mkdirSync(join(ocsidDir, "skills", "ocsid-positive"), { recursive: true });
 			writeFileSync(join(piDir, "SYSTEM.md"), "Pi poison prompt");
-			writeFileSync(join(discoDir, "SYSTEM.md"), "DisCo project prompt");
+			writeFileSync(join(ocsidDir, "SYSTEM.md"), "OCSID project prompt");
 			writeFileSync(
 				join(piDir, "skills", "pi-poison", "SKILL.md"),
 				"---\nname: pi-poison\ndescription: Must never load\n---\n",
 			);
 			writeFileSync(
-				join(discoDir, "skills", "disco-positive", "SKILL.md"),
-				"---\nname: disco-positive\ndescription: Must load\n---\n",
+				join(ocsidDir, "skills", "ocsid-positive", "SKILL.md"),
+				"---\nname: ocsid-positive\ndescription: Must load\n---\n",
 			);
 
 			const loader = createIsolatedResourceLoader({ cwd, agentDir });
 			await loader.reload();
 
-			expect(loader.getSystemPrompt()).toBe("DisCo project prompt");
-			expect(loader.getSkills().skills.map((skill) => skill.name)).toContain("disco-positive");
+			expect(loader.getSystemPrompt()).toBe("OCSID project prompt");
+			expect(loader.getSkills().skills.map((skill) => skill.name)).toContain("ocsid-positive");
 			expect(loader.getSkills().skills.map((skill) => skill.name)).not.toContain("pi-poison");
 		});
 
-		it("should disable only bundled DisCo skills when requested", async () => {
+		it("should disable only bundled OCSID skills when requested", async () => {
 			const userSkillDir = join(agentDir, "skills", "user-operating");
 			mkdirSync(userSkillDir, { recursive: true });
 			writeFileSync(
@@ -442,8 +442,8 @@ Content`,
 			const loader = new DefaultResourceLoader({
 				cwd,
 				agentDir,
-				discoMode: "researcher",
-				includeDisCoBuiltinSkills: false,
+				ocsidMode: "researcher",
+				includeOCSIDBuiltinSkills: false,
 			});
 			await loader.reload();
 
@@ -459,16 +459,16 @@ Content`,
 		});
 
 		it("should skip project resources that require trust when project is not trusted", async () => {
-			const discoDir = join(cwd, ".disco");
-			const extensionsDir = join(discoDir, "extensions");
-			const skillDir = join(discoDir, "skills", "project-skill");
-			const promptsDir = join(discoDir, "prompts");
-			const themesDir = join(discoDir, "themes");
+			const ocsidDir = join(cwd, ".ocsid");
+			const extensionsDir = join(ocsidDir, "extensions");
+			const skillDir = join(ocsidDir, "skills", "project-skill");
+			const promptsDir = join(ocsidDir, "prompts");
+			const themesDir = join(ocsidDir, "themes");
 			mkdirSync(extensionsDir, { recursive: true });
 			mkdirSync(skillDir, { recursive: true });
 			mkdirSync(promptsDir, { recursive: true });
 			mkdirSync(themesDir, { recursive: true });
-			writeFileSync(join(discoDir, "SYSTEM.md"), "Project system prompt.");
+			writeFileSync(join(ocsidDir, "SYSTEM.md"), "Project system prompt.");
 			writeFileSync(join(agentDir, "SYSTEM.md"), "Global system prompt.");
 			writeFileSync(join(agentDir, "AGENTS.md"), "Global instructions");
 			writeFileSync(join(cwd, "AGENTS.md"), "Project instructions");
@@ -505,9 +505,9 @@ Project skill content`,
 		});
 
 		it("should discover APPEND_SYSTEM.md", async () => {
-			const discoDir = join(cwd, ".disco");
-			mkdirSync(discoDir, { recursive: true });
-			writeFileSync(join(discoDir, "APPEND_SYSTEM.md"), "Additional instructions.");
+			const ocsidDir = join(cwd, ".ocsid");
+			mkdirSync(ocsidDir, { recursive: true });
+			writeFileSync(join(ocsidDir, "APPEND_SYSTEM.md"), "Additional instructions.");
 
 			const loader = createIsolatedResourceLoader({ cwd, agentDir });
 			await loader.reload();
@@ -518,9 +518,9 @@ Project skill content`,
 
 	describe("system prompt sources", () => {
 		it("exposes discovered project SYSTEM.md as the system prompt source", async () => {
-			const discoDir = join(cwd, ".disco");
-			const systemPromptPath = join(discoDir, "SYSTEM.md");
-			mkdirSync(discoDir, { recursive: true });
+			const ocsidDir = join(cwd, ".ocsid");
+			const systemPromptPath = join(ocsidDir, "SYSTEM.md");
+			mkdirSync(ocsidDir, { recursive: true });
 			writeFileSync(systemPromptPath, "Project system prompt.");
 
 			const loader = createIsolatedResourceLoader({ cwd, agentDir });
@@ -561,9 +561,9 @@ Project skill content`,
 		});
 
 		it("exposes discovered APPEND_SYSTEM.md as an append system prompt source", async () => {
-			const discoDir = join(cwd, ".disco");
-			const appendSystemPromptPath = join(discoDir, "APPEND_SYSTEM.md");
-			mkdirSync(discoDir, { recursive: true });
+			const ocsidDir = join(cwd, ".ocsid");
+			const appendSystemPromptPath = join(ocsidDir, "APPEND_SYSTEM.md");
+			mkdirSync(ocsidDir, { recursive: true });
 			writeFileSync(appendSystemPromptPath, "Project append prompt.");
 
 			const loader = createIsolatedResourceLoader({ cwd, agentDir });

@@ -5,7 +5,7 @@ description: "Score pySCENIC regulon or gene-signature activity with AUCell,
   regulon specificity scores."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

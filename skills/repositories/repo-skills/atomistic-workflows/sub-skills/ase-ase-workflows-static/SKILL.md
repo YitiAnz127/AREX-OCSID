@@ -3,7 +3,7 @@ name: ase-ase-workflows-static
 description: "Prepare ASE static (single-point) workflow tasks with backend-agnostic workflow controls."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ase-ase-workflows-static — atomistic-workflows sub-skill

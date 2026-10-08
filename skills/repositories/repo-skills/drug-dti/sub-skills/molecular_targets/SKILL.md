@@ -3,7 +3,7 @@ name: molecular_targets
 description: "Query the NCI CCDI Molecular Targets Platform (pediatric oncology) for targets (genes), diseases, drugs, and target-disease associations via its public GraphQL API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # molecular_targets — drug-dti sub-skill

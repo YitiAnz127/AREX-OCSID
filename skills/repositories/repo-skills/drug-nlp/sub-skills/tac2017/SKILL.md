@@ -3,7 +3,7 @@ name: tac2017
 description: "Query TAC 2017 ADR annotated drug labels for adverse drug reactions."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # tac2017 — drug-nlp sub-skill

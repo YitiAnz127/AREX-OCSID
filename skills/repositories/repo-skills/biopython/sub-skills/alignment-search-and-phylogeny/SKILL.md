@@ -4,7 +4,7 @@ description: "Operate Biopython alignment, search result, BLAST, and phylogeny
   workflows with offline-safe routing guidance."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

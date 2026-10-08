@@ -4,7 +4,7 @@ description: "Plan and troubleshoot DiffDock benchmark evaluation runs,
   RMSD/confidence metrics, GNINA post-processing, and vendored spyrmsd checks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

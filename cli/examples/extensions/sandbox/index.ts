@@ -10,10 +10,10 @@
  * via `tool_call` input mutation without replacing the tool.
  *
  * Config files (merged, project takes precedence):
- * - ~/.disco/agent/extensions/sandbox.json (global)
- * - <cwd>/.disco/sandbox.json (project-local)
+ * - ~/.ocsid/agent/extensions/sandbox.json (global)
+ * - <cwd>/.ocsid/sandbox.json (project-local)
  *
- * Example .disco/sandbox.json:
+ * Example .ocsid/sandbox.json:
  * ```json
  * {
  *   "enabled": true,
@@ -30,13 +30,13 @@
  * ```
  *
  * Usage:
- * - `disco -e ./sandbox` - sandbox enabled with default/config settings
- * - `disco -e ./sandbox --no-sandbox` - disable sandboxing
+ * - `ocsid -e ./sandbox` - sandbox enabled with default/config settings
+ * - `ocsid -e ./sandbox --no-sandbox` - disable sandboxing
  * - `/sandbox` - show current sandbox configuration
  *
  * Setup:
- * 1. Copy sandbox/ directory to ~/.disco/agent/extensions/
- * 2. Run `npm install` in ~/.disco/agent/extensions/sandbox/
+ * 1. Copy sandbox/ directory to ~/.ocsid/agent/extensions/
+ * 2. Run `npm install` in ~/.ocsid/agent/extensions/sandbox/
  *
  * Linux also requires: bubblewrap, socat, ripgrep
  */
@@ -198,8 +198,8 @@ function createSandboxedBashOps(): BashOperations {
 	};
 }
 
-export default function (disco: ExtensionAPI) {
-	disco.registerFlag("no-sandbox", {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerFlag("no-sandbox", {
 		description: "Disable OS-level sandboxing for bash commands",
 		type: "boolean",
 		default: false,
@@ -211,7 +211,7 @@ export default function (disco: ExtensionAPI) {
 	let sandboxEnabled = false;
 	let sandboxInitialized = false;
 
-	disco.registerTool({
+	ocsid.registerTool({
 		...localBash,
 		label: "bash (sandboxed)",
 		async execute(id, params, signal, onUpdate, _ctx) {
@@ -226,13 +226,13 @@ export default function (disco: ExtensionAPI) {
 		},
 	});
 
-	disco.on("user_bash", () => {
+	ocsid.on("user_bash", () => {
 		if (!sandboxEnabled || !sandboxInitialized) return;
 		return { operations: createSandboxedBashOps() };
 	});
 
-	disco.on("session_start", async (_event, ctx) => {
-		const noSandbox = disco.getFlag("no-sandbox") as boolean;
+	ocsid.on("session_start", async (_event, ctx) => {
+		const noSandbox = ocsid.getFlag("no-sandbox") as boolean;
 
 		if (noSandbox) {
 			sandboxEnabled = false;
@@ -284,7 +284,7 @@ export default function (disco: ExtensionAPI) {
 		}
 	});
 
-	disco.on("session_shutdown", async () => {
+	ocsid.on("session_shutdown", async () => {
 		if (sandboxInitialized) {
 			try {
 				await SandboxManager.reset();
@@ -294,7 +294,7 @@ export default function (disco: ExtensionAPI) {
 		}
 	});
 
-	disco.registerCommand("sandbox", {
+	ocsid.registerCommand("sandbox", {
 		description: "Show sandbox configuration",
 		handler: async (_args, ctx) => {
 			if (!sandboxEnabled) {

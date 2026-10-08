@@ -3,7 +3,7 @@ name: annotation-roary-pangenome
 description: "&quot;Compute the bacterial pan-genome from Prokka/Bakta GFF3 annotations with Roary's CD-HIT + BLAST + MCL clustering pipeline."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # annotation-roary-pangenome — genomics-bioinformatics sub-skill

@@ -5,7 +5,7 @@ description: "Use Chai Lab / Chai-1 for molecular structure prediction, input
   troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

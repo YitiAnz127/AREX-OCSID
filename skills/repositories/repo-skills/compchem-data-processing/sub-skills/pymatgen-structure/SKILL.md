@@ -3,7 +3,7 @@ name: pymatgen-structure
 description: "Structure manipulation and crystal analysis workflows based on pymatgen."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pymatgen-structure — compchem-data-processing sub-skill

@@ -5,7 +5,7 @@ description: "Guide AlphaFold Amber/OpenMM relaxation, AmberRelaxation APIs,
   constraints."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

@@ -3,7 +3,7 @@ name: proteomics-protein-engineering
 description: "Use proteomics-protein-engineering for protein modeling workflows: proteomics-protein-engineering."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

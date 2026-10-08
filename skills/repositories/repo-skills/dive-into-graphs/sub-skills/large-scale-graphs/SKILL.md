@@ -5,7 +5,7 @@ description: "Use DIG's large-scale graph stack for GraphFMOB/GraphFMIB-style
   graph-memory helpers."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

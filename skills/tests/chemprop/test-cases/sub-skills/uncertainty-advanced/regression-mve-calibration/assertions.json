@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "uncertainty-advanced",
   "target_capability": "mve-calibration-conformal-prediction",
   "difficulty": "advanced",

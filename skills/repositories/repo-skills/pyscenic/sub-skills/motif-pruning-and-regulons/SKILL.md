@@ -4,7 +4,7 @@ description: "Prune pySCENIC co-expression modules against cisTarget ranking
   databases and convert enriched motif tables into regulons."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

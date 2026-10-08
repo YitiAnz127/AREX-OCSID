@@ -4,7 +4,7 @@ description: "Render Squidpy plots for spatial overlays, segmentation, graph
   statistics, ligand-receptor heatmaps, and variation-by-distance results."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

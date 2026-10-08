@@ -1,5 +1,5 @@
 {
-  "schema": "disco.benchmark.v1",
+  "schema": "ocsid.benchmark.v1",
   "name": "pilot-v1",
   "frozenAt": "2026-01-01T00:00:00Z",
   "splitHash": "fabcb729156e295afed6b395f1905939f18857158351c0945c0c93525a7c7a05",

@@ -29,15 +29,15 @@ describe("createAgentSession provider attribution headers", () => {
 		agentDir = join(tempDir, "agent");
 		mkdirSync(cwd, { recursive: true });
 		mkdirSync(agentDir, { recursive: true });
-		originalTelemetryEnv = process.env.DISCO_TELEMETRY;
-		delete process.env.DISCO_TELEMETRY;
+		originalTelemetryEnv = process.env.OCSID_TELEMETRY;
+		delete process.env.OCSID_TELEMETRY;
 	});
 
 	afterEach(() => {
 		if (originalTelemetryEnv === undefined) {
-			delete process.env.DISCO_TELEMETRY;
+			delete process.env.OCSID_TELEMETRY;
 		} else {
-			process.env.DISCO_TELEMETRY = originalTelemetryEnv;
+			process.env.OCSID_TELEMETRY = originalTelemetryEnv;
 		}
 		if (tempDir && existsSync(tempDir)) {
 			rmSync(tempDir, { recursive: true, force: true });
@@ -248,7 +248,7 @@ describe("createAgentSession provider attribution headers", () => {
 		});
 
 		expect(headers?.["x-opencode-session"]).toBe("opencode-session");
-		expect(headers?.["x-opencode-client"]).toBe("disco");
+		expect(headers?.["x-opencode-client"]).toBe("ocsid");
 	});
 
 	it("lets configured OpenCode headers override the defaults", async () => {

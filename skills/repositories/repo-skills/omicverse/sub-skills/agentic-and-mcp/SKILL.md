@@ -4,7 +4,7 @@ description: "OmicVerse CLI, MCP server, registry manifest, JARVIS/gateway,
   smart agent, agent backend, skill seeker, and AI-assisted session workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

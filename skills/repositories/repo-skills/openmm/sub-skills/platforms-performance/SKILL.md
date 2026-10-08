@@ -4,7 +4,7 @@ description: "Select and diagnose OpenMM runtime platforms, platformProperties,
   GPU/CPU precision modes, plugin availability, and safe performance tuning."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT, GPL, LGPL
 ---
 

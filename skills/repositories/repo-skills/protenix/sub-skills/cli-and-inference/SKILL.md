@@ -5,7 +5,7 @@ description: "Build safe Protenix prediction commands and debug CLI inference
   user-facing kernel choices."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

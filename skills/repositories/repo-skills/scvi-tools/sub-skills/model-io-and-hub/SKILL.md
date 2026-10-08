@@ -4,7 +4,7 @@ description: "Save, load, inspect, minify, and share scvi-tools model artifacts
   locally or through Hugging Face Hub metadata."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

@@ -4,7 +4,7 @@ description: "Run practical PyDESeq2 differential expression workflows with
   DeseqDataSet and DeseqStats."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

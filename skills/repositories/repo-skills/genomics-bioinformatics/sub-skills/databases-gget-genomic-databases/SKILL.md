@@ -3,7 +3,7 @@ name: databases-gget-genomic-databases
 description: "&quot;Unified CLI/Python interface to 20+ genomic databases."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-gget-genomic-databases — genomics-bioinformatics sub-skill

@@ -5,7 +5,7 @@ description: "Load DeePMD-kit models, run Python or CLI inference, extract
   frozen/checkpoint/pretrained model artifacts."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: LGPL 3.0
 ---
 

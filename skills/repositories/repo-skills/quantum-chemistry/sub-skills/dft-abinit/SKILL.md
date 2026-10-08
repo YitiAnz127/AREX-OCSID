@@ -3,7 +3,7 @@ name: dft-abinit
 description: "Route ABINIT requests to task-specific subskills based on user intent."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-abinit — quantum-chemistry sub-skill

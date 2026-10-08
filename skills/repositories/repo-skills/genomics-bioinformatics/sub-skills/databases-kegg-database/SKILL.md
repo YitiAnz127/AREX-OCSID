@@ -3,7 +3,7 @@ name: databases-kegg-database
 description: "&quot;KEGG REST API (academic only)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-kegg-database — genomics-bioinformatics sub-skill

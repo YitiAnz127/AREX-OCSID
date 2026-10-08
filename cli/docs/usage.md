@@ -1,4 +1,4 @@
-# Using DisCo
+# Using OCSID
 
 This page collects day-to-day usage details that do not fit on the quickstart page.
 
@@ -61,7 +61,7 @@ Type `/` in the editor to open command completion. Extensions can register custo
 | `/reload` | Reload keybindings, extensions, skills, prompts, themes, and context files |
 | `/hotkeys` | Show all keyboard shortcuts |
 | `/changelog` | Display version history |
-| `/quit` | Quit disco |
+| `/quit` | Quit ocsid |
 
 ## Message Queue
 
@@ -72,7 +72,7 @@ You can submit messages while the agent is still working:
 - **Escape** aborts and restores queued messages to the editor.
 - **Alt+Up** retrieves queued messages back to the editor.
 
-On Windows Terminal, Alt+Enter is fullscreen by default. Remap it as described in [Terminal setup](terminal-setup.md) if you want disco to receive the shortcut.
+On Windows Terminal, Alt+Enter is fullscreen by default. Remap it as described in [Terminal setup](terminal-setup.md) if you want ocsid to receive the shortcut.
 
 Configure delivery in [Settings](settings.md) with `steeringMode` and `followUpMode`.
 
@@ -84,15 +84,15 @@ run controls and recovery behavior.
 
 ## Sessions
 
-Sessions are saved automatically to `~/.disco/agent/sessions/`, organized by working directory.
+Sessions are saved automatically to `~/.ocsid/agent/sessions/`, organized by working directory.
 
 ```bash
-disco -c                  # Continue most recent session
-disco -r                  # Browse and select a session
-disco --no-session        # Ephemeral mode; do not save
-disco --name "my task"    # Set session display name at startup
-disco --session <path|id> # Use a specific session file or session ID
-disco --fork <path|id>    # Fork a session into a new session file
+ocsid -c                  # Continue most recent session
+ocsid -r                  # Browse and select a session
+ocsid --no-session        # Ephemeral mode; do not save
+ocsid --name "my task"    # Set session display name at startup
+ocsid --session <path|id> # Use a specific session file or session ID
+ocsid --fork <path|id>    # Fork a session into a new session file
 ```
 
 Useful session commands:
@@ -107,9 +107,9 @@ See [Sessions](sessions.md) and [Compaction](compaction.md) for details.
 
 ## Context Files
 
-DisCo loads `AGENTS.md` or `CLAUDE.md` at startup from:
+OCSID loads `AGENTS.md` or `CLAUDE.md` at startup from:
 
-- `~/.disco/agent/AGENTS.md` for global instructions
+- `~/.ocsid/agent/AGENTS.md` for global instructions
 - parent directories, walking up from the current working directory
 - the current directory
 
@@ -119,24 +119,24 @@ Use context files for project conventions, commands, safety rules, and preferenc
 
 Replace the default system prompt with:
 
-- `.disco/SYSTEM.md` for a project
-- `~/.disco/agent/SYSTEM.md` globally
+- `.ocsid/SYSTEM.md` for a project
+- `~/.ocsid/agent/SYSTEM.md` globally
 
 Append to the default prompt without replacing it with `APPEND_SYSTEM.md` in either location.
 
 ### Project Trust
 
-On interactive startup, disco asks before trusting a project folder that contains project-local settings, resources, or project `.agents/skills` and has no saved decision for the folder or a parent folder in `~/.disco/agent/trust.json`. Trusting a project allows disco to load `.disco/settings.json` and `.disco` resources, install missing project packages, and execute project extensions.
+On interactive startup, ocsid asks before trusting a project folder that contains project-local settings, resources, or project `.agents/skills` and has no saved decision for the folder or a parent folder in `~/.ocsid/agent/trust.json`. Trusting a project allows ocsid to load `.ocsid/settings.json` and `.ocsid` resources, install missing project packages, and execute project extensions.
 
-Before the trust decision, disco loads only context files, user/global extensions, and CLI `-e` extensions so they can handle the `project_trust` event. Project-local extensions, project package-managed extensions, and project settings are loaded only after the project is trusted. This split also applies when switching to a session from a different cwd whose trust has not been resolved in the current process.
+Before the trust decision, ocsid loads only context files, user/global extensions, and CLI `-e` extensions so they can handle the `project_trust` event. Project-local extensions, project package-managed extensions, and project settings are loaded only after the project is trusted. This split also applies when switching to a session from a different cwd whose trust has not been resolved in the current process.
 
 Non-interactive modes (`-p`, `--mode json`, and `--mode rpc`) do not show a trust prompt. Without an applicable saved trust decision, they use `defaultProjectTrust` from global settings: `ask` (default) and `never` ignore those project resources, while `always` trusts them. Pass `--approve`/`-a` or `--no-approve`/`-na` to override project trust for one run.
 
-If no extension or saved decision applies, `defaultProjectTrust` controls the fallback behavior. Set it to `"ask"`, `"always"`, or `"never"` in `~/.disco/agent/settings.json`, or change it with `/settings`.
+If no extension or saved decision applies, `defaultProjectTrust` controls the fallback behavior. Set it to `"ask"`, `"always"`, or `"never"` in `~/.ocsid/agent/settings.json`, or change it with `/settings`.
 
-`disco config` and package commands use the same project trust flow, except `disco update` never prompts. Pass `--approve` to trust project-local settings for one command or `--no-approve` to ignore them.
+`ocsid config` and package commands use the same project trust flow, except `ocsid update` never prompts. Pass `--approve` to trust project-local settings for one command or `--no-approve` to ignore them.
 
-Use `/trust` in interactive mode to save a project trust decision for future sessions, including trust for the immediate parent folder. It writes `~/.disco/agent/trust.json` only; the current session is not reloaded, so restart disco for changes to take effect.
+Use `/trust` in interactive mode to save a project trust decision for future sessions, including trust for the immediate parent folder. It writes `~/.ocsid/agent/trust.json` only; the current session is not reloaded, so restart ocsid for changes to take effect.
 
 
 ## Exporting and Sharing Sessions
@@ -145,33 +145,33 @@ Use `/export [file]` to write a session to HTML.
 
 Use `/share` to upload a private GitHub gist with a shareable HTML link.
 
-For upstream reference, Pi provides [`badlogic/pi-share-hf`](https://github.com/badlogic/pi-share-hf) for publishing Pi sessions to Hugging Face datasets. It targets Pi session data and is not a supported DisCo session integration.
+For upstream reference, Pi provides [`badlogic/pi-share-hf`](https://github.com/badlogic/pi-share-hf) for publishing Pi sessions to Hugging Face datasets. It targets Pi session data and is not a supported OCSID session integration.
 
 ## CLI Reference
 
 ```bash
-disco [options] [@files...] [messages...]
+ocsid [options] [@files...] [messages...]
 ```
 
 ### Package Commands
 
 ```bash
-disco install <source> [-l]     # Install package, -l for project-local
-disco remove <source> [-l]      # Remove package
-disco uninstall <source> [-l]   # Alias for remove
-disco update [source|self|disco]   # Update disco only, or one package source
-disco update --all              # Update disco and packages; reconcile pinned git refs
-disco update --extensions       # Update packages only; reconcile pinned git refs
-disco update --models           # Refresh model catalogs only
-disco update --self             # Update disco only
-disco update --extension <src>  # Update one package
-disco list                      # List installed packages
-disco config                    # Enable/disable package resources
+ocsid install <source> [-l]     # Install package, -l for project-local
+ocsid remove <source> [-l]      # Remove package
+ocsid uninstall <source> [-l]   # Alias for remove
+ocsid update [source|self|ocsid]   # Update ocsid only, or one package source
+ocsid update --all              # Update ocsid and packages; reconcile pinned git refs
+ocsid update --extensions       # Update packages only; reconcile pinned git refs
+ocsid update --models           # Refresh model catalogs only
+ocsid update --self             # Update ocsid only
+ocsid update --extension <src>  # Update one package
+ocsid list                      # List installed packages
+ocsid config                    # Enable/disable package resources
 ```
 
-These commands manage disco packages and `disco update` can update the disco CLI installation. To uninstall disco itself, see [Quickstart](quickstart.md#uninstall). `disco config` and project package commands accept `--approve`/`--no-approve` to trust or ignore project-local settings for one command. `disco update` never prompts for project trust.
+These commands manage ocsid packages and `ocsid update` can update the ocsid CLI installation. To uninstall ocsid itself, see [Quickstart](quickstart.md#uninstall). `ocsid config` and project package commands accept `--approve`/`--no-approve` to trust or ignore project-local settings for one command. `ocsid update` never prompts for project trust.
 
-See [DisCo Packages](packages.md) for package sources and security notes.
+See [OCSID Packages](packages.md) for package sources and security notes.
 
 ### Agent Modes
 
@@ -195,10 +195,10 @@ non-interactive output. They are independent of `-p` / `--print` and
 | `--mode rpc` | RPC mode over stdin/stdout; see [RPC mode](rpc.md) |
 | `--export <in> [out]` | Export a session to HTML |
 
-In print mode, disco also reads piped stdin and merges it into the initial prompt:
+In print mode, ocsid also reads piped stdin and merges it into the initial prompt:
 
 ```bash
-cat README.md | disco -p "Summarize this text"
+cat README.md | ocsid -p "Summarize this text"
 ```
 
 ### Model Options
@@ -242,7 +242,7 @@ Built-in tools: `read`, `bash`, `edit`, `write`, `grep`, `find`, `ls`.
 | `-e`, `--extension <source>` | Load an extension from path, npm, or git; repeatable |
 | `--no-extensions` | Disable extension discovery |
 | `--skill <path>` | Load a skill; repeatable |
-| `--disco-no-builtin-skills` | Disable only bundled DisCo skills; keep other discovered and explicit skills |
+| `--ocsid-no-builtin-skills` | Disable only bundled OCSID skills; keep other discovered and explicit skills |
 | `--no-skills`, `-ns` | Disable all discovered skills; explicit `--skill` paths still load |
 | `--prompt-template <path>` | Load a prompt template; repeatable |
 | `--no-prompt-templates` | Disable prompt template discovery |
@@ -253,7 +253,7 @@ Built-in tools: `read`, `bash`, `edit`, `write`, `grep`, `find`, `ls`.
 Combine `--no-*` with explicit flags to load exactly what you need, ignoring settings. Example:
 
 ```bash
-disco --no-extensions -e ./my-extension.ts
+ocsid --no-extensions -e ./my-extension.ts
 ```
 
 ### Other Options
@@ -273,48 +273,48 @@ disco --no-extensions -e ./my-extension.ts
 Prefix files with `@` to include them in the message:
 
 ```bash
-disco @prompt.md "Answer this"
-disco -p @screenshot.png "What's in this image?"
-disco @code.ts @test.ts "Review these files"
+ocsid @prompt.md "Answer this"
+ocsid -p @screenshot.png "What's in this image?"
+ocsid @code.ts @test.ts "Review these files"
 ```
 
 ### Examples
 
 ```bash
 # Interactive with initial prompt
-disco "List all .ts files in src/"
+ocsid "List all .ts files in src/"
 
 # Non-interactive
-disco -p "Summarize this codebase"
+ocsid -p "Summarize this codebase"
 
 # Non-interactive with piped stdin
-cat README.md | disco -p "Summarize this text"
+cat README.md | ocsid -p "Summarize this text"
 
 # Named one-shot session
-disco --name "release audit" -p "Audit this repository"
+ocsid --name "release audit" -p "Audit this repository"
 
 # Different model
-disco --provider openai --model gpt-4o "Help me refactor"
+ocsid --provider openai --model gpt-4o "Help me refactor"
 
 # Model with provider prefix
-disco --model openai/gpt-4o "Help me refactor"
+ocsid --model openai/gpt-4o "Help me refactor"
 
 # Model with thinking level shorthand
-disco --model sonnet:high "Solve this complex problem"
+ocsid --model sonnet:high "Solve this complex problem"
 
 # Limit model cycling
-disco --models "claude-*,gpt-4o"
+ocsid --models "claude-*,gpt-4o"
 
 # Read-only mode
-disco --tools read,grep,find,ls -p "Review the code"
+ocsid --tools read,grep,find,ls -p "Review the code"
 
 # Disable one extension or built-in tool while keeping the rest available
-disco --exclude-tools ask_question
+ocsid --exclude-tools ask_question
 ```
 
 ## Design Principles
 
-DisCo keeps the core small and pushes most task-specific behavior into
+OCSID keeps the core small and pushes most task-specific behavior into
 extensions, skills, prompt templates, and packages.
 
 It intentionally does not include built-in MCP, permission popups, plan mode,
@@ -324,4 +324,4 @@ built-in [dynamic workflow runtime](dynamic-workflows.md). Other workflows can
 be built or installed as extensions or packages, or run through external tools
 such as containers and tmux.
 
-For the full rationale, read the [blog post](https://mariozechner.at/posts/2025-11-30-disco-coding-agent/).
+For the full rationale, read the [blog post](https://mariozechner.at/posts/2025-11-30-ocsid-coding-agent/).

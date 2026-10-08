@@ -6,7 +6,7 @@ description: "Operate MolecularNodes Universe-backed trajectories: map Blender
   state safely in Blender."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

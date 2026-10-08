@@ -5,7 +5,7 @@ description: "Use gget to discover Ensembl reference FTPs, search gene or
   nucleotide or UniProt amino-acid FASTA sequences."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 2-Clause
 ---
 

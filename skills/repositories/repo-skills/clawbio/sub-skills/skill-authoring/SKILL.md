@@ -4,7 +4,7 @@ description: "Create, register, test, package, and maintain ClawBio skills and
   their intent descriptors."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

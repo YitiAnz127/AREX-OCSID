@@ -3,7 +3,7 @@ name: zarr-python
 description: "&quot;Chunked N-D arrays with compression and cloud storage."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # zarr-python — sciagent-scientific-computing sub-skill

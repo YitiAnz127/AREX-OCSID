@@ -3,7 +3,7 @@ name: antechamber
 description: "A command-line tool in AmberTools for preparing small molecules or non-standard residues within GAFF/AMBER-compatible chemical space for molecular mechanics simulations, by automat"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # antechamber — molecular-dynamics sub-skill

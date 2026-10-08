@@ -3,7 +3,7 @@ name: foldseek
 description: "Structure similarity search with Foldseek."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

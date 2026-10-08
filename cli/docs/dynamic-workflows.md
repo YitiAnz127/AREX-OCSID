@@ -1,6 +1,6 @@
 # Dynamic Workflows
 
-DisCo includes a deterministic JavaScript `workflow` tool for work that benefits
+OCSID includes a deterministic JavaScript `workflow` tool for work that benefits
 from coordinated subagents, bounded concurrency, or multiple execution phases.
 Creator and Researcher can both use the runtime, and every workflow subagent
 inherits the parent session's mode and skill boundary.
@@ -9,7 +9,7 @@ Use ordinary tools for simple sequential work. Use `workflow` when the task has
 independent lanes, an explicit coverage set, or a review/recovery loop that is
 clearer and safer when represented as one managed run.
 
-This page documents the execution and authoring contracts hardened in DisCo
+This page documents the execution and authoring contracts hardened in OCSID
 0.2.0. It is not a complete catalog of every workflow helper or model-routing
 feature.
 
@@ -47,13 +47,13 @@ functions, not promises that have already started.
 Workflow calls run in the background by default. The tool returns a run ID, the
 current assistant turn ends normally, and the workflow continues without
 blocking the user. When the run completes, fails, or returns incomplete
-coverage, DisCo delivers a follow-up into the same conversation and starts a
+coverage, OCSID delivers a follow-up into the same conversation and starts a
 new turn when the agent is idle. If another turn is active, the result waits as
 a follow-up rather than interrupting it.
 
 Use `background: false` only when the main agent must consume the result inline
 in the same turn. A foreground run blocks until it finishes and returns its
-result directly, so DisCo does not deliver it a second time.
+result directly, so OCSID does not deliver it a second time.
 
 Background runs remain available through `/workflows` even if follow-up
 delivery cannot be displayed after a reload or other session transition.
@@ -137,11 +137,11 @@ await agent(job.prompt, {
 });
 ```
 
-Before creating the subagent session, DisCo executes the absolute
+Before creating the subagent session, OCSID executes the absolute
 `environment.executable` without a shell and verifies the requested package or
 runtime version. A missing executable, a relative executable path, an execution
 failure, or a version mismatch is a non-recoverable environment assertion
-failure. DisCo does not substitute `python` from `PATH`, another virtual
+failure. OCSID does not substitute `python` from `PATH`, another virtual
 environment, or an unverified installation.
 
 The runtime recognizes only these legacy prepare-environment mappings as a
@@ -178,7 +178,7 @@ return {
 `results.length` is not a success count. A missing row, `null`, or an explicit
 `ok: false` means that coverage is incomplete.
 
-When a managed run returns `complete: false`, DisCo persists it as a recoverable
+When a managed run returns `complete: false`, OCSID persists it as a recoverable
 `WORKFLOW_INCOMPLETE` failure, displays `recovery required`, and includes the
 missing IDs in the background follow-up. Do not silently integrate the
 successful subset as though the whole batch completed.
@@ -208,31 +208,35 @@ By default, workflow agents have no hard timeout. Set `agentTimeoutMs` only when
 the run needs a time bound.
 
 When a timeout is active and no run or configured default overrides retry
-behavior, DisCo retries a recoverable timeout once. Set `agentRetries: 0`
+behavior, OCSID retries a recoverable timeout once. Set `agentRetries: 0`
 explicitly to disable retries. The runtime clamps retries to a maximum of three.
 
-Before retrying, DisCo aborts the timed-out attempt and waits for its session to
+Before retrying, OCSID aborts the timed-out attempt and waits for its session to
 finish tearing down. The next attempt does not overlap the previous one, so two
 attempts cannot continue writing the same output concurrently.
 
-A non-recoverable environment or runtime failure is fatal to the run. DisCo
+A non-recoverable environment or runtime failure is fatal to the run. OCSID
 aborts and drains active sibling lanes before reporting the parent failure,
 rather than leaving them running after the workflow has stopped.
 
 ## Usage and persistence
 
-DisCo separates live observability from finalized accounting:
+OCSID separates live observability from finalized accounting:
 
 - Live usage snapshots update progress displays but are not final totals.
 - Terminal provider usage is used for finalized accounting when available.
-- If terminal usage is unavailable, DisCo uses an explicitly marked estimated
+- If terminal usage is unavailable, OCSID uses an explicitly marked estimated
   fallback.
 - Cache reads and cache writes are tracked separately.
 - Each attempt keeps its own usage and error record; run totals include work
   spent by retries that actually executed.
 
-Workflow state is stored under `~/.disco/workflows` in a project-keyed run
-store. Persisted state includes the run limits, stable agent IDs, attempt
+Workflow state is stored under the workflow home (`~/.ocsid/workflows` by
+default) in a project-keyed run store. That home is the `workflows/` sibling of
+the agent directory, so setting `OCSID_CODING_AGENT_DIR` to isolate or relocate
+the OCSID home moves runs, saved workflows, model tiers and workflow settings
+together — the real user home is only used when no override is set. Persisted
+state includes the run limits, stable agent IDs, attempt
 records, coverage, recovery lineage, journaled results, and usage needed by the
 navigator and resume path. Resuming a run restores its original execution
 limits instead of silently adopting unrelated defaults from a later session.
@@ -271,7 +275,7 @@ token usage when available.
 
 ### The script fails to parse
 
-DisCo reports the source line, column, excerpt, and caret. If the failing line
+OCSID reports the source line, column, excerpt, and caret. If the failing line
 contains Markdown backticks, move the prompt payload into `args.jobs` or
 `args.briefs` instead of repeatedly escaping a large template literal.
 
@@ -305,6 +309,6 @@ shown.
 
 ## Maintainer references
 
-- [Workflow authoring skill](../packages/coding-agent/src/disco/skills/workflow-authoring/SKILL.md)
-- [Inline adaptation provenance](../packages/coding-agent/src/disco/dynamic-workflows/UPSTREAM_SOURCE.md)
-- [Workflow regression tests](../packages/coding-agent/src/disco/dynamic-workflows/workflow.test.ts)
+- [Workflow authoring skill](../packages/coding-agent/src/ocsid/skills/workflow-authoring/SKILL.md)
+- [Inline adaptation provenance](../packages/coding-agent/src/ocsid/dynamic-workflows/UPSTREAM_SOURCE.md)
+- [Workflow regression tests](../packages/coding-agent/src/ocsid/dynamic-workflows/workflow.test.ts)

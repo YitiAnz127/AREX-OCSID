@@ -3,7 +3,7 @@ name: biopython-sequence-analysis
 description: "&quot;Biopython sequence analysis: parse FASTA/FASTQ/GenBank/GFF (SeqIO), NCBI Entrez (esearch/efetch/elink), remote/local BLAST, pairwise/MSA alignment (PairwiseAligner, MUSCLE/Clustal"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # biopython-sequence-analysis — genomics-bioinformatics sub-skill

@@ -5,7 +5,7 @@ description: "Turn OpenFermion operators and fermionic state data into bounded
   circuits while preserving dimension, ordering, and backend boundaries."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
   parent: openfermion
 license: Apache 2.0
 ---

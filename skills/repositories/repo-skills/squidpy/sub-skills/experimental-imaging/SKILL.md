@@ -5,7 +5,7 @@ description: "Use Squidpy experimental SpatialData image APIs for tissue masks,
   QC/stitching."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

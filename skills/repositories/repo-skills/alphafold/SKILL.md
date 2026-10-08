@@ -5,7 +5,7 @@ description: "Route AlphaFold protein structure prediction setup, data
   relaxation workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

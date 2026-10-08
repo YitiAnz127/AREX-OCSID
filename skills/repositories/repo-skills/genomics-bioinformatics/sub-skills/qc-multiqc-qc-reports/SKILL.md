@@ -3,7 +3,7 @@ name: qc-multiqc-qc-reports
 description: "&quot;Aggregates QC from 150+ bioinformatics tools into one interactive HTML report."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # qc-multiqc-qc-reports — genomics-bioinformatics sub-skill

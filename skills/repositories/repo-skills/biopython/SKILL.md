@@ -5,7 +5,7 @@ description: "Route Biopython computational biology workflows across sequence
   restriction enzymes, and specialized modules."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

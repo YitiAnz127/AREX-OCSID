@@ -3,11 +3,11 @@ import ignore from "ignore";
 import { basename, dirname, join, relative, resolve, sep } from "path";
 import { CONFIG_DIR_NAME, getAgentDir } from "../config.ts";
 import {
-	type DiscoSkillRole,
-	isSkillEligibleForDiscoMode,
-	resolveDiscoSkillRole,
-} from "../disco/modes/skill-policy.ts";
-import { DEFAULT_DISCO_AGENT_MODE, type DiscoAgentMode } from "../disco/modes/types.ts";
+	type OcsidSkillRole,
+	isSkillEligibleForOcsidMode,
+	resolveOcsidSkillRole,
+} from "../ocsid/modes/skill-policy.ts";
+import { DEFAULT_OCSID_AGENT_MODE, type OcsidAgentMode } from "../ocsid/modes/types.ts";
 import { parseFrontmatter } from "../utils/frontmatter.ts";
 import { canonicalizePath, resolvePath } from "../utils/paths.ts";
 import type { ResourceDiagnostic } from "./diagnostics.ts";
@@ -85,7 +85,7 @@ export interface Skill {
 	baseDir: string;
 	sourceInfo: SourceInfo;
 	disableModelInvocation: boolean;
-	discoRole: DiscoSkillRole;
+	ocsidRole: OcsidSkillRole;
 }
 
 export interface LoadSkillsResult {
@@ -293,12 +293,12 @@ function loadSkillFromFile(
 		const { frontmatter } = parseFrontmatter<SkillFrontmatter>(rawContent);
 		const skillDir = dirname(filePath);
 		const parentDirName = basename(skillDir);
-		const roleResolution = resolveDiscoSkillRole(frontmatter);
+		const roleResolution = resolveOcsidSkillRole(frontmatter);
 		if (!roleResolution.role) {
 			const serializedValue = JSON.stringify(roleResolution.invalidValue) ?? String(roleResolution.invalidValue);
 			diagnostics.push({
 				type: "warning",
-				message: `invalid metadata.disco-role ${serializedValue}; expected "meta", "operating", or "shared"`,
+				message: `invalid metadata.ocsid-role ${serializedValue}; expected "meta", "operating", or "shared"`,
 				path: filePath,
 			});
 			return { skill: null, diagnostics };
@@ -332,7 +332,7 @@ function loadSkillFromFile(
 				baseDir: skillDir,
 				sourceInfo: createSkillSourceInfo(filePath, skillDir, source),
 				disableModelInvocation: frontmatter["disable-model-invocation"] === true,
-				discoRole: roleResolution.role,
+				ocsidRole: roleResolution.role,
 			},
 			diagnostics,
 		};
@@ -405,12 +405,12 @@ export interface LoadSkillsOptions {
 	skillPaths: string[];
 	/** Include default skills directories. */
 	includeDefaults: boolean;
-	/** DisCo mode used to exclude wrong-role skills before collision resolution. */
-	discoMode?: DiscoAgentMode;
+	/** OCSID mode used to exclude wrong-role skills before collision resolution. */
+	ocsidMode?: OcsidAgentMode;
 }
 
-export function filterSkillsForDiscoMode(skills: Skill[], discoMode: DiscoAgentMode): Skill[] {
-	return skills.filter((skill) => isSkillEligibleForDiscoMode(skill.discoRole, discoMode));
+export function filterSkillsForOcsidMode(skills: Skill[], ocsidMode: OcsidAgentMode): Skill[] {
+	return skills.filter((skill) => isSkillEligibleForOcsidMode(skill.ocsidRole, ocsidMode));
 }
 
 /**
@@ -419,7 +419,7 @@ export function filterSkillsForDiscoMode(skills: Skill[], discoMode: DiscoAgentM
  */
 export function loadSkills(options: LoadSkillsOptions): LoadSkillsResult {
 	const { agentDir, skillPaths, includeDefaults } = options;
-	const discoMode = options.discoMode ?? DEFAULT_DISCO_AGENT_MODE;
+	const ocsidMode = options.ocsidMode ?? DEFAULT_OCSID_AGENT_MODE;
 
 	// Resolve agentDir - if not provided, use default from config
 	const resolvedCwd = resolvePath(options.cwd);
@@ -433,7 +433,7 @@ export function loadSkills(options: LoadSkillsOptions): LoadSkillsResult {
 	function addSkills(result: LoadSkillsResult) {
 		allDiagnostics.push(...result.diagnostics);
 		for (const skill of result.skills) {
-			if (!isSkillEligibleForDiscoMode(skill.discoRole, discoMode)) {
+			if (!isSkillEligibleForOcsidMode(skill.ocsidRole, ocsidMode)) {
 				continue;
 			}
 

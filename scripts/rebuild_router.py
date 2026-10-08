@@ -6,6 +6,23 @@ Usage:
   python rebuild_router.py                  # read-only consistency check
   python rebuild_router.py --output-dir DIR # isolated generation
   python rebuild_router.py --write-live     # update live router and root index
+
+Options:
+  --confidence-mode legacy|strict   strict accepts a confidence only when it is a
+                                    verified routing decision (--routing-entry) or an
+                                    explicit metadata value; a prior index row is not
+                                    accepted, because that row may itself be a default
+  --source-index FILE               repository index whose recorded provenance is
+                                    preserved (default: the live
+                                    repo-skills/repository-index.jsonl)
+  --source-assignments FILE         assignment index whose recorded confidence is
+                                    preserved (default: the live
+                                    references/index/assignments.jsonl)
+  --routing-entry FILE              verified external classification handoff
+                                    (jsonl); repeat for several skills. Mirrors
+                                    update_repo_skills_router.mjs --routing-entry.
+
+Both `--flag value` and `--flag=value` are accepted; unknown options are errors.
 """
 import json, os, sys, hashlib, re, unicodedata
 
@@ -20,13 +37,57 @@ ROUTER = os.path.join(ROOT, "skills", "repositories", "repo-skills-router")
 IDX = os.path.join(ROUTER, "references", "index")
 TAX_PATH = os.path.join(IDX, "taxonomy.json")
 
-WRITE_LIVE = "--write-live" in sys.argv
-OUTPUT = None
-if "--output-dir" in sys.argv:
-    try:
-        OUTPUT = sys.argv[sys.argv.index("--output-dir") + 1]
-    except IndexError as exc:
-        raise SystemExit("--output-dir requires a directory") from exc
+USAGE = (
+    "usage: python rebuild_router.py [--output-dir DIR | --write-live] "
+    "[--confidence-mode legacy|strict] [--source-index FILE] [--source-assignments FILE] "
+    "[--routing-entry FILE ...]"
+)
+
+VALUE_OPTIONS = ("--output-dir", "--confidence-mode", "--source-index", "--source-assignments")
+REPEATABLE_OPTIONS = ("--routing-entry",)
+FLAG_OPTIONS = ("--write-live",)
+
+def parse_args(argv):
+    """Parse `--flag value` and `--flag=value`, and reject anything unknown.
+
+    The previous hand-written parser looked for exact tokens, which had two bad
+    consequences: `--confidence-mode=strict` (the form this script's own warning
+    recommends) was silently ignored and the build ran in legacy mode, and a typo
+    in any option was silently ignored too. Both are hard errors now.
+    """
+    values, flags, repeated = {}, set(), {}
+    index = 0
+    while index < len(argv):
+        arg = argv[index]
+        name, sep, inline = arg.partition("=")
+        if sep and name in VALUE_OPTIONS:
+            values[name] = inline
+        elif sep and name in REPEATABLE_OPTIONS:
+            repeated.setdefault(name, []).append(inline)
+        elif arg in VALUE_OPTIONS:
+            if index + 1 >= len(argv):
+                raise SystemExit(f"{arg} requires a value\n{USAGE}")
+            values[arg] = argv[index + 1]
+            index += 1
+        elif arg in REPEATABLE_OPTIONS:
+            if index + 1 >= len(argv):
+                raise SystemExit(f"{arg} requires a value\n{USAGE}")
+            repeated.setdefault(arg, []).append(argv[index + 1])
+            index += 1
+        elif arg in FLAG_OPTIONS:
+            flags.add(arg)
+        elif arg.startswith("-"):
+            raise SystemExit(f"unknown option: {name if sep else arg}\n{USAGE}")
+        else:
+            raise SystemExit(f"unknown argument: {arg}\n{USAGE}")
+        index += 1
+    return values, flags, repeated
+
+ARG_VALUES, ARG_FLAGS, ARG_REPEATED = parse_args(sys.argv[1:])
+
+WRITE_LIVE = "--write-live" in ARG_FLAGS
+OUTPUT = ARG_VALUES.get("--output-dir")
+if OUTPUT is not None:
     # os.path.abspath("") is the current working directory, which is truthy, so an
     # empty value used to disable the check and write SKILL.md, references/areas/*
     # and references/index/* straight into the invocation directory — normally the
@@ -38,11 +99,12 @@ if WRITE_LIVE and OUTPUT:
     raise SystemExit("use either --write-live or --output-dir, not both")
 CHECK = not WRITE_LIVE and OUTPUT is None
 
-CONFIDENCE_MODE = "legacy"
-if "--confidence-mode" in sys.argv:
-    CONFIDENCE_MODE = sys.argv[sys.argv.index("--confidence-mode") + 1]
-    if CONFIDENCE_MODE not in ("legacy", "strict"):
-        raise SystemExit("--confidence-mode must be 'legacy' or 'strict'")
+CONFIDENCE_MODE = ARG_VALUES.get("--confidence-mode", "legacy")
+if CONFIDENCE_MODE not in ("legacy", "strict"):
+    raise SystemExit("--confidence-mode must be 'legacy' or 'strict'")
+SOURCE_INDEX_PATH = os.path.abspath(ARG_VALUES["--source-index"]) if "--source-index" in ARG_VALUES else os.path.join(REPO, "repository-index.jsonl")
+SOURCE_ASSIGNMENTS_PATH = os.path.abspath(ARG_VALUES["--source-assignments"]) if "--source-assignments" in ARG_VALUES else os.path.join(IDX, "assignments.jsonl")
+ROUTING_ENTRY_PATHS = [os.path.abspath(path) for path in ARG_REPEATED.get("--routing-entry", [])]
 
 # ---------------------------------------------------------------- utils
 def slug(s):
@@ -84,16 +146,259 @@ for d in sorted(os.listdir(REPO)):
                    "assignments":md.get("assignments",[])})
 skills.sort(key=lambda s:(s["repo_id"], s["id"]))
 
+# ------------------------------------------------------- preserved provenance
+def load_source_index(path):
+    """Read the previously written central repository index, if any.
+
+    The generated records carry no source commit of their own: `repo_id`, the
+    description and the target root are all derived from the local tree. Anything
+    this script cannot regenerate — the pinned source commit, the source skill
+    root, aliases — must survive a rebuild, so known provenance is copied field by
+    field from the index that is already on disk. Nothing is invented: a field the
+    old index leaves null stays null and is counted as unpinned.
+    """
+    if not os.path.isfile(path):
+        return {}
+    records = {}
+    with open(path, encoding="utf-8") as handle:
+        for line_no, line in enumerate(handle, start=1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise SystemExit(f"failed to read source index {path}:{line_no}: {exc}") from exc
+            if not isinstance(record, dict):
+                raise SystemExit(f"failed to read source index {path}:{line_no}: expected a JSON object")
+            key = record.get("skill_id")
+            if isinstance(key, str) and key:
+                records[key] = record
+    return records
+
+SOURCE_RECORDS = load_source_index(SOURCE_INDEX_PATH)
+# Fields the generator cannot recompute from the local skill tree.
+PROVENANCE_FIELDS = ("schema_version", "legacy_repo_id", "source_commit", "source_skill_root", "aliases")
+preserved_provenance_count = [0]
+preserved_commit_count = [0]
+unpinned_record_count = [0]
+
+# ------------------------------------------------------- preserved assignments
+def load_source_assignments(path):
+    """Read the previously written central assignment index, if any.
+
+    `confidence` and `confidence_basis` are external routing decisions, and the v2
+    runtime metadata fragment deliberately carries neither (see the maintenance
+    contract). Rebuilding without reading the index that is already on disk would
+    therefore silently drop every recorded decision back to the legacy default, so
+    the prior row is the second source in the fallback chain, exactly as in the mjs
+    writer (routing handoff -> prior index row).
+    """
+    if not os.path.isfile(path):
+        return {}
+    entries = {}
+    with open(path, encoding="utf-8") as handle:
+        for line_no, line in enumerate(handle, start=1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise SystemExit(f"failed to read source assignments {path}:{line_no}: {exc}") from exc
+            if not isinstance(record, dict):
+                raise SystemExit(f"failed to read source assignments {path}:{line_no}: expected a JSON object")
+            key = (record.get("skill_id"), record.get("area"), record.get("family"))
+            if all(isinstance(part, str) and part for part in key):
+                entries[key] = record
+    return entries
+
+SOURCE_ASSIGNMENTS = load_source_assignments(SOURCE_ASSIGNMENTS_PATH)
+preserved_confidence_count = [0]
+
+# --------------------------------------------------------- routing handoff files
+def load_routing_entries(paths):
+    """Read verified external classification handoffs (`--routing-entry FILE`).
+
+    Python twin of update_repo_skills_router.mjs readRoutingEntries(): the handoff is
+    the production routing decision record, so it is what supplies assignment
+    confidence/basis and the pinned source identity the runtime metadata omits. One
+    entry per skill_id — a second entry for the same skill is an error instead of a
+    silent last-writer-wins.
+    """
+    entries = {}
+    sources = {}
+    for path in paths:
+        if not os.path.isfile(path):
+            raise SystemExit(f"routing entry not found: {path}")
+        with open(path, encoding="utf-8") as handle:
+            for line_no, line in enumerate(handle, start=1):
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    entry = json.loads(line)
+                except json.JSONDecodeError as exc:
+                    raise SystemExit(f"failed to read routing entry {path}:{line_no}: {exc}") from exc
+                if not isinstance(entry, dict):
+                    raise SystemExit(f"failed to read routing entry {path}:{line_no}: expected a JSON object")
+                skill_id = entry.get("skill_id")
+                if not isinstance(skill_id, str) or not skill_id:
+                    raise SystemExit(f"routing entry {path}:{line_no}: an entry needs a skill_id")
+                if skill_id in entries:
+                    raise SystemExit(f"duplicate routing handoff for skill {skill_id}")
+                assignments = entry.get("assignments", [])
+                if not isinstance(assignments, list):
+                    raise SystemExit(f"routing entry {path}:{line_no}: assignments must be a list")
+                for assignment in assignments:
+                    if (not isinstance(assignment, dict)
+                            or not isinstance(assignment.get("area"), str)
+                            or not isinstance(assignment.get("family"), str)):
+                        raise SystemExit(f"routing entry {path}:{line_no}: every assignment needs an area and a family")
+                entries[skill_id] = entry
+                sources[skill_id] = path
+    return entries, sources
+
+ROUTING_ENTRIES, ROUTING_ENTRY_SOURCES = load_routing_entries(ROUTING_ENTRY_PATHS)
+routing_confidence_count = [0]
+
+# A handoff is only trustworthy when it describes THIS build: one that names an
+# unknown skill, another repository, or a different assignment set is rejected
+# rather than applied to the nearest match (mirrors the mjs validation).
+SKILL_BY_ID = {s["id"]: s for s in skills}
+for _skill_id, _entry in ROUTING_ENTRIES.items():
+    _skill = SKILL_BY_ID.get(_skill_id)
+    if _skill is None:
+        raise SystemExit(f"routing handoff {_skill_id} is not part of this router build")
+    if _entry.get("repo_id") != _skill["repo_id"]:
+        raise SystemExit(f"routing handoff repo_id does not match {_skill_id}")
+    _handoff_pairs = {(a.get("area"), a.get("family")) for a in _entry.get("assignments", [])}
+    _metadata_pairs = {(a.get("area"), a.get("family")) for a in _skill["assignments"]}
+    if _handoff_pairs != _metadata_pairs:
+        raise SystemExit(f"routing handoff assignments do not match {_skill_id} metadata")
+
+def routing_assignment(skill_id, asg):
+    handoff = ROUTING_ENTRIES.get(skill_id)
+    if handoff is None:
+        return None
+    for candidate in handoff.get("assignments", []):
+        if candidate.get("area") == asg.get("area") and candidate.get("family") == asg.get("family"):
+            return candidate
+    return None
+
+def prior_assignment(skill_id, asg):
+    return SOURCE_ASSIGNMENTS.get((skill_id, asg.get("area"), asg.get("family")))
+
+# ------------------------------------------------------------ recorded provenance
+PROVENANCE_BLOCK = re.compile(r"```json\r?\n([\s\S]*?)\r?\n```")
+COMMIT_RE = re.compile(r"^[0-9a-f]{40}$", re.IGNORECASE)
+
+def first_text(*candidates):
+    """First candidate that is a non-empty string, trimmed; nothing is invented."""
+    for candidate in candidates:
+        if isinstance(candidate, str) and candidate.strip():
+            return candidate.strip()
+    return None
+
+def first_commit(*candidates):
+    """First candidate that is a full 40-hex commit; anything else is not a commit.
+
+    Mirrors the mjs writer: a partial or malformed value falls through to the next
+    source instead of being recorded, because a non-hash would look pinned while
+    proving nothing.
+    """
+    for candidate in candidates:
+        if isinstance(candidate, str) and COMMIT_RE.match(candidate.strip()):
+            return candidate.strip().lower()
+    return None
+
+def normalize_github_url(url):
+    candidate = first_text(url)
+    if candidate is None:
+        return None
+    candidate = candidate.rstrip("/")
+    if candidate.lower().endswith(".git"):
+        candidate = candidate[:-4].rstrip("/")
+    return candidate if re.match(r"^https?://github\.com/[^/\s]+/[^/\s]+$", candidate) else None
+
+def read_provenance(skill_id):
+    """Read the first machine-readable block of references/repo-provenance.md.
+
+    Mirrors update_repo_skills_router.mjs readProvenance(): the importer records
+    repository.remote_url / repository.commit / generated_skill.root there, and a
+    missing or unparsable block simply means "no provenance recorded" — never a
+    fabricated commit.
+    """
+    path = os.path.join(REPO, skill_id, "references", "repo-provenance.md")
+    if not os.path.isfile(path):
+        return {}
+    try:
+        with open(path, encoding="utf-8") as handle:
+            text = handle.read()
+    except (OSError, UnicodeError) as exc:
+        raise SystemExit(f"failed to read provenance at {path}: {exc}") from exc
+    match = PROVENANCE_BLOCK.search(text)
+    if match is None:
+        return {}
+    try:
+        parsed = json.loads(match.group(1))
+    except json.JSONDecodeError:
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
+
+provenance_record_count = [0]
+ignored_commit_count = [0]
+
 # ---------------------------------------------------------------- repository records
 def make_repository_records(skills):
-    return [{
-        "schema_version":1, "repo_id":s["repo_id"],
-        "legacy_repo_id":None, "repo_name":s["repo_id"].split("/")[-1],
-        "skill_id":s["id"], "source_url":f"https://github.com/{s['repo_id']}",
-        "source_commit":None, "source_skill_root":None,
-        "target_skill_root":f"repo-skills/{s['id']}", "aliases":[],
-        "description":s["desc"],
-    } for s in sorted(skills, key=lambda s:(s["repo_id"],s["id"]))]
+    records = []
+    for s in sorted(skills, key=lambda s:(s["repo_id"],s["id"])):
+        prior = SOURCE_RECORDS.get(s["id"]) or {}
+        handoff = ROUTING_ENTRIES.get(s["id"]) or {}
+        provenance = read_provenance(s["id"])
+        provenance_repository = provenance.get("repository") if isinstance(provenance.get("repository"), dict) else {}
+        provenance_skill = provenance.get("generated_skill") if isinstance(provenance.get("generated_skill"), dict) else {}
+        if provenance:
+            provenance_record_count[0] += 1
+
+        # Precedence mirrors makeRepositoryRecords() in the mjs writer:
+        # routing handoff -> prior index row -> repo-provenance.md -> derived.
+        recorded_url = first_text(handoff.get("source_url"), prior.get("source_url"), provenance_repository.get("remote_url"))
+        source_url = normalize_github_url(recorded_url)
+        if source_url is None:
+            if recorded_url is not None:
+                raise SystemExit(f"source_url for {s['id']} is not a GitHub repository URL: {recorded_url}")
+            source_url = f"https://github.com/{s['repo_id']}"
+
+        recorded_commit = first_text(handoff.get("source_commit"), prior.get("source_commit"), provenance_repository.get("commit"))
+        commit = first_commit(handoff.get("source_commit"), prior.get("source_commit"), provenance_repository.get("commit"))
+        if commit is None and recorded_commit is not None:
+            # Recorded but not a full commit: dropped rather than rewritten, and
+            # counted so "unpinned" is never silently presented as "pinned".
+            ignored_commit_count[0] += 1
+
+        record = {
+            "schema_version":1, "repo_id":s["repo_id"],
+            "legacy_repo_id":first_text(handoff.get("legacy_repo_id"), prior.get("legacy_repo_id")),
+            "repo_name":s["repo_id"].split("/")[-1],
+            "skill_id":s["id"], "source_url":source_url,
+            "source_commit":commit,
+            "source_skill_root":first_text(handoff.get("source_skill_root"), handoff.get("skill_root"), prior.get("source_skill_root"), provenance_skill.get("root")),
+            "target_skill_root":f"repo-skills/{s['id']}",
+            "aliases":sorted(prior["aliases"]) if isinstance(prior.get("aliases"), list) and all(isinstance(a, str) for a in prior["aliases"]) else [],
+            "description":s["desc"],
+        }
+        # Known provenance is preserved, never regenerated and never invented.
+        if prior:
+            carried = sum(1 for field in PROVENANCE_FIELDS if field in prior)
+            if carried:
+                preserved_provenance_count[0] += 1
+        if record["source_commit"]:
+            preserved_commit_count[0] += 1
+        else:
+            unpinned_record_count[0] += 1
+        records.append(record)
+    return records
 
 repo_records = make_repository_records(skills)
 
@@ -105,23 +410,52 @@ for a in tax["areas"]:
 VALID_CONFIDENCE = ("high", "medium", "low")
 missing_confidence_count = [0]
 
-def resolve_confidence(repo_id, asg):
+def resolve_confidence(repo_id, skill_id, asg):
     """Return the assignment confidence for the central assignment index.
 
-    Contract (mirrors update_repo_skills_router.mjs): confidence must come from a
-    routing decision ledger and never be silently defaulted. In `strict` mode a
-    missing/invalid confidence aborts the build; in `legacy` mode it is still
-    surfaced as a counted warning at the end (toplines are logged, not silently
-    fabricated).
+    Contract (mirrors update_repo_skills_router.mjs): confidence is external routing
+    evidence and is never silently defaulted. Precedence is the routing handoff, then
+    the prior assignment index row, then — for metadata written before the v2 contract
+    split confidence out of the runtime graph — the metadata fragment itself. A value
+    that is present but invalid is a hard error, because a typo must not be laundered
+    into a counted warning. In `strict` mode a missing confidence aborts the build; in
+    `legacy` mode it is still surfaced as a counted warning (never silent).
     """
+    handoff_assignment = routing_assignment(skill_id, asg)
+    recorded = handoff_assignment.get("confidence") if handoff_assignment is not None else None
+    if recorded is not None:
+        if recorded in VALID_CONFIDENCE:
+            routing_confidence_count[0] += 1
+            return recorded
+        raise SystemExit(
+            f"routing entry for {repo_id}/{skill_id} ({asg.get('area')}/{asg.get('family')}) has an invalid "
+            f"confidence ({recorded!r}); must be one of high/medium/low."
+        )
+    prior = prior_assignment(skill_id, asg)
+    recorded = prior.get("confidence") if prior is not None else None
+    if recorded is not None:
+        if recorded not in VALID_CONFIDENCE:
+            raise SystemExit(
+                f"assignment index {SOURCE_ASSIGNMENTS_PATH} records an invalid confidence "
+                f"({recorded!r}) for {repo_id}/{skill_id} ({asg.get('area')}/{asg.get('family')}); "
+                "must be one of high/medium/low."
+            )
+        if CONFIDENCE_MODE != "strict":
+            # Legacy mode reproduces the index that is already on disk, so a recorded
+            # decision is carried over instead of being replaced by the default. It is
+            # NOT evidence: that row may itself have been written by the legacy default,
+            # so `strict` deliberately refuses it and needs a routing entry.
+            preserved_confidence_count[0] += 1
+            return recorded
     val = asg.get("confidence")
-    if val in VALID_CONFIDENCE:
+    if CONFIDENCE_MODE != "strict" and val in VALID_CONFIDENCE:
         return val
     if CONFIDENCE_MODE == "strict":
         raise SystemExit(
-            f"assignment for {repo_id} is missing a valid confidence (high/medium/low); "
-            "confidence must come from the central routing decision ledger, never a default. "
-            "Reimport with explicit confidence and add the record to the ledger."
+            f"assignment for {repo_id} ({asg.get('area')}/{asg.get('family')}) has no recorded confidence; "
+            "strict mode accepts only a verified routing decision (--routing-entry FILE) or an explicit "
+            "metadata confidence, never a prior index row, which may itself be a legacy default. "
+            "Reimport with explicit confidence and add the record to the central routing decision ledger."
         )
     missing_confidence_count[0] += 1
     return "high"
@@ -130,16 +464,24 @@ assign_records=[]
 VALID_CONFIDENCE_BASIS = ("committed", "materialized-unpinned", "external-verified")
 invalid_confidence_basis_count = [0]
 
-def resolve_confidence_basis(repo_id, asg):
+def resolve_confidence_basis(repo_id, skill_id, asg):
     """Return the assignment confidence_basis for the central assignment index.
 
     BUG-P1-17: the official mjs writer propagates `confidence_basis` (schema
     schema-evolved in v40/v42) so provenance survives every generate/export.
     The Python rebuild must not silently drop it. It is OPTIONAL: omit it when
     the source carries none, and in `strict` mode reject an unknown value so
-    the index never records a basis the consumers cannot parse.
+    the index never records a basis the consumers cannot parse. The routing
+    handoff is consulted first, then the prior assignment row, then the metadata
+    fragment (mirrors makeAssignmentRecords() in the mjs writer).
     """
-    val = asg.get("confidence_basis")
+    handoff_assignment = routing_assignment(skill_id, asg)
+    val = handoff_assignment.get("confidence_basis") if handoff_assignment is not None else None
+    if val is None:
+        prior = prior_assignment(skill_id, asg)
+        val = prior.get("confidence_basis") if prior is not None else None
+    if val is None:
+        val = asg.get("confidence_basis")
     if val is None:
         return None
     if val in VALID_CONFIDENCE_BASIS:
@@ -153,13 +495,21 @@ def resolve_confidence_basis(repo_id, asg):
     invalid_confidence_basis_count[0] += 1
     return None
 
+REPO_RECORD_BY_SKILL = {r["skill_id"]: r for r in repo_records}
+
 for s in skills:
     for asg in s["assignments"]:
+        repository_record = REPO_RECORD_BY_SKILL.get(s["id"]) or {}
         rec = {
-            "repo_id":s["repo_id"], "legacy_repo_id":None, "skill_id":s["id"],
-            "area":asg["area"], "family":asg["family"], "confidence":resolve_confidence(s["repo_id"], asg),
+            "repo_id":s["repo_id"],
+            # The mjs writer takes this from the repository record it just built
+            # (handoff -> prior), so a renamed legacy id stays attached to the skill.
+            "legacy_repo_id":repository_record.get("legacy_repo_id"),
+            "skill_id":s["id"],
+            "area":asg["area"], "family":asg["family"],
+            "confidence":resolve_confidence(s["repo_id"], s["id"], asg),
         }
-        basis = resolve_confidence_basis(s["repo_id"], asg)
+        basis = resolve_confidence_basis(s["repo_id"], s["id"], asg)
         if basis is not None:
             rec["confidence_basis"] = basis
         assign_records.append(rec)
@@ -205,7 +555,7 @@ def render_root_v2(disabled=True):
 name: "repo-skills-router"
 description: "{markdown_escape(desc)}"
 metadata:
-  disco-role: "operating"
+  ocsid-role: "operating"
 ---
 """
     return (fm + "# Repo Skills Router\n\n"
@@ -288,9 +638,10 @@ def content_matches(path, expected):
 
 if missing_confidence_count[0] > 0:
     print(
-        f"warning: {missing_confidence_count[0]} assignment(s) carry no confidence and were "
-        f"defaulted to 'high' in legacy mode; record them in the central routing decision "
-        f"ledger (or use --confidence-mode=strict to require explicit confidence)",
+        f"warning: {missing_confidence_count[0]} assignment(s) carry no confidence anywhere "
+        f"(no routing entry, no prior index row, no metadata) and were defaulted to 'high' in "
+        f"legacy mode; record them in the central routing decision ledger and pass "
+        f"--routing-entry FILE (or use --confidence-mode=strict to require explicit confidence)",
         file=sys.stderr,
     )
 
@@ -299,6 +650,38 @@ if invalid_confidence_basis_count[0] > 0:
         f"warning: {invalid_confidence_basis_count[0]} assignment(s) carry a non-empty "
         f"confidence_basis outside {{committed, materialized-unpinned, external-verified}} "
         f"and were dropped in legacy mode; use --confidence-mode=strict to require a valid basis",
+        file=sys.stderr,
+    )
+
+# Provenance is reported on every run, in both modes: "router is current" says the
+# structure reproduces, not that the sources are pinned, so the pinning status has to
+# be visible instead of assumed.
+print(
+    f"provenance: {len(repo_records)} repository record(s), "
+    f"{preserved_commit_count[0]} pinned to a source commit, "
+    f"{unpinned_record_count[0]} unpinned (source_commit null), "
+    f"{preserved_provenance_count[0]} carried over from {SOURCE_INDEX_PATH}, "
+    f"{provenance_record_count[0]} with a repo-provenance.md block",
+    file=sys.stderr,
+)
+print(
+    f"confidence: {routing_confidence_count[0]} assignment(s) from routing entries, "
+    f"{preserved_confidence_count[0]} preserved from {SOURCE_ASSIGNMENTS_PATH}, "
+    f"{missing_confidence_count[0]} defaulted in legacy mode; "
+    f"{len(ROUTING_ENTRIES)} handoff(s) supplied via {len(ROUTING_ENTRY_PATHS)} --routing-entry file(s)",
+    file=sys.stderr,
+)
+if ignored_commit_count[0] > 0:
+    print(
+        f"warning: {ignored_commit_count[0]} repository record(s) carried a source_commit that is "
+        f"not a full 40-hex commit; it was dropped rather than recorded, so the record stays unpinned",
+        file=sys.stderr,
+    )
+if unpinned_record_count[0] > 0:
+    print(
+        f"warning: {unpinned_record_count[0]} repository record(s) have no pinned source_commit; "
+        f"the rebuild preserves what the index already records but cannot recover a commit that "
+        f"was never recorded",
         file=sys.stderr,
     )
 

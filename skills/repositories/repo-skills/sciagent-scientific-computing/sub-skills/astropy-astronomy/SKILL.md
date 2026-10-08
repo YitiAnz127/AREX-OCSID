@@ -3,7 +3,7 @@ name: astropy-astronomy
 description: "&quot;Core Python library for astronomy/astrophysics: units with dimensional analysis, celestial coordinate transforms (ICRS/Galactic/AltAz/FK5), FITS I/O, tables (FITS/HDF5/VOTable/CSV"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # astropy-astronomy — sciagent-scientific-computing sub-skill

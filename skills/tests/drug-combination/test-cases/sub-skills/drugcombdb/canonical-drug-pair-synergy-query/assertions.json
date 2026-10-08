@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "drugcombdb",
   "target_capability": "canonical-drug-pair-synergy-query",
   "difficulty": "intermediate",

@@ -5,7 +5,7 @@ description: "Use DeepVariant and DeepTrio for genomics variant-calling command
   and report analysis."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

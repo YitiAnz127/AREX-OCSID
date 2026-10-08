@@ -5,7 +5,7 @@ description: "Use SchNetPack for atomistic machine-learning datasets, Hydra
   interfaces, and LAMMPS deployment guidance."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

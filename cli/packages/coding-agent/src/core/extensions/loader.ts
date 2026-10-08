@@ -64,7 +64,7 @@ const VIRTUAL_MODULES: Record<string, unknown> = {
 	"ocsid": _bundledPiCodingAgent,
 	"@arex-skill/disco": _bundledPiCodingAgent,
 	// Keep the old package names as compatibility aliases; they are not npm dependencies.
-	"@auto-ml-skills/disco": _bundledPiCodingAgent,
+	"@auto-ml-skills/ocsid": _bundledPiCodingAgent,
 	"@earendil-works/pi-coding-agent": _bundledPiCodingAgent,
 	"@mariozechner/pi-agent-core": _bundledPiAgentCore,
 	"@mariozechner/pi-tui": _bundledPiTui,
@@ -119,7 +119,7 @@ function getAliases(): Record<string, string> {
 		"ocsid": piCodingAgentEntry,
 		"@arex-skill/disco": piCodingAgentEntry,
 		// Keep the old package names as compatibility aliases to this package's internal SDK entry.
-		"@auto-ml-skills/disco": piCodingAgentEntry,
+		"@auto-ml-skills/ocsid": piCodingAgentEntry,
 		"@earendil-works/pi-coding-agent": piCodingAgentEntry,
 		"@earendil-works/pi-agent-core": piAgentCoreEntry,
 		"@earendil-works/pi-tui": piTuiEntry,
@@ -566,23 +566,23 @@ export async function loadExtensionsCached(
 	return loadExtensionsInternal(paths, cwd, eventBus, runtime, true);
 }
 
-interface DisCoManifest {
+interface OCSIDManifest {
 	extensions?: string[];
 	themes?: string[];
 	skills?: string[];
 	prompts?: string[];
 }
 
-function readDisCoManifest(packageJsonPath: string): DisCoManifest | null {
+function readOCSIDManifest(packageJsonPath: string): OCSIDManifest | null {
 	try {
 		const content = fs.readFileSync(packageJsonPath, "utf-8");
 		const pkg = JSON.parse(content);
-		if (pkg.disco && typeof pkg.disco === "object") {
-			return pkg.disco as DisCoManifest;
+		if (pkg.ocsid && typeof pkg.ocsid === "object") {
+			return pkg.ocsid as OCSIDManifest;
 		}
 		// Keep legacy Pi extension packages usable without loading any .pi paths.
 		if (pkg.pi && typeof pkg.pi === "object") {
-			return pkg.pi as DisCoManifest;
+			return pkg.pi as OCSIDManifest;
 		}
 		return null;
 	} catch {
@@ -598,16 +598,16 @@ function isExtensionFile(name: string): boolean {
  * Resolve extension entry points from a directory.
  *
  * Checks for:
- * 1. package.json with "disco.extensions" (or legacy "pi.extensions") -> returns declared paths
+ * 1. package.json with "ocsid.extensions" (or legacy "pi.extensions") -> returns declared paths
  * 2. index.ts or index.js -> returns the index file
  *
  * Returns resolved paths or null if no entry points found.
  */
 function resolveExtensionEntries(dir: string): string[] | null {
-	// Check for package.json with a DisCo or legacy Pi manifest first.
+	// Check for package.json with a OCSID or legacy Pi manifest first.
 	const packageJsonPath = path.join(dir, "package.json");
 	if (fs.existsSync(packageJsonPath)) {
-		const manifest = readDisCoManifest(packageJsonPath);
+		const manifest = readOCSIDManifest(packageJsonPath);
 		if (manifest?.extensions?.length) {
 			const entries: string[] = [];
 			for (const extPath of manifest.extensions) {
@@ -641,7 +641,7 @@ function resolveExtensionEntries(dir: string): string[] | null {
  * Discovery rules:
  * 1. Direct files: `extensions/*.ts` or `*.js` → load
  * 2. Subdirectory with index: `extensions/* /index.ts` or `index.js` → load
- * 3. Subdirectory with package.json: `extensions/* /package.json` with a DisCo/legacy Pi manifest
+ * 3. Subdirectory with package.json: `extensions/* /package.json` with a OCSID/legacy Pi manifest
  *
  * No recursion beyond one level. Complex packages must use package.json manifest.
  *
@@ -727,7 +727,7 @@ export async function discoverAndLoadExtensions(
 	for (const p of configuredPaths) {
 		const resolved = resolvePath(p, resolvedCwd, { normalizeUnicodeSpaces: true });
 		if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) {
-			// Check for package.json with a DisCo/legacy Pi manifest or index.ts.
+			// Check for package.json with a OCSID/legacy Pi manifest or index.ts.
 			const entries = resolveExtensionEntries(resolved);
 			if (entries) {
 				addPaths(entries);

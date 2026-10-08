@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "root",
   "target_capability": "chain-select-and-trim-binder-target",
   "difficulty": "intermediate",

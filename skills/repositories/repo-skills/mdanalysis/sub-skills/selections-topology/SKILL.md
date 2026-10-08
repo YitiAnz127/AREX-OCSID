@@ -4,7 +4,7 @@ description: "Use and debug MDAnalysis atom selections, topology attributes,
   groups, fragments, topology guessing, and selection exporters."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

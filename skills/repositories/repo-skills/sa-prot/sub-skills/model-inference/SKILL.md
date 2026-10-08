@@ -4,7 +4,7 @@ description: "Load local SaProt checkpoints, tokenize structure-aware sequences,
   extract embeddings, score mutations, and run inverse folding."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

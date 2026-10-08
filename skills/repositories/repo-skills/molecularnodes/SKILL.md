@@ -5,7 +5,7 @@ description: "Use MolecularNodes 5.2 in a Blender 5.2 host to import, style,
   density maps, and ensembles with verified API and recovery guidance."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

@@ -4,7 +4,7 @@ description: "Understand and adapt DeepVariant make_examples, call_variants,
   postprocess_variants, sharded TFRecords, and gVCF stage contracts."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

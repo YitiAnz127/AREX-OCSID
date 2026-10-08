@@ -68,7 +68,7 @@ class EmptyFooter implements Component {
 	invalidate(): void {}
 }
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	let isWorking = false;
 	let spinnerIndex = 0;
 	let spinnerTimer: ReturnType<typeof setInterval> | undefined;
@@ -82,7 +82,7 @@ export default function (disco: ExtensionAPI) {
 		}
 	};
 
-	disco.on("agent_start", () => {
+	ocsid.on("agent_start", () => {
 		isWorking = true;
 		stopSpinner();
 		spinnerTimer = setInterval(() => {
@@ -92,25 +92,25 @@ export default function (disco: ExtensionAPI) {
 		activeTui?.requestRender();
 	});
 
-	disco.on("agent_end", () => {
+	ocsid.on("agent_end", () => {
 		isWorking = false;
 		stopSpinner();
 		activeTui?.requestRender();
 	});
 
-	disco.on("session_shutdown", () => {
+	ocsid.on("session_shutdown", () => {
 		stopSpinner();
 		activeTui = undefined;
 	});
 
-	disco.on("session_start", (_event, ctx) => {
+	ocsid.on("session_start", (_event, ctx) => {
 		ctx.ui.setWorkingVisible(false);
 		ctx.ui.setFooter(() => new EmptyFooter());
 
 		let branch: string | undefined;
 
 		const refreshBranch = async () => {
-			const result = await disco.exec("git", ["branch", "--show-current"], { cwd: ctx.cwd }).catch(() => undefined);
+			const result = await ocsid.exec("git", ["branch", "--show-current"], { cwd: ctx.cwd }).catch(() => undefined);
 			const stdout = result?.stdout.trim();
 			branch = stdout && stdout.length > 0 ? stdout : undefined;
 			activeTui?.requestRender();
@@ -129,7 +129,7 @@ export default function (disco: ExtensionAPI) {
 
 				const thm = ctx.ui.theme;
 				const model = ctx.model ? `${ctx.model.provider}/${ctx.model.id}` : "no model";
-				const thinking = disco.getThinkingLevel();
+				const thinking = ocsid.getThinkingLevel();
 				const topLeft = isWorking ? thm.fg("accent", ` ${spinnerFrames[spinnerIndex]} `) : "";
 				const topRight = "";
 				const bottomLeft = thm.fg("muted", ` ${model} · ${formatThinking(thinking)} `);

@@ -1,5 +1,5 @@
 {
-  "schema": "disco.repo-skill-verification.v1",
+  "schema": "ocsid.repo-skill-verification.v1",
   "runtimeSkill": "skills/huggingface-hub",
   "artifactRoot": "skills/tests/huggingface-hub",
   "sourceCommit": "4237d95c603db491cb1070898c74c97e4d7c2582",
@@ -11,7 +11,7 @@
     {"name": "portable runtime and privacy", "status": "PASS", "evidence": "No local checkout/prefix paths in runtime files except allowed relative evidence paths in provenance; no symlinks, pycache, pyc, build/cache debris."},
     {"name": "routing projection and external handoff", "status": "PASS", "evidence": "Minimal v2 metadata matches MLOps → Model Hubs and Registries; external classification has source URL/commit/checkout, rationale, non-generated evidence, taxonomy hash, and matching portable-tree digest."},
     {"name": "runtime script checks", "status": "PASS", "evidence": "Download diagnostic, CLI help checker (8/8 with prepared hf), inference mock, and local integration smoke passed."},
-    {"name": "usability case shape", "status": "PASS", "evidence": "15 case directories contain copyable user_request.txt, reviewer README.md, and disco.usability-case.v1 assertions.json; index covers root, all sub-skills, and two integrated cases."},
+    {"name": "usability case shape", "status": "PASS", "evidence": "15 case directories contain copyable user_request.txt, reviewer README.md, and ocsid.usability-case.v1 assertions.json; index covers root, all sub-skills, and two integrated cases."},
     {"name": "content self-refine", "status": "PASS", "evidence": "reports/self-refine/iteration-1.md records breadth/depth/privacy/link/script review and revisions; no unresolved actionable assertion failure."},
     {"name": "native ground truth", "status": "WARN", "evidence": "720 safe unit/mocked native tests passed. Additional staging/network selections timed out or failed due external service/privilege behavior and are explicitly not counted as safe passes; no skill gap found."},
     {"name": "required backend gate", "status": "PASS", "evidence": "No required accelerator backend in selected package graph; optional CUDA smoke passed on A100 hardware. No BLOCKED_REQUIRED_BACKEND result."},

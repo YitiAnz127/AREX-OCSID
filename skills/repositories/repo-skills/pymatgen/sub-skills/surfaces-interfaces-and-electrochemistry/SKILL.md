@@ -5,7 +5,7 @@ description: "Use pymatgen surface, interface, Pourbaix, Wulff-shape,
   interfacial-reactivity workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

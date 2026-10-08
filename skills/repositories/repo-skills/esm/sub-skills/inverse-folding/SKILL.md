@@ -5,7 +5,7 @@ description: "Use ESM-IF1 for fixed-backbone protein inverse design, sequence
   structure encoder representations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

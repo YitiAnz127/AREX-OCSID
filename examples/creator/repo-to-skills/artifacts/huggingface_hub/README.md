@@ -1,7 +1,7 @@
 # `huggingface_hub` Creator artifacts
 
 This bundle accompanies the sanitized Creator session in
-[`../../disco-creator-huggingface_hub.html`](../../disco-creator-huggingface_hub.html).
+[`../../ocsid-creator-huggingface_hub.html`](../../ocsid-creator-huggingface_hub.html).
 It records the public, reviewable outputs of a task-agnostic Creator run for
 `huggingface/huggingface_hub` at source commit
 `4237d95c603db491cb1070898c74c97e4d7c2582` (`v1.29.0`).

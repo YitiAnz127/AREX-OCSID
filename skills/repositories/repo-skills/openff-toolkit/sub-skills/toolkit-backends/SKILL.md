@@ -4,7 +4,7 @@ description: "Choose, inspect, and troubleshoot OpenFF Toolkit optional backend
   wrappers and ToolkitRegistry behavior."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

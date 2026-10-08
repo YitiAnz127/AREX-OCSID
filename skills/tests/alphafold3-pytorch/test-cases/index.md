@@ -1,6 +1,6 @@
 # alphafold3-pytorch — usability test-cases
 
-Evidence-anchored `disco.usability-case.v1` cases for the `alphafold3-pytorch`
+Evidence-anchored `ocsid.usability-case.v1` cases for the `alphafold3-pytorch`
 repo-skill. Every `evidence_basis` / `expected_skill_files` path below exists in
 `skills/repositories/repo-skills/alphafold3-pytorch/`. No assertion is invented
 beyond what the skill's real files document; all are derivable from the request

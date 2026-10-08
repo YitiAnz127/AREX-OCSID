@@ -3,7 +3,7 @@ name: gtopdb-database
 description: "&quot;Query IUPHAR/BPS Guide to Pharmacology (GtoPdb) for receptor-ligand interactions, target/ligand metadata, families, and approved drugs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # gtopdb-database — structural-biology-drug-discovery sub-skill

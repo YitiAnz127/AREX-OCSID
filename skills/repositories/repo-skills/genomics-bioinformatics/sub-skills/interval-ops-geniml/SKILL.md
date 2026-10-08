@@ -3,7 +3,7 @@ name: interval-ops-geniml
 description: "&quot;Python library for genomic interval ML."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # interval-ops-geniml — genomics-bioinformatics sub-skill

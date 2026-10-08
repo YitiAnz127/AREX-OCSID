@@ -3,7 +3,7 @@ name: variant-gatk-variant-calling
 description: "&quot;GATK Best Practices for germline SNP/indel calling from WGS/WES BAMs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # variant-gatk-variant-calling — genomics-bioinformatics sub-skill

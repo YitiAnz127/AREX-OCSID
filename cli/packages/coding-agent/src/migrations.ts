@@ -73,10 +73,10 @@ export function migrateAuthToAuthJson(): string[] {
 }
 
 /**
- * Migrate sessions from ~/.disco/agent/*.jsonl to proper session directories.
+ * Migrate sessions from ~/.ocsid/agent/*.jsonl to proper session directories.
  *
- * Legacy sessions may be saved to ~/.disco/agent/ instead of
- * ~/.disco/agent/sessions/<encoded-cwd>/. This migration moves them
+ * Legacy sessions may be saved to ~/.ocsid/agent/ instead of
+ * ~/.ocsid/agent/sessions/<encoded-cwd>/. This migration moves them
  * to the correct location based on the cwd in their session header.
  *
  * See: https://github.com/earendil-works/pi/issues/320
@@ -217,7 +217,7 @@ function migrateToolsToBin(): void {
 
 /**
  * Check for deprecated hooks/ and tools/ directories.
- * Note: tools/ may contain fd/rg binaries extracted by DisCo, so only warn if it has other files.
+ * Note: tools/ may contain fd/rg binaries extracted by OCSID, so only warn if it has other files.
  */
 function checkDeprecatedExtensionDirs(baseDir: string, label: string): string[] {
 	const hooksDir = join(baseDir, "hooks");

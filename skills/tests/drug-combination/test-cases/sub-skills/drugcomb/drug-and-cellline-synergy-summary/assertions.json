@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "drugcomb",
   "target_capability": "drug-and-cellline-synergy-search",
   "difficulty": "basic",

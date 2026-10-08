@@ -4,8 +4,8 @@ import type { ExtensionAPI } from "@arex-skill/disco";
 
 const baseDir = dirname(fileURLToPath(import.meta.url));
 
-export default function (disco: ExtensionAPI) {
-	disco.on("resources_discover", () => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("resources_discover", () => {
 		return {
 			skillPaths: [join(baseDir, "SKILL.md")],
 			promptPaths: [join(baseDir, "dynamic.md")],

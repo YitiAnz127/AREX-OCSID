@@ -3,7 +3,7 @@ name: exploratory-data-analysis
 description: "Methodology for exploratory data analysis on scientific files."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # exploratory-data-analysis — sciagent-scientific-computing sub-skill

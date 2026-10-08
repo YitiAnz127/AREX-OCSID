@@ -9,17 +9,17 @@
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
-	disco.registerCommand("session-name", {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerCommand("session-name", {
 		description: "Set or show session name (usage: /session-name [new name])",
 		handler: async (args, ctx) => {
 			const name = args.trim();
 
 			if (name) {
-				disco.setSessionName(name);
+				ocsid.setSessionName(name);
 				ctx.ui.notify(`Session named: ${name}`, "info");
 			} else {
-				const current = disco.getSessionName();
+				const current = ocsid.getSessionName();
 				ctx.ui.notify(current ? `Session: ${current}` : "No session name set", "info");
 			}
 		},

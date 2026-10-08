@@ -3,7 +3,7 @@ name: compchem-analysis
 description: "Use compchem-analysis for molecular simulation workflows: analysis."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

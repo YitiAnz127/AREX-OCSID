@@ -5,7 +5,7 @@ description: "Guides PyHealth model-family selection, dataset and vocabulary
   small-scale workflow adaptation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

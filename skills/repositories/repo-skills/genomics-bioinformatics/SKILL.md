@@ -3,7 +3,7 @@ name: genomics-bioinformatics
 description: "Use genomics-bioinformatics for genomics and bioinformatics workflows: genomics-bioinformatics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

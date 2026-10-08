@@ -5,7 +5,7 @@ description: "Run Chemprop prediction and fingerprint workflows from trained
   fingerprint layer choices."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

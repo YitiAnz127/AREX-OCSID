@@ -36,7 +36,7 @@ def make_adata() -> AnnData:
 
 
 @ad.register_anndata_namespace("disco_demo")
-class DisCoDemoNamespace:
+class OCSIDDemoNamespace:
     def __init__(self, adata: AnnData) -> None:
         self._adata = adata
 

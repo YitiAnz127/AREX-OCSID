@@ -8,7 +8,7 @@ function writeCandidateRun(quality: string, runId: string, rows: Array<Record<st
 	const dir = join(quality, "audit", runId);
 	mkdirSync(dir, { recursive: true });
 	writeFileSync(join(dir, "summary.json"), JSON.stringify({ runId, kind: "candidate-eval", caseCount: rows.length, ledgerRowCount: rows.length, taskSuccessRate: 0.5, ...(summary ?? {}) }), "utf8");
-	writeFileSync(join(dir, "ledger.jsonl"), rows.map((r) => JSON.stringify({ runId, schema: "disco.quality-ledger.v1", candidateSha256: "d1", score: 0.5, gradedBy: "model_grader", ts: "2026-01-01T00:00:00Z", ...r })).join("\n") + "\n", "utf8");
+	writeFileSync(join(dir, "ledger.jsonl"), rows.map((r) => JSON.stringify({ runId, schema: "ocsid.quality-ledger.v1", candidateSha256: "d1", score: 0.5, gradedBy: "model_grader", ts: "2026-01-01T00:00:00Z", ...r })).join("\n") + "\n", "utf8");
 }
 
 describe("score report", () => {

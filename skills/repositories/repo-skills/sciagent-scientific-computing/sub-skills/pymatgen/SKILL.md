@@ -3,7 +3,7 @@ name: pymatgen
 description: "&quot;Python Materials Genomics library for structure analysis, thermodynamics, and electronic properties."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pymatgen — sciagent-scientific-computing sub-skill

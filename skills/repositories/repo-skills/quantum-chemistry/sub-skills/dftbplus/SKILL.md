@@ -3,7 +3,7 @@ name: dftbplus
 description: "Route DFTB+ requests to task-specific subskills based on user intent."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dftbplus — quantum-chemistry sub-skill

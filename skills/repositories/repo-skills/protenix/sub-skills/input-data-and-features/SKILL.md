@@ -5,7 +5,7 @@ description: "Author, validate, and convert Protenix input JSON for proteins,
   inference."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

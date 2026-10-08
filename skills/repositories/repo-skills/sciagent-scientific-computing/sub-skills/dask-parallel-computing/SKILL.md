@@ -3,7 +3,7 @@ name: dask-parallel-computing
 description: "&quot;Parallel/distributed computing for larger-than-RAM data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dask-parallel-computing — sciagent-scientific-computing sub-skill

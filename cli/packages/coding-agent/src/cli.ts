@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-/** DisCo CLI process entry point. */
-import { isolateDisCoProcessFromPiEnvironment } from "./cli/pi-environment-isolation.ts";
+/** OCSID CLI process entry point. */
+import { isolateOCSIDProcessFromPiEnvironment } from "./cli/pi-environment-isolation.ts";
 
-process.env.DISCO_CODING_AGENT = "true";
+process.env.OCSID_CODING_AGENT = "true";
 process.emitWarning = (() => {}) as typeof process.emitWarning;
-isolateDisCoProcessFromPiEnvironment();
+isolateOCSIDProcessFromPiEnvironment();
 
 const [{ APP_NAME }, { configureHttpDispatcher }, { main }] = await Promise.all([
 	import("./config.ts"),

@@ -5,7 +5,7 @@ description: "Use CellTypist for single-cell RNA-seq cell type annotation, model
   workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

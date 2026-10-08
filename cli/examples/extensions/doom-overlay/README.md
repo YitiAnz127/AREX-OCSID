@@ -1,11 +1,11 @@
 # DOOM Overlay Demo
 
-Play DOOM as an overlay in disco. Demonstrates that the overlay system can handle real-time game rendering at 35 FPS.
+Play DOOM as an overlay in ocsid. Demonstrates that the overlay system can handle real-time game rendering at 35 FPS.
 
 ## Usage
 
 ```bash
-disco --extension ./examples/extensions/doom-overlay
+ocsid --extension ./examples/extensions/doom-overlay
 ```
 
 Then run:

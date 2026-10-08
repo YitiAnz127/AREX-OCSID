@@ -3,7 +3,7 @@ name: lab-automation
 description: "Use lab-automation for genomics and bioinformatics workflows: lab-automation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

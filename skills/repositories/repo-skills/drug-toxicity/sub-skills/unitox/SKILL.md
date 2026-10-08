@@ -3,7 +3,7 @@ name: unitox
 description: "Query the UniTox drug toxicity database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # unitox — drug-toxicity sub-skill

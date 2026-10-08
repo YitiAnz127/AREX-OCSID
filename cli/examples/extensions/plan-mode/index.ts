@@ -44,13 +44,13 @@ function getTextContent(message: AssistantMessage): string {
 		.join("\n");
 }
 
-export default function planModeExtension(disco: ExtensionAPI): void {
+export default function planModeExtension(ocsid: ExtensionAPI): void {
 	let planModeEnabled = false;
 	let executionMode = false;
 	let todoItems: TodoItem[] = [];
 	let toolsBeforePlanMode: string[] | undefined;
 
-	disco.registerFlag("plan", {
+	ocsid.registerFlag("plan", {
 		description: "Start in plan mode (read-only exploration)",
 		type: "boolean",
 		default: false,
@@ -103,18 +103,18 @@ export default function planModeExtension(disco: ExtensionAPI): void {
 
 	function enablePlanModeTools(): void {
 		if (toolsBeforePlanMode === undefined) {
-			toolsBeforePlanMode = disco.getActiveTools();
+			toolsBeforePlanMode = ocsid.getActiveTools();
 		}
-		disco.setActiveTools(getPlanModeTools(toolsBeforePlanMode));
+		ocsid.setActiveTools(getPlanModeTools(toolsBeforePlanMode));
 	}
 
 	function restoreNormalModeTools(): void {
-		disco.setActiveTools(toolsBeforePlanMode ?? getNormalModeTools(disco.getActiveTools()));
+		ocsid.setActiveTools(toolsBeforePlanMode ?? getNormalModeTools(ocsid.getActiveTools()));
 		toolsBeforePlanMode = undefined;
 	}
 
 	function persistState(): void {
-		disco.appendEntry("plan-mode", {
+		ocsid.appendEntry("plan-mode", {
 			enabled: planModeEnabled,
 			todos: todoItems,
 			executing: executionMode,
@@ -138,12 +138,12 @@ export default function planModeExtension(disco: ExtensionAPI): void {
 		persistState();
 	}
 
-	disco.registerCommand("plan", {
+	ocsid.registerCommand("plan", {
 		description: "Toggle plan mode (read-only exploration)",
 		handler: async (_args, ctx) => togglePlanMode(ctx),
 	});
 
-	disco.registerCommand("todos", {
+	ocsid.registerCommand("todos", {
 		description: "Show current plan todo list",
 		handler: async (_args, ctx) => {
 			if (todoItems.length === 0) {
@@ -155,13 +155,13 @@ export default function planModeExtension(disco: ExtensionAPI): void {
 		},
 	});
 
-	disco.registerShortcut(Key.ctrlAlt("p"), {
+	ocsid.registerShortcut(Key.ctrlAlt("p"), {
 		description: "Toggle plan mode",
 		handler: async (ctx) => togglePlanMode(ctx),
 	});
 
 	// Block destructive bash commands in plan mode
-	disco.on("tool_call", async (event) => {
+	ocsid.on("tool_call", async (event) => {
 		if (!planModeEnabled || event.toolName !== "bash") return;
 
 		const command = event.input.command as string;
@@ -174,7 +174,7 @@ export default function planModeExtension(disco: ExtensionAPI): void {
 	});
 
 	// Filter out stale plan mode context when not in plan mode
-	disco.on("context", async (event) => {
+	ocsid.on("context", async (event) => {
 		if (planModeEnabled) return;
 
 		return {
@@ -198,7 +198,7 @@ export default function planModeExtension(disco: ExtensionAPI): void {
 	});
 
 	// Inject plan/execution context before agent starts
-	disco.on("before_agent_start", async () => {
+	ocsid.on("before_agent_start", async () => {
 		if (planModeEnabled) {
 			return {
 				message: {
@@ -247,7 +247,7 @@ After completing a step, include a [DONE:n] tag in your response.`,
 	});
 
 	// Track progress after each turn
-	disco.on("turn_end", async (event, ctx) => {
+	ocsid.on("turn_end", async (event, ctx) => {
 		if (!executionMode || todoItems.length === 0) return;
 		if (!isAssistantMessage(event.message)) return;
 
@@ -259,12 +259,12 @@ After completing a step, include a [DONE:n] tag in your response.`,
 	});
 
 	// Handle plan completion and plan mode UI
-	disco.on("agent_end", async (event, ctx) => {
+	ocsid.on("agent_end", async (event, ctx) => {
 		// Check if execution is complete
 		if (executionMode && todoItems.length > 0) {
 			if (todoItems.every((t) => t.completed)) {
 				const completedList = todoItems.map((t) => `~~${t.text}~~`).join("\n");
-				disco.sendMessage(
+				ocsid.sendMessage(
 					{ customType: "plan-complete", content: `**Plan Complete!** ✓\n\n${completedList}`, display: true },
 					{ triggerTurn: false },
 				);
@@ -322,23 +322,23 @@ ${remainingList}
 
 Start with: ${firstTodoItem.text}
 After completing a step, include a [DONE:n] tag in your response.`;
-			disco.sendMessage(planTodoListMessage, { deliverAs: "followUp" });
-			disco.sendMessage(
+			ocsid.sendMessage(planTodoListMessage, { deliverAs: "followUp" });
+			ocsid.sendMessage(
 				{ customType: "plan-mode-execute", content: execMessage, display: true },
 				{ triggerTurn: true, deliverAs: "followUp" },
 			);
 		} else if (choice === "Refine the plan") {
 			const refinement = await ctx.ui.editor("Refine the plan:", "");
 			if (refinement?.trim()) {
-				disco.sendMessage(planTodoListMessage, { deliverAs: "followUp" });
-				disco.sendUserMessage(refinement.trim(), { deliverAs: "followUp" });
+				ocsid.sendMessage(planTodoListMessage, { deliverAs: "followUp" });
+				ocsid.sendUserMessage(refinement.trim(), { deliverAs: "followUp" });
 			}
 		}
 	});
 
 	// Restore state on session start/resume
-	disco.on("session_start", async (_event, ctx) => {
-		if (disco.getFlag("plan") === true) {
+	ocsid.on("session_start", async (_event, ctx) => {
+		if (ocsid.getFlag("plan") === true) {
 			planModeEnabled = true;
 		}
 

@@ -5,7 +5,7 @@ description: "Prepare and diagnose Boltz raw training/evaluation data pipelines,
   layouts."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

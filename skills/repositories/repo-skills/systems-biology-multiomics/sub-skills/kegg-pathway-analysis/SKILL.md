@@ -3,7 +3,7 @@ name: kegg-pathway-analysis
 description: "&quot;Guide to KEGG pathway enrichment for DEG results."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # kegg-pathway-analysis — systems-biology-multiomics sub-skill

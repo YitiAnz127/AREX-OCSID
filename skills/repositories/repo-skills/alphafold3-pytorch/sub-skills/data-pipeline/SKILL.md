@@ -5,7 +5,7 @@ description: "Prepare and validate AlphaFold 3 mmCIF/PDB, MSA, template, crop,
   acquisition or mutation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

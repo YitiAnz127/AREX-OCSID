@@ -6,7 +6,7 @@ description: "Use DIG (Dive into Graphs) to load graph-learning datasets, run
   large-scale graph workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

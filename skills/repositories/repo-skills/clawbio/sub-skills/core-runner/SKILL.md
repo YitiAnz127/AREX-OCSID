@@ -4,7 +4,7 @@ description: "Operate the ClawBio installation, CLI, public Python runner,
   patient profiles, output contracts, and reproducibility bundles safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

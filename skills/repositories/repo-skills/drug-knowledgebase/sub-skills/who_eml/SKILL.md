@@ -3,7 +3,7 @@ name: who_eml
 description: "Query the WHO Model List of Essential Medicines (23rd list, 2023)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # who_eml — drug-knowledgebase sub-skill

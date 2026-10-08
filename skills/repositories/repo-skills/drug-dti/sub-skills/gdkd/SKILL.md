@@ -3,7 +3,7 @@ name: gdkd
 description: "Query the Gene-Drug Knowledge Database (GDKD) for variant-specific gene–drug associations in oncology."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # gdkd — drug-dti sub-skill

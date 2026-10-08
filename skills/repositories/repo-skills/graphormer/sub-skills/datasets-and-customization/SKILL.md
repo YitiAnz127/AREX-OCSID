@@ -4,7 +4,7 @@ description: "Route Graphormer dataset source selection, custom registration,
   preprocessing, and validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

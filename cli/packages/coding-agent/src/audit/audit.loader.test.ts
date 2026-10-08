@@ -6,16 +6,17 @@ import { tmpdir } from "node:os";
 import { auditPreflight, buildBaselineDeps, computeBenchmarkContentDigest, loadBenchmark } from "./loader.ts";
 import { runAudit } from "./runner.ts";
 import { persistAuditRun } from "./records.ts";
+import { OFFICIAL_BENCHMARK_DIR, OFFICIAL_BENCHMARK_NAME } from "../benchmark/freeze.ts";
 
 const srcAudit = path.dirname(fileURLToPath(import.meta.url));
 // src/audit -> repo root is 5 levels up.
 const repoRoot = path.resolve(srcAudit, "..", "..", "..", "..", "..");
-const benchmarkRoot = path.join(repoRoot, "skills", "tests", "benchmark-v1");
+const benchmarkRoot = path.join(repoRoot, "skills", "tests", OFFICIAL_BENCHMARK_DIR);
 
 describe("audit loader over the frozen pilot benchmark", () => {
-	it("loads the real frozen pilot-v1 manifest", () => {
+	it("loads the real frozen pilot manifest", () => {
 		const loaded = loadBenchmark(benchmarkRoot);
-		expect(loaded.manifest.name).toBe("pilot-v1");
+		expect(loaded.manifest.name).toBe(OFFICIAL_BENCHMARK_NAME);
 		expect(loaded.manifest.splits.train.length).toBe(4);
 		expect(loaded.manifest.splits.dev.length).toBe(3);
 		expect(loaded.manifest.splits.heldout.length).toBe(3);
@@ -60,7 +61,7 @@ describe("audit loader over the frozen pilot benchmark", () => {
 			const caseDir = path.join(tmp, "skill-a", "test-cases", "c1");
 			mkdirSync(caseDir, { recursive: true });
 			writeFileSync(path.join(caseDir, "user_request.txt"), "Do thing X\n", "utf8");
-			writeFileSync(path.join(caseDir, "assertions.json"), JSON.stringify({ schema: "disco.usability-case.v1", checks: [{ id: "c1", pass: "thing X present" }] }), "utf8");
+			writeFileSync(path.join(caseDir, "assertions.json"), JSON.stringify({ schema: "ocsid.usability-case.v1", checks: [{ id: "c1", pass: "thing X present" }] }), "utf8");
 			const splitIndex = { train: ["skill-a"], dev: [], heldout: [] } as const;
 
 			const base = computeBenchmarkContentDigest(tmp, splitIndex);
@@ -72,7 +73,7 @@ describe("audit loader over the frozen pilot benchmark", () => {
 
 			// Restore, then mutate assertions instead.
 			writeFileSync(path.join(caseDir, "user_request.txt"), "Do thing X\n", "utf8");
-			writeFileSync(path.join(caseDir, "assertions.json"), JSON.stringify({ schema: "disco.usability-case.v1", checks: [{ id: "c1", pass: "thing Z present" }] }), "utf8");
+			writeFileSync(path.join(caseDir, "assertions.json"), JSON.stringify({ schema: "ocsid.usability-case.v1", checks: [{ id: "c1", pass: "thing Z present" }] }), "utf8");
 			expect(computeBenchmarkContentDigest(tmp, splitIndex)).not.toBe(base);
 		} finally {
 			rmSync(tmp, { recursive: true, force: true });

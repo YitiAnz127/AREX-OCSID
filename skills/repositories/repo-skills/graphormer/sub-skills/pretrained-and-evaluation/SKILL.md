@@ -4,7 +4,7 @@ description: "Guide Graphormer pretrained checkpoint loading, fine-tuning, and
   evaluation workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

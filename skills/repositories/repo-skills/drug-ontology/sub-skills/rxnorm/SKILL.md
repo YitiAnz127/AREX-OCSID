@@ -3,7 +3,7 @@ name: rxnorm
 description: "Query the RxNorm drug naming and normalization API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rxnorm — drug-ontology sub-skill

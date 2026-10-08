@@ -3,7 +3,7 @@ name: drugbank-database-access
 description: "&quot;Parse local DrugBank XML for drug info, interactions, targets, and properties."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drugbank-database-access — structural-biology-drug-discovery sub-skill

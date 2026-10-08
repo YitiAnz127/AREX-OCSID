@@ -3,7 +3,7 @@ name: statsmodels-statistical-modeling
 description: "&quot;Python statistical modeling: regression (OLS, WLS, GLM), discrete (Logit, Poisson, NegBin), time series (ARIMA, SARIMAX, VAR), with rigorous inference, diagnostics, and hypothesis"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # statsmodels-statistical-modeling — biostatistics sub-skill

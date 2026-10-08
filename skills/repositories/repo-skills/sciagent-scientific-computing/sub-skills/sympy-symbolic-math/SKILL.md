@@ -3,7 +3,7 @@ name: sympy-symbolic-math
 description: "&quot;Symbolic math in Python: exact algebra, calculus (derivatives, integrals, limits), equation solving, symbolic matrices, ODEs, code gen (lambdify, C/Fortran)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # sympy-symbolic-math — sciagent-scientific-computing sub-skill

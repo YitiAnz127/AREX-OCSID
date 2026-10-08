@@ -3,7 +3,7 @@ name: dft-gpaw
 description: "Route GPAW DFT requests to task-specific subskills based on user intent."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-gpaw — quantum-chemistry sub-skill

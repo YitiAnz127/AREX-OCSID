@@ -3,7 +3,7 @@ name: ddinter
 description: "Query the DDInter drug-drug interaction database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ddinter — drug-ddi sub-skill

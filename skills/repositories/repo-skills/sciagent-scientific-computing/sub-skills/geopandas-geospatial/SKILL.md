@@ -3,7 +3,7 @@ name: geopandas-geospatial
 description: "Geospatial vector analysis extending pandas."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # geopandas-geospatial — sciagent-scientific-computing sub-skill

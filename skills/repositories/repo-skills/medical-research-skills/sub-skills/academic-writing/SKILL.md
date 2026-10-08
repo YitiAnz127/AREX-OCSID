@@ -5,7 +5,7 @@ description: "Supports evidence-disciplined medical manuscript, review,
   fabricating data, citations, or compliance."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

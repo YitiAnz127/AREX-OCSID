@@ -5,7 +5,7 @@ description: "Install and verify MolecularNodes in a Blender 5.2 host, then
   recover setup failures."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

@@ -3,7 +3,7 @@ name: compchem-tools
 description: "Use compchem-tools for molecular simulation workflows: tools."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

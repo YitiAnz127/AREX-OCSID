@@ -3,7 +3,7 @@ name: search-species
 description: "USE WHEN requesting core chemical structural data (SMILES, formula, mass, 2D images) via IUPAC, common, or multilingual names."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # search-species — compchem-tools sub-skill

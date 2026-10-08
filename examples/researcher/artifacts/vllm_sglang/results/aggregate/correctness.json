@@ -91,6 +91,6 @@
       "vllm_text": " probabilistic.\nA. True\nB. False\n\n<think>\nThinking Process:\n\n1.  **Analyze the Request:** The user is asking whether"
     }
   ],
-  "schema": "disco.correctness-comparison.v1",
+  "schema": "ocsid.correctness-comparison.v1",
   "successful_in_both": 8
 }

@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "gdsc",
   "target_capability": "query-gdsc-drug-target-lookup",
   "difficulty": "basic",

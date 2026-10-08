@@ -1,25 +1,25 @@
 # Settings
 
-DisCo uses JSON settings files with project settings overriding global settings.
+OCSID uses JSON settings files with project settings overriding global settings.
 
 | Location | Scope |
 |----------|-------|
-| `~/.disco/agent/settings.json` | Global (all projects) |
-| `.disco/settings.json` | Project (current directory) |
+| `~/.ocsid/agent/settings.json` | Global (all projects) |
+| `.ocsid/settings.json` | Project (current directory) |
 
 Edit directly or use `/settings` for common options.
 
 ## Project Trust
 
-On interactive startup, disco asks before trusting a project folder that contains project-local settings, resources, or project `.agents/skills` and has no saved decision for the folder or a parent folder in `~/.disco/agent/trust.json`. Trusting a project allows disco to load `.disco/settings.json` and `.disco` resources, install missing project packages, and execute project extensions.
+On interactive startup, ocsid asks before trusting a project folder that contains project-local settings, resources, or project `.agents/skills` and has no saved decision for the folder or a parent folder in `~/.ocsid/agent/trust.json`. Trusting a project allows ocsid to load `.ocsid/settings.json` and `.ocsid` resources, install missing project packages, and execute project extensions.
 
 Non-interactive modes (`-p`, `--mode json`, and `--mode rpc`) do not show a trust prompt. Without an applicable saved trust decision, they use `defaultProjectTrust` from global settings: `ask` (default) and `never` ignore those project resources, while `always` trusts them. Pass `--approve`/`-a` or `--no-approve`/`-na` to override project trust for one run.
 
-If no extension or saved decision applies, `defaultProjectTrust` controls the fallback behavior. Set it to `"ask"`, `"always"`, or `"never"` in `~/.disco/agent/settings.json`, or change it with `/settings`.
+If no extension or saved decision applies, `defaultProjectTrust` controls the fallback behavior. Set it to `"ask"`, `"always"`, or `"never"` in `~/.ocsid/agent/settings.json`, or change it with `/settings`.
 
-`disco config` and package commands use the same project trust flow, except `disco update` never prompts. Pass `--approve` to trust project-local settings for one command or `--no-approve` to ignore them.
+`ocsid config` and package commands use the same project trust flow, except `ocsid update` never prompts. Pass `--approve` to trust project-local settings for one command or `--no-approve` to ignore them.
 
-Use `/trust` in interactive mode to save a project trust decision for future sessions, including trust for the immediate parent folder. It writes `~/.disco/agent/trust.json` only; the current session is not reloaded, so restart disco for changes to take effect.
+Use `/trust` in interactive mode to save a project trust decision for future sessions, including trust for the immediate parent folder. It writes `~/.ocsid/agent/trust.json` only; the current session is not reloaded, so restart ocsid for changes to take effect.
 
 ## All Settings
 
@@ -57,7 +57,7 @@ Use `/trust` in interactive mode to save a project trust decision for future ses
 | `defaultProjectTrust` | string | `"ask"` | Fallback project trust behavior: `"ask"`, `"always"`, or `"never"`. Global setting only |
 | `collapseChangelog` | boolean | `false` | Show condensed changelog after updates |
 | `enableInstallTelemetry` | boolean | `true` | Send an anonymous install/update version ping after first install or changelog-detected updates. This does not control update checks |
-| `enableAnalytics` | boolean | `false` | Opt-in analytics data sharing. Currently only asked for during the experimental first-time setup (`DISCO_EXPERIMENTAL=1`) |
+| `enableAnalytics` | boolean | `false` | Opt-in analytics data sharing. Currently only asked for during the experimental first-time setup (`OCSID_EXPERIMENTAL=1`) |
 | `trackingId` | string | - | Analytics tracking identifier, generated when `enableAnalytics` is turned on |
 | `doubleEscapeAction` | string | `"tree"` | Action for double-escape: `"tree"`, `"fork"`, or `"none"` |
 | `treeFilterMode` | string | `"default"` | Default filter for `/tree`: `"default"`, `"no-tools"`, `"user-only"`, `"labeled-only"`, `"all"` |
@@ -66,7 +66,7 @@ Use `/trust` in interactive mode to save a project trust decision for future ses
 | `autocompleteMaxVisible` | number | `5` | Max visible items in autocomplete dropdown (3-20) |
 | `showHardwareCursor` | boolean | `false` | Show the terminal cursor while TUI positions it for IME support |
 
-For VS Code, include `--wait` so disco resumes after the editor exits:
+For VS Code, include `--wait` so ocsid resumes after the editor exits:
 
 ```json
 {
@@ -76,9 +76,9 @@ For VS Code, include `--wait` so disco resumes after the editor exits:
 
 ### Telemetry and update checks
 
-DisCo has no built-in telemetry endpoint. `enableInstallTelemetry` only permits an anonymous version ping when the distributor explicitly supplies `DISCO_INSTALL_TELEMETRY_URL`; without that variable, no install/update telemetry request is sent. Opting out of telemetry does not disable update checks. By default, the version check reads the published `@arex-skill/disco` metadata from the npm registry.
+OCSID has no built-in telemetry endpoint. `enableInstallTelemetry` only permits an anonymous version ping when the distributor explicitly supplies `OCSID_INSTALL_TELEMETRY_URL`; without that variable, no install/update telemetry request is sent. Opting out of telemetry does not disable update checks. By default, the version check reads npm registry metadata for the package name; this build is not published to npm, so it has no meaningful data unless `OCSID_LATEST_VERSION_URL` points at your own endpoint.
 
-Set `DISCO_SKIP_VERSION_CHECK=1` to disable the DisCo version update check. Use `--offline` or `DISCO_OFFLINE=1` to disable all startup network operations described here, including update checks, package update checks, and install/update telemetry.
+Set `OCSID_SKIP_VERSION_CHECK=1` to disable the OCSID version update check. Use `--offline` or `OCSID_OFFLINE=1` to disable all startup network operations described here, including update checks, package update checks, and install/update telemetry.
 
 ### Network
 
@@ -144,7 +144,7 @@ Set `DISCO_SKIP_VERSION_CHECK=1` to disable the DisCo version update check. Use 
 
 When a provider requests a retry delay longer than `retry.provider.maxRetryDelayMs`, the request fails immediately with an informative error instead of waiting silently. Set it to `0` to disable the limit.
 
-Keep `retry.provider.maxRetries` at `0` unless provider-level retries are explicitly needed. Setting it above `0` can make SDK/provider retries handle out-of-usage-limit errors before DisCo sees them, which may block the agent until the provider quota resets in some circumstances.
+Keep `retry.provider.maxRetries` at `0` unless provider-level retries are explicitly needed. Setting it above `0` can make SDK/provider retries handle out-of-usage-limit errors before OCSID sees them, which may block the agent until the provider quota resets in some circumstances.
 
 ```json
 {
@@ -195,7 +195,7 @@ Keep `retry.provider.maxRetries` at `0` unless provider-level retries are explic
 }
 ```
 
-`npmCommand` is used for all npm package-manager operations, including installs, uninstalls, and dependency installs inside git packages. User-scoped npm packages install under `~/.disco/agent/npm/`; project-scoped npm packages install under `.disco/npm/`. Use argv-style entries exactly as the process should be launched. When `npmCommand` is configured, git package dependency installs use plain `install` to avoid npm-specific flags in wrappers or alternate package managers.
+`npmCommand` is used for all npm package-manager operations, including installs, uninstalls, and dependency installs inside git packages. User-scoped npm packages install under `~/.ocsid/agent/npm/`; project-scoped npm packages install under `.ocsid/npm/`. Use argv-style entries exactly as the process should be launched. When `npmCommand` is configured, git package dependency installs use plain `install` to avoid npm-specific flags in wrappers or alternate package managers.
 
 ### Sessions
 
@@ -204,10 +204,10 @@ Keep `retry.provider.maxRetries` at `0` unless provider-level retries are explic
 | `sessionDir` | string | - | Directory where session files are stored. Accepts absolute or relative paths, plus `~`. |
 
 ```json
-{ "sessionDir": ".disco/sessions" }
+{ "sessionDir": ".ocsid/sessions" }
 ```
 
-When multiple sources specify a session directory, precedence is `--session-dir`, `DISCO_CODING_AGENT_SESSION_DIR`, then `sessionDir` in settings.json.
+When multiple sources specify a session directory, precedence is `--session-dir`, `OCSID_CODING_AGENT_SESSION_DIR`, then `sessionDir` in settings.json.
 
 ### Model Cycling
 
@@ -231,7 +231,7 @@ When multiple sources specify a session directory, precedence is `--session-dir`
 
 These settings define where to load extensions, skills, prompts, and themes from.
 
-Paths in `~/.disco/agent/settings.json` resolve relative to `~/.disco/agent`. Paths in `.disco/settings.json` resolve relative to `.disco`. Absolute paths and `~` are supported.
+Paths in `~/.ocsid/agent/settings.json` resolve relative to `~/.ocsid/agent`. Paths in `.ocsid/settings.json` resolve relative to `.ocsid`. Absolute paths and `~` are supported.
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
@@ -250,7 +250,7 @@ String form loads all resources from a package:
 
 ```json
 {
-  "packages": ["disco-skills", "@org/my-extension"]
+  "packages": ["ocsid-skills", "@org/my-extension"]
 }
 ```
 
@@ -260,7 +260,7 @@ Object form filters which resources to load:
 {
   "packages": [
     {
-      "source": "disco-skills",
+      "source": "ocsid-skills",
       "skills": ["brave-search", "transcribe"],
       "extensions": []
     }
@@ -291,22 +291,22 @@ See [packages.md](packages.md) for package management details.
   "warnings": {
     "anthropicExtraUsage": true
   },
-  "packages": ["disco-skills"]
+  "packages": ["ocsid-skills"]
 }
 ```
 
 ## Project Overrides
 
-Project settings (`.disco/settings.json`) override global settings. Nested objects are merged:
+Project settings (`.ocsid/settings.json`) override global settings. Nested objects are merged:
 
 ```json
-// ~/.disco/agent/settings.json (global)
+// ~/.ocsid/agent/settings.json (global)
 {
   "theme": "dark",
   "compaction": { "enabled": true, "reserveTokens": 16384 }
 }
 
-// .disco/settings.json (project)
+// .ocsid/settings.json (project)
 {
   "compaction": { "reserveTokens": 8192 }
 }

@@ -3,7 +3,7 @@ name: annotation-bakta-genome-annotation
 description: "&quot;Annotate bacterial and archaeal genomes and plasmids with Bakta's Prodigal/HMM/diamond pipeline."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # annotation-bakta-genome-annotation — genomics-bioinformatics sub-skill

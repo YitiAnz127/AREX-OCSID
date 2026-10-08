@@ -3,7 +3,7 @@ name: ase-ase-workflows-relax
 description: "Prepare ASE geometry-optimization workflow tasks with backend-agnostic controls."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ase-ase-workflows-relax — atomistic-workflows sub-skill

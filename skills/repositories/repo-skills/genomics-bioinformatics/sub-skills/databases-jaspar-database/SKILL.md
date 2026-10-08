@@ -3,7 +3,7 @@ name: databases-jaspar-database
 description: "&quot;JASPAR 2024 TF binding profiles via REST API and pyJASPAR."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-jaspar-database — genomics-bioinformatics sub-skill

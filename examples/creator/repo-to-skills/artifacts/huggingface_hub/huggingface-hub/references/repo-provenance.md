@@ -11,7 +11,7 @@ relying on detailed behavior.
 
 ```json
 {
-  "schema": "disco.repo-provenance.v1",
+  "schema": "ocsid.repo-provenance.v1",
   "generated_at_utc": "2026-08-31T11:13:43Z",
   "repository": {
     "name": "huggingface_hub",

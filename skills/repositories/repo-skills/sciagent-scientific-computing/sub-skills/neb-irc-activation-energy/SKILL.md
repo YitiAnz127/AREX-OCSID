@@ -3,7 +3,7 @@ name: neb-irc-activation-energy
 description: "&quot;NEB-IRC activation energy pipeline for reaction barriers using GFN2-xTB and pysisyphus."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # neb-irc-activation-energy — sciagent-scientific-computing sub-skill

@@ -1,8 +1,8 @@
 /**
  * Inline Bash Extension - expands inline bash commands in user prompts.
  *
- * Start disco with this extension:
- *   disco -e ./examples/extensions/inline-bash.ts
+ * Start ocsid with this extension:
+ *   ocsid -e ./examples/extensions/inline-bash.ts
  *
  * Then type prompts with inline bash:
  *   What's in !{pwd}?
@@ -16,11 +16,11 @@
  */
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	const PATTERN = /!\{([^}]+)\}/g;
 	const TIMEOUT_MS = 30000;
 
-	disco.on("input", async (event, ctx) => {
+	ocsid.on("input", async (event, ctx) => {
 		const text = event.text;
 
 		// Don't process if it's a whole-line bash command (starts with !)
@@ -51,7 +51,7 @@ export default function (disco: ExtensionAPI) {
 		// Execute each command and collect results
 		for (const { full, command } of matches) {
 			try {
-				const bashResult = await disco.exec("bash", ["-c", command], {
+				const bashResult = await ocsid.exec("bash", ["-c", command], {
 					timeout: TIMEOUT_MS,
 				});
 

@@ -4,7 +4,7 @@ description: "Plan DeepVariant labeled-example generation, custom training,
   fine-tuning, checkpoint export, and customized-model handoff."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

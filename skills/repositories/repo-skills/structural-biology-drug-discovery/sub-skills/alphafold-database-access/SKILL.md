@@ -3,7 +3,7 @@ name: alphafold-database-access
 description: "Access AlphaFold DB's 200M+ predicted structures by UniProt ID."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # alphafold-database-access — structural-biology-drug-discovery sub-skill

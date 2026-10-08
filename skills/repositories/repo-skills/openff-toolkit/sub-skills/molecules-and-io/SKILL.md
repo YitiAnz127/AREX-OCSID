@@ -4,7 +4,7 @@ description: "Build, inspect, convert, serialize, charge, conformer-generate,
   visualize, and validate OpenFF Molecule objects."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

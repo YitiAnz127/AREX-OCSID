@@ -796,7 +796,7 @@ export function getDefaultTheme(): string {
 // Global Theme Instance
 // ============================================================================
 
-// Use a DisCo-owned key to share the theme across module loaders (tsx + jiti)
+// Use a OCSID-owned key to share the theme across module loaders (tsx + jiti)
 // without sharing state with Pi loaded in the same process.
 const THEME_KEY = Symbol.for("@arex-skill/disco:theme");
 
@@ -1022,7 +1022,7 @@ function ansi256ToHex(index: number): string {
  * The exported document writes these values raw into a `<style>` block
  * (`--accent: <value>;`), so any value that can carry `<`, `>`, `/`, `;` or a
  * quote can close `</style>` and inject markup. Theme files are supplied by
- * users and by trusted projects (`.disco/themes/*.json`), and the exported HTML
+ * users and by trusted projects (`.ocsid/themes/*.json`), and the exported HTML
  * is normally handed to other people — so this is a value that crosses into
  * someone else's browser.
  */

@@ -4,7 +4,7 @@ description: "Routes Hugging Face Hub file and snapshot downloads, cache and off
 disable-model-invocation: true
 license: Apache-2.0
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # Downloads and Storage

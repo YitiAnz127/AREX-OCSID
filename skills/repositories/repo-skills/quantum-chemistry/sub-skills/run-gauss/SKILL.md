@@ -3,7 +3,7 @@ name: run-gauss
 description: "Acts as a knowledge base providing environment checklists, directory/scratch management, and bash command templates."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # run-gauss — quantum-chemistry sub-skill

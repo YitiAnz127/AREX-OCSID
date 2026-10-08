@@ -3,7 +3,7 @@ name: single-cell-scanpy-scrna-seq
 description: "&quot;scRNA-seq with Scanpy: QC, normalization, HVG selection, PCA, neighborhood graph, UMAP/t-SNE, Leiden clustering, markers, cell annotation, trajectory inference."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # single-cell-scanpy-scrna-seq — genomics-bioinformatics sub-skill

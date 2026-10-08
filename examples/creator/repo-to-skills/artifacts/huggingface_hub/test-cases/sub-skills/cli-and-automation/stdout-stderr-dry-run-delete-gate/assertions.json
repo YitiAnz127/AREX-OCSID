@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "cli-and-automation",
   "target_capability": "CLI output streams and destructive confirmation",
   "difficulty": "intermediate",

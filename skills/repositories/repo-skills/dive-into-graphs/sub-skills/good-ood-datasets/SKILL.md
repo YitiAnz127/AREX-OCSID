@@ -5,7 +5,7 @@ description: "Use DIG's GOOD OOD dataset loaders for domain/shift splits,
   graph domains."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

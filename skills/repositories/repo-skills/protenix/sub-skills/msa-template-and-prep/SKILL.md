@@ -4,7 +4,7 @@ description: "Plan and validate Protenix protein MSA, template search, RNA MSA,
   ColabFold-compatible MSA, and prep workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

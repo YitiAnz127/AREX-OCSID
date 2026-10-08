@@ -3,7 +3,7 @@ name: spikeinterface-electrophysiology
 description: "&quot;Unified Python framework for extracellular electrophysiology."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # spikeinterface-electrophysiology — sciagent-scientific-computing sub-skill

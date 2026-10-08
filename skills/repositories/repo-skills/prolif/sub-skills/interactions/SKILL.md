@@ -3,7 +3,7 @@ name: interactions
 description: "Choose, parameterize, customize, and troubleshoot ProLIF interaction classes."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

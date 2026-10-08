@@ -3,7 +3,7 @@ name: xtbloom-run-python-inference
 description: "Write, review, and run high-level xTBloom Python GFN2-xTB inference with `Calculator`, `Structure`, and `BatchCalculator`, including single systems, repeated geometry updates, hete"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # xtbloom-run-python-inference — quantum-chemistry sub-skill

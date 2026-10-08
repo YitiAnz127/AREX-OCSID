@@ -3,7 +3,7 @@ name: machine-learning-potentials
 description: "Use machine-learning-potentials for molecular simulation workflows: machine-learning-potentials."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

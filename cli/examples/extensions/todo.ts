@@ -102,7 +102,7 @@ class TodoListComponent {
 	}
 }
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	// In-memory state (reconstructed from session on load)
 	let todos: Todo[] = [];
 	let nextId = 1;
@@ -129,11 +129,11 @@ export default function (disco: ExtensionAPI) {
 	};
 
 	// Reconstruct state on session events
-	disco.on("session_start", async (_event, ctx) => reconstructState(ctx));
-	disco.on("session_tree", async (_event, ctx) => reconstructState(ctx));
+	ocsid.on("session_start", async (_event, ctx) => reconstructState(ctx));
+	ocsid.on("session_tree", async (_event, ctx) => reconstructState(ctx));
 
 	// Register the todo tool for the LLM
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "todo",
 		label: "Todo",
 		description: "Manage a todo list. Actions: list, add (text), toggle (id), clear",
@@ -281,7 +281,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Register the /todos command for users
-	disco.registerCommand("todos", {
+	ocsid.registerCommand("todos", {
 		description: "Show all todos on the current branch",
 		handler: async (_args, ctx) => {
 			if (ctx.mode !== "tui") {

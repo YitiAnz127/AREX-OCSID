@@ -6,7 +6,7 @@ description: "Selects and runs Scientific Agent Skills repository validation and
   --isolated environments, and tests/skill-requirements.toml entries."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

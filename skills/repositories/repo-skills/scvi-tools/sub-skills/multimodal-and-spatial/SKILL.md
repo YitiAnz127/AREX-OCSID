@@ -5,7 +5,7 @@ description: "Route scvi-tools tasks involving multimodal, ATAC, spatial,
   model families."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

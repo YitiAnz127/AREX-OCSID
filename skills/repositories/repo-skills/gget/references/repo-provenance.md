@@ -8,7 +8,7 @@ major evidence paths differ, run `refresh-repo-skill`.
 
 ```json
 {
-  "schema": "disco.repo-provenance.v1",
+  "schema": "ocsid.repo-provenance.v1",
   "generated_at_utc": "2026-08-22T02:00:00Z",
   "repository": {
     "name": "gget",
@@ -18,7 +18,7 @@ major evidence paths differ, run `refresh-repo-skill`.
     "tag": null,
     "commit": "8006088f831b145b95f13b5cdb4823ad95cb740b",
     "working_tree": "dirty",
-    "dirty_paths": ["skills/gget.log", "skills/disco/gget/"]
+    "dirty_paths": ["skills/gget.log", "skills/ocsid/gget/"]
   },
   "packages": [
     {
@@ -39,7 +39,7 @@ major evidence paths differ, run `refresh-repo-skill`.
 
 The generated skill was produced from a dirty checkout because the repository
 already contained `skills/gget.log` and the generated output is intentionally
-placed under `skills/disco/gget/`. The source commit and package metadata remain
+placed under `skills/ocsid/gget/`. The source commit and package metadata remain
 the refresh baseline; generated review artifacts are not runtime dependencies.
 
 ## Refresh check

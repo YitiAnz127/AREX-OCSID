@@ -7,10 +7,10 @@
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
-	disco.on("session_shutdown", async (_event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("session_shutdown", async (_event, ctx) => {
 		// Check for uncommitted changes
-		const { stdout: status, code } = await disco.exec("git", ["status", "--porcelain"]);
+		const { stdout: status, code } = await ocsid.exec("git", ["status", "--porcelain"]);
 
 		if (code !== 0 || status.trim().length === 0) {
 			// Not a git repo or no changes
@@ -36,11 +36,11 @@ export default function (disco: ExtensionAPI) {
 
 		// Generate a simple commit message
 		const firstLine = lastAssistantText.split("\n")[0] || "Work in progress";
-		const commitMessage = `[disco] ${firstLine.slice(0, 50)}${firstLine.length > 50 ? "..." : ""}`;
+		const commitMessage = `[ocsid] ${firstLine.slice(0, 50)}${firstLine.length > 50 ? "..." : ""}`;
 
 		// Stage and commit
-		await disco.exec("git", ["add", "-A"]);
-		const { code: commitCode } = await disco.exec("git", ["commit", "-m", commitMessage]);
+		await ocsid.exec("git", ["add", "-A"]);
+		const { code: commitCode } = await ocsid.exec("git", ["commit", "-m", commitMessage]);
 
 		if (commitCode === 0 && ctx.hasUI) {
 			ctx.ui.notify(`Auto-committed: ${commitMessage}`, "info");

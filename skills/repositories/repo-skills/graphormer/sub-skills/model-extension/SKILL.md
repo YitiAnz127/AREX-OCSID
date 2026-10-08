@@ -4,7 +4,7 @@ description: "Inspect and extend Graphormer fairseq models, tasks, criterions,
   and architectures."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

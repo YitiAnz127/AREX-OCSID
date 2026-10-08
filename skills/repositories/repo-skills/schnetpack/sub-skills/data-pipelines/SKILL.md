@@ -4,7 +4,7 @@ description: "Create, inspect, convert, split, and validate SchNetPack atomistic
   datasets backed by ASE databases and built-in dataset modules."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

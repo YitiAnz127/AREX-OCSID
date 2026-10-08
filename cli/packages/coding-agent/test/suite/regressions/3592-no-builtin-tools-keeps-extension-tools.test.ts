@@ -36,7 +36,7 @@ describe("regression #3592: no-builtin-tools keeps extension tools enabled", () 
 			cwd: tempDir,
 			agentDir,
 			settingsManager,
-			includeDisCoDefaults: false,
+			includeOCSIDDefaults: false,
 			extensionFactories: [
 				(pi) => {
 					pi.on("session_start", () => {
@@ -103,7 +103,7 @@ describe("regression #3592: no-builtin-tools keeps extension tools enabled", () 
 			cwd: tempDir,
 			agentDir,
 			settingsManager,
-			resourceLoaderOptions: { includeDisCoDefaults: false },
+			resourceLoaderOptions: { includeOCSIDDefaults: false },
 		});
 
 		const { session } = await createAgentSessionFromServices({

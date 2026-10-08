@@ -3,7 +3,7 @@ name: drug-dti
 description: "Use drug-dti for drug discovery and development workflows: dti."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

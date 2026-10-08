@@ -6,7 +6,7 @@ description: "Build, validate, and troubleshoot Chemprop CLI training commands,
   handoff."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

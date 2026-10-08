@@ -1,4 +1,4 @@
-/** Pi-owned variables that must not configure or leak through the DisCo CLI process. */
+/** Pi-owned variables that must not configure or leak through the OCSID CLI process. */
 export const PI_ENVIRONMENT_KEYS = [
 	"PI_CODING_AGENT",
 	"PI_CODING_AGENT_DIR",
@@ -24,11 +24,11 @@ export const PI_ENVIRONMENT_KEYS = [
 ] as const;
 
 /**
- * Isolate the DisCo executable before importing Pi-derived dependencies.
- * This only mutates the current DisCo process; a parent shell or separate Pi
+ * Isolate the OCSID executable before importing Pi-derived dependencies.
+ * This only mutates the current OCSID process; a parent shell or separate Pi
  * process keeps its original environment.
  */
-export function isolateDisCoProcessFromPiEnvironment(env: NodeJS.ProcessEnv = process.env): void {
+export function isolateOCSIDProcessFromPiEnvironment(env: NodeJS.ProcessEnv = process.env): void {
 	for (const key of PI_ENVIRONMENT_KEYS) {
 		delete env[key];
 	}

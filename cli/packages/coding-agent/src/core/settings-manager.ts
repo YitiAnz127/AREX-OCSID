@@ -123,7 +123,7 @@ export interface Settings {
 	markdown?: MarkdownSettings;
 	warnings?: WarningSettings;
 	sessionDir?: string; // Custom session storage directory (same format as --session-dir CLI flag)
-	httpProxy?: string; // Proxy URL applied as HTTP_PROXY and HTTPS_PROXY for DisCo-managed HTTP clients
+	httpProxy?: string; // Proxy URL applied as HTTP_PROXY and HTTPS_PROXY for OCSID-managed HTTP clients
 	httpIdleTimeoutMs?: number; // HTTP header/body idle timeout in milliseconds; 0 disables it
 	websocketConnectTimeoutMs?: number; // WebSocket connect/open handshake timeout in milliseconds; 0 disables it
 }
@@ -176,7 +176,7 @@ function parseTimeoutSetting(value: unknown): number | undefined {
 	return parseHttpIdleTimeoutMs(value);
 }
 
-/** Accept "1"/"true"/"yes" (case-insensitive) for DISCO_* boolean toggles (audit H4). */
+/** Accept "1"/"true"/"yes" (case-insensitive) for OCSID_* boolean toggles (audit H4). */
 function isTruthyEnvFlag(value: string | undefined): boolean {
 	if (!value) return false;
 	const normalized = value.toLowerCase();
@@ -1129,7 +1129,7 @@ export class SettingsManager {
 		if (this.settings.terminal?.clearOnShrink !== undefined) {
 			return this.settings.terminal.clearOnShrink;
 		}
-		return isTruthyEnvFlag(process.env.DISCO_CLEAR_ON_SHRINK);
+		return isTruthyEnvFlag(process.env.OCSID_CLEAR_ON_SHRINK);
 	}
 
 	setClearOnShrink(enabled: boolean): void {
@@ -1213,7 +1213,7 @@ export class SettingsManager {
 	}
 
 	getShowHardwareCursor(): boolean {
-		return this.settings.showHardwareCursor ?? isTruthyEnvFlag(process.env.DISCO_HARDWARE_CURSOR);
+		return this.settings.showHardwareCursor ?? isTruthyEnvFlag(process.env.OCSID_HARDWARE_CURSOR);
 	}
 
 	setShowHardwareCursor(enabled: boolean): void {

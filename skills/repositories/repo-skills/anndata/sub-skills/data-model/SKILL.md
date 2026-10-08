@@ -4,7 +4,7 @@ description: "Construct, inspect, validate, slice, copy, and mutate in-memory
   AnnData objects and their aligned annotations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

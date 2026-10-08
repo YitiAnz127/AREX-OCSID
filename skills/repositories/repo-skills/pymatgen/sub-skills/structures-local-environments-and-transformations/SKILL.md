@@ -5,7 +5,7 @@ description: "Construct and analyze pymatgen structures, molecules, local
   and safe transformation-adjacent workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

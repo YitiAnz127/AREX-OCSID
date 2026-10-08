@@ -5,7 +5,7 @@ description: "Use hailtop.batch DAGs and packaged hailctl commands for Hail
   description workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

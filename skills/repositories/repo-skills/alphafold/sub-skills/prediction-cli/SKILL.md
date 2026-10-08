@@ -4,7 +4,7 @@ description: "Guide local AlphaFold prediction CLI workflows, flags, presets,
   MSA reuse, relaxation choices, random seeds, and output expectations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

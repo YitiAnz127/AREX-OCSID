@@ -22,19 +22,19 @@
  *   toggled the tool output open (via ctrl+e or clicking)
  *
  * Usage:
- *   disco -e ./built-in-tool-renderer.ts
+ *   ocsid -e ./built-in-tool-renderer.ts
  */
 
 import type { BashToolDetails, EditToolDetails, ExtensionAPI, ReadToolDetails } from "@arex-skill/disco";
 import { createBashTool, createEditTool, createReadTool, createWriteTool } from "@arex-skill/disco";
 import { Text } from "@earendil-works/pi-tui";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	const cwd = process.cwd();
 
 	// --- Read tool: show path and line count ---
 	const originalRead = createReadTool(cwd);
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "read",
 		label: "read",
 		description: originalRead.description,
@@ -93,7 +93,7 @@ export default function (disco: ExtensionAPI) {
 
 	// --- Bash tool: show command and exit code ---
 	const originalBash = createBashTool(cwd);
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "bash",
 		label: "bash",
 		description: originalBash.description,
@@ -152,7 +152,7 @@ export default function (disco: ExtensionAPI) {
 
 	// --- Edit tool: show path and diff stats ---
 	const originalEdit = createEditTool(cwd);
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "edit",
 		label: "edit",
 		description: originalEdit.description,
@@ -217,7 +217,7 @@ export default function (disco: ExtensionAPI) {
 
 	// --- Write tool: show path and size ---
 	const originalWrite = createWriteTool(cwd);
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "write",
 		label: "write",
 		description: originalWrite.description,

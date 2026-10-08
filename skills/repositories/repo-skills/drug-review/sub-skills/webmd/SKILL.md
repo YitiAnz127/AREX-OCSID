@@ -3,7 +3,7 @@ name: webmd
 description: "Query the WebMD Drug Reviews dataset (~362 k patient reviews, 2007–2020)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # webmd — drug-review sub-skill

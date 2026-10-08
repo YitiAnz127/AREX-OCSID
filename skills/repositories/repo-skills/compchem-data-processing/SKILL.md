@@ -3,7 +3,7 @@ name: compchem-data-processing
 description: "Use compchem-data-processing for molecular simulation workflows: data-processing."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

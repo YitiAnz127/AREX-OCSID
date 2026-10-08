@@ -3,19 +3,19 @@
  *
  * Demonstrates the project_trust event. Install globally or pass via -e:
  *
- *   mkdir -p ~/.disco/agent/extensions
- *   cp packages/coding-agent/examples/extensions/project-trust.ts ~/.disco/agent/extensions/
+ *   mkdir -p ~/.ocsid/agent/extensions
+ *   cp packages/coding-agent/examples/extensions/project-trust.ts ~/.ocsid/agent/extensions/
  *
  * Or:
  *
- *   disco -e packages/coding-agent/examples/extensions/project-trust.ts
+ *   ocsid -e packages/coding-agent/examples/extensions/project-trust.ts
  *
- * Try it in a project containing .disco, AGENTS.md/CLAUDE.md, or .agents/skills.
+ * Try it in a project containing .ocsid, AGENTS.md/CLAUDE.md, or .agents/skills.
  */
 
 import type { ExtensionAPI, ProjectTrustEventResult } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	let loadCount = 0;
 	loadCount++;
 
@@ -23,7 +23,7 @@ export default function (disco: ExtensionAPI) {
 	// { trusted: "yes" } or { trusted: "no" } wins and suppresses the built-in
 	// trust prompt. Return { trusted: "undecided" } to let another handler or the
 	// built-in flow decide.
-	disco.on("project_trust", async (event, ctx): Promise<ProjectTrustEventResult> => {
+	ocsid.on("project_trust", async (event, ctx): Promise<ProjectTrustEventResult> => {
 		ctx.ui.notify(`project_trust fired for ${event.cwd} (mode: ${ctx.mode}, load: ${loadCount})`, "info");
 
 		if (!ctx.hasUI) {
@@ -58,7 +58,7 @@ export default function (disco: ExtensionAPI) {
 		return { trusted: "undecided" };
 	});
 
-	disco.on("session_start", (_event, ctx) => {
+	ocsid.on("session_start", (_event, ctx) => {
 		ctx.ui.notify(`project-trust example loaded after trust resolution in ${ctx.cwd}`, "info");
 	});
 }

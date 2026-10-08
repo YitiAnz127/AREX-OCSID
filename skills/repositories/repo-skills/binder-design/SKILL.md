@@ -3,7 +3,7 @@ name: binder-design
 description: "Guidance for choosing the right protein binder design tool."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

@@ -5,7 +5,7 @@ description: "Use Hail VariantDataset sparse sequencing workflows: read, filter,
   and reference blocks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

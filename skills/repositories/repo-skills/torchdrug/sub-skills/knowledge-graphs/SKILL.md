@@ -5,7 +5,7 @@ description: "Use TorchDrug for knowledge graph reasoning, triple datasets,
   troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

@@ -5,7 +5,7 @@ description: "Select, instantiate, inspect, and troubleshoot DGL-LifeSci
   link prediction heads."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

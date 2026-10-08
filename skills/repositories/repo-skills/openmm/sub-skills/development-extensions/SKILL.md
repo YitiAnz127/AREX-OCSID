@@ -5,7 +5,7 @@ description: "Guides OpenMM maintainer and extension-author work on C++ core
   and focused tests."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT, GPL, LGPL
 ---
 

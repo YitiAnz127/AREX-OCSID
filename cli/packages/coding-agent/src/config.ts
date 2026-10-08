@@ -72,7 +72,7 @@ function makeSelfUpdateCommandStep(command: string, args: string[]): SelfUpdateC
 }
 
 export function detectInstallMethod(): InstallMethod {
-	if (process.env.DISCO_MANAGED_INSTALL === "1") {
+	if (process.env.OCSID_MANAGED_INSTALL === "1") {
 		return "managed";
 	}
 	if (isBunBinary) {
@@ -361,10 +361,10 @@ export function getSelfUpdateUnavailableInstruction(
 	const method = detectInstallMethod();
 	const target = normalizeSelfUpdatePackageTarget(updatePackageTarget);
 	if (method === "bun-binary") {
-		return "Replace the local DisCo binary with a newer release artifact.";
+		return "Replace the local OCSID binary with a newer release artifact.";
 	}
 	if (method === "managed") {
-		return "The managed installer marker or updater is missing or invalid. Re-run the DisCo installer to repair this installation.";
+		return "The managed installer marker or updater is missing or invalid. Re-run the OCSID installer to repair this installation.";
 	}
 	const command = getSelfUpdateCommandForMethod(method, packageName, target, npmCommand);
 	if (command) {
@@ -397,7 +397,7 @@ export function getUpdateInstruction(packageName: string): string {
  */
 export function getPackageDir(): string {
 	// Allow override via environment variable (useful for Nix/Guix where store paths tokenize poorly)
-	const envDir = process.env.DISCO_PACKAGE_DIR;
+	const envDir = process.env.OCSID_PACKAGE_DIR;
 	if (envDir) {
 		return normalizePath(envDir);
 	}
@@ -501,25 +501,25 @@ export function getBundledInteractiveAssetPath(name: string): string {
 	return join(getInteractiveAssetsDir(), name);
 }
 
-/** Get the bundled DisCo skill directory in source, npm, and binary layouts. */
+/** Get the bundled OCSID skill directory in source, npm, and binary layouts. */
 export function getBundledSkillsDir(): string {
 	if (isBunBinary) {
-		return join(getPackageDir(), "disco-skills");
+		return join(getPackageDir(), "ocsid-skills");
 	}
 	const sourceDir = getRuntimeSourceDir();
 	return sourceDir
-		? join(sourceDir, "disco", "skills")
-		: join(getPackageDir(), "dist", "disco-resources", "skills");
+		? join(sourceDir, "ocsid", "skills")
+		: join(getPackageDir(), "dist", "ocsid-resources", "skills");
 }
 
 // =============================================================================
-// App Config (from package.json discoConfig)
+// App Config (from package.json ocsidConfig)
 // =============================================================================
 
 interface PackageJson {
 	name?: string;
 	version?: string;
-	discoConfig?: {
+	ocsidConfig?: {
 		name?: string;
 		configDir?: string;
 	};
@@ -533,11 +533,11 @@ try {
 	if (err.code !== "ENOENT") throw e;
 }
 
-const discoConfigName: string | undefined = pkg.discoConfig?.name;
+const ocsidConfigName: string | undefined = pkg.ocsidConfig?.name;
 export const PACKAGE_NAME: string = pkg.name || "ocsid";
-export const APP_NAME: string = discoConfigName || "ocsid";
+export const APP_NAME: string = ocsidConfigName || "ocsid";
 export const APP_TITLE: string = APP_NAME;
-export const CONFIG_DIR_NAME: string = pkg.discoConfig?.configDir || ".disco";
+export const CONFIG_DIR_NAME: string = pkg.ocsidConfig?.configDir || ".ocsid";
 export const VERSION: string = pkg.version || "0.0.0";
 
 /**
@@ -546,15 +546,15 @@ export const VERSION: string = pkg.version || "0.0.0";
  * self-update targets written by earlier releases, but they are never used to
  * derive a new path or a new install target.
  */
-export const LEGACY_PACKAGE_NAMES = ["@arex-skill/disco", "@auto-ml-skills/disco"] as const;
+export const LEGACY_PACKAGE_NAMES = ["@arex-skill/disco", "@auto-ml-skills/ocsid"] as const;
 
 /** True when `name` is this CLI's canonical package name or one of its legacy names. */
 export function isOwnPackageName(name: string): boolean {
 	return name === PACKAGE_NAME || (LEGACY_PACKAGE_NAMES as readonly string[]).includes(name);
 }
 
-export const ENV_AGENT_DIR = "DISCO_CODING_AGENT_DIR";
-export const ENV_SESSION_DIR = "DISCO_CODING_AGENT_SESSION_DIR";
+export const ENV_AGENT_DIR = "OCSID_CODING_AGENT_DIR";
+export const ENV_SESSION_DIR = "OCSID_CODING_AGENT_SESSION_DIR";
 
 export function expandTildePath(path: string): string {
 	return normalizePath(path);
@@ -564,7 +564,7 @@ const DEFAULT_SHARE_VIEWER_URL = "https://gist.github.com/";
 
 /** Get the share viewer URL for a gist ID */
 export function getShareViewerUrl(gistId: string): string {
-	const configuredViewerUrl = process.env.DISCO_SHARE_VIEWER_URL?.trim();
+	const configuredViewerUrl = process.env.OCSID_SHARE_VIEWER_URL?.trim();
 	if (!configuredViewerUrl) {
 		return `${DEFAULT_SHARE_VIEWER_URL}${gistId}`;
 	}
@@ -572,10 +572,10 @@ export function getShareViewerUrl(gistId: string): string {
 }
 
 // =============================================================================
-// User Config Paths (~/.disco/agent/*)
+// User Config Paths (~/.ocsid/agent/*)
 // =============================================================================
 
-/** Get the agent config directory (e.g., ~/.disco/agent/) */
+/** Get the agent config directory (e.g., ~/.ocsid/agent/) */
 export function getAgentDir(): string {
 	const envDir = process.env[ENV_AGENT_DIR];
 	if (envDir) {

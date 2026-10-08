@@ -1,7 +1,7 @@
 /**
  * Modal Editor - vim-like modal editing example
  *
- * Usage: disco --extension ./examples/extensions/modal-editor.ts
+ * Usage: ocsid --extension ./examples/extensions/modal-editor.ts
  *
  * - Escape: insert → normal mode (in normal mode, aborts agent)
  * - i: normal → insert mode
@@ -78,8 +78,8 @@ class ModalEditor extends CustomEditor {
 	}
 }
 
-export default function (disco: ExtensionAPI) {
-	disco.on("session_start", (_event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("session_start", (_event, ctx) => {
 		ctx.ui.setEditorComponent((tui, theme, kb) => new ModalEditor(tui, theme, kb));
 	});
 }

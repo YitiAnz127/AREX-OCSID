@@ -3,7 +3,7 @@ name: binding-characterization
 description: "Guidance for SPR and BLI binding characterization experiments."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

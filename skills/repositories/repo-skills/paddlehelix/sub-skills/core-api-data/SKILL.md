@@ -5,7 +5,7 @@ description: "Use core PaddleHelix pahelix APIs for datasets, NPZ caches,
   featurizer/model-zoo orientation, and import diagnostics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

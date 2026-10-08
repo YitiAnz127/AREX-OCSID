@@ -51,7 +51,7 @@ describe("extensions discovery", () => {
 		expect(result.extensions.map((e) => path.basename(e.path)).sort()).toEqual(["bar.ts", "foo.ts"]);
 	});
 
-	it("loads the DisCo SDK entrypoint without rewriting pi-ai provider subpaths", async () => {
+	it("loads the OCSID SDK entrypoint without rewriting pi-ai provider subpaths", async () => {
 		fs.writeFileSync(
 			path.join(extensionsDir, "coding-agent-import.ts"),
 			`
@@ -75,8 +75,8 @@ describe("extensions discovery", () => {
 			`
 				import { getAgentDir } from "@earendil-works/pi-coding-agent";
 				void getAgentDir;
-				export default function(disco) {
-					disco.registerCommand("test", { handler: async () => {} });
+				export default function(ocsid) {
+					ocsid.registerCommand("test", { handler: async () => {} });
 				}
 			`,
 		);
@@ -153,7 +153,7 @@ describe("extensions discovery", () => {
 		expect(result.extensions[0].path).toContain("index.ts");
 	});
 
-	it("discovers subdirectory with package.json disco field", async () => {
+	it("discovers subdirectory with package.json ocsid field", async () => {
 		const subdir = path.join(extensionsDir, "my-package");
 		const srcDir = path.join(subdir, "src");
 		fs.mkdirSync(subdir);
@@ -163,7 +163,7 @@ describe("extensions discovery", () => {
 			path.join(subdir, "package.json"),
 			JSON.stringify({
 				name: "my-package",
-				disco: {
+				ocsid: {
 					extensions: ["./src/main.ts"],
 				},
 			}),

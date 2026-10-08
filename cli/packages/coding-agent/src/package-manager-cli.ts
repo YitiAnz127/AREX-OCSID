@@ -24,7 +24,7 @@ import { DefaultResourceLoader } from "./core/resource-loader.ts";
 import { SettingsManager } from "./core/settings-manager.ts";
 import { hasTrustRequiringProjectResources, ProjectTrustStore } from "./core/trust-manager.ts";
 import { spawnProcess } from "./utils/child-process.ts";
-import { getLatestDiscoRelease, isNewerPackageVersion } from "./utils/version-check.ts";
+import { getLatestOcsidRelease, isNewerPackageVersion } from "./utils/version-check.ts";
 import {
 	cleanupWindowsSelfUpdateQuarantine,
 	quarantineWindowsNativeDependencies,
@@ -83,7 +83,7 @@ function getPackageCommandUsage(command: PackageCommand): string {
 		case "remove":
 			return `${APP_NAME} remove <source> [-l] [--approve|--no-approve]`;
 		case "update":
-			return `${APP_NAME} update [source|self|disco] [--self|--extensions|--models|--all] [--extension <source>] [--approve|--no-approve] [--force]`;
+			return `${APP_NAME} update [source|self|ocsid] [--self|--extensions|--models|--all] [--extension <source>] [--approve|--no-approve] [--force]`;
 		case "list":
 			return `${APP_NAME} list [--approve|--no-approve]`;
 	}
@@ -151,24 +151,24 @@ Examples:
 			console.log(`${chalk.bold("Usage:")}
   ${getPackageCommandUsage("update")}
 
-Update DisCo, installed packages, or model catalogs.
+Update OCSID, installed packages, or model catalogs.
 
 Options:
-  --self                  Update DisCo only (default when no target is given)
+  --self                  Update OCSID only (default when no target is given)
   --extensions            Update installed packages only
   --models                Refresh model catalogs only
-  --all                   Update DisCo and installed packages
+  --all                   Update OCSID and installed packages
   --extension <source>    Update one package only
   -a, --approve           Trust project-local files for this command
   -na, --no-approve       Ignore project-local files for this command
-  --force                 Reinstall DisCo even if the current version is latest
+  --force                 Reinstall OCSID even if the current version is latest
 
 Short forms:
-  ${APP_NAME} update                Update DisCo only
-  ${APP_NAME} update --all          Update DisCo and all extensions
+  ${APP_NAME} update                Update OCSID only
+  ${APP_NAME} update --all          Update OCSID and all extensions
   ${APP_NAME} update --models       Refresh model catalogs only
   ${APP_NAME} update <source>       Update one package
-  ${APP_NAME} update self           Update DisCo only
+  ${APP_NAME} update self           Update OCSID only
 `);
 			return;
 
@@ -345,7 +345,7 @@ function parsePackageCommand(args: string[]): PackageCommandOptions | undefined 
 			}
 			updateTarget = { type: "extensions", source: extensionFlagSource };
 		} else if (source) {
-			const sourceIsSelf = source === "self" || source === "disco";
+			const sourceIsSelf = source === "self" || source === "ocsid";
 			if (sourceIsSelf) {
 				updateTarget = extensionsFlag ? { type: "all" } : { type: "self" };
 			} else {
@@ -431,7 +431,7 @@ function printSelfUpdateUnavailable(
 	const entrypoint = process.argv[1];
 	if (entrypoint) {
 		console.error("");
-		console.error(`Location of DisCo executable: ${entrypoint}`);
+		console.error(`Location of OCSID executable: ${entrypoint}`);
 	}
 }
 
@@ -465,7 +465,7 @@ function printSelfUpdateNote(note: string): void {
 }
 
 function isOfflineModeEnabled(): boolean {
-	const value = process.env.DISCO_OFFLINE;
+	const value = process.env.OCSID_OFFLINE;
 	if (!value) return false;
 	return value === "1" || value.toLowerCase() === "true" || value.toLowerCase() === "yes";
 }
@@ -479,9 +479,9 @@ interface SelfUpdatePlan {
 }
 
 async function getSelfUpdatePlan(force: boolean): Promise<SelfUpdatePlan> {
-	let latestRelease: Awaited<ReturnType<typeof getLatestDiscoRelease>>;
+	let latestRelease: Awaited<ReturnType<typeof getLatestOcsidRelease>>;
 	try {
-		latestRelease = await getLatestDiscoRelease(VERSION);
+		latestRelease = await getLatestOcsidRelease(VERSION);
 	} catch {
 		latestRelease = undefined;
 	}
@@ -832,7 +832,7 @@ export async function handlePackageCommand(
 				if (updateTargetIncludesSelf(target) && isOfflineModeEnabled()) {
 					console.error(
 						chalk.red(
-							`Error: ${APP_NAME} cannot self-update in offline mode. Re-run without --offline or DISCO_OFFLINE.`,
+							`Error: ${APP_NAME} cannot self-update in offline mode. Re-run without --offline or OCSID_OFFLINE.`,
 						),
 					);
 					process.exitCode = 1;

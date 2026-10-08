@@ -3,7 +3,7 @@ name: drugcombdb
 description: "Query canonical DrugCombDB combination records."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drugcombdb — drug-combination sub-skill

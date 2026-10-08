@@ -3,7 +3,7 @@ name: networkx-graph-analysis
 description: "&quot;Graph and network analysis toolkit."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # networkx-graph-analysis — sciagent-scientific-computing sub-skill

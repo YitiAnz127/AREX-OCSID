@@ -81,8 +81,8 @@ function errorResult(
 	};
 }
 
-export default function questionnaire(disco: ExtensionAPI) {
-	disco.registerTool({
+export default function questionnaire(ocsid: ExtensionAPI) {
+	ocsid.registerTool({
 		name: "questionnaire",
 		label: "Questionnaire",
 		description:

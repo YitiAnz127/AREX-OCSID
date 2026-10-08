@@ -4,7 +4,7 @@ description: "Validate AlphaFold FASTA, MSA, template, notebook, and
   data-pipeline inputs without running external searches."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

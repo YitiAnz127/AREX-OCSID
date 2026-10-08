@@ -5,7 +5,7 @@ description: "Guide safe, reproducible NCBI genome retrieval with
   metadata, and optional taxonomy expansion."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

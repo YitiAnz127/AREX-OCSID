@@ -6,7 +6,7 @@ description: "Set up and run practical OpenMM Python application-layer
   checkpoints, portable state restarts, and small validation smokes."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT, GPL, LGPL
 ---
 

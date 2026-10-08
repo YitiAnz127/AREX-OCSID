@@ -3,7 +3,7 @@ name: rnaseq-salmon-rna-quantification
 description: "&quot;Ultra-fast RNA-seq transcript/gene quantification via quasi-mapping (no BAM)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rnaseq-salmon-rna-quantification — genomics-bioinformatics sub-skill

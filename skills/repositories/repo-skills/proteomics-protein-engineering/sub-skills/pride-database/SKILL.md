@@ -3,7 +3,7 @@ name: pride-database
 description: "&quot;Search the PRIDE Archive v3 REST API for proteomics datasets: discover projects by keyword + faceted filters (organism, instrument, disease, software), fetch project metadata, lis"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pride-database — proteomics-protein-engineering sub-skill

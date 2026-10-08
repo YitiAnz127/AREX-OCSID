@@ -3,7 +3,7 @@ name: drug-combination
 description: "Use drug-combination for drug discovery and development workflows: drug_combination."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

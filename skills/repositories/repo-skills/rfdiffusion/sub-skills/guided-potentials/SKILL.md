@@ -6,7 +6,7 @@ description: "Configure RFdiffusion auxiliary guiding potentials, including
   workflow-specific caveats."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

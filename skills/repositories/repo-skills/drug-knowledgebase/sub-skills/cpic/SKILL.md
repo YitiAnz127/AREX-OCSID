@@ -3,7 +3,7 @@ name: cpic
 description: "Sub-skill cpic for drug-knowledgebase."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # cpic — drug-knowledgebase sub-skill

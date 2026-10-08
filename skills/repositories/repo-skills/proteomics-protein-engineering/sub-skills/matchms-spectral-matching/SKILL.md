@@ -3,7 +3,7 @@ name: matchms-spectral-matching
 description: "MS spectral matching and metabolite ID with matchms."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # matchms-spectral-matching — proteomics-protein-engineering sub-skill

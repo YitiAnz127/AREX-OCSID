@@ -6,7 +6,7 @@ description: "Build and validate RFdiffusion scaffold-guided fold-conditioning
   settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

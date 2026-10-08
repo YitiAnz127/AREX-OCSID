@@ -4,7 +4,7 @@ description: "Use AiZynthFinder for retrosynthetic planning, configuration,
   route analysis, custom extensions, and focused development workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

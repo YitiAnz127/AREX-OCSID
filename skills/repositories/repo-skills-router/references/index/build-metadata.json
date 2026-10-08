@@ -5,7 +5,7 @@
   "family_count": 10,
   "non_empty_family_count": 10,
   "repository_count": 109,
-  "repository_index_sha256": "sha256:9e8ee694b78bef19319b491c43fe3b6bdf8268cd2970d0e01685e2ad090bb6db",
+  "repository_index_sha256": "sha256:dbfa18c08ffbbfcd8c9df33cf6d3aecc313b2aceec99a6228fadf633fcb0ccbe",
   "schema_version": 1,
   "source_router_run_id": "router-chem-subset-20260906T000000Z",
   "taxonomy_sha256": "30f8aa8934db13c613e6dfea053acb0023543cb9d5c3990e348ecf100479c985"

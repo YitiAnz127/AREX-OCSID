@@ -3,7 +3,7 @@ name: deepmd-finetune-dpa3
 description: "Fine-tune a DPA3 model in DeePMD-kit using the PyTorch backend."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # deepmd-finetune-dpa3 — machine-learning-potentials sub-skill

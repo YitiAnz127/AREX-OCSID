@@ -3,7 +3,7 @@ name: mecddi
 description: "Query the MecDDI mechanism-based drug-drug interaction database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # mecddi — drug-ddi sub-skill

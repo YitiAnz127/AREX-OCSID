@@ -2,26 +2,26 @@
  * Shutdown Command Extension
  *
  * Adds a /quit command that allows extensions to trigger clean shutdown.
- * Demonstrates how extensions can use ctx.shutdown() to exit disco cleanly.
+ * Demonstrates how extensions can use ctx.shutdown() to exit ocsid cleanly.
  */
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 import { Type } from "typebox";
 
-export default function (disco: ExtensionAPI) {
-	// Register a /quit command that cleanly exits disco
-	disco.registerCommand("quit", {
-		description: "Exit disco cleanly",
+export default function (ocsid: ExtensionAPI) {
+	// Register a /quit command that cleanly exits ocsid
+	ocsid.registerCommand("quit", {
+		description: "Exit ocsid cleanly",
 		handler: async (_args, ctx) => {
 			ctx.shutdown();
 		},
 	});
 
 	// You can also create a tool that shuts down after completing work
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "finish_and_exit",
 		label: "Finish and Exit",
-		description: "Complete a task and exit disco",
+		description: "Complete a task and exit ocsid",
 		parameters: Type.Object({}),
 		async execute(_toolCallId, _params, _signal, _onUpdate, ctx) {
 			// Do any final work here...
@@ -37,10 +37,10 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// You could also create a more complex tool with parameters
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "deploy_and_exit",
 		label: "Deploy and Exit",
-		description: "Deploy the application and exit disco",
+		description: "Deploy the application and exit ocsid",
 		parameters: Type.Object({
 			environment: Type.String({ description: "Target environment (e.g., production, staging)" }),
 		}),
@@ -48,7 +48,7 @@ export default function (disco: ExtensionAPI) {
 			onUpdate?.({ content: [{ type: "text", text: `Deploying to ${params.environment}...` }], details: {} });
 
 			// Example deployment logic
-			// const result = await disco.exec("npm", ["run", "deploy", params.environment], { signal });
+			// const result = await ocsid.exec("npm", ["run", "deploy", params.environment], { signal });
 
 			// On success, request graceful shutdown
 			onUpdate?.({ content: [{ type: "text", text: "Deployment complete, exiting..." }], details: {} });

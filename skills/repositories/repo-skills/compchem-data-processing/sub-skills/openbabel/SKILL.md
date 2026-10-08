@@ -3,7 +3,7 @@ name: openbabel
 description: "A versatile CLI tool for converting molecular file formats, generating 3D atomic coordinates from SMILES, rendering 2D chemical structure images, and preparing or extracting struct"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # openbabel — compchem-data-processing sub-skill

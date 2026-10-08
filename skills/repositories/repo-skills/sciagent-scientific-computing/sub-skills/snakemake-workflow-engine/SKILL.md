@@ -3,7 +3,7 @@ name: snakemake-workflow-engine
 description: "&quot;Python-based workflow manager for reproducible, scalable pipelines."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # snakemake-workflow-engine — sciagent-scientific-computing sub-skill

@@ -4,7 +4,7 @@ import type { AgentSession } from "../../../core/agent-session.ts";
 import { areExperimentalFeaturesEnabled } from "../../../core/experimental.ts";
 import type { ReadonlyFooterDataProvider } from "../../../core/footer-data-provider.ts";
 import { addUsageToTotals, createUsageTotals } from "../../../core/usage-totals.ts";
-import { formatDiscoAgentMode } from "../../../disco/modes/types.ts";
+import { formatOcsidAgentMode } from "../../../ocsid/modes/types.ts";
 import { theme } from "../theme/theme.ts";
 
 /**
@@ -163,7 +163,7 @@ export class FooterComponent implements Component {
 		if (areExperimentalFeaturesEnabled()) {
 			statsParts.push(`${theme.fg("dim", "•")} ${theme.bold(theme.fg("warning", "xp"))}`);
 		}
-		statsParts.push(`• ${formatDiscoAgentMode(this.session.sessionManager.getDiscoMode())}`);
+		statsParts.push(`• ${formatOcsidAgentMode(this.session.sessionManager.getOcsidMode())}`);
 
 		let statsLeft = statsParts.join(" ");
 

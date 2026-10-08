@@ -3,7 +3,7 @@ name: pyimagej-fiji-bridge
 description: "&quot;Python bridge to ImageJ2/Fiji for macros, plugins (Bio-Formats, TrackMate, Analyze Particles), NumPy↔ImagePlus/ImgLib2 exchange, and ImageJ Ops."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pyimagej-fiji-bridge — cell-biology sub-skill

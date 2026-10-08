@@ -5,7 +5,7 @@ description: "Route general medical utilities, privacy-sensitive operations,
   installation/export questions with explicit safety boundaries."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

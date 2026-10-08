@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { Agent, type AgentMessage, setDefaultStreamFn, type ThinkingLevel } from "@earendil-works/pi-agent-core";
 import { clampThinkingLevel, type Message, type Model, streamSimple } from "@earendil-works/pi-ai/compat";
 import { getAgentDir } from "../config.ts";
-import { DEFAULT_DISCO_AGENT_MODE, type DiscoAgentMode, isDiscoAgentMode } from "../disco/modes/types.ts";
+import { DEFAULT_OCSID_AGENT_MODE, type OcsidAgentMode, isOcsidAgentMode } from "../ocsid/modes/types.ts";
 import { resolvePath } from "../utils/paths.ts";
 import { AgentSession } from "./agent-session.ts";
 import { formatNoModelsAvailableMessage } from "./auth-guidance.ts";
@@ -33,16 +33,16 @@ import {
 
 // Preserve the pre-0.81 fallback for extensions that construct Agent instances
 // or invoke low-level agent loops without supplying streamFn. Agent core remains
-// provider-agnostic and does not import disco-ai/compat itself.
+// provider-agnostic and does not import ocsid-ai/compat itself.
 setDefaultStreamFn(streamSimple);
 
 export interface CreateAgentSessionOptions {
 	/** Working directory for project-local discovery. Default: process.cwd() */
 	cwd?: string;
-	/** Global config directory. Default: ~/.disco/agent */
+	/** Global config directory. Default: ~/.ocsid/agent */
 	agentDir?: string;
-	/** Session-scoped DisCo role. Defaults to the session header, then researcher. */
-	discoMode?: DiscoAgentMode;
+	/** Session-scoped OCSID role. Defaults to the session header, then researcher. */
+	ocsidMode?: OcsidAgentMode;
 
 	/** Canonical model/auth runtime. Defaults to a runtime using agentDir/auth.json and models.json. */
 	modelRuntime?: ModelRuntime;
@@ -65,7 +65,7 @@ export interface CreateAgentSessionOptions {
 	/**
 	 * Optional allowlist of tool names.
 	 *
-	 * When omitted, DisCo enables the default built-in tools (read, bash, edit, write)
+	 * When omitted, OCSID enables the default built-in tools (read, bash, edit, write)
 	 * and leaves extension/custom tools enabled unless `noTools` changes that default.
 	 * When provided, only the listed tool names are enabled.
 	 */
@@ -99,8 +99,8 @@ export interface CreateAgentSessionResult {
 
 // Re-exports
 
-export type { DiscoSkillRole } from "../disco/modes/skill-policy.ts";
-export type { DiscoAgentMode } from "../disco/modes/types.ts";
+export type { OcsidSkillRole } from "../ocsid/modes/skill-policy.ts";
+export type { OcsidAgentMode } from "../ocsid/modes/types.ts";
 export * from "./agent-session-runtime.ts";
 export type {
 	ExtensionAPI,
@@ -181,28 +181,28 @@ export async function createAgentSession(options: CreateAgentSessionOptions = {}
 	const modelRuntime = options.modelRuntime ?? (await ModelRuntime.create({ authPath, modelsPath }));
 
 	const settingsManager = options.settingsManager ?? SettingsManager.create(cwd, agentDir);
-	if (options.discoMode !== undefined && !isDiscoAgentMode(options.discoMode)) {
-		throw new Error(`Invalid discoMode ${JSON.stringify(options.discoMode)}; expected "creator" or "researcher"`);
+	if (options.ocsidMode !== undefined && !isOcsidAgentMode(options.ocsidMode)) {
+		throw new Error(`Invalid ocsidMode ${JSON.stringify(options.ocsidMode)}; expected "creator" or "researcher"`);
 	}
-	const requestedDiscoMode = options.discoMode ?? DEFAULT_DISCO_AGENT_MODE;
+	const requestedOcsidMode = options.ocsidMode ?? DEFAULT_OCSID_AGENT_MODE;
 	const sessionManager =
 		options.sessionManager ??
-		SessionManager.create(cwd, getDefaultSessionDir(cwd, agentDir), { discoMode: requestedDiscoMode });
-	const discoMode = options.discoMode ?? sessionManager.getDiscoMode();
-	if (options.discoMode !== undefined && sessionManager.getDiscoMode() !== discoMode) {
+		SessionManager.create(cwd, getDefaultSessionDir(cwd, agentDir), { ocsidMode: requestedOcsidMode });
+	const ocsidMode = options.ocsidMode ?? sessionManager.getOcsidMode();
+	if (options.ocsidMode !== undefined && sessionManager.getOcsidMode() !== ocsidMode) {
 		throw new Error(
-			`Session manager mode ${sessionManager.getDiscoMode()} does not match requested discoMode ${discoMode}`,
+			`Session manager mode ${sessionManager.getOcsidMode()} does not match requested ocsidMode ${ocsidMode}`,
 		);
 	}
 
 	if (!resourceLoader) {
-		resourceLoader = new DefaultResourceLoader({ cwd, agentDir, settingsManager, discoMode });
+		resourceLoader = new DefaultResourceLoader({ cwd, agentDir, settingsManager, ocsidMode });
 		await resourceLoader.reload();
 		time("resourceLoader.reload");
 	}
-	const resourceLoaderMode = resourceLoader.getDiscoMode?.();
-	if (resourceLoaderMode !== undefined && resourceLoaderMode !== discoMode) {
-		throw new Error(`Resource loader mode ${resourceLoaderMode} does not match session mode ${discoMode}`);
+	const resourceLoaderMode = resourceLoader.getOcsidMode?.();
+	if (resourceLoaderMode !== undefined && resourceLoaderMode !== ocsidMode) {
+		throw new Error(`Resource loader mode ${resourceLoaderMode} does not match session mode ${ocsidMode}`);
 	}
 
 	// Check if session has existing data to restore

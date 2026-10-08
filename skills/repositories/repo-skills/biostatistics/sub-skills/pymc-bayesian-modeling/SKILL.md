@@ -3,7 +3,7 @@ name: pymc-bayesian-modeling
 description: "&quot;Bayesian modeling with PyMC 5: priors, likelihood, NUTS/ADVI sampling, diagnostics (R-hat, ESS), LOO/WAIC comparison, prediction."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pymc-bayesian-modeling — biostatistics sub-skill

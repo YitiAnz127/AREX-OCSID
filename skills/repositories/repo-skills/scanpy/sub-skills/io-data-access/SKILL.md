@@ -6,7 +6,7 @@ description: "Use when working with Scanpy input/output, AnnData persistence,
   access."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

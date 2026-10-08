@@ -5,7 +5,7 @@ description: "Validate ClawBio runs, benchmarks, reproducibility records, action
   unsupported work."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

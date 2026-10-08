@@ -7,8 +7,8 @@ import { listCandidateRuns, poolByFamily } from "./candidate-pool.ts";
 function writeRun(quality: string, runId: string, kind: string, rate: number | null, digest: string | null, gradedBy: string): void {
 	const dir = join(quality, "audit", runId);
 	mkdirSync(dir, { recursive: true });
-	writeFileSync(join(dir, "summary.json"), JSON.stringify({ schema: "disco.audit-summary.v1", runId, kind, skillCount: 1, caseCount: 10, perDepth: { L0: 0, L1: 0, L2: 0, L3: 10 }, taskSuccessRate: rate, perSkill: {}, perSplit: {}, note: "x", ledgerRowCount: 10 }), "utf8");
-	const row = { schema: "disco.quality-ledger.v1", runId, skillId: "chemprop", caseId: "c1", candidateSha256: digest, extractor: { path: "audit", jsonpath: "$.score" }, observed: [{ outcome: "pass", score: 0.5 }], score: 0.5, gradedBy, ts: "2026-01-01T00:00:00Z" };
+	writeFileSync(join(dir, "summary.json"), JSON.stringify({ schema: "ocsid.audit-summary.v1", runId, kind, skillCount: 1, caseCount: 10, perDepth: { L0: 0, L1: 0, L2: 0, L3: 10 }, taskSuccessRate: rate, perSkill: {}, perSplit: {}, note: "x", ledgerRowCount: 10 }), "utf8");
+	const row = { schema: "ocsid.quality-ledger.v1", runId, skillId: "chemprop", caseId: "c1", candidateSha256: digest, extractor: { path: "audit", jsonpath: "$.score" }, observed: [{ outcome: "pass", score: 0.5 }], score: 0.5, gradedBy, ts: "2026-01-01T00:00:00Z" };
 	writeFileSync(join(dir, "ledger.jsonl"), JSON.stringify(row) + "\n", "utf8");
 }
 
@@ -73,11 +73,11 @@ describe("candidate pooling", () => {
 		try {
 			const dir = join(q, "audit", "fam-x");
 			mkdirSync(dir, { recursive: true });
-			writeFileSync(join(dir, "summary.json"), JSON.stringify({ schema: "disco.audit-summary.v1", runId: "fam-x", kind: "candidate-eval", skillCount: 1, caseCount: 2, perDepth: { L3: 2 }, taskSuccessRate: 0.5, perSkill: {}, perSplit: {}, ledgerRowCount: 2 }), "utf8");
+			writeFileSync(join(dir, "summary.json"), JSON.stringify({ schema: "ocsid.audit-summary.v1", runId: "fam-x", kind: "candidate-eval", skillCount: 1, caseCount: 2, perDepth: { L3: 2 }, taskSuccessRate: 0.5, perSkill: {}, perSplit: {}, ledgerRowCount: 2 }), "utf8");
 			// First row carries NO digest and grader A; second row carries the digest
 			// and grader B. The old first-line-only reader would report digest=null
 			// and gradedBy=A, losing the true provenance.
-			const r = { schema: "disco.quality-ledger.v1", runId: "fam-x", skillId: "s", caseId: "c", extractor: { path: "audit", jsonpath: "$.score" }, observed: [], score: 0.5 };
+			const r = { schema: "ocsid.quality-ledger.v1", runId: "fam-x", skillId: "s", caseId: "c", extractor: { path: "audit", jsonpath: "$.score" }, observed: [], score: 0.5 };
 			writeFileSync(join(dir, "ledger.jsonl"),
 				JSON.stringify({ ...r, candidateSha256: null, gradedBy: "human", caseId: "c1" }) + "\n" +
 				JSON.stringify({ ...r, candidateSha256: "dig-1234", gradedBy: "model_grader", caseId: "c2" }) + "\n", "utf8");
@@ -96,8 +96,8 @@ describe("candidate pooling", () => {
 			const dir = join(q, "audit", "fam-c");
 			mkdirSync(dir, { recursive: true });
 			// Older/corrupt summary omits caseCount but records a non-null rate.
-			writeFileSync(join(dir, "summary.json"), JSON.stringify({ schema: "disco.audit-summary.v1", runId: "fam-c", kind: "candidate-eval", skillCount: 1, perDepth: { L3: 5 }, taskSuccessRate: 0.6, perSkill: {}, perSplit: {} }), "utf8");
-			const row = { schema: "disco.quality-ledger.v1", runId: "fam-c", skillId: "s", caseId: "c", candidateSha256: "d", extractor: { path: "audit", jsonpath: "$.score" }, observed: [], score: 0.6, gradedBy: "model_grader", ts: "2026-01-01T00:00:00Z" };
+			writeFileSync(join(dir, "summary.json"), JSON.stringify({ schema: "ocsid.audit-summary.v1", runId: "fam-c", kind: "candidate-eval", skillCount: 1, perDepth: { L3: 5 }, taskSuccessRate: 0.6, perSkill: {}, perSplit: {} }), "utf8");
+			const row = { schema: "ocsid.quality-ledger.v1", runId: "fam-c", skillId: "s", caseId: "c", candidateSha256: "d", extractor: { path: "audit", jsonpath: "$.score" }, observed: [], score: 0.6, gradedBy: "model_grader", ts: "2026-01-01T00:00:00Z" };
 			writeFileSync(join(dir, "ledger.jsonl"), JSON.stringify(row) + "\n", "utf8");
 
 			const run = listCandidateRuns(q)[0];

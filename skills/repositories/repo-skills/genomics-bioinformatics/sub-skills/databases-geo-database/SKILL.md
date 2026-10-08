@@ -3,7 +3,7 @@ name: databases-geo-database
 description: "&quot;NCBI GEO access via GEOparse and E-utilities."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-geo-database — genomics-bioinformatics sub-skill

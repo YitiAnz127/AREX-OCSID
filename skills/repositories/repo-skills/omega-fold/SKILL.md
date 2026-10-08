@@ -4,7 +4,7 @@ description: "Use OmegaFold for protein structure prediction from FASTA to PDB,
   including CLI inference, FASTA/PDB handling, and Python model API inspection."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

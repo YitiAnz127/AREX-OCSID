@@ -4,7 +4,7 @@ description: "Configure and validate REINVENT4 enumeration workflows, peptide
   amino-acid libraries, seed files, and attachment-point chemistry."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

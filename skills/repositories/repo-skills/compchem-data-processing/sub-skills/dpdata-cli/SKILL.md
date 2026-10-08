@@ -3,7 +3,7 @@ name: dpdata-cli
 description: "A command-line utility for converting and manipulating over 50 atomic simulation data formats, including outputs from DFT and MD software (VASP, LAMMPS, Gaussian, QE, CP2K, ABACUS,"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dpdata-cli — compchem-data-processing sub-skill

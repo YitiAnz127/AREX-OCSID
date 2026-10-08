@@ -3,7 +3,7 @@ name: databases-clinpgx-database
 description: "&quot;Query the ClinPGx (formerly PharmGKB) REST API plus the CPIC PostgREST companion API for pharmacogenomic clinical annotations, CPIC/DPWG dosing guidelines, gene-drug pairs, varian"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-clinpgx-database — genomics-bioinformatics sub-skill

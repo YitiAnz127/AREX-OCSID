@@ -19,8 +19,20 @@ export const MAX_ID_LEN = 128;
  * Canonical id shape: starts with an alphanumeric, then only
  * `[A-Za-z0-9._-]`, at most 127 more chars. Rejects `..`, absolute/UNC/drive
  * prefixes, separators, whitespace and other path metacharacters.
+ *
+ * Two Windows aliasing cases are rejected on top of the character rule, because
+ * the character rule alone still admits names that do not name a distinct file:
+ *
+ *  - a trailing dot — Win32 strips trailing dots, so `abc.` and `abc` are the
+ *    SAME directory. Two distinct runIds (`abc`, `abc.`) would silently share
+ *    and overwrite each other's `summary.json` / `ledger.jsonl`.
+ *  - a reserved device name (`CON`, `PRN`, `AUX`, `NUL`, `COM1`…`COM9`,
+ *    `LPT1`…`LPT9`), matched with or without an extension because `NUL.json` is
+ *    still the device. Writing to `…/audit/NUL` discards the bytes and reports
+ *    success, so a run's records vanish with no error.
  */
-export const CANONICAL_ID_RE = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/;
+export const CANONICAL_ID_RE =
+	/^(?!(?:CON|PRN|AUX|NUL|COM[0-9]|LPT[0-9])(?:\.|$))(?!.*\.$)[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/i;
 
 /**
  * Validate an unknown value as a canonical filesystem component id (runId,
@@ -34,7 +46,7 @@ export function validateId(value: unknown, label: string): string | null {
 		return `${label} must be at most ${MAX_ID_LEN} characters`;
 	}
 	if (!CANONICAL_ID_RE.test(value)) {
-		return `${label} "${value}" is not a valid id: it must start with an alphanumeric and contain only [A-Za-z0-9._-] (no path separators, "..", or drive/UNC prefixes)`;
+		return `${label} "${value}" is not a valid id: it must start with an alphanumeric and contain only [A-Za-z0-9._-] (no path separators, "..", or drive/UNC prefixes), must not end with a dot, and must not be a reserved device name (CON, PRN, AUX, NUL, COM1-9, LPT1-9)`;
 	}
 	return null;
 }

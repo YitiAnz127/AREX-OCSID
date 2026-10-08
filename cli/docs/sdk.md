@@ -1,8 +1,8 @@
-> disco can help you use the SDK. Ask it to build an integration for your use case.
+> ocsid can help you use the SDK. Ask it to build an integration for your use case.
 
 # SDK
 
-The SDK provides programmatic access to disco's agent capabilities. Use it to embed disco in other applications, build custom interfaces, or integrate with automated workflows.
+The SDK provides programmatic access to ocsid's agent capabilities. Use it to embed ocsid in other applications, build custom interfaces, or integrate with automated workflows.
 
 **Example use cases:**
 - Build a custom UI (web, desktop, mobile)
@@ -16,7 +16,7 @@ See [examples/sdk/](../examples/sdk/) for working examples from minimal to full 
 ## Quick Start
 
 ```typescript
-import { createAgentSession, ModelRuntime, SessionManager } from "@arex-skill/disco";
+import { createAgentSession, ModelRuntime, SessionManager } from "ocsid";
 
 const modelRuntime = await ModelRuntime.create();
 const { session } = await createAgentSession({
@@ -36,7 +36,8 @@ await session.prompt("What files are in the current directory?");
 ## Installation
 
 ```bash
-npm install @arex-skill/disco
+# this package is not published to npm; install it from a local checkout
+npm install /path/to/ocsid/cli
 ```
 
 The SDK is included in the main package. No separate installation needed.
@@ -50,7 +51,7 @@ The main factory function for a single `AgentSession`.
 `createAgentSession()` uses a `ResourceLoader` to supply extensions, skills, prompt templates, themes, and context files. If you do not provide one, it uses `DefaultResourceLoader` with standard discovery.
 
 ```typescript
-import { createAgentSession, SessionManager } from "@arex-skill/disco";
+import { createAgentSession, SessionManager } from "ocsid";
 
 // Minimal: defaults with DefaultResourceLoader
 const { session } = await createAgentSession();
@@ -128,7 +129,7 @@ import {
   createAgentSessionServices,
   getAgentDir,
   SessionManager,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 const createRuntime: CreateAgentSessionRuntimeFactory = async ({ cwd, sessionManager, sessionStartEvent }) => {
   const services = await createAgentSessionServices({ cwd });
@@ -215,7 +216,7 @@ await session.prompt("After you're done, also check X", { streamingBehavior: "fo
 ```
 
 **Behavior:**
-- **Extension commands** (e.g., `/mycommand`): Execute immediately, even during streaming. They manage their own LLM interaction via `disco.sendMessage()`.
+- **Extension commands** (e.g., `/mycommand`): Execute immediately, even during streaming. They manage their own LLM interaction via `ocsid.sendMessage()`.
 - **File-based prompt templates** (from `.md` files): Expanded to their content before sending or queueing.
 - **During streaming without `streamingBehavior`**: Throws an error. Use `steer()` or `followUp()` directly, or specify the option.
 - **`preflightResult(true)`**: Means the prompt was accepted, queued, or handled immediately.
@@ -337,23 +338,23 @@ const { session } = await createAgentSession({
   cwd: process.cwd(), // default
   
   // Global config directory
-  agentDir: "~/.disco/agent", // default (expands ~)
+  agentDir: "~/.ocsid/agent", // default (expands ~)
 });
 ```
 
 `cwd` is used by `DefaultResourceLoader` for:
-- Project extensions (`.disco/extensions/`)
+- Project extensions (`.ocsid/extensions/`)
 - Project skills:
-  - `.disco/skills/`
+  - `.ocsid/skills/`
   - `.agents/skills/` in `cwd` and ancestor directories (up to git repo root, or filesystem root when not in a repo)
-- Project prompts (`.disco/prompts/`)
+- Project prompts (`.ocsid/prompts/`)
 - Context files (`AGENTS.md` walking up from cwd)
 - Session directory naming
 
 `agentDir` is used by `DefaultResourceLoader` for:
 - Global extensions (`extensions/`)
 - Global skills:
-  - `skills/` under `agentDir` (for example `~/.disco/agent/skills/`)
+  - `skills/` under `agentDir` (for example `~/.ocsid/agent/skills/`)
   - `~/.agents/skills/`
 - Global prompts (`prompts/`)
 - Global context file (`AGENTS.md`)
@@ -368,7 +369,7 @@ When you pass a custom `ResourceLoader`, `cwd` and `agentDir` no longer control 
 
 ```typescript
 import { getModel } from "@earendil-works/pi-ai";
-import { ModelRuntime } from "@arex-skill/disco";
+import { ModelRuntime } from "ocsid";
 
 const modelRuntime = await ModelRuntime.create();
 
@@ -408,7 +409,7 @@ To match CLI model parsing, use the exported resolver helpers:
 import {
   resolveCliModel,
   resolveModelScopeWithDiagnostics,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 const cliModel = resolveCliModel({
   cliModel: "anthropic/claude-opus-4-5:high",
@@ -440,9 +441,9 @@ Authentication resolution priority (handled by `ModelRuntime`):
 
 ```typescript
 import { InMemoryCredentialStore } from "@earendil-works/pi-ai";
-import { createAgentSession, ModelRuntime } from "@arex-skill/disco";
+import { createAgentSession, ModelRuntime } from "ocsid";
 
-// Default: uses ~/.disco/agent/auth.json and ~/.disco/agent/models.json
+// Default: uses ~/.ocsid/agent/auth.json and ~/.ocsid/agent/models.json
 const modelRuntime = await ModelRuntime.create();
 
 // Provider-owned auth methods and current status
@@ -476,7 +477,7 @@ const { session } = await createAgentSession({
 Use a `ResourceLoader` to override the system prompt:
 
 ```typescript
-import { createAgentSession, DefaultResourceLoader } from "@arex-skill/disco";
+import { createAgentSession, DefaultResourceLoader } from "ocsid";
 
 const loader = new DefaultResourceLoader({
   systemPromptOverride: () => "You are a helpful assistant.",
@@ -498,10 +499,10 @@ Specify which built-in tools to enable:
 - `noTools: "builtin"` disables default built-ins while keeping extension and custom tools enabled
 - `excludeTools` disables specific built-in, extension, or custom tool names after any `tools` allowlist is applied
 
-The `edit` tool returns `details.diff` for DisCo's TUI display and `details.patch` as a standard unified patch for SDK consumers.
+The `edit` tool returns `details.diff` for OCSID's TUI display and `details.patch` as a standard unified patch for SDK consumers.
 
 ```typescript
-import { createAgentSession } from "@arex-skill/disco";
+import { createAgentSession } from "ocsid";
 
 // Read-only mode
 const { session } = await createAgentSession({
@@ -524,7 +525,7 @@ const { session } = await createAgentSession({
 When you pass a custom `cwd`, `createAgentSession()` builds selected built-in tools for that cwd.
 
 ```typescript
-import { createAgentSession, SessionManager } from "@arex-skill/disco";
+import { createAgentSession, SessionManager } from "ocsid";
 
 const cwd = "/path/to/project";
 
@@ -548,7 +549,7 @@ const { session } = await createAgentSession({
 
 ```typescript
 import { Type } from "typebox";
-import { createAgentSession, defineTool } from "@arex-skill/disco";
+import { createAgentSession, defineTool } from "ocsid";
 
 // Inline custom tool
 const myTool = defineTool({
@@ -570,9 +571,9 @@ const { session } = await createAgentSession({
 });
 ```
 
-Use `defineTool()` for standalone definitions and arrays like `customTools: [myTool]`. Inline `disco.registerTool({ ... })` already infers parameter types correctly.
+Use `defineTool()` for standalone definitions and arrays like `customTools: [myTool]`. Inline `ocsid.registerTool({ ... })` already infers parameter types correctly.
 
-Custom tools passed via `customTools` are combined with extension-registered tools. Extensions loaded by the ResourceLoader can also register tools via `disco.registerTool()`.
+Custom tools passed via `customTools` are combined with extension-registered tools. Extensions loaded by the ResourceLoader can also register tools via `ocsid.registerTool()`.
 
 If you pass `tools`, include each custom or extension tool name you want enabled, for example `tools: ["read", "bash", "my_tool"]`.
 
@@ -580,16 +581,16 @@ If you pass `tools`, include each custom or extension tool name you want enabled
 
 ### Extensions
 
-Extensions are loaded by the `ResourceLoader`. `DefaultResourceLoader` discovers extensions from `~/.disco/agent/extensions/`, `.disco/extensions/`, and settings.json extension sources.
+Extensions are loaded by the `ResourceLoader`. `DefaultResourceLoader` discovers extensions from `~/.ocsid/agent/extensions/`, `.ocsid/extensions/`, and settings.json extension sources.
 
 ```typescript
-import { createAgentSession, DefaultResourceLoader } from "@arex-skill/disco";
+import { createAgentSession, DefaultResourceLoader } from "ocsid";
 
 const loader = new DefaultResourceLoader({
   additionalExtensionPaths: ["/path/to/my-extension.ts"],
   extensionFactories: [
-    (disco) => {
-      disco.on("agent_start", () => {
+    (ocsid) => {
+      ocsid.on("agent_start", () => {
         console.log("[Inline Extension] Agent starting");
       });
     },
@@ -605,12 +606,12 @@ Extensions can register tools, subscribe to events, add commands, and more. See 
 **Named inline extensions:** By default, inline factories display as `<inline:1>`, `<inline:2>`, etc. in the startup Extensions list. To show a descriptive name instead, wrap the factory:
 
 ```typescript
-import type { InlineExtension } from "@arex-skill/disco";
+import type { InlineExtension } from "ocsid";
 
 const myProvider: InlineExtension = {
   name: "my-provider",
-  factory: (disco) => {
-    disco.on("agent_start", () => {
+  factory: (ocsid) => {
+    ocsid.on("agent_start", () => {
       console.log("[my-provider] Agent starting");
     });
   },
@@ -623,10 +624,10 @@ const loader = new DefaultResourceLoader({
 
 This displays as `<inline:my-provider>` instead of `<inline:1>`. Bare factory functions are still accepted for backward compatibility.
 
-**Event Bus:** Extensions can communicate via `disco.events`. Pass a shared `eventBus` to `DefaultResourceLoader` if you need to emit or listen from outside:
+**Event Bus:** Extensions can communicate via `ocsid.events`. Pass a shared `eventBus` to `DefaultResourceLoader` if you need to emit or listen from outside:
 
 ```typescript
-import { createEventBus, DefaultResourceLoader } from "@arex-skill/disco";
+import { createEventBus, DefaultResourceLoader } from "ocsid";
 
 const eventBus = createEventBus();
 const loader = new DefaultResourceLoader({
@@ -646,7 +647,7 @@ import {
   createAgentSession,
   DefaultResourceLoader,
   type Skill,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 const customSkill: Skill = {
   name: "my-skill",
@@ -672,7 +673,7 @@ const { session } = await createAgentSession({ resourceLoader: loader });
 ### Context Files
 
 ```typescript
-import { createAgentSession, DefaultResourceLoader } from "@arex-skill/disco";
+import { createAgentSession, DefaultResourceLoader } from "ocsid";
 
 const loader = new DefaultResourceLoader({
   agentsFilesOverride: (current) => ({
@@ -696,7 +697,7 @@ import {
   createAgentSession,
   DefaultResourceLoader,
   type PromptTemplate,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 const customCommand: PromptTemplate = {
   name: "deploy",
@@ -731,7 +732,7 @@ import {
   createAgentSessionServices,
   getAgentDir,
   SessionManager,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 // In-memory (no persistence)
 const { session } = await createAgentSession({
@@ -825,7 +826,7 @@ sm.createBranchedSession(leafId);       // Extract path to new file
 ### Settings Management
 
 ```typescript
-import { createAgentSession, SettingsManager, SessionManager } from "@arex-skill/disco";
+import { createAgentSession, SettingsManager, SessionManager } from "ocsid";
 
 // Default: loads from files (global + project merged)
 const { session } = await createAgentSession({
@@ -859,8 +860,8 @@ const { session } = await createAgentSession({
 **Project-specific settings:**
 
 Settings load from two locations and merge:
-1. Global: `~/.disco/agent/settings.json`
-2. Project: `<cwd>/.disco/settings.json`
+1. Global: `~/.ocsid/agent/settings.json`
+2. Project: `<cwd>/.ocsid/settings.json`
 
 Project overrides global. Nested objects merge keys. Setters modify global settings by default.
 
@@ -881,7 +882,7 @@ Use `DefaultResourceLoader` to discover extensions, skills, prompts, themes, and
 import {
   DefaultResourceLoader,
   getAgentDir,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 const loader = new DefaultResourceLoader({
   cwd,
@@ -931,7 +932,7 @@ import {
   ModelRuntime,
   SessionManager,
   SettingsManager,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 const modelRuntime = await ModelRuntime.create({
   authPath: "/custom/agent/auth.json",
@@ -1012,7 +1013,7 @@ import {
   getAgentDir,
   InteractiveMode,
   SessionManager,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 const createRuntime: CreateAgentSessionRuntimeFactory = async ({ cwd, sessionManager, sessionStartEvent }) => {
   const services = await createAgentSessionServices({ cwd });
@@ -1052,7 +1053,7 @@ import {
   getAgentDir,
   runPrintMode,
   SessionManager,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 const createRuntime: CreateAgentSessionRuntimeFactory = async ({ cwd, sessionManager, sessionStartEvent }) => {
   const services = await createAgentSessionServices({ cwd });
@@ -1089,7 +1090,7 @@ import {
   getAgentDir,
   runRpcMode,
   SessionManager,
-} from "@arex-skill/disco";
+} from "ocsid";
 
 const createRuntime: CreateAgentSessionRuntimeFactory = async ({ cwd, sessionManager, sessionStartEvent }) => {
   const services = await createAgentSessionServices({ cwd });
@@ -1115,7 +1116,7 @@ See [RPC documentation](rpc.md) for the JSON protocol.
 For subprocess-based integration without building with the SDK, use the CLI directly:
 
 ```bash
-disco --mode rpc --no-session
+ocsid --mode rpc --no-session
 ```
 
 See [RPC documentation](rpc.md) for the JSON protocol.

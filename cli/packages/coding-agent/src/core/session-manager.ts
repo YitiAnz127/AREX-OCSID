@@ -18,7 +18,7 @@ import { join, resolve } from "path";
 import { createInterface } from "readline";
 import { StringDecoder } from "string_decoder";
 import { getAgentDir as getDefaultAgentDir, getSessionsDir } from "../config.ts";
-import { type DiscoAgentMode, resolveDiscoAgentMode } from "../disco/modes/types.ts";
+import { type OcsidAgentMode, resolveOcsidAgentMode } from "../ocsid/modes/types.ts";
 import { normalizePath, resolvePath } from "../utils/paths.ts";
 import {
 	type BashExecutionMessage,
@@ -48,13 +48,13 @@ export interface SessionHeader {
 	timestamp: string;
 	cwd: string;
 	parentSession?: string;
-	discoMode?: DiscoAgentMode;
+	ocsidMode?: OcsidAgentMode;
 }
 
 export interface NewSessionOptions {
 	id?: string;
 	parentSession?: string;
-	discoMode?: DiscoAgentMode;
+	ocsidMode?: OcsidAgentMode;
 }
 
 export interface SessionEntryBase {
@@ -485,7 +485,7 @@ export function buildSessionContext(
 
 /**
  * Compute the default session directory for a cwd.
- * Encodes cwd into a safe directory name under ~/.disco/agent/sessions/.
+ * Encodes cwd into a safe directory name under ~/.ocsid/agent/sessions/.
  */
 function getDefaultSessionDirPath(cwd: string, agentDir: string = getDefaultAgentDir()): string {
 	const resolvedCwd = resolvePath(cwd);
@@ -916,11 +916,11 @@ export class SessionManager {
 			this.fileEntries = preloadedFileEntries ?? loadEntriesFromFile(this.sessionFile);
 
 			// If file was empty, initialize it with a valid session header. If it was
-			// non-empty but did not parse as a DisCo/Pi-compatible session, fail without modifying it.
+			// non-empty but did not parse as a OCSID/Pi-compatible session, fail without modifying it.
 			if (this.fileEntries.length === 0) {
 				const explicitPath = this.sessionFile;
 				if (statSync(explicitPath).size > 0) {
-					throw new Error(`Session file is not a valid ocsid/DisCo/Pi-compatible session: ${explicitPath}`);
+					throw new Error(`Session file is not a valid ocsid/OCSID/Pi-compatible session: ${explicitPath}`);
 				}
 				this.newSession(newSessionOptions);
 				this.sessionFile = explicitPath;
@@ -958,7 +958,7 @@ export class SessionManager {
 			timestamp,
 			cwd: this.cwd,
 			parentSession: options?.parentSession,
-			discoMode: options?.discoMode ?? this.getDiscoMode(),
+			ocsidMode: options?.ocsidMode ?? this.getOcsidMode(),
 		};
 		this.fileEntries = [header];
 		this.byId.clear();
@@ -1046,8 +1046,8 @@ export class SessionManager {
 		return this.sessionFile;
 	}
 
-	getDiscoMode(): DiscoAgentMode {
-		return resolveDiscoAgentMode(this.getHeader()?.discoMode).mode;
+	getOcsidMode(): OcsidAgentMode {
+		return resolveOcsidAgentMode(this.getHeader()?.ocsidMode).mode;
 	}
 
 	_persist(entry: SessionEntry): void {
@@ -1477,7 +1477,7 @@ export class SessionManager {
 			timestamp,
 			cwd: this.cwd,
 			parentSession: this.persist ? previousSessionFile : undefined,
-			discoMode: this.getDiscoMode(),
+			ocsidMode: this.getOcsidMode(),
 		};
 
 		// Collect labels for entries in the path
@@ -1553,7 +1553,7 @@ export class SessionManager {
 	/**
 	 * Create a new session.
 	 * @param cwd Working directory (stored in session header)
-	 * @param sessionDir Optional session directory. If omitted, uses default (~/.disco/agent/sessions/<encoded-cwd>/).
+	 * @param sessionDir Optional session directory. If omitted, uses default (~/.ocsid/agent/sessions/<encoded-cwd>/).
 	 */
 	static create(cwd: string, sessionDir?: string, options?: NewSessionOptions): SessionManager {
 		const dir = sessionDir ? normalizePath(sessionDir) : getDefaultSessionDir(cwd);
@@ -1597,7 +1597,7 @@ export class SessionManager {
 	/**
 	 * Continue the most recent session, or create new if none.
 	 * @param cwd Working directory
-	 * @param sessionDir Optional session directory. If omitted, uses default (~/.disco/agent/sessions/<encoded-cwd>/).
+	 * @param sessionDir Optional session directory. If omitted, uses default (~/.ocsid/agent/sessions/<encoded-cwd>/).
 	 */
 	static continueRecent(cwd: string, sessionDir?: string): SessionManager {
 		const dir = sessionDir ? normalizePath(sessionDir) : getDefaultSessionDir(cwd);
@@ -1661,7 +1661,7 @@ export class SessionManager {
 			timestamp,
 			cwd: resolvedTargetCwd,
 			parentSession: resolvedSourcePath,
-			discoMode: options?.discoMode ?? resolveDiscoAgentMode(sourceHeader.discoMode).mode,
+			ocsidMode: options?.ocsidMode ?? resolveOcsidAgentMode(sourceHeader.ocsidMode).mode,
 		};
 		writeFileSync(newSessionFile, `${JSON.stringify(newHeader)}\n`, { flag: "wx", mode: SESSION_FILE_MODE });
 
@@ -1678,7 +1678,7 @@ export class SessionManager {
 	/**
 	 * List all sessions for a directory.
 	 * @param cwd Working directory (used to compute default session directory)
-	 * @param sessionDir Optional session directory. If omitted, uses default (~/.disco/agent/sessions/<encoded-cwd>/).
+	 * @param sessionDir Optional session directory. If omitted, uses default (~/.ocsid/agent/sessions/<encoded-cwd>/).
 	 * @param onProgress Optional callback for progress updates (loaded, total)
 	 */
 	static async list(cwd: string, sessionDir?: string, onProgress?: SessionListProgress): Promise<SessionInfo[]> {

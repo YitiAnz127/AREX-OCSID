@@ -5,7 +5,7 @@ description: "Operate gget's viral dataset, mutation-generation, optional setup,
   and side-effect boundaries."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 2-Clause
 ---
 

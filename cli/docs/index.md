@@ -1,69 +1,55 @@
-# DisCo Documentation
+# OCSID Documentation
 
-DisCo is a skill-powered research agent with separate Creator and Researcher modes. It combines bundled research skills and dynamic workflows with a terminal interface that can also be extended through TypeScript extensions, skills, prompt templates, themes, and DisCo packages.
+OCSID is a skill-powered research agent with separate Creator and Researcher modes. It combines bundled research skills and dynamic workflows with a terminal interface that can also be extended through TypeScript extensions, skills, prompt templates, themes, and OCSID packages.
 
 ## Quick start
 
-Install DisCo with npm:
+`ocsid` is not published to npm. Build and link it from this checkout:
 
 ```bash
-npm install -g --ignore-scripts @arex-skill/disco
+cd cli
+npm install
+npm run typecheck
+npm run build
+npm link        # exposes the `ocsid` command
+ocsid --version
 ```
 
-`--ignore-scripts` disables dependency lifecycle scripts during install. DisCo does not require install scripts for normal npm installs.
+`scripts/build-from-source-link.sh` performs the same build-and-link flow.
 
-Other supported entry points are:
+To uninstall, remove the global link:
 
 ```bash
-# macOS / Linux / WSL / Git Bash
-curl -fsSL https://github.com/VectorSpaceLab/AREX-Skill/releases/latest/download/install-disco.sh | sh
-
-# pnpm
-pnpm add -g --ignore-scripts @arex-skill/disco
-
-# Bun
-bun add -g --ignore-scripts @arex-skill/disco
+npm unlink -g ocsid     # or: npm rm -g ocsid
 ```
 
-On Windows PowerShell, use:
+Removing the command leaves settings, credentials, sessions, and installed
+skills in the user-level `~/.ocsid/agent` directory; do not delete that directory
+unless you want a fresh state.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& { irm https://github.com/VectorSpaceLab/AREX-Skill/releases/latest/download/install-disco.ps1 | iex }"
-```
-
-The curl and PowerShell commands use the DisCo managed installer. It keeps
-releases and optional managed runtimes under the user-level DisCo directory and
-refuses to overwrite an unrelated `disco` command. See the repository's
-[Installation Guide](https://github.com/VectorSpaceLab/AREX-Skill/blob/main/docs/installation.md)
-for managed update, uninstall, and Windows shell details.
-
-To uninstall DisCo after an npm installation:
-
-```bash
-npm uninstall -g @arex-skill/disco
-```
-
-For pnpm, Yarn, or Bun installs, use the matching global remove command: `pnpm remove -g @arex-skill/disco`, `yarn global remove @arex-skill/disco`, or `bun uninstall -g @arex-skill/disco`. For a managed curl/PowerShell installation, use the persisted installer with its uninstall option; do not remove the user-level `~/.disco/agent` directory.
+See the repository's Installation Guide at `docs/installation.md` (it ships with
+the repository checkout, not with the published npm package) for the local build,
+the live skill collection, and validation commands.
 
 Then run it in a project directory:
 
 ```bash
-disco
+ocsid
 ```
 
-Authenticate with `/login` for subscription providers, or set an API key such as `ANTHROPIC_API_KEY` before starting disco.
+Authenticate with `/login` for subscription providers, or set an API key such as `ANTHROPIC_API_KEY` before starting ocsid.
 
 For the full first-run flow, see [Quickstart](quickstart.md).
 
 ## Start here
 
 - [Quickstart](quickstart.md) - install, authenticate, and run a first session.
-- [Using DisCo](usage.md) - interactive mode, slash commands, context files, and CLI reference.
+- [Using OCSID](usage.md) - interactive mode, slash commands, context files, and CLI reference.
 - [Dynamic workflows](dynamic-workflows.md) - run, monitor, author, recover, and inspect coordinated subagent workflows.
 - [Providers](providers.md) - subscription and API-key setup for built-in providers.
 - [llama.cpp](llama-cpp.md) - run a local router and manage models with `/llama`.
 - [Security](security.md) - project trust, sandbox boundaries, and vulnerability reporting.
-- [Containerization](containerization.md) - sandbox disco with Gondolin, Docker, or OpenShell.
+- [Containerization](containerization.md) - sandbox ocsid with Gondolin, Docker, or OpenShell.
 - [Settings](settings.md) - global and project settings.
 - [Keybindings](keybindings.md) - default shortcuts and custom keybindings.
 - [Sessions](sessions.md) - session management, branching, and tree navigation.
@@ -75,20 +61,20 @@ For the full first-run flow, see [Quickstart](quickstart.md).
 - [Skills](skills.md) - Agent Skills for reusable on-demand capabilities.
 - [Prompt templates](prompt-templates.md) - reusable prompts that expand from slash commands.
 - [Themes](themes.md) - built-in and custom terminal themes.
-- [DisCo packages](packages.md) - bundle and share extensions, skills, prompts, and themes.
+- [OCSID packages](packages.md) - bundle and share extensions, skills, prompts, and themes.
 - [Custom models](models.md) - add model entries for supported provider APIs.
 - [Custom providers](custom-provider.md) - implement custom APIs and OAuth flows.
 
 ## Programmatic usage
 
-- [SDK](sdk.md) - embed disco in Node.js applications.
+- [SDK](sdk.md) - embed ocsid in Node.js applications.
 - [RPC mode](rpc.md) - integrate over stdin/stdout JSONL.
 - [JSON event stream mode](json.md) - print mode with structured events.
 - [TUI components](tui.md) - build custom terminal UI for extensions.
 
 ## Reference
 
-- [Environment variables](environment-variables.md) - DisCo process configuration and session metadata available to bash tools.
+- [Environment variables](environment-variables.md) - OCSID process configuration and session metadata available to bash tools.
 - [Session format](session-format.md) - JSONL session file format, entry types, and SessionManager API.
 
 ## Platform setup

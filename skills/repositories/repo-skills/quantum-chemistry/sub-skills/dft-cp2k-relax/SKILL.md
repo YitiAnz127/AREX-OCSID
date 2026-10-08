@@ -3,7 +3,7 @@ name: dft-cp2k-relax
 description: "Prepare CP2K geometry-relaxation task inputs from a user-provided structure and optimization settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-cp2k-relax — quantum-chemistry sub-skill

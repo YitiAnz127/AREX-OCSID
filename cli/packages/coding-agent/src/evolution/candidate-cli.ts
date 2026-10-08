@@ -133,7 +133,7 @@ export function runCandidateAuthor(args: CandidateAuthorArgs): CandidateAuthorRe
 	const patchDigestHex = patchDigest(ops);
 	const stagedRoot = args.stagingDir
 		? path.resolve(args.stagingDir)
-		: fs.mkdtempSync(path.join(os.tmpdir(), "disco-candidate-"));
+		: fs.mkdtempSync(path.join(os.tmpdir(), "ocsid-candidate-"));
 	const applied = applyPatchToTree(skillRoot, ops, parentSkillDigest, stagedRoot);
 
 	const manifest = buildManifest({

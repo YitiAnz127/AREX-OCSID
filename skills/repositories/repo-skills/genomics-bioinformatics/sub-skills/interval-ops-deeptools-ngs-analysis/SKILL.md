@@ -3,7 +3,7 @@ name: interval-ops-deeptools-ngs-analysis
 description: "&quot;NGS CLI for ChIP/RNA/ATAC-seq."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # interval-ops-deeptools-ngs-analysis — genomics-bioinformatics sub-skill

@@ -3,7 +3,7 @@ name: lamindb-data-management
 description: "&quot;Open-source FAIR biology data framework."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # lamindb-data-management — systems-biology-multiomics sub-skill

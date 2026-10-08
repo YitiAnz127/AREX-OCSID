@@ -3,7 +3,7 @@ name: psytar
 description: "Query the PsyTAR psychiatric adverse-reaction corpus."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # psytar — drug-nlp sub-skill

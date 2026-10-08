@@ -5,7 +5,7 @@ description: "Install prerequisites, select BindCraft design and filter presets,
   validation campaign."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 
@@ -36,7 +36,7 @@ PDB preprocessing or downstream binder selection. Use
 4. Build a command without executing it:
 
    ```bash
-   python skills/disco/bindcraft/sub-skills/design-pipeline/scripts/build_bindcraft_command.py \
+   python skills/ocsid/bindcraft/sub-skills/design-pipeline/scripts/build_bindcraft_command.py \
      --mode direct --settings ./settings_target/my_target.json \
      --filters ./settings_filters/default_filters.json \
      --advanced ./settings_advanced/default_4stage_multimer.json --dry-run

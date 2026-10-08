@@ -5,7 +5,7 @@ description: "Guides agents troubleshooting pysam installation, source builds,
   names, and platform build failures."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

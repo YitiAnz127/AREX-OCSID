@@ -234,7 +234,7 @@ export function skillTreeDigest(skillRoot: string): string {
 
 /** Candidate manifest (C1). Immutable once written. */
 export interface CandidateManifest {
-	enc: "disco.candidate-manifest.v1";
+	enc: "ocsid.candidate-manifest.v1";
 	candidateId: string;
 	targetSkillId: string;
 	/** sha256 of the whole parent skill tree the patch was based on. */
@@ -350,7 +350,7 @@ export function buildManifest(opts: {
 }): CandidateManifest {
 	const id = opts.candidateId ?? candidateIdFor(opts.parentSkillDigest, opts.patchDigest);
 	return {
-		enc: "disco.candidate-manifest.v1",
+		enc: "ocsid.candidate-manifest.v1",
 		candidateId: id,
 		targetSkillId: opts.targetSkillId,
 		parentSkillDigest: opts.parentSkillDigest,

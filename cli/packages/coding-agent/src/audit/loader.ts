@@ -2,8 +2,8 @@
  * Loads real benchmark cases + the frozen split index so the audit runner can
  * operate on the on-disk pilot benchmark rather than only synthetic fixtures.
  *
- * Layout (see skills/tests/benchmark-v1 and each skill's test-cases/):
- *   <benchmarkRoot>/manifest.json            — disco.benchmark.v1 manifest
+ * Layout (see skills/tests/benchmark-v2 and each skill's test-cases/):
+ *   <benchmarkRoot>/manifest.json            — ocsid.benchmark.v1 manifest
  *   <skillRoot>/<skillId>/test-cases/...     — <caseDir>/user_request.txt + assertions.json
  *   (skillRoot = parent of the benchmark root; skills sit SIBLING to it under
  *   skills/tests/<skillId>, not beneath the benchmark dir — see resolve(benchmarkRoot,"..")).
@@ -180,7 +180,7 @@ export interface AuditPreflight {
 
 /**
  * Deterministic L0 preflight: loads the frozen benchmark and validates that
- * every enumerated case has parseable user_request + disco.usability-case.v1
+ * every enumerated case has parseable user_request + ocsid.usability-case.v1
  * assertions. No artifact execution or grading — this is the read-only "can the
  * runner see the benchmark" check.
  */

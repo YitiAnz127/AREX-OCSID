@@ -3,7 +3,7 @@ name: aeon
 description: "&quot;scikit-learn compatible Python toolkit for time series ML: classify, cluster, regress, segment, transform with 30+ algorithms (ROCKET, InceptionTime, KNN-DTW, HIVE-COTE, WEASEL)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # aeon — sciagent-scientific-computing sub-skill

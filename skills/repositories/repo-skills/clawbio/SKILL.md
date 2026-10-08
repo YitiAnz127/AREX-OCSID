@@ -6,7 +6,7 @@ description: "Use ClawBio for local-first bioinformatics agent workflows:
   author or validate skills."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

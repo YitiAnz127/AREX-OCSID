@@ -57,7 +57,7 @@ import { assertValidSessionId, SessionManager } from "./core/session-manager.ts"
 import { SettingsManager } from "./core/settings-manager.ts";
 import { printTimings, resetTimings, time } from "./core/timings.ts";
 import { hasTrustRequiringProjectResources, ProjectTrustStore } from "./core/trust-manager.ts";
-import type { DiscoAgentMode } from "./disco/modes/types.ts";
+import type { OcsidAgentMode } from "./ocsid/modes/types.ts";
 import { builtInExtensions } from "./extensions/index.ts";
 import { runMigrations, showDeprecationWarnings } from "./migrations.ts";
 import { InteractiveMode, runPrintMode, runRpcMode } from "./modes/index.ts";
@@ -299,9 +299,9 @@ function validateSessionIdFlags(parsed: Args): void {
 	}
 }
 
-function openSessionOrExit(path: string, sessionDir?: string, discoMode?: DiscoAgentMode): SessionManager {
+function openSessionOrExit(path: string, sessionDir?: string, ocsidMode?: OcsidAgentMode): SessionManager {
 	try {
-		return SessionManager.open(path, sessionDir, undefined, { discoMode });
+		return SessionManager.open(path, sessionDir, undefined, { ocsidMode });
 	} catch (error: unknown) {
 		const message = error instanceof Error ? error.message : String(error);
 		console.error(chalk.red(`Error: ${message}`));
@@ -326,7 +326,7 @@ async function createSessionManager(
 	settingsManager: SettingsManager,
 ): Promise<SessionManager> {
 	if (parsed.noSession || parsed.help || parsed.listModels !== undefined) {
-		return SessionManager.inMemory(cwd, { id: parsed.sessionId, discoMode: parsed.agentMode });
+		return SessionManager.inMemory(cwd, { id: parsed.sessionId, ocsidMode: parsed.agentMode });
 	}
 
 	if (parsed.fork) {
@@ -397,7 +397,7 @@ async function createSessionManager(
 		const continuedSession = SessionManager.continueRecent(cwd, sessionDir);
 		const continuedSessionFile = continuedSession.getSessionFile();
 		if (parsed.agentMode && (!continuedSessionFile || !existsSync(continuedSessionFile))) {
-			continuedSession.newSession({ discoMode: parsed.agentMode });
+			continuedSession.newSession({ ocsidMode: parsed.agentMode });
 		}
 		return continuedSession;
 	}
@@ -414,13 +414,13 @@ async function createSessionManager(
 		);
 	}
 
-	return SessionManager.create(cwd, sessionDir, { id: parsed.sessionId, discoMode: parsed.agentMode });
+	return SessionManager.create(cwd, sessionDir, { id: parsed.sessionId, ocsidMode: parsed.agentMode });
 }
 
 function validateRequestedAgentMode(parsed: Args, sessionManager: SessionManager): void {
 	if (parsed.agentMode === undefined) return;
 
-	const sessionMode = sessionManager.getDiscoMode();
+	const sessionMode = sessionManager.getOcsidMode();
 	if (sessionMode === parsed.agentMode) return;
 
 	console.error(
@@ -577,19 +577,19 @@ async function safeExit(code?: number | string | undefined): Promise<void> {
 export async function main(args: string[], options?: MainOptions) {
 	resetTimings();
 	const extensionFactories = [...builtInExtensions, ...(options?.extensionFactories ?? [])];
-	if (process.env.DISCO_MANAGED_INSTALL === "1" && !isManagedInstallMarkerUsable(readManagedInstallMarker())) {
+	if (process.env.OCSID_MANAGED_INSTALL === "1" && !isManagedInstallMarkerUsable(readManagedInstallMarker())) {
 		console.error(
 			chalk.red(
-				"Error: the DisCo managed installation marker, active release, or updater is missing or invalid. Re-run the DisCo installer to repair this installation.",
+				"Error: the OCSID managed installation marker, active release, or updater is missing or invalid. Re-run the OCSID installer to repair this installation.",
 			),
 		);
 		process.exitCode = 1;
 		return;
 	}
-	const offlineMode = args.includes("--offline") || isTruthyEnvFlag(process.env.DISCO_OFFLINE);
+	const offlineMode = args.includes("--offline") || isTruthyEnvFlag(process.env.OCSID_OFFLINE);
 	if (offlineMode) {
-		process.env.DISCO_OFFLINE = "1";
-		process.env.DISCO_SKIP_VERSION_CHECK = "1";
+		process.env.OCSID_OFFLINE = "1";
+		process.env.OCSID_SKIP_VERSION_CHECK = "1";
 	}
 
 	if (process.platform === "win32") {
@@ -623,7 +623,7 @@ export async function main(args: string[], options?: MainOptions) {
 		if (process.platform === "win32" && exitCode === 0 && args[0] === "update") {
 			// We normally prefer process.exit(0) for package commands so bad extensions cannot keep
 			// one-shot commands alive. On Windows, Node can assert after fetch() if process.exit(0)
-			// runs during teardown; let successful `disco update` drain naturally instead.
+			// runs during teardown; let successful `ocsid update` drain naturally instead.
 			// https://github.com/nodejs/node/issues/56645
 			return;
 		}
@@ -694,7 +694,7 @@ export async function main(args: string[], options?: MainOptions) {
 	time("runMigrations");
 
 	// Project-scope settings must not be honoured before this project's trust
-	// decision is made. A cloned repository ships its own .disco/settings.json,
+	// decision is made. A cloned repository ships its own .ocsid/settings.json,
 	// and reading its sessionDir here would redirect transcripts — and let
 	// --continue adopt a planted transcript as the user's own prior conversation —
 	// ahead of the trust prompt. Only an already-trusted project contributes
@@ -788,7 +788,7 @@ export async function main(args: string[], options?: MainOptions) {
 		const services = await createAgentSessionServices({
 			cwd,
 			agentDir,
-			discoMode: sessionManager.getHeader()?.discoMode,
+			ocsidMode: sessionManager.getHeader()?.ocsidMode,
 			settingsManager: runtimeSettingsManager,
 			extensionFlagValues: parsed.unknownFlags,
 			resourceLoaderReloadOptions: shouldResolveProjectTrust
@@ -819,12 +819,12 @@ export async function main(args: string[], options?: MainOptions) {
 				// Help is a runtime metadata command. Do not install bundled default
 				// packages just to render it; explicit user/project packages still
 				// follow the normal trust and loading rules.
-				includeDisCoDefaults: !parsed.help,
+				includeOCSIDDefaults: !parsed.help,
 				additionalExtensionPaths: resolvedExtensionPaths,
 				additionalSkillPaths: resolvedSkillPaths,
 				additionalPromptTemplatePaths: resolvedPromptTemplatePaths,
 				additionalThemePaths: resolvedThemePaths,
-				includeDisCoBuiltinSkills: !parsed.discoNoBuiltinSkills,
+				includeOCSIDBuiltinSkills: !parsed.ocsidNoBuiltinSkills,
 				noExtensions: parsed.noExtensions,
 				noSkills: parsed.noSkills,
 				noPromptTemplates: parsed.noPromptTemplates,
@@ -968,9 +968,9 @@ export async function main(args: string[], options?: MainOptions) {
 		return;
 	}
 
-	const startupBenchmark = isTruthyEnvFlag(process.env.DISCO_STARTUP_BENCHMARK);
+	const startupBenchmark = isTruthyEnvFlag(process.env.OCSID_STARTUP_BENCHMARK);
 	if (startupBenchmark && appMode !== "interactive") {
-		console.error(chalk.red("Error: DISCO_STARTUP_BENCHMARK only supports interactive mode"));
+		console.error(chalk.red("Error: OCSID_STARTUP_BENCHMARK only supports interactive mode"));
 		await safeExit(1);
 		return;
 	}

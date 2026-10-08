@@ -13,7 +13,7 @@
 
 import { createServer, type Server, type ServerResponse } from "node:http";
 import type { AuthInteraction, OAuthAuth, OAuthCredential } from "@earendil-works/pi-ai";
-import { getDiscoOAuthCallbackHost } from "./callback-host.ts";
+import { getOcsidOAuthCallbackHost } from "./callback-host.ts";
 import { oauthErrorHtml, oauthSuccessHtml } from "./oauth-page.ts";
 import { generatePKCE } from "./pkce.ts";
 
@@ -23,7 +23,7 @@ const LOGIN_TIMEOUT_MS = 5 * 60 * 1000;
 const TOKEN_EXCHANGE_TIMEOUT_MS = 30_000;
 
 function getCallbackHost(): string {
-	return getDiscoOAuthCallbackHost();
+	return getOcsidOAuthCallbackHost();
 }
 
 type JsonObject = Record<string, unknown>;

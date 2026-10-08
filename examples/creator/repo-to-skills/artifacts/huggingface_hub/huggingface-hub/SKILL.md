@@ -4,7 +4,7 @@ description: "Use the Hugging Face Hub Python client and hf CLI for repository a
 license: Apache-2.0
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # Hugging Face Hub

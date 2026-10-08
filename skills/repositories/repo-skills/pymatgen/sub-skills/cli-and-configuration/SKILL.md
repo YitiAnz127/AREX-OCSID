@@ -5,7 +5,7 @@ description: "Use pymatgen command-line tools and persistent configuration
   helpers, and redacted environment probes."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

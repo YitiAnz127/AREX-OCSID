@@ -3,7 +3,7 @@ name: maxquant-proteomics
 description: "&quot;MaxQuant + Perseus proteomics pipeline: run MaxQuant for LFQ and SILAC; parse proteinGroups.txt in Python; filter contaminants/decoys; log2 + median-normalize; impute MNAR; t-test"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # maxquant-proteomics — proteomics-protein-engineering sub-skill

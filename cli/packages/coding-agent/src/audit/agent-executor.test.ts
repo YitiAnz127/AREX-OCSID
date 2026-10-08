@@ -18,11 +18,119 @@ import {
 	makeAgentExecutor,
 	prepareCaseWorkspace,
 	runAgentEval,
+	runPairedAgentEval,
 } from "./agent-executor.ts";
 import { artifactResult, proxyExecutor } from "./types.ts";
+import { replayWorkspaceVerifier } from "./workspace-evidence.ts";
+import { executeToolCall } from "./agent-tools.ts";
 import { applyPatchToTree, buildManifest as buildCandidateManifest, makePatch, skillTreeDigest } from "../evolution/skill-patch.ts";
 import { computeBenchmarkContentDigest, computeBenchmarkSplitDigests } from "./loader.ts";
 import { buildManifest as buildBenchmarkManifest } from "../benchmark/schema.ts";
+import { NativeSessionDriver } from "./native-session-driver.ts";
+
+/** A fake `--mode json` stream from one native session run. */
+const NATIVE_STREAM = [
+	JSON.stringify({ type: "session", id: "session-1", ocsidMode: "researcher" }),
+	JSON.stringify({
+		type: "agent_end",
+		messages: [{
+			role: "assistant",
+			content: [{ type: "text", text: "candidate guidance" }],
+			provider: "openai-codex",
+			model: "gpt-5.5",
+			usage: { input: 10, output: 5, totalTokens: 15 },
+		}],
+	}),
+].join("\n") + "\n";
+
+function nativeFixtureDriver(): NativeSessionDriver {
+	return new NativeSessionDriver({
+		launcher: { launch: async () => ({ code: 0, timedOut: false, aborted: false, stdout: NATIVE_STREAM, stderr: "" }) },
+	});
+}
+
+/** One native session run against a real benchmark tree, labelled as its own run kind. */
+test("native session driver runs score as native run kinds with session identity in the ledger", async () => {
+	const root = fs.mkdtempSync(path.join(os.tmpdir(), "native-eval-"));
+	const benchmarkRoot = path.join(root, "bench");
+	const skillRoot = root;
+	const qualityDir = path.join(root, "quality");
+	try {
+		const caseDir = path.join(skillRoot, "skill-a", "test-cases", "c1");
+		fs.mkdirSync(caseDir, { recursive: true });
+		fs.mkdirSync(benchmarkRoot, { recursive: true });
+		fs.writeFileSync(path.join(skillRoot, "skill-a", "SKILL.md"), "guide\n");
+		fs.writeFileSync(path.join(caseDir, "user_request.txt"), "Use the skill.\n");
+		fs.writeFileSync(path.join(caseDir, "assertions.json"), JSON.stringify({ schema: "ocsid.usability-case.v1", assertions: ["candidate guidance"] }));
+		const splits = { train: ["skill-a"], dev: [], heldout: [] };
+		fs.writeFileSync(path.join(benchmarkRoot, "manifest.json"), JSON.stringify({
+			...buildBenchmarkManifest("native-fixture", "2026-01-01T00:00:00Z", [{ skillId: "skill-a", split: "train" }]),
+			contentHash: computeBenchmarkContentDigest(skillRoot, splits),
+			contentHashes: computeBenchmarkSplitDigests(skillRoot, splits),
+		}));
+		const config = {
+			model: "gpt-5.5", maxRounds: 1, maxToolCalls: 1, wallMs: 1000, tokenBudget: 1000,
+			toolAllowlist: ["read_file" as const], writeDirs: ["@workspace/output"], networkPolicy: "all" as const,
+		};
+		const result = await runAgentEval({
+			benchmarkRoot, qualityDir, runId: "native-run", skillId: "skill-a", caseId: "c1",
+			skillRoot, driver: nativeFixtureDriver(), config,
+		});
+		expect(result.runKind).toBe("native-agent-eval");
+		expect(result.executor).toBe("agent-native");
+		expect(result.nativeSession).toEqual({ sessionId: "session-1", mode: "researcher", provider: "openai-codex", model: "gpt-5.5" });
+		const summary = JSON.parse(fs.readFileSync(result.summaryPath, "utf8"));
+		expect(summary.kind).toBe("native-agent-eval");
+		expect(summary.note).toContain("runtime=native-session");
+		expect(summary.note).toContain("nativeSession=session-1 mode=researcher runtime=openai-codex/gpt-5.5");
+
+		// Held-out acceptance needs the native runtime, and is labelled separately.
+		const heldoutSplits = { train: [], dev: [], heldout: ["skill-a"] };
+		fs.writeFileSync(path.join(benchmarkRoot, "manifest.json"), JSON.stringify({
+			...buildBenchmarkManifest("native-fixture", "2026-01-01T00:00:00Z", [{ skillId: "skill-a", split: "heldout" }]),
+			contentHash: computeBenchmarkContentDigest(skillRoot, heldoutSplits),
+			contentHashes: computeBenchmarkSplitDigests(skillRoot, heldoutSplits),
+		}));
+		const heldout = await runAgentEval({
+			benchmarkRoot, qualityDir, runId: "native-heldout-run", skillId: "skill-a", caseId: "c1",
+			skillRoot, driver: nativeFixtureDriver(), config, acceptance: "heldout",
+		});
+		expect(heldout.runKind).toBe("native-heldout-acceptance");
+		expect(JSON.parse(fs.readFileSync(heldout.summaryPath, "utf8")).note).toContain("POST-FREEZE HELD-OUT ACCEPTANCE");
+		await expect(runAgentEval({
+			benchmarkRoot, qualityDir, runId: "api-heldout-run", skillId: "skill-a", caseId: "c1", skillRoot,
+			acceptance: "heldout", config,
+			driver: { name: "api", async run({ workspace }) {
+				fs.writeFileSync(path.join(workspace.root, "output", "r.txt"), "x");
+				return artifactResult("candidate guidance");
+			} },
+		})).rejects.toThrow(/heldout.*native-session runtime/);
+
+		// An ad-hoc native case needs no benchmark tree at all; assertions come from
+		// the caller, so a graded L3 row still exists (an empty assertions list would
+		// leave the ledger empty — an L2 smoke, not a scored run).
+		const adhoc = await runAgentEval({
+			qualityDir, runId: "native-adhoc-run", skillId: "skill-a", caseId: "creator-case", skillRoot,
+			driver: nativeFixtureDriver(), config,
+			adhocCase: { skillId: "skill-a", caseId: "creator-case", userRequest: "Use the skill.\n", assertionsText: JSON.stringify({ schema: "ocsid.usability-case.v1", assertions: ["candidate guidance"] }) },
+		});
+		expect(adhoc.runKind).toBe("native-agent-eval");
+		expect(fs.readFileSync(adhoc.ledgerPath, "utf8").trim().split("\n")).toHaveLength(1);
+		expect(JSON.parse(fs.readFileSync(adhoc.ledgerPath, "utf8").trim()).score).toBe(1);
+		const unasserted = await runAgentEval({
+			qualityDir, runId: "native-unasserted-run", skillId: "skill-a", caseId: "creator-case", skillRoot,
+			driver: nativeFixtureDriver(), config,
+			adhocCase: { skillId: "skill-a", caseId: "creator-case", userRequest: "Use the skill.\n" },
+		});
+		expect(fs.readFileSync(unasserted.ledgerPath, "utf8")).toBe("");
+		await expect(runAgentEval({
+			qualityDir, runId: "no-benchmark-run", skillId: "skill-a", caseId: "c1", skillRoot,
+			driver: nativeFixtureDriver(), config,
+		})).rejects.toThrow(/benchmarkRoot is required unless adhocCase is provided/);
+	} finally {
+		fs.rmSync(root, { recursive: true, force: true });
+	}
+});
 
 /** Build a tiny local skill tree with one case + one skill file. */
 function makeSkillFixture(): { skillRoot: string; cleanup: () => void } {
@@ -239,7 +347,7 @@ test("agent evaluation executes the candidate tree named by its manifest and rec
 		fs.mkdirSync(benchmarkRoot, { recursive: true });
 		fs.mkdirSync(liveSkill, { recursive: true });
 		fs.writeFileSync(path.join(caseDir, "user_request.txt"), "Use the skill.\n");
-		fs.writeFileSync(path.join(caseDir, "assertions.json"), JSON.stringify({ schema: "disco.usability-case.v1", assertions: ["candidate guidance"] }));
+		fs.writeFileSync(path.join(caseDir, "assertions.json"), JSON.stringify({ schema: "ocsid.usability-case.v1", assertions: ["candidate guidance"] }));
 		fs.writeFileSync(path.join(liveSkill, "SKILL.md"), "parent guidance\n");
 		const splits = { train: ["skill-a"], dev: [], heldout: [] };
 		const manifest = buildBenchmarkManifest("candidate-fixture", "2026-01-01T00:00:00Z", [{ skillId: "skill-a", split: "train" }]);
@@ -257,15 +365,24 @@ test("agent evaluation executes the candidate tree named by its manifest and rec
 		});
 		const manifestFile = path.join(root, "candidate.json");
 		fs.writeFileSync(manifestFile, JSON.stringify(candidate));
+		let gradedWorkspace: string | undefined;
 		const driver: AgentDriver = {
 			name: "snapshot-reader",
 			async run({ workspace }) {
-				return artifactResult(fs.readFileSync(path.join(workspace.skillSnapshotDir, "SKILL.md"), "utf8"));
+				const skillText = fs.readFileSync(path.join(workspace.skillSnapshotDir, "SKILL.md"), "utf8");
+				fs.writeFileSync(path.join(workspace.root, "output", "result.json"), JSON.stringify({ count: skillText.includes("candidate") ? 3 : 0 }));
+				gradedWorkspace = workspace.root;
+				return artifactResult(skillText);
 			},
 		};
+		const verifierFile = path.join(root, "private-verifier.json");
+		fs.writeFileSync(verifierFile, JSON.stringify({ schema: "ocsid.workspace-verifier.v1", checks: [
+			{ type: "file-exists", path: "output/result.json" },
+			{ type: "json-number-range", path: "output/result.json", key: "count", min: 2, max: 4 },
+		] }));
 		const opts = {
 			benchmarkRoot, qualityDir, runId: "candidate-run", skillId: "skill-a", caseId: "c1",
-			skillRoot: liveParent, candidate: { manifestFile, stagedRoot }, driver,
+			skillRoot: liveParent, candidate: { manifestFile, stagedRoot }, driver, verifierFile,
 			config: { model: "fake/test", maxRounds: 1, maxToolCalls: 1, wallMs: 1000, tokenBudget: 1000,
 				toolAllowlist: [], writeDirs: [], networkPolicy: "none" as const },
 		};
@@ -276,14 +393,70 @@ test("agent evaluation executes the candidate tree named by its manifest and rec
 		const ledger = JSON.parse(fs.readFileSync(result.ledgerPath, "utf8").trim());
 		expect(ledger.candidateSha256).toBe(candidate.resultSkillDigest);
 		expect(ledger.artifactSha256).toBe(artifactResult("candidate guidance\n").artifactSha256);
+		expect(ledger.gradedBy).toBe("assertion");
+		expect(ledger.score).toBe(1);
+		expect(result.verifierSha256).toMatch(/^[0-9a-f]{64}$/);
+		const evidence = JSON.parse(fs.readFileSync(result.diagnosticEvidencePath, "utf8"));
+		expect(evidence).toMatchObject({ runId: "candidate-run", caseId: "c1", skillDigest: candidate.resultSkillDigest, score: 1 });
+		// P1-02: the graded output/ is archived, and the verdict replays after the
+		// temporary workspace that produced it has been deleted.
+		expect(result.workspaceEvidencePath).toBeDefined();
+		expect(evidence.evidenceRefs).toContain(result.workspaceEvidencePath);
+		expect(gradedWorkspace).toBeDefined();
+		expect(fs.existsSync(gradedWorkspace as string)).toBe(false);
+		const replay = replayWorkspaceVerifier(path.dirname(result.ledgerPath));
+		expect(replay.consistent).toBe(true);
+		expect(replay.mismatches).toEqual([]);
+		expect(replay.replayed).toEqual(replay.recorded);
+		expect(replay.fileCount).toBe(1);
+		const paired = await runPairedAgentEval({ ...opts, runId: "paired-run" });
+		expect([paired.parentScore, paired.candidateScore, paired.delta]).toEqual([0.5, 1, 0.5]);
+		expect(paired.parent.configDigest).toBe(paired.candidate.configDigest);
+		const failed = await runAgentEval({ ...opts, runId: "failed-model-run", driver: {
+			name: "failing-model",
+			async run() { throw new Error("model endpoint returned HTTP 401: Invalid token"); },
+		} });
+		expect(failed.status).toBe("failed");
+		expect(failed.error).toContain("HTTP 401: Invalid token");
+		expect(JSON.parse(fs.readFileSync(failed.diagnosticEvidencePath, "utf8")).score).toBeNull();
 		const summary = JSON.parse(fs.readFileSync(result.summaryPath, "utf8"));
 		expect(summary.kind).toBe("candidate-agent-eval");
 		expect(summary.perSplit["skill-a:train"]).toBe(1);
+		await expect(runAgentEval({ ...opts, runId: "fake-run", driver: new FakeAgentDriver() })).rejects.toThrow(/real AgentDriver/);
 		fs.writeFileSync(path.join(stagedRoot, "SKILL.md"), "tampered\n");
 		await expect(runAgentEval({ ...opts, runId: "tampered-run" })).rejects.toThrow(/digest/i);
 		expect(fs.existsSync(path.join(qualityDir, "audit", "tampered-run"))).toBe(false);
 	} finally {
 		fs.rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test("workspace output token permits a file and rejects a symlinked parent", async () => {
+	const fx = makeSkillFixture();
+	const outside = fs.mkdtempSync(path.join(os.tmpdir(), "ocsid-outside-"));
+	try {
+		const ws = prepareCaseWorkspace(fx.skillRoot, caseRecord);
+		try {
+			const config = { model: "test", maxRounds: 1, maxToolCalls: 1, wallMs: 1000, tokenBudget: 1000,
+				toolAllowlist: ["write_file"], writeDirs: ["@workspace/output"], networkPolicy: "none" as const };
+			const context = { workspace: ws, config };
+			const good = await executeToolCall("write_file", JSON.stringify({ path: "output/result.json", content: "ok" }), context);
+			expect(good.trace.status).toBe("ok");
+			expect(fs.readFileSync(path.join(ws.root, "output", "result.json"), "utf8")).toBe("ok");
+			let linked = false;
+			try {
+				fs.symlinkSync(outside, path.join(ws.root, "output", "linked"), "junction");
+				linked = true;
+			} catch { /* symlink creation may be unavailable */ }
+			if (linked) {
+				const bad = await executeToolCall("write_file", JSON.stringify({ path: "output/linked/escape.txt", content: "no" }), context);
+				expect(bad.trace.status).toBe("error");
+				expect(fs.existsSync(path.join(outside, "escape.txt"))).toBe(false);
+			}
+		} finally { ws.cleanup(); }
+	} finally {
+		fx.cleanup();
+		fs.rmSync(outside, { recursive: true, force: true });
 	}
 });
 
@@ -308,7 +481,7 @@ test("FakeAgentDriver returns a succeeded result with honest simulated usage", a
 				},
 				startedAt: "2026-01-01T00:00:00.000Z",
 			});
-			expect(res.schema).toBe("disco.execution-result.v1");
+			expect(res.schema).toBe("ocsid.execution-result.v1");
 			expect(res.status).toBe("succeeded");
 			expect(res.artifact).toBe("Make it work.\n");
 			expect(res.artifactSha256).toMatch(/^[a-f0-9]{64}$/);

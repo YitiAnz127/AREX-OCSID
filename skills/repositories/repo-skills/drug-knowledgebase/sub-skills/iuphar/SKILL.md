@@ -3,7 +3,7 @@ name: iuphar
 description: "Query the IUPHAR/BPS Guide to Pharmacology REST API for drug targets, ligands (drugs/compounds), and their interactions."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # iuphar — drug-knowledgebase sub-skill

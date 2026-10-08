@@ -7,15 +7,15 @@
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	let turnCount = 0;
 
-	disco.on("session_start", async (_event, ctx) => {
+	ocsid.on("session_start", async (_event, ctx) => {
 		const theme = ctx.ui.theme;
 		ctx.ui.setStatus("status-demo", theme.fg("dim", "Ready"));
 	});
 
-	disco.on("turn_start", async (_event, ctx) => {
+	ocsid.on("turn_start", async (_event, ctx) => {
 		turnCount++;
 		const theme = ctx.ui.theme;
 		const spinner = theme.fg("accent", "●");
@@ -23,7 +23,7 @@ export default function (disco: ExtensionAPI) {
 		ctx.ui.setStatus("status-demo", spinner + text);
 	});
 
-	disco.on("turn_end", async (_event, ctx) => {
+	ocsid.on("turn_end", async (_event, ctx) => {
 		const theme = ctx.ui.theme;
 		const check = theme.fg("success", "✓");
 		const text = theme.fg("dim", ` Turn ${turnCount} complete`);

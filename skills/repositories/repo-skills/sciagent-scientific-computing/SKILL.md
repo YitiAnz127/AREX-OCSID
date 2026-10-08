@@ -3,7 +3,7 @@ name: sciagent-scientific-computing
 description: "Use sciagent-scientific-computing for molecular informatics workflows: scientific-computing."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

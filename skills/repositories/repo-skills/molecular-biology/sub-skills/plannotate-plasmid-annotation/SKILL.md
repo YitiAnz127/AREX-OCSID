@@ -3,7 +3,7 @@ name: plannotate-plasmid-annotation
 description: "&quot;Auto-annotate plasmids with features (promoters, terminators, resistance, origins, tags, fluorescent proteins) via BLAST against curated DBs (Addgene, fpbase, SnapGene)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # plannotate-plasmid-annotation — molecular-biology sub-skill

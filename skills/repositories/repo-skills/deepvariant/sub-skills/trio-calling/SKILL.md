@@ -4,7 +4,7 @@ description: "Plans DeepTrio trio and duo variant-calling workflows with child
   and parent inputs, per-sample VCF/gVCF outputs, and GLnexus merge handoff."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

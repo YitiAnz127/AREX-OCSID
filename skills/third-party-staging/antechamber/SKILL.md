@@ -3,7 +3,7 @@ name: antechamber
 description: "Use for AmberTools antechamber tasks: parameterizing small molecules or non-standard residues into GAFF/AMBER-compatible chemical space by automating atom/bond typing, charge generation or import (RESP/AM1-BCC/ESP/etc.), and producing force-field-compatible mol2/prepi inputs for downstream LEaP."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: LGPL-3.0-or-later
 ---
 

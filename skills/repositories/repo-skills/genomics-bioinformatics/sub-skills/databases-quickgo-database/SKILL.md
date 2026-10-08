@@ -3,7 +3,7 @@ name: databases-quickgo-database
 description: "&quot;Query EBI QuickGO REST API for GO terms and protein annotations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-quickgo-database — genomics-bioinformatics sub-skill

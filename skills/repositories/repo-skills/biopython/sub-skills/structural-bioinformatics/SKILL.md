@@ -4,7 +4,7 @@ description: "Use Biopython Bio.PDB to parse, write, traverse, and analyze PDB,
   mmCIF, BinaryCIF, PQR, and PDBML structure data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

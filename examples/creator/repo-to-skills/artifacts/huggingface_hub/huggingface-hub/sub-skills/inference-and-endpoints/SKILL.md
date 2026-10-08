@@ -4,7 +4,7 @@ description: "Run hosted model inference and manage Hugging Face Inference Endpo
 license: Apache-2.0
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # Inference And Endpoints

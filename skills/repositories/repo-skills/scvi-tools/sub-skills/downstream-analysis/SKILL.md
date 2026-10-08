@@ -6,7 +6,7 @@ description: "Use trained scvi-tools models for latent embeddings, normalized
   correlations, posterior predictive checks, criticism, and simulation outputs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

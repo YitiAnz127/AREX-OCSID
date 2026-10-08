@@ -4,7 +4,7 @@ description: "Use OpenFold programmatic model APIs, config presets, weight
   imports, protein outputs, validation metrics, and acceleration internals."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

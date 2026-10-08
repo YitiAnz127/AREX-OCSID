@@ -3,7 +3,7 @@ name: drug-toxicity
 description: "Use drug-toxicity for drug discovery and development workflows: drug_toxicity."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

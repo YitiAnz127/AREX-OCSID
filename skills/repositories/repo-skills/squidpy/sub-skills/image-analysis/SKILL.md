@@ -4,7 +4,7 @@ description: "Use stable Squidpy image APIs for ImageContainer storage,
   processing, segmentation, and AnnData image-feature extraction."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

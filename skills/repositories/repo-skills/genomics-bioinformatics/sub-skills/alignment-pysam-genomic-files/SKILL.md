@@ -3,7 +3,7 @@ name: alignment-pysam-genomic-files
 description: "&quot;Read/write SAM/BAM/CRAM, VCF/BCF, FASTA/FASTQ."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # alignment-pysam-genomic-files — genomics-bioinformatics sub-skill

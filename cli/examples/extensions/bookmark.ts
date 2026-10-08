@@ -9,8 +9,8 @@
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
-	disco.registerCommand("bookmark", {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerCommand("bookmark", {
 		description: "Bookmark last message (usage: /bookmark [label])",
 		handler: async (args, ctx) => {
 			const label = args.trim() || `bookmark-${Date.now()}`;
@@ -20,7 +20,7 @@ export default function (disco: ExtensionAPI) {
 			for (let i = entries.length - 1; i >= 0; i--) {
 				const entry = entries[i];
 				if (entry.type === "message" && entry.message.role === "assistant") {
-					disco.setLabel(entry.id, label);
+					ocsid.setLabel(entry.id, label);
 					ctx.ui.notify(`Bookmarked as: ${label}`, "info");
 					return;
 				}
@@ -31,7 +31,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Remove bookmark
-	disco.registerCommand("unbookmark", {
+	ocsid.registerCommand("unbookmark", {
 		description: "Remove bookmark from last labeled entry",
 		handler: async (_args, ctx) => {
 			const entries = ctx.sessionManager.getEntries();
@@ -39,7 +39,7 @@ export default function (disco: ExtensionAPI) {
 				const entry = entries[i];
 				const label = ctx.sessionManager.getLabel(entry.id);
 				if (label) {
-					disco.setLabel(entry.id, undefined);
+					ocsid.setLabel(entry.id, undefined);
 					ctx.ui.notify(`Removed bookmark: ${label}`, "info");
 					return;
 				}

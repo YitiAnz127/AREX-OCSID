@@ -3,7 +3,7 @@ name: databases-depmap-crispr-essentiality
 description: "&quot;DepMap CRISPR gene effect (Chronos) analysis: sign convention for essentiality, per-gene NaN-safe Spearman correlation, data loading/alignment."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-depmap-crispr-essentiality — genomics-bioinformatics sub-skill

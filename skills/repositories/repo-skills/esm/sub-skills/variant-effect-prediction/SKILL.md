@@ -4,7 +4,7 @@ description: "Score deep mutational scan CSVs with ESM-1v or MSA Transformer
   using wt-marginals, masked-marginals, or pseudo-ppl workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

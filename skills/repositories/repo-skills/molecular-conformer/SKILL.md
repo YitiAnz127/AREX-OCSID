@@ -3,7 +3,7 @@ name: molecular-conformer
 description: "Use molecular-conformer for molecular informatics workflows: molecular-conformer."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

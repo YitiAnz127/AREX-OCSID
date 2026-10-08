@@ -3,7 +3,7 @@ name: variant-bcftools-variant-manipulation
 description: "&quot;CLI for VCF/BCF: filter, merge, annotate, query, normalize, compute stats."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # variant-bcftools-variant-manipulation — genomics-bioinformatics sub-skill

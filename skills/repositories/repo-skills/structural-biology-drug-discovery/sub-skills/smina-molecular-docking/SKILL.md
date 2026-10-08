@@ -3,7 +3,7 @@ name: smina-molecular-docking
 description: "&quot;smina molecular docking CLI."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # smina-molecular-docking — structural-biology-drug-discovery sub-skill

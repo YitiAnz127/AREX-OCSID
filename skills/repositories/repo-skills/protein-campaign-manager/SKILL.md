@@ -3,7 +3,7 @@ name: protein-campaign-manager
 description: "Goal-oriented binder design campaign planning and health assessment."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

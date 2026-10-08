@@ -3,7 +3,7 @@ name: dft-gpaw-dos
 description: "Prepare GPAW DOS workflow scripts from existing ground-state context and user-specified DOS settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-gpaw-dos — quantum-chemistry sub-skill

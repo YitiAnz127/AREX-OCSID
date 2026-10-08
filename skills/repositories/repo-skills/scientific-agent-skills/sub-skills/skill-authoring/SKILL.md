@@ -7,7 +7,7 @@ description: "Creates and updates canonical Agent Skills in the Scientific Agent
   contribution checklists."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

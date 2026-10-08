@@ -6,7 +6,7 @@ description: "Use when coding against AlphaFold 3 Python internals for input
   full inference."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

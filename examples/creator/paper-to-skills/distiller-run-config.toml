@@ -1,7 +1,7 @@
 # Paper2Skills Distiller run config.
-# Copy this file, fill one or more [[runs]], then give its absolute path to DisCo Creator.
+# Copy this file, fill one or more [[runs]], then give its absolute path to OCSID Creator.
 # This is a curated starter; the canonical template lives under
-# cli/packages/coding-agent/src/disco/skills/create-paper-skills/assets/.
+# cli/packages/coding-agent/src/ocsid/skills/create-paper-skills/assets/.
 
 schema_version = 1
 
@@ -11,7 +11,7 @@ schema_version = 1
 workspace_root = "/path/to/paper2skills-workspace"
 
 # Use "none" when there is no implementation repository, or "unknown" to let
-# repo_discovery_mode control whether DisCo searches for one.
+# repo_discovery_mode control whether OCSID searches for one.
 original_repo_source = "unknown"
 
 # Source acquisition policy for URLs, arXiv identifiers, paper titles, Git
@@ -35,7 +35,7 @@ ask_before_expensive_recovery = true
 recovery_mode = "hard"
 
 # Runtime policy.
-runtime_constraints = "Do not mutate shared conda envs; use isolated env only. Create/reuse private recovery envs under $DISCO_CODING_AGENT_DIR/envs/ or ~/.disco/agent/envs/. Missing packages, model caches, datasets, or credentials are setup work to attempt before marking blocked. Reduced recovery is allowed if full model stack is unavailable."
+runtime_constraints = "Do not mutate shared conda envs; use isolated env only. Create/reuse private recovery envs under $OCSID_CODING_AGENT_DIR/envs/ or ~/.ocsid/agent/envs/. Missing packages, model caches, datasets, or credentials are setup work to attempt before marking blocked. Reduced recovery is allowed if full model stack is unavailable."
 
 # Maximum number of refine cycles after the first recovery.
 iteration_budget = 10

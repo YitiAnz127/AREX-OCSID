@@ -11,7 +11,7 @@ function seedCandidateRun(quality: string, runId: string, rows: Array<{ skillId:
 	mkdirSync(dir, { recursive: true });
 	writeFileSync(join(dir, "summary.json"), JSON.stringify({ runId, kind, taskSuccessRate: 0.5, caseCount: rows.length }), "utf8");
 	const ledger = rows
-		.map((r) => JSON.stringify({ schema: "disco.quality-ledger.v1", runId, skillId: r.skillId, caseId: r.caseId, candidateSha256: "d1", score: r.score, gradedBy: "model_grader", ts: "2026-01-01T00:00:00Z" }))
+		.map((r) => JSON.stringify({ schema: "ocsid.quality-ledger.v1", runId, skillId: r.skillId, caseId: r.caseId, candidateSha256: "d1", score: r.score, gradedBy: "model_grader", ts: "2026-01-01T00:00:00Z" }))
 		.join("\n");
 	writeFileSync(join(dir, "ledger.jsonl"), ledger + "\n", "utf8");
 }
@@ -153,7 +153,7 @@ describe("grade injection", () => {
 			const dir = join(q, "audit", "dup-1");
 			mkdirSync(dir, { recursive: true });
 			writeFileSync(join(dir, "summary.json"), JSON.stringify({ runId: "dup-1", kind: "candidate-eval", taskSuccessRate: 0.5, caseCount: 1 }), "utf8");
-			const mk = (score: number) => JSON.stringify({ schema: "disco.quality-ledger.v1", runId: "dup-1", skillId: "s", caseId: "c", candidateSha256: "d1", score, gradedBy: "model_grader", ts: "2026-01-01T00:00:00Z" });
+			const mk = (score: number) => JSON.stringify({ schema: "ocsid.quality-ledger.v1", runId: "dup-1", skillId: "s", caseId: "c", candidateSha256: "d1", score, gradedBy: "model_grader", ts: "2026-01-01T00:00:00Z" });
 			writeFileSync(join(dir, "ledger.jsonl"), mk(0.3) + "\n" + mk(0.3) + "\n", "utf8");
 
 			const before = readFileSync(join(dir, "ledger.jsonl"), "utf8");
@@ -178,7 +178,7 @@ describe("grade injection", () => {
 			// A proxy row that ALSO carries observed/extractor claims (the old
 			// provenance contradiction: human score next to proxy evidence).
 			const proxyRow = {
-				schema: "disco.quality-ledger.v1",
+				schema: "ocsid.quality-ledger.v1",
 				runId: "prov-1",
 				skillId: "s",
 				caseId: "c",
@@ -214,7 +214,7 @@ describe("grade injection", () => {
 			const revPath = join(dir, "grades.jsonl");
 			expect(existsSync(revPath)).toBe(true);
 			const rev = JSON.parse(readFileSync(revPath, "utf8").split("\n").filter((l) => l && !l.includes('"journal"'))[0]) as Record<string, unknown>;
-			expect(rev.schema).toBe("disco.grade-revision.v1");
+			expect(rev.schema).toBe("ocsid.grade-revision.v1");
 			expect(rev.gradeId).toBe("g-abc");
 			expect((rev.before as Record<string, unknown>).score).toBe(0.4);
 			expect((rev.after as Record<string, unknown>).score).toBe(1.0);
@@ -284,7 +284,7 @@ describe("grade injection", () => {
 			expect(detectIncompleteGrades(dir)).toEqual([]);
 
 			// Simulate a crash: intent without a matching done is detected.
-			writeFileSync(join(dir, "grades.jsonl"), readFileSync(join(dir, "grades.jsonl"), "utf8") + JSON.stringify({ journal: "disco.grade-journal.v1", phase: "intent", gradeId: "g-crashed", at: "2026-01-01T00:00:00Z" }) + "\n", "utf8");
+			writeFileSync(join(dir, "grades.jsonl"), readFileSync(join(dir, "grades.jsonl"), "utf8") + JSON.stringify({ journal: "ocsid.grade-journal.v1", phase: "intent", gradeId: "g-crashed", at: "2026-01-01T00:00:00Z" }) + "\n", "utf8");
 			const dangling = detectIncompleteGrades(dir);
 			expect(dangling).toContain("g-crashed");
 			expect(dangling).not.toContain("g-rec");

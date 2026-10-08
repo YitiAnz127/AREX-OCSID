@@ -36,7 +36,7 @@ import { getAgentDir } from "../config.ts";
 import { AuthStorage as DefaultAuthStorage } from "./auth-storage.ts";
 import { ModelConfig } from "./model-config.ts";
 import { FileModelsStore, InMemoryCodingAgentModelsStore } from "./models-store.ts";
-import { createDiscoProviderAuthContext, withDiscoOAuth } from "./oauth/index.ts";
+import { createOcsidProviderAuthContext, withOcsidOAuth } from "./oauth/index.ts";
 import {
 	type AuthStatus,
 	type CompatibilityRequestConfig,
@@ -81,8 +81,8 @@ export interface ModelRuntimeAuthOverrides {
 	minOAuthValidityMs?: number;
 }
 
-function getDiscoCacheRetention(): CacheRetention {
-	const configured = process.env.DISCO_CACHE_RETENTION?.trim().toLowerCase();
+function getOcsidCacheRetention(): CacheRetention {
+	const configured = process.env.OCSID_CACHE_RETENTION?.trim().toLowerCase();
 	return configured === "none" || configured === "long" ? configured : "short";
 }
 
@@ -161,15 +161,15 @@ export class ModelRuntime implements Models {
 					? provider
 					: withRemoteCatalog(provider, options.catalogBaseUrl, builtinModelDataGeneratedAt),
 			)
-			.map(withDiscoOAuth);
+			.map(withOcsidOAuth);
 		const runtime = new ModelRuntime(
 			credentials,
 			config,
 			modelsPath,
 			modelsStore,
 			providers,
-			process.env.DISCO_OFFLINE === undefined,
-			createDiscoProviderAuthContext(options.authContext),
+			process.env.OCSID_OFFLINE === undefined,
+			createOcsidProviderAuthContext(options.authContext),
 		);
 		runtime.configureRadiusProviders();
 		runtime.rebuildProviders();
@@ -471,7 +471,7 @@ export class ModelRuntime implements Models {
 			model: resolution.auth.baseUrl ? { ...model, baseUrl: resolution.auth.baseUrl } : model,
 			options: {
 				...providerOptions,
-				cacheRetention: providerOptions.cacheRetention ?? getDiscoCacheRetention(),
+				cacheRetention: providerOptions.cacheRetention ?? getOcsidCacheRetention(),
 				apiKey: providerOptions.apiKey ?? resolution.auth.apiKey,
 				headers,
 				env,

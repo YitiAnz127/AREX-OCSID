@@ -1,0 +1,9 @@
+FROM node:24-bookworm-slim
+WORKDIR /opt/ocsid
+COPY package.json npm-shrinkwrap.json ./
+RUN npm ci --omit=dev --no-audit --no-fund
+COPY dist ./dist
+COPY docs ./docs
+COPY examples ./examples
+COPY README.md LICENSE THIRD_PARTY_NOTICES.md ./
+RUN node dist/cli.js --version

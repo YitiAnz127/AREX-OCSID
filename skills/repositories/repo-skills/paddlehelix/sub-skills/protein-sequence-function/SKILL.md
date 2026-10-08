@@ -5,7 +5,7 @@ description: "Use for PaddleHelix protein sequence pretraining, prediction,
   validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

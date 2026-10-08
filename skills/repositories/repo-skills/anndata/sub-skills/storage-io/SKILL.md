@@ -5,7 +5,7 @@ description: "Read, write, choose, inspect, and troubleshoot AnnData H5AD/Zarr
   v3 options."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

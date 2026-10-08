@@ -5,7 +5,7 @@ description: "Route and supervise clinical, biomedical, omics, imaging,
   backend limits, privacy gates, and reproducible outputs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

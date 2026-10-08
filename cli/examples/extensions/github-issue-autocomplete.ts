@@ -39,8 +39,8 @@ function parseGitHubRepo(remoteUrl: string): string | undefined {
 	return undefined;
 }
 
-async function resolveGitHubRepo(disco: ExtensionAPI, cwd: string): Promise<RepoResolution> {
-	const result = await disco.exec("git", ["remote", "-v"], { cwd, timeout: 5_000 });
+async function resolveGitHubRepo(ocsid: ExtensionAPI, cwd: string): Promise<RepoResolution> {
+	const result = await ocsid.exec("git", ["remote", "-v"], { cwd, timeout: 5_000 });
 	if (result.code !== 0) {
 		return { ok: false, error: "github-issue-autocomplete: cwd is not a git repository" };
 	}
@@ -127,9 +127,9 @@ function createIssueAutocompleteProvider(
 	};
 }
 
-export default function (disco: ExtensionAPI): void {
-	disco.on("session_start", async (_event, ctx) => {
-		const resolvedRepo = await resolveGitHubRepo(disco, ctx.cwd);
+export default function (ocsid: ExtensionAPI): void {
+	ocsid.on("session_start", async (_event, ctx) => {
+		const resolvedRepo = await resolveGitHubRepo(ocsid, ctx.cwd);
 		if (!resolvedRepo.ok) {
 			ctx.ui.notify(resolvedRepo.error, "error");
 			return;
@@ -141,7 +141,7 @@ export default function (disco: ExtensionAPI): void {
 
 		const getIssues = async (): Promise<GitHubIssue[] | undefined> => {
 			issuesPromise ||= (async () => {
-				const result = await disco.exec(
+				const result = await ocsid.exec(
 					"gh",
 					[
 						"issue",

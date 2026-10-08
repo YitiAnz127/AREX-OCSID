@@ -3,7 +3,7 @@ name: opentrons-protocol-api
 description: "&quot;Python API v2 for Opentrons OT-2/Flex liquid handlers: protocols as Python files with metadata and run(); control pipettes, labware, and modules (thermocycler, heater-shaker, magn"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # opentrons-protocol-api — lab-automation sub-skill

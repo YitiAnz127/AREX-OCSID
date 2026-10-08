@@ -1,7 +1,7 @@
 /**
  * Overlay QA Tests - comprehensive overlay positioning and edge case tests
  *
- * Usage: disco --extension ./examples/extensions/overlay-qa-tests.ts
+ * Usage: ocsid --extension ./examples/extensions/overlay-qa-tests.ts
  *
  * Commands:
  *   /overlay-animation  - Real-time animation demo (~30 FPS, proves DOOM-like rendering works)
@@ -27,9 +27,9 @@ import { spawn } from "child_process";
 // Global handle for toggle demo (in real code, use a more elegant pattern)
 let globalToggleHandle: OverlayHandle | null = null;
 
-export default function (disco: ExtensionAPI) {
-	// Animation demo - proves overlays can handle real-time updates (like disco-doom would need)
-	disco.registerCommand("overlay-animation", {
+export default function (ocsid: ExtensionAPI) {
+	// Animation demo - proves overlays can handle real-time updates (like ocsid-doom would need)
+	ocsid.registerCommand("overlay-animation", {
 		description: "Test real-time animation in overlay (~30 FPS)",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			await ctx.ui.custom<void>((tui, theme, _kb, done) => new AnimationDemoComponent(tui, theme, done), {
@@ -40,7 +40,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test all 9 anchor positions
-	disco.registerCommand("overlay-anchors", {
+	ocsid.registerCommand("overlay-anchors", {
 		description: "Cycle through all anchor positions",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			const anchors: OverlayAnchor[] = [
@@ -78,7 +78,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test margins and offsets
-	disco.registerCommand("overlay-margins", {
+	ocsid.registerCommand("overlay-margins", {
 		description: "Test margin and offset options",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			const configs: { name: string; options: OverlayOptions }[] = [
@@ -112,7 +112,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test stacked overlays
-	disco.registerCommand("overlay-stack", {
+	ocsid.registerCommand("overlay-stack", {
 		description: "Test stacked overlays",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			// Three large overlays that overlap in the center area
@@ -156,7 +156,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test width overflow scenarios (original crash case) - streams real process output
-	disco.registerCommand("overlay-overflow", {
+	ocsid.registerCommand("overlay-overflow", {
 		description: "Test width overflow with streaming process output",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			await ctx.ui.custom<void>((tui, theme, _kb, done) => new StreamingOverflowComponent(tui, theme, done), {
@@ -167,7 +167,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test overlay at terminal edge
-	disco.registerCommand("overlay-edge", {
+	ocsid.registerCommand("overlay-edge", {
 		description: "Test overlay positioned at terminal edge",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			await ctx.ui.custom<void>((_tui, theme, _kb, done) => new EdgeTestComponent(theme, done), {
@@ -178,7 +178,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test percentage-based positioning
-	disco.registerCommand("overlay-percent", {
+	ocsid.registerCommand("overlay-percent", {
 		description: "Test percentage-based positioning",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			const configs = [
@@ -214,7 +214,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test maxHeight
-	disco.registerCommand("overlay-maxheight", {
+	ocsid.registerCommand("overlay-maxheight", {
 		description: "Test maxHeight truncation",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			await ctx.ui.custom<void>((_tui, theme, _kb, done) => new MaxHeightTestComponent(theme, done), {
@@ -225,7 +225,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test responsive sidepanel - only shows when terminal is wide enough
-	disco.registerCommand("overlay-sidepanel", {
+	ocsid.registerCommand("overlay-sidepanel", {
 		description: "Test responsive sidepanel (hides when terminal < 100 cols)",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			await ctx.ui.custom<void>((tui, theme, _kb, done) => new SidepanelComponent(tui, theme, done), {
@@ -243,7 +243,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test toggle overlay - demonstrates OverlayHandle.setHidden() via onHandle callback
-	disco.registerCommand("overlay-toggle", {
+	ocsid.registerCommand("overlay-toggle", {
 		description: "Test overlay toggle (press 't' to toggle visibility)",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			await ctx.ui.custom<void>((tui, theme, _kb, done) => new ToggleDemoComponent(tui, theme, done), {
@@ -261,7 +261,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Non-capturing overlay demo - passive info panel that doesn't steal focus
-	disco.registerCommand("overlay-passive", {
+	ocsid.registerCommand("overlay-passive", {
 		description: "Test non-capturing overlay (passive info panel alongside active overlay)",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			ctx.ui.setEditorText("");
@@ -273,7 +273,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Focus cycling demo - demonstrates focus(), input routing, per-panel dismissal, and rendering order
-	disco.registerCommand("overlay-focus", {
+	ocsid.registerCommand("overlay-focus", {
 		description: "Test focus cycling, input routing, dismissal, and rendering order with overlays",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			ctx.ui.setEditorText("");
@@ -285,7 +285,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Test multiple input panels with simulated streaming
-	disco.registerCommand("overlay-streaming", {
+	ocsid.registerCommand("overlay-streaming", {
 		description: "Multiple input panels with simulated streaming (Tab to cycle focus)",
 		handler: async (_args: string, ctx: ExtensionCommandContext) => {
 			ctx.ui.setEditorText("");
@@ -485,13 +485,13 @@ class StreamingOverflowComponent extends BaseOverlay {
 			echo ""
 			for i in $(seq 1 100); do
 				# Simulate long file paths with OSC 8 hyperlinks (clickable) - tests width overflow
-				DIR="/Users/example/Documents/development/disco/packages/coding-agent/src/modes/interactive"
+				DIR="/Users/example/Documents/development/ocsid/packages/coding-agent/src/modes/interactive"
 				FILE="\${DIR}/components/very-long-component-name-that-exceeds-width-\${i}.ts"
 				echo -e "\\033]8;;file://\${FILE}\\007▶ read: \${FILE}\\033]8;;\\007"
 
 				# Add some colored status messages with long text
 				if [ $((i % 5)) -eq 0 ]; then
-					echo -e "  \\033[32m✓ Successfully processed \${i} files in /Users/example/Documents/development/disco\\033[0m"
+					echo -e "  \\033[32m✓ Successfully processed \${i} files in /Users/example/Documents/development/ocsid\\033[0m"
 				fi
 				if [ $((i % 7)) -eq 0 ]; then
 					echo -e "  \\033[33m⚠ Warning: potential issue detected at line \${i} in very-long-component-name-that-exceeds-width.ts\\033[0m"
@@ -760,7 +760,7 @@ class SidepanelComponent extends BaseOverlay {
 	}
 }
 
-// Animation demo - proves overlays can handle real-time updates like disco-doom
+// Animation demo - proves overlays can handle real-time updates like ocsid-doom
 class AnimationDemoComponent extends BaseOverlay {
 	private tui: TUI;
 	private frame = 0;
@@ -836,7 +836,7 @@ class AnimationDemoComponent extends BaseOverlay {
 		lines.push(border("│") + padLine(``) + border("│"));
 		lines.push(border("│") + padLine(th.fg("dim", " This proves overlays can handle")) + border("│"));
 		lines.push(border("│") + padLine(th.fg("dim", " real-time game-like rendering.")) + border("│"));
-		lines.push(border("│") + padLine(th.fg("dim", " (disco-doom uses same approach)")) + border("│"));
+		lines.push(border("│") + padLine(th.fg("dim", " (ocsid-doom uses same approach)")) + border("│"));
 		lines.push(border("│") + padLine(``) + border("│"));
 		lines.push(border("│") + padLine(th.fg("dim", " Press Esc to close")) + border("│"));
 		lines.push(border(`╰${"─".repeat(innerW)}╯`));

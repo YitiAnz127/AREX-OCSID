@@ -62,7 +62,7 @@ Read this before deciding whether this skill is current for a checkout of DGL-Li
     "vcs": "git",
     "working_tree": "dirty"
   },
-  "schema": "disco.repo-provenance.v1"
+  "schema": "ocsid.repo-provenance.v1"
 }
 ```
 

@@ -3,7 +3,7 @@ name: aizynthfinder-retrosynthesis
 description: "&quot;AiZynthFinder retrosynthetic route planning (CASP) from AstraZeneca Molecular AI."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # aizynthfinder-retrosynthesis — structural-biology-drug-discovery sub-skill

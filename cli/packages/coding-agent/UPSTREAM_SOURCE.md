@@ -5,19 +5,19 @@
 - Tag: `v0.83.0`
 - Commit: `845d6ff1f6643aba440341cce877ce1c43ebbc39`
 - Audited source: all 187 tracked files from `src/`; 135 remain byte-identical,
-  49 are adapted for DisCo, `utils/pi-user-agent.ts` is adapted and renamed to
-  `utils/disco-user-agent.ts`, and two unused Pi announcement resources are
+  49 are adapted for OCSID, `utils/pi-user-agent.ts` is adapted and renamed to
+  `utils/ocsid-user-agent.ts`, and two unused Pi announcement resources are
   intentionally excluded.
 - Imported tests: all 219 tracked files from `test/`; 179 remain byte-identical
-  and 40 are adapted. Eight DisCo-specific integration tests are added.
+  and 40 are adapted. Eight OCSID-specific integration tests are added.
 - Imported documentation: `docs/`, excluding the upstream documentation-site
   configuration `docs/docs.json` and four Pi-branded screenshots. All 30
-  retained documents are rewritten and published as DisCo behavior resources.
+  retained documents are rewritten and published as OCSID behavior resources.
 - Imported examples: all 134 tracked files from `examples/`; 26 remain
-  byte-identical and 108 have DisCo package names, commands, or paths adapted.
+  byte-identical and 108 have OCSID package names, commands, or paths adapted.
 - Imported OAuth support from `packages/ai/src/auth/oauth/`: Anthropic,
   OpenAI Codex, and OpenRouter flows plus `device-code.ts`, `oauth-page.ts`,
-  and `pkce.ts`. These local copies isolate DisCo from
+  and `pkce.ts`. These local copies isolate OCSID from
   `PI_OAUTH_CALLBACK_HOST`; all other `pi-ai` behavior remains an exact npm
   dependency at v0.83.0.
 
@@ -39,7 +39,7 @@ inventory check without requiring a separate Pi checkout. Supplying the
 upstream root additionally verifies the exact Git commit/tag, tracked-tree
 cleanliness, upstream hashes, and every migration decision.
 
-When the pinned upstream baseline is unchanged and only local DisCo files have
+When the pinned upstream baseline is unchanged and only local OCSID files have
 changed, use the local-only refresh workflow instead:
 
 ```bash
@@ -58,7 +58,7 @@ Apart from the six explicitly listed OAuth support files, no source file from
 `@earendil-works/pi-tui`, each pinned to `0.83.0`.
 
 The following upstream package content is intentionally excluded from the
-DisCo implementation and npm tarball:
+OCSID implementation and npm tarball:
 
 - `dist/`
 - `node_modules/`
@@ -71,7 +71,7 @@ DisCo implementation and npm tarball:
   no-longer-accurate UI
 - `src/modes/interactive/components/earendil-announcement.ts` and
   `src/modes/interactive/assets/clankolas.png`, because the announcement has no
-  runtime caller and is unrelated to DisCo
+  runtime caller and is unrelated to OCSID
 
 Generated or local-install artifacts such as `dist/`, `node_modules/`, and the
 untracked development `bin/pi` link are also excluded. `upstream-package.json`,

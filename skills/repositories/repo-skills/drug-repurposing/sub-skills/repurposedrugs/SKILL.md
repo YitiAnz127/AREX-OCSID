@@ -3,7 +3,7 @@ name: repurposedrugs
 description: "Query the RepurposeDrugs single-agent drug repurposing database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # repurposedrugs — drug-repurposing sub-skill

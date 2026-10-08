@@ -3,7 +3,7 @@ name: variant-snpeff-variant-annotation
 description: "&quot;Annotate and filter VCF variants with SnpEff and SnpSift."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # variant-snpeff-variant-annotation — genomics-bioinformatics sub-skill

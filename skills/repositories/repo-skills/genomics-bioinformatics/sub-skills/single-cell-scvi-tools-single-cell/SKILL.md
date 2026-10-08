@@ -3,7 +3,7 @@ name: single-cell-scvi-tools-single-cell
 description: "&quot;Deep generative models for single-cell omics: probabilistic batch correction (scVI), semi-supervised annotation (scANVI), CITE-seq RNA+protein (totalVI), transfer learning (scARCH"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # single-cell-scvi-tools-single-cell — genomics-bioinformatics sub-skill

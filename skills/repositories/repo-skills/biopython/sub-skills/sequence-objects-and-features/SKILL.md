@@ -4,7 +4,7 @@ description: "Operate Biopython Seq, MutableSeq, SeqRecord, SeqFeature,
   location, codon-table, and SeqUtils workflows without file parsing."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

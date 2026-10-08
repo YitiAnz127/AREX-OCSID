@@ -7,10 +7,10 @@
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	const protectedPaths = [".env", ".git/", "node_modules/"];
 
-	disco.on("tool_call", async (event, ctx) => {
+	ocsid.on("tool_call", async (event, ctx) => {
 		if (event.toolName !== "write" && event.toolName !== "edit") {
 			return undefined;
 		}

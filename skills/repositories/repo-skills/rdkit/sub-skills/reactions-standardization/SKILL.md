@@ -7,7 +7,7 @@ description: "Use for RDKit reaction SMARTS/RXN workflows, product sanitization,
   optional MMPA/Fraggle contrib workflows to contrib-utilities."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

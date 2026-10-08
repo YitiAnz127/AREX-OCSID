@@ -3,7 +3,7 @@ name: databases-gwas-database
 description: "&quot;NHGRI-EBI GWAS Catalog REST API for SNP-trait associations from published GWAS."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-gwas-database — genomics-bioinformatics sub-skill

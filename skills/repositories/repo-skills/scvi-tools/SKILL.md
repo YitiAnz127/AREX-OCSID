@@ -5,7 +5,7 @@ description: "Use scvi-tools for probabilistic single-cell omics analysis with
   save/load, Hub workflows, and advanced extension/autotune tasks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

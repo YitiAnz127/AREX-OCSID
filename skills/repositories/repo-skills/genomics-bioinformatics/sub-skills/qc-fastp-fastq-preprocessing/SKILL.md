@@ -3,7 +3,7 @@ name: qc-fastp-fastq-preprocessing
 description: "&quot;All-in-one FASTQ QC and adapter trimming."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # qc-fastp-fastq-preprocessing — genomics-bioinformatics sub-skill

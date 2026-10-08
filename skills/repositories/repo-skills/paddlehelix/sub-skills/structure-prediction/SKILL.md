@@ -4,7 +4,7 @@ description: "Plan and validate PaddleHelix HelixFold structure-prediction
   workflows without unsafe downloads or GPU inference."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

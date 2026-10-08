@@ -6,7 +6,7 @@ description: "Guide construction and execution of the verified Alphafold2
   supported trunk configuration."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

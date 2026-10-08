@@ -4,7 +4,7 @@ description: "Operate Hugging Face Hub repositories and API resources with authe
 license: Apache-2.0
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # Hub Operations

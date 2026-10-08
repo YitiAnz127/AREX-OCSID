@@ -4,7 +4,7 @@ description: "Routes Biopython motif, restriction enzyme, clustering, phenotype,
   population genetics, graphics, protein-analysis, and long-tail module tasks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

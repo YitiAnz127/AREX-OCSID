@@ -1,6 +1,6 @@
 import type { Api, Model, ModelsStoreEntry, Provider } from "@earendil-works/pi-ai";
 import { VERSION } from "../config.ts";
-import { getDiscoUserAgent } from "../utils/disco-user-agent.ts";
+import { getOcsidUserAgent } from "../utils/ocsid-user-agent.ts";
 
 export const REMOTE_CATALOG_REFRESH_INTERVAL_MS = 4 * 60 * 60 * 1000;
 
@@ -42,7 +42,7 @@ function remoteModels(
 /** Add an optional persisted remote catalog overlay to a static built-in provider. */
 export function withRemoteCatalog(
 	provider: Provider,
-	catalogBaseUrl: string | undefined = process.env.DISCO_MODEL_CATALOG_URL,
+	catalogBaseUrl: string | undefined = process.env.OCSID_MODEL_CATALOG_URL,
 	localGeneratedAt?: number,
 ): Provider {
 	if (!catalogBaseUrl) return provider;
@@ -61,7 +61,7 @@ export function withRemoteCatalog(
 	const parsedCatalogUrl = new URL(catalogBaseUrl);
 	if (parsedCatalogUrl.protocol !== "https:") {
 		throw new Error(
-			`Refusing to load remote model catalog: DISCO_MODEL_CATALOG_URL must use https:// (got "${parsedCatalogUrl.protocol}//") so that resolved API keys are never sent to an insecure endpoint.`,
+			`Refusing to load remote model catalog: OCSID_MODEL_CATALOG_URL must use https:// (got "${parsedCatalogUrl.protocol}//") so that resolved API keys are never sent to an insecure endpoint.`,
 		);
 	}
 
@@ -93,7 +93,7 @@ export function withRemoteCatalog(
 					const response = await fetch(url, {
 						headers: {
 							accept: "application/json",
-							"User-Agent": getDiscoUserAgent(VERSION),
+							"User-Agent": getOcsidUserAgent(VERSION),
 							...(validator ? { "if-none-match": validator } : {}),
 						},
 						signal: context.signal,

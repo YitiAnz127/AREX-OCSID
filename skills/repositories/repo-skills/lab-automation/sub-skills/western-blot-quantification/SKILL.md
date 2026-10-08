@@ -3,7 +3,7 @@ name: western-blot-quantification
 description: "Protocols and best practices for western blot quantification and analysis including band detection, normalization, and statistical methods."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # western-blot-quantification — lab-automation sub-skill

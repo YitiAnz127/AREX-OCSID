@@ -5,7 +5,7 @@ description: "Use DeepChem for molecular machine learning, data loading,
   troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

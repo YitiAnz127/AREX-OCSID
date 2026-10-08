@@ -3,7 +3,7 @@ name: atomistic-workflows
 description: "Use atomistic-workflows for molecular simulation workflows: atomistic-workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

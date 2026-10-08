@@ -3,7 +3,7 @@ name: dilirank
 description: "Query the DILIrank/FDA Liver Toxicity Knowledge Base (LTKB)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dilirank — drug-toxicity sub-skill

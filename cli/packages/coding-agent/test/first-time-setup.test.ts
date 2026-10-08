@@ -7,24 +7,24 @@ import { ENV_AGENT_DIR } from "../src/config.ts";
 import { SettingsManager } from "../src/core/settings-manager.ts";
 
 describe("shouldRunFirstTimeSetup", () => {
-	const originalDiscoExperimental = process.env.DISCO_EXPERIMENTAL;
+	const originalOcsidExperimental = process.env.OCSID_EXPERIMENTAL;
 	const originalAgentDir = process.env[ENV_AGENT_DIR];
 	let tempDir: string;
 	let settingsPath: string;
 
 	beforeEach(() => {
-		tempDir = mkdtempSync(join(tmpdir(), "disco-first-time-setup-"));
+		tempDir = mkdtempSync(join(tmpdir(), "ocsid-first-time-setup-"));
 		settingsPath = join(tempDir, "settings.json");
-		process.env.DISCO_EXPERIMENTAL = "1";
+		process.env.OCSID_EXPERIMENTAL = "1";
 		delete process.env[ENV_AGENT_DIR];
 	});
 
 	afterEach(() => {
 		rmSync(tempDir, { recursive: true, force: true });
-		if (originalDiscoExperimental === undefined) {
-			delete process.env.DISCO_EXPERIMENTAL;
+		if (originalOcsidExperimental === undefined) {
+			delete process.env.OCSID_EXPERIMENTAL;
 		} else {
-			process.env.DISCO_EXPERIMENTAL = originalDiscoExperimental;
+			process.env.OCSID_EXPERIMENTAL = originalOcsidExperimental;
 		}
 		if (originalAgentDir === undefined) {
 			delete process.env[ENV_AGENT_DIR];
@@ -38,7 +38,7 @@ describe("shouldRunFirstTimeSetup", () => {
 	});
 
 	it("returns false when experimental features are disabled", () => {
-		delete process.env.DISCO_EXPERIMENTAL;
+		delete process.env.OCSID_EXPERIMENTAL;
 
 		expect(shouldRunFirstTimeSetup(settingsPath)).toBe(false);
 	});

@@ -1,7 +1,7 @@
 /**
  * DOOM Overlay Demo - Play DOOM as an overlay
  *
- * Usage: disco --extension ./examples/extensions/doom-overlay
+ * Usage: ocsid --extension ./examples/extensions/doom-overlay
  *
  * Commands:
  *   /doom-overlay - Play DOOM in an overlay (Q to pause/exit)
@@ -18,8 +18,8 @@ import { ensureWadFile } from "./wad-finder.ts";
 let activeEngine: DoomEngine | null = null;
 let activeWadPath: string | null = null;
 
-export default function (disco: ExtensionAPI) {
-	disco.registerCommand("doom-overlay", {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerCommand("doom-overlay", {
 		description: "Play DOOM as an overlay. Q to pause and exit.",
 
 		handler: async (args, ctx) => {

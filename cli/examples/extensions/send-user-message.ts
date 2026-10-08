@@ -1,8 +1,8 @@
 /**
  * Send User Message Example
  *
- * Demonstrates disco.sendUserMessage() for sending user messages from extensions.
- * Unlike disco.sendMessage() which sends custom messages, sendUserMessage() sends
+ * Demonstrates ocsid.sendUserMessage() for sending user messages from extensions.
+ * Unlike ocsid.sendMessage() which sends custom messages, sendUserMessage() sends
  * actual user messages that appear in the conversation as if typed by the user.
  *
  * Usage:
@@ -13,9 +13,9 @@
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	// Simple command that sends a user message
-	disco.registerCommand("ask", {
+	ocsid.registerCommand("ask", {
 		description: "Send a user message to the agent",
 		handler: async (args, ctx) => {
 			if (!args.trim()) {
@@ -30,12 +30,12 @@ export default function (disco: ExtensionAPI) {
 				return;
 			}
 
-			disco.sendUserMessage(args);
+			ocsid.sendUserMessage(args);
 		},
 	});
 
 	// Command that steers the agent mid-conversation
-	disco.registerCommand("steer", {
+	ocsid.registerCommand("steer", {
 		description: "Send a steering message (interrupts current processing)",
 		handler: async (args, ctx) => {
 			if (!args.trim()) {
@@ -45,16 +45,16 @@ export default function (disco: ExtensionAPI) {
 
 			if (ctx.isIdle()) {
 				// Not streaming, just send normally
-				disco.sendUserMessage(args);
+				ocsid.sendUserMessage(args);
 			} else {
 				// Streaming - use steer to interrupt
-				disco.sendUserMessage(args, { deliverAs: "steer" });
+				ocsid.sendUserMessage(args, { deliverAs: "steer" });
 			}
 		},
 	});
 
 	// Command that queues a follow-up message
-	disco.registerCommand("followup", {
+	ocsid.registerCommand("followup", {
 		description: "Queue a follow-up message (waits for current processing)",
 		handler: async (args, ctx) => {
 			if (!args.trim()) {
@@ -64,17 +64,17 @@ export default function (disco: ExtensionAPI) {
 
 			if (ctx.isIdle()) {
 				// Not streaming, just send normally
-				disco.sendUserMessage(args);
+				ocsid.sendUserMessage(args);
 			} else {
 				// Streaming - queue as follow-up
-				disco.sendUserMessage(args, { deliverAs: "followUp" });
+				ocsid.sendUserMessage(args, { deliverAs: "followUp" });
 				ctx.ui.notify("Follow-up queued", "info");
 			}
 		},
 	});
 
 	// Example with content array (text + images would go here)
-	disco.registerCommand("askwith", {
+	ocsid.registerCommand("askwith", {
 		description: "Send a user message with structured content",
 		handler: async (args, ctx) => {
 			if (!args.trim()) {
@@ -88,7 +88,7 @@ export default function (disco: ExtensionAPI) {
 			}
 
 			// sendUserMessage accepts string or (TextContent | ImageContent)[]
-			disco.sendUserMessage([
+			ocsid.sendUserMessage([
 				{ type: "text", text: `User request: ${args}` },
 				{ type: "text", text: "Please respond concisely." },
 			]);

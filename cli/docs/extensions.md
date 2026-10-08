@@ -1,23 +1,23 @@
-> disco can create extensions. Ask it to build one for your use case.
+> ocsid can create extensions. Ask it to build one for your use case.
 
 # Extensions
 
 > **Upstream source reference:** GitHub source links on this page point to the
-> Pi v0.83.0 baseline from which DisCo's internal coding-agent implementation
-> was forked. The installed `@arex-skill/disco` types and behavior are
+> Pi v0.83.0 baseline from which OCSID's internal coding-agent implementation
+> was forked. The installed `ocsid` types and behavior are
 > authoritative.
 
-Extensions are TypeScript modules that extend disco's behavior. They can subscribe to lifecycle events, register custom tools callable by the LLM, add commands, and more.
+Extensions are TypeScript modules that extend ocsid's behavior. They can subscribe to lifecycle events, register custom tools callable by the LLM, add commands, and more.
 
-> **Placement for /reload:** Put extensions in `~/.disco/agent/extensions/` (global) or `.disco/extensions/` (project-local) for auto-discovery. Use `disco -e ./path.ts` only for quick tests. Extensions in auto-discovered locations can be hot-reloaded with `/reload`.
+> **Placement for /reload:** Put extensions in `~/.ocsid/agent/extensions/` (global) or `.ocsid/extensions/` (project-local) for auto-discovery. Use `ocsid -e ./path.ts` only for quick tests. Extensions in auto-discovered locations can be hot-reloaded with `/reload`.
 
 **Key capabilities:**
-- **Custom tools** - Register tools the LLM can call via `disco.registerTool()`
+- **Custom tools** - Register tools the LLM can call via `ocsid.registerTool()`
 - **Event interception** - Block or modify tool calls, inject context, customize compaction
 - **User interaction** - Prompt users via `ctx.ui` (select, confirm, input, notify)
 - **Custom UI components** - Full TUI components with keyboard input via `ctx.ui.custom()` for complex interactions
-- **Custom commands** - Register commands like `/mycommand` via `disco.registerCommand()`
-- **Session persistence** - Store state that survives restarts via `disco.appendEntry()`
+- **Custom commands** - Register commands like `/mycommand` via `ocsid.registerCommand()`
+- **Session persistence** - Store state that survives restarts via `ocsid.appendEntry()`
 - **Custom rendering** - Control how tool calls/results and messages appear in TUI
 
 **Example use cases:**
@@ -60,19 +60,19 @@ See [examples/extensions/](../examples/extensions/) for working implementations.
 
 ## Quick Start
 
-Create `~/.disco/agent/extensions/my-extension.ts`:
+Create `~/.ocsid/agent/extensions/my-extension.ts`:
 
 ```typescript
-import type { ExtensionAPI } from "@arex-skill/disco";
+import type { ExtensionAPI } from "ocsid";
 import { Type } from "typebox";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
   // React to events
-  disco.on("session_start", async (_event, ctx) => {
+  ocsid.on("session_start", async (_event, ctx) => {
     ctx.ui.notify("Extension loaded!", "info");
   });
 
-  disco.on("tool_call", async (event, ctx) => {
+  ocsid.on("tool_call", async (event, ctx) => {
     if (event.toolName === "bash" && event.input.command?.includes("rm -rf")) {
       const ok = await ctx.ui.confirm("Dangerous!", "Allow rm -rf?");
       if (!ok) return { block: true, reason: "Blocked by user" };
@@ -80,7 +80,7 @@ export default function (disco: ExtensionAPI) {
   });
 
   // Register a custom tool
-  disco.registerTool({
+  ocsid.registerTool({
     name: "greet",
     label: "Greet",
     description: "Greet someone by name",
@@ -96,7 +96,7 @@ export default function (disco: ExtensionAPI) {
   });
 
   // Register a command
-  disco.registerCommand("hello", {
+  ocsid.registerCommand("hello", {
     description: "Say hello",
     handler: async (args, ctx) => {
       ctx.ui.notify(`Hello ${args || "world"}!`, "info");
@@ -108,21 +108,21 @@ export default function (disco: ExtensionAPI) {
 Test with `--extension` (or `-e`) flag:
 
 ```bash
-disco -e ./my-extension.ts
+ocsid -e ./my-extension.ts
 ```
 
 ## Extension Locations
 
 > **Security:** Extensions run with your full system permissions and can execute arbitrary code. Only install from sources you trust.
 
-Extensions are auto-discovered from trusted locations. Project-local `.disco/extensions` entries load only after the project is trusted.
+Extensions are auto-discovered from trusted locations. Project-local `.ocsid/extensions` entries load only after the project is trusted.
 
 | Location | Scope |
 |----------|-------|
-| `~/.disco/agent/extensions/*.ts` | Global (all projects) |
-| `~/.disco/agent/extensions/*/index.ts` | Global (subdirectory) |
-| `.disco/extensions/*.ts` | Project-local |
-| `.disco/extensions/*/index.ts` | Project-local (subdirectory) |
+| `~/.ocsid/agent/extensions/*.ts` | Global (all projects) |
+| `~/.ocsid/agent/extensions/*/index.ts` | Global (subdirectory) |
+| `.ocsid/extensions/*.ts` | Project-local |
+| `.ocsid/extensions/*/index.ts` | Project-local (subdirectory) |
 
 Additional paths via `settings.json`:
 
@@ -139,20 +139,20 @@ Additional paths via `settings.json`:
 }
 ```
 
-To share extensions via npm or git as disco packages, see [packages.md](packages.md).
+To share extensions via npm or git as ocsid packages, see [packages.md](packages.md).
 
 ## Available Imports
 
 | Package | Purpose |
 |---------|---------|
-| `@arex-skill/disco` | Extension types (`ExtensionAPI`, `ExtensionContext`, events) |
+| `ocsid` | Extension types (`ExtensionAPI`, `ExtensionContext`, events) |
 | `typebox` | Schema definitions for tool parameters |
 | `@earendil-works/pi-ai` | AI utilities (`StringEnum` for Google-compatible enums) |
 | `@earendil-works/pi-tui` | TUI components for custom rendering |
 
 npm dependencies work too. Add a `package.json` next to your extension (or in a parent directory), run `npm install`, and imports from `node_modules/` are resolved automatically.
 
-For distributed disco packages installed with `disco install` (npm or git), runtime deps must be in `dependencies`. Package installation uses production installs (`npm install --omit=dev`) by default, so `devDependencies` are not available at runtime; when `npmCommand` is configured, git packages use plain `install` for compatibility with wrappers.
+For distributed ocsid packages installed with `ocsid install` (npm or git), runtime deps must be in `dependencies`. Package installation uses production installs (`npm install --omit=dev`) by default, so `devDependencies` are not available at runtime; when `npmCommand` is configured, git packages use plain `install` for compatibility with wrappers.
 
 Node.js built-ins (`node:fs`, `node:path`, etc.) are also available.
 
@@ -161,11 +161,11 @@ Node.js built-ins (`node:fs`, `node:path`, etc.) are also available.
 An extension exports a default factory function that receives `ExtensionAPI`. The factory can be synchronous or asynchronous:
 
 ```typescript
-import type { ExtensionAPI } from "@arex-skill/disco";
+import type { ExtensionAPI } from "ocsid";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
   // Subscribe to events
-  disco.on("event_name", async (event, ctx) => {
+  ocsid.on("event_name", async (event, ctx) => {
     // ctx.ui for user interaction
     const ok = await ctx.ui.confirm("Title", "Are you sure?");
     ctx.ui.notify("Done!", "info");
@@ -174,25 +174,25 @@ export default function (disco: ExtensionAPI) {
   });
 
   // Register tools, commands, shortcuts, flags
-  disco.registerTool({ ... });
-  disco.registerCommand("name", { ... });
-  disco.registerShortcut("ctrl+x", { ... });
-  disco.registerFlag("my-flag", { ... });
+  ocsid.registerTool({ ... });
+  ocsid.registerCommand("name", { ... });
+  ocsid.registerShortcut("ctrl+x", { ... });
+  ocsid.registerFlag("my-flag", { ... });
 }
 ```
 
 Extensions are loaded via [jiti](https://github.com/unjs/jiti), so TypeScript works without compilation.
 
-If the factory returns a `Promise`, disco awaits it before continuing startup. That means async initialization completes before `session_start`, before `resources_discover`, and before provider registrations queued via `disco.registerProvider()` are flushed.
+If the factory returns a `Promise`, ocsid awaits it before continuing startup. That means async initialization completes before `session_start`, before `resources_discover`, and before provider registrations queued via `ocsid.registerProvider()` are flushed.
 
 ### Async factory functions
 
 Use an async factory for one-time startup work such as fetching remote configuration or dynamically discovering available models.
 
 ```typescript
-import type { ExtensionAPI } from "@arex-skill/disco";
+import type { ExtensionAPI } from "ocsid";
 
-export default async function (disco: ExtensionAPI) {
+export default async function (ocsid: ExtensionAPI) {
   const response = await fetch("http://localhost:1234/v1/models");
   const payload = (await response.json()) as {
     data: Array<{
@@ -203,7 +203,7 @@ export default async function (disco: ExtensionAPI) {
     }>;
   };
 
-  disco.registerProvider("local-openai", {
+  ocsid.registerProvider("local-openai", {
     baseUrl: "http://localhost:1234/v1",
     apiKey: "$LOCAL_OPENAI_API_KEY",
     api: "openai-completions",
@@ -220,7 +220,7 @@ export default async function (disco: ExtensionAPI) {
 }
 ```
 
-This pattern makes the fetched models available during normal startup and to `disco --list-models`.
+This pattern makes the fetched models available during normal startup and to `ocsid --list-models`.
 
 ### Long-lived resources and shutdown
 
@@ -233,14 +233,14 @@ Defer background resource startup until `session_start` or the command/tool/even
 **Single file** - simplest, for small extensions:
 
 ```
-~/.disco/agent/extensions/
+~/.ocsid/agent/extensions/
 └── my-extension.ts
 ```
 
 **Directory with index.ts** - for multi-file extensions:
 
 ```
-~/.disco/agent/extensions/
+~/.ocsid/agent/extensions/
 └── my-extension/
     ├── index.ts        # Entry point (exports default function)
     ├── tools.ts        # Helper module
@@ -250,7 +250,7 @@ Defer background resource startup until `session_start` or the command/tool/even
 **Package with dependencies** - for extensions that need npm packages:
 
 ```
-~/.disco/agent/extensions/
+~/.ocsid/agent/extensions/
 └── my-extension/
     ├── package.json    # Declares dependencies and entry points
     ├── package-lock.json
@@ -267,7 +267,7 @@ Defer background resource startup until `session_start` or the command/tool/even
     "zod": "^3.0.0",
     "chalk": "^5.0.0"
   },
-  "disco": {
+  "ocsid": {
     "extensions": ["./src/index.ts"]
   }
 }
@@ -280,7 +280,7 @@ Run `npm install` in the extension directory, then imports from `node_modules/` 
 ### Lifecycle Overview
 
 ```
-disco starts
+ocsid starts
   │
   ├─► project_trust (user/global and CLI extensions only, before project resources load)
   ├─► session_start { reason: "startup" }
@@ -330,7 +330,7 @@ user sends another prompt ◄─────────────────
   ├─► session_start { reason: "fork", previousSessionFile }
   └─► resources_discover { reason: "startup" }
 
-/name or disco.setSessionName()
+/name or ocsid.setSessionName()
   └─► session_info_changed
 
 /compact or auto-compaction
@@ -345,7 +345,7 @@ user sends another prompt ◄─────────────────
   ├─► thinking_level_select (if model change changes/clamps thinking level)
   └─► model_select
 
-thinking level changes (settings, keybinding, disco.setThinkingLevel())
+thinking level changes (settings, keybinding, ocsid.setThinkingLevel())
   └─► thinking_level_select
 
 exit (Ctrl+C, Ctrl+D, SIGHUP, SIGTERM)
@@ -356,10 +356,10 @@ exit (Ctrl+C, Ctrl+D, SIGHUP, SIGTERM)
 
 #### project_trust
 
-Fired before disco decides whether to trust a project with dynamic configs (`.disco` or `.agents/skills`). It runs during startup and when session replacement (for example `/resume`) enters a cwd whose trust has not been resolved in the current process. Only user/global extensions and CLI `-e` extensions participate; project-local extensions are not loaded until after trust is resolved.
+Fired before ocsid decides whether to trust a project with dynamic configs (`.ocsid` or `.agents/skills`). It runs during startup and when session replacement (for example `/resume`) enters a cwd whose trust has not been resolved in the current process. Only user/global extensions and CLI `-e` extensions participate; project-local extensions are not loaded until after trust is resolved.
 
 ```typescript
-disco.on("project_trust", async (event, ctx) => {
+ocsid.on("project_trust", async (event, ctx) => {
   // event.cwd - current working directory
   // ctx has a limited trust context: cwd, mode, hasUI, and select/confirm/input/notify UI helpers
   if (await ctx.ui.confirm("Trust project?", event.cwd)) {
@@ -369,7 +369,7 @@ disco.on("project_trust", async (event, ctx) => {
 });
 ```
 
-A `project_trust` handler must return `{ trusted: "yes" | "no" | "undecided" }`. A user/global or CLI extension that returns `"yes"` or `"no"` owns the decision; the first yes/no decision wins and suppresses the built-in trust prompt. Use `remember: true` to persist a yes/no decision; otherwise it applies only to the current process. Return `"undecided"` to let later handlers or the built-in trust flow decide. Check `ctx.hasUI` before prompting. If no handler returns yes/no, normal trust resolution continues: saved `trust.json` decisions apply first, then `defaultProjectTrust` controls whether disco asks, trusts, or declines by default.
+A `project_trust` handler must return `{ trusted: "yes" | "no" | "undecided" }`. A user/global or CLI extension that returns `"yes"` or `"no"` owns the decision; the first yes/no decision wins and suppresses the built-in trust prompt. Use `remember: true` to persist a yes/no decision; otherwise it applies only to the current process. Return `"undecided"` to let later handlers or the built-in trust flow decide. Check `ctx.hasUI` before prompting. If no handler returns yes/no, normal trust resolution continues: saved `trust.json` decisions apply first, then `defaultProjectTrust` controls whether ocsid asks, trusts, or declines by default.
 
 ### Resource Events
 
@@ -379,7 +379,7 @@ Fired after `session_start` so extensions can contribute additional skill, promp
 The startup path uses `reason: "startup"`. Reload uses `reason: "reload"`.
 
 ```typescript
-disco.on("resources_discover", async (event, _ctx) => {
+ocsid.on("resources_discover", async (event, _ctx) => {
   // event.cwd - current working directory
   // event.reason - "startup" | "reload"
   return {
@@ -399,7 +399,7 @@ See [Session Format](session-format.md) for session storage internals and the Se
 Fired when a session is started, loaded, or reloaded.
 
 ```typescript
-disco.on("session_start", async (event, ctx) => {
+ocsid.on("session_start", async (event, ctx) => {
   // event.reason - "startup" | "reload" | "new" | "resume" | "fork"
   // event.previousSessionFile - present for "new", "resume", and "fork"
   ctx.ui.notify(`Session: ${ctx.sessionManager.getSessionFile() ?? "ephemeral"}`, "info");
@@ -408,10 +408,10 @@ disco.on("session_start", async (event, ctx) => {
 
 #### session_info_changed
 
-Fired when the current session display name is set via `/name`, RPC, or `disco.setSessionName()`.
+Fired when the current session display name is set via `/name`, RPC, or `ocsid.setSessionName()`.
 
 ```typescript
-disco.on("session_info_changed", async (event, ctx) => {
+ocsid.on("session_info_changed", async (event, ctx) => {
   // event.name - current normalized name, or undefined if cleared
   ctx.ui.notify(`Session renamed: ${event.name ?? "(none)"}`, "info");
 });
@@ -422,7 +422,7 @@ disco.on("session_info_changed", async (event, ctx) => {
 Fired before starting a new session (`/new`) or switching sessions (`/resume`).
 
 ```typescript
-disco.on("session_before_switch", async (event, ctx) => {
+ocsid.on("session_before_switch", async (event, ctx) => {
   // event.reason - "new" or "resume"
   // event.targetSessionFile - session we're switching to (only for "resume")
 
@@ -433,7 +433,7 @@ disco.on("session_before_switch", async (event, ctx) => {
 });
 ```
 
-After a successful switch or new-session action, disco emits `session_shutdown` for the old extension instance, reloads and rebinds extensions for the new session, then emits `session_start` with `reason: "new" | "resume"` and `previousSessionFile`.
+After a successful switch or new-session action, ocsid emits `session_shutdown` for the old extension instance, reloads and rebinds extensions for the new session, then emits `session_start` with `reason: "new" | "resume"` and `previousSessionFile`.
 Do cleanup work in `session_shutdown`, then reestablish any in-memory state in `session_start`.
 
 #### session_before_fork
@@ -441,7 +441,7 @@ Do cleanup work in `session_shutdown`, then reestablish any in-memory state in `
 Fired when forking via `/fork` or cloning via `/clone`.
 
 ```typescript
-disco.on("session_before_fork", async (event, ctx) => {
+ocsid.on("session_before_fork", async (event, ctx) => {
   // event.entryId - ID of the selected entry
   // event.position - "before" for /fork, "at" for /clone
   return { cancel: true }; // Cancel fork/clone
@@ -450,7 +450,7 @@ disco.on("session_before_fork", async (event, ctx) => {
 });
 ```
 
-After a successful fork or clone, disco emits `session_shutdown` for the old extension instance, reloads and rebinds extensions for the new session, then emits `session_start` with `reason: "fork"` and `previousSessionFile`.
+After a successful fork or clone, ocsid emits `session_shutdown` for the old extension instance, reloads and rebinds extensions for the new session, then emits `session_start` with `reason: "fork"` and `previousSessionFile`.
 Do cleanup work in `session_shutdown`, then reestablish any in-memory state in `session_start`.
 
 #### session_before_compact / session_compact
@@ -458,7 +458,7 @@ Do cleanup work in `session_shutdown`, then reestablish any in-memory state in `
 Fired on compaction. See [compaction.md](compaction.md) for details.
 
 ```typescript
-disco.on("session_before_compact", async (event, ctx) => {
+ocsid.on("session_before_compact", async (event, ctx) => {
   const { preparation, branchEntries, customInstructions, reason, willRetry, signal } = event;
 
   // reason - "manual" (/compact), "threshold", or "overflow"
@@ -478,7 +478,7 @@ disco.on("session_before_compact", async (event, ctx) => {
   };
 });
 
-disco.on("session_compact", async (event, ctx) => {
+ocsid.on("session_compact", async (event, ctx) => {
   // event.compactionEntry - the saved compaction
   // event.fromExtension - whether extension provided it
   // event.reason - "manual" (/compact), "threshold", or "overflow"
@@ -491,7 +491,7 @@ disco.on("session_compact", async (event, ctx) => {
 Fired on `/tree` navigation. See [Sessions](sessions.md) for tree navigation concepts.
 
 ```typescript
-disco.on("session_before_tree", async (event, ctx) => {
+ocsid.on("session_before_tree", async (event, ctx) => {
   const { preparation, signal } = event;
   return { cancel: true };
   // OR provide custom summary:
@@ -504,7 +504,7 @@ disco.on("session_before_tree", async (event, ctx) => {
   };
 });
 
-disco.on("session_tree", async (event, ctx) => {
+ocsid.on("session_tree", async (event, ctx) => {
   // event.newLeafId, oldLeafId, summaryEntry, fromExtension
 });
 ```
@@ -514,7 +514,7 @@ disco.on("session_tree", async (event, ctx) => {
 Fired before a started session runtime is torn down. Use this to clean up resources opened from `session_start` or other session-scoped hooks.
 
 ```typescript
-disco.on("session_shutdown", async (event, ctx) => {
+ocsid.on("session_shutdown", async (event, ctx) => {
   // event.reason - "quit" | "reload" | "new" | "resume" | "fork"
   // event.targetSessionFile - destination session for session replacement flows
   // Cleanup, save state, etc.
@@ -528,7 +528,7 @@ disco.on("session_shutdown", async (event, ctx) => {
 Fired after user submits prompt, before agent loop. Can inject a message and/or modify the system prompt.
 
 ```typescript
-disco.on("before_agent_start", async (event, ctx) => {
+ocsid.on("before_agent_start", async (event, ctx) => {
   // event.prompt - user's prompt text
   // event.images - attached images (if any)
   // event.systemPrompt - current chained system prompt for this handler
@@ -556,22 +556,22 @@ disco.on("before_agent_start", async (event, ctx) => {
 });
 ```
 
-The `systemPromptOptions` field gives extensions access to the same structured data DisCo uses to build the system prompt. This lets you inspect what DisCo has loaded — custom prompts, guidelines, tool snippets, context files, skills — without re-discovering resources or re-parsing flags. Use it when your extension needs to make deep, informed changes to the system prompt while respecting user-provided configuration.
+The `systemPromptOptions` field gives extensions access to the same structured data OCSID uses to build the system prompt. This lets you inspect what OCSID has loaded — custom prompts, guidelines, tool snippets, context files, skills — without re-discovering resources or re-parsing flags. Use it when your extension needs to make deep, informed changes to the system prompt while respecting user-provided configuration.
 
 Inside `before_agent_start`, `event.systemPrompt` and `ctx.getSystemPrompt()` both reflect the chained system prompt as of the current handler. Later `before_agent_start` handlers can still modify it again.
 
 #### agent_start / agent_end / agent_settled
 
-`agent_start` fires when a low-level agent run begins. `agent_end` fires when that run ends, but DisCo may still auto-retry, auto-compact and retry, or continue with queued follow-up messages. Use `agent_settled` for status integrations that need to know DisCo will not continue running automatically.
+`agent_start` fires when a low-level agent run begins. `agent_end` fires when that run ends, but OCSID may still auto-retry, auto-compact and retry, or continue with queued follow-up messages. Use `agent_settled` for status integrations that need to know OCSID will not continue running automatically.
 
 ```typescript
-disco.on("agent_start", async (_event, ctx) => {});
+ocsid.on("agent_start", async (_event, ctx) => {});
 
-disco.on("agent_end", async (event, ctx) => {
+ocsid.on("agent_end", async (event, ctx) => {
   // event.messages - messages from this low-level run
 });
 
-disco.on("agent_settled", async (_event, ctx) => {
+ocsid.on("agent_settled", async (_event, ctx) => {
   // ctx.isIdle() is true here unless another extension started a new run.
 });
 ```
@@ -581,11 +581,11 @@ disco.on("agent_settled", async (_event, ctx) => {
 Fired for each turn (one LLM response + tool calls).
 
 ```typescript
-disco.on("turn_start", async (event, ctx) => {
+ocsid.on("turn_start", async (event, ctx) => {
   // event.turnIndex, event.timestamp
 });
 
-disco.on("turn_end", async (event, ctx) => {
+ocsid.on("turn_end", async (event, ctx) => {
   // event.turnIndex, event.message, event.toolResults
 });
 ```
@@ -599,16 +599,16 @@ Fired for message lifecycle updates.
 - `message_end` handlers can return `{ message }` to replace the finalized message. The replacement must keep the same `role`.
 
 ```typescript
-disco.on("message_start", async (event, ctx) => {
+ocsid.on("message_start", async (event, ctx) => {
   // event.message
 });
 
-disco.on("message_update", async (event, ctx) => {
+ocsid.on("message_update", async (event, ctx) => {
   // event.message
   // event.assistantMessageEvent (token-by-token stream event)
 });
 
-disco.on("message_end", async (event, ctx) => {
+ocsid.on("message_end", async (event, ctx) => {
   if (event.message.role !== "assistant") return;
 
   return {
@@ -637,15 +637,15 @@ In parallel tool mode:
 - final `toolResult` message events are still emitted later in assistant source order
 
 ```typescript
-disco.on("tool_execution_start", async (event, ctx) => {
+ocsid.on("tool_execution_start", async (event, ctx) => {
   // event.toolCallId, event.toolName, event.args
 });
 
-disco.on("tool_execution_update", async (event, ctx) => {
+ocsid.on("tool_execution_update", async (event, ctx) => {
   // event.toolCallId, event.toolName, event.args, event.partialResult
 });
 
-disco.on("tool_execution_end", async (event, ctx) => {
+ocsid.on("tool_execution_end", async (event, ctx) => {
   // event.toolCallId, event.toolName, event.result, event.isError
 });
 ```
@@ -655,7 +655,7 @@ disco.on("tool_execution_end", async (event, ctx) => {
 Fired before each LLM call. Modify messages non-destructively. See [Session Format](session-format.md) for message types.
 
 ```typescript
-disco.on("context", async (event, ctx) => {
+ocsid.on("context", async (event, ctx) => {
   // event.messages - deep copy, safe to modify
   const filtered = event.messages.filter(m => !shouldPrune(m));
   return { messages: filtered };
@@ -669,11 +669,11 @@ Fired after the outgoing HTTP headers are assembled. Use it to add, override, or
 Handlers mutate `event.headers` in place. Set a key to a string to add or override it, or to `null` to delete it.
 
 ```typescript
-disco.on("before_provider_headers", (event, ctx) => {
+ocsid.on("before_provider_headers", (event, ctx) => {
   // Add or override — e.g. a session id for gateway tracing/attribution
   event.headers["x-session-id"] = ctx.sessionManager.getSessionId();
 
-  // Drop a tracking header disco adds for this call
+  // Drop a tracking header ocsid adds for this call
   event.headers["X-OpenRouter-Title"] = null;
 });
 ```
@@ -684,10 +684,10 @@ Runs once per provider request; retries reuse the same headers rather than re-fi
 
 Fired after the provider-specific payload is built, right before the request is sent. Handlers run in extension load order. Returning `undefined` keeps the payload unchanged. Returning any other value replaces the payload for later handlers and for the actual request.
 
-This hook can rewrite provider-level system instructions or remove them entirely. Those payload-level changes are not reflected by `ctx.getSystemPrompt()`, which reports DisCo's system prompt string rather than the final serialized provider payload.
+This hook can rewrite provider-level system instructions or remove them entirely. Those payload-level changes are not reflected by `ctx.getSystemPrompt()`, which reports OCSID's system prompt string rather than the final serialized provider payload.
 
 ```typescript
-disco.on("before_provider_request", (event, ctx) => {
+ocsid.on("before_provider_request", (event, ctx) => {
   console.log(JSON.stringify(event.payload, null, 2));
 
   // Optional: replace payload
@@ -702,7 +702,7 @@ This is mainly useful for debugging provider serialization and cache behavior.
 Fired after an HTTP response is received and before its stream body is consumed. Handlers run in extension load order.
 
 ```typescript
-disco.on("after_provider_response", (event, ctx) => {
+ocsid.on("after_provider_response", (event, ctx) => {
   // event.status - HTTP status code
   // event.headers - normalized response headers
   if (event.status === 429) {
@@ -720,7 +720,7 @@ Header availability depends on provider and transport. Providers that abstract H
 Fired when the model changes via `/model` command, model cycling (`Ctrl+P`), or session restore.
 
 ```typescript
-disco.on("model_select", async (event, ctx) => {
+ocsid.on("model_select", async (event, ctx) => {
   // event.model - newly selected model
   // event.previousModel - previous model (undefined if first selection)
   // event.source - "set" | "cycle" | "restore"
@@ -741,7 +741,7 @@ Use this to update UI elements (status bars, footers) or perform model-specific 
 Fired when the thinking level changes. This is notification-only; handler return values are ignored.
 
 ```typescript
-disco.on("thinking_level_select", async (event, ctx) => {
+ocsid.on("thinking_level_select", async (event, ctx) => {
   // event.level - newly selected thinking level
   // event.previousLevel - previous thinking level
 
@@ -749,7 +749,7 @@ disco.on("thinking_level_select", async (event, ctx) => {
 });
 ```
 
-Use this to update extension UI when `disco.setThinkingLevel()`, model changes, or built-in thinking-level controls change the active thinking level.
+Use this to update extension UI when `ocsid.setThinkingLevel()`, model changes, or built-in thinking-level controls change the active thinking level.
 
 ### Tool Events
 
@@ -757,7 +757,7 @@ Use this to update extension UI when `disco.setThinkingLevel()`, model changes, 
 
 Fired after `tool_execution_start`, before the tool executes. **Can block.** Use `isToolCallEventType` to narrow and get typed inputs.
 
-Before `tool_call` runs, disco waits for previously emitted Agent events to finish draining through `AgentSession`. This means `ctx.sessionManager` is up to date through the current assistant tool-calling message.
+Before `tool_call` runs, ocsid waits for previously emitted Agent events to finish draining through `AgentSession`. This means `ctx.sessionManager` is up to date through the current assistant tool-calling message.
 
 In the default parallel tool execution mode, sibling tool calls from the same assistant message are preflighted sequentially, then executed concurrently. `tool_call` is not guaranteed to see sibling tool results from that same assistant message in `ctx.sessionManager`.
 
@@ -770,9 +770,9 @@ Behavior guarantees:
 - Return values from `tool_call` only control blocking via `{ block: true, reason?: string }`
 
 ```typescript
-import { isToolCallEventType } from "@arex-skill/disco";
+import { isToolCallEventType } from "ocsid";
 
-disco.on("tool_call", async (event, ctx) => {
+ocsid.on("tool_call", async (event, ctx) => {
   // event.toolName - "bash", "read", "write", "edit", etc.
   // event.toolCallId
   // event.input - tool parameters (mutable)
@@ -806,10 +806,10 @@ export type MyToolInput = Static<typeof myToolSchema>;
 Use `isToolCallEventType` with explicit type parameters:
 
 ```typescript
-import { isToolCallEventType } from "@arex-skill/disco";
+import { isToolCallEventType } from "ocsid";
 import type { MyToolInput } from "my-extension";
 
-disco.on("tool_call", (event) => {
+ocsid.on("tool_call", (event) => {
   if (isToolCallEventType<"my_tool", MyToolInput>("my_tool", event)) {
     event.input.action;  // typed
   }
@@ -830,9 +830,9 @@ In parallel tool mode, `tool_result` and `tool_execution_end` may interleave in 
 Use `ctx.signal` for nested async work inside the handler. This lets Esc cancel model calls, `fetch()`, and other abort-aware operations started by the extension.
 
 ```typescript
-import { isBashToolResult } from "@arex-skill/disco";
+import { isBashToolResult } from "ocsid";
 
-disco.on("tool_result", async (event, ctx) => {
+ocsid.on("tool_result", async (event, ctx) => {
   // event.toolName, event.toolCallId, event.input
   // event.content, event.details, event.isError, event.usage
 
@@ -858,9 +858,9 @@ disco.on("tool_result", async (event, ctx) => {
 Fired when user executes `!` or `!!` commands. **Can intercept.**
 
 ```typescript
-import { createLocalBashOperations } from "@arex-skill/disco";
+import { createLocalBashOperations } from "ocsid";
 
-disco.on("user_bash", (event, ctx) => {
+ocsid.on("user_bash", (event, ctx) => {
   // event.command - the bash command
   // event.excludeFromContext - true if !! prefix
   // event.cwd - working directory
@@ -868,7 +868,7 @@ disco.on("user_bash", (event, ctx) => {
   // Option 1: Provide custom operations (e.g., SSH)
   return { operations: remoteBashOps };
 
-  // Option 2: Wrap disco's built-in local bash backend
+  // Option 2: Wrap ocsid's built-in local bash backend
   const local = createLocalBashOperations();
   return {
     operations: {
@@ -897,7 +897,7 @@ Fired when user input is received, after extension commands are checked but befo
 5. Agent processing begins (`before_agent_start`, etc.)
 
 ```typescript
-disco.on("input", async (event, ctx) => {
+ocsid.on("input", async (event, ctx) => {
   // event.text - raw input (before skill/template expansion)
   // event.images - attached images, if any
   // event.source - "interactive" (typed), "rpc" (API), or "extension" (via sendUserMessage)
@@ -954,14 +954,14 @@ Current run mode: `"tui"`, `"rpc"`, `"json"`, or `"print"`. Use `ctx.mode === "t
 
 Current working directory.
 
-Use `CONFIG_DIR_NAME` instead of hardcoding `.disco` when constructing project-local config paths. Rebranded distributions can use a different config directory name.
+Use `CONFIG_DIR_NAME` instead of hardcoding `.ocsid` when constructing project-local config paths. Rebranded distributions can use a different config directory name.
 
 ```typescript
-import { CONFIG_DIR_NAME, type ExtensionAPI } from "@arex-skill/disco";
+import { CONFIG_DIR_NAME, type ExtensionAPI } from "ocsid";
 import { join } from "node:path";
 
-export default function (disco: ExtensionAPI) {
-  disco.on("session_start", (_event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+  ocsid.on("session_start", (_event, ctx) => {
     const projectConfigPath = join(ctx.cwd, CONFIG_DIR_NAME, "my-extension.json");
     // ...
   });
@@ -1003,10 +1003,10 @@ Use this for abort-aware nested work started by extension handlers, for example:
 - file or process helpers that accept `AbortSignal`
 
 `ctx.signal` is typically defined during active turn events such as `tool_call`, `tool_result`, `message_update`, and `turn_end`.
-It is usually `undefined` in idle or non-turn contexts such as session events, extension commands, and shortcuts fired while disco is idle.
+It is usually `undefined` in idle or non-turn contexts such as session events, extension commands, and shortcuts fired while ocsid is idle.
 
 ```typescript
-disco.on("tool_result", async (event, ctx) => {
+ocsid.on("tool_result", async (event, ctx) => {
   const response = await fetch("https://example.com/api", {
     method: "POST",
     body: JSON.stringify(event),
@@ -1020,11 +1020,11 @@ disco.on("tool_result", async (event, ctx) => {
 
 ### ctx.isIdle() / ctx.abort() / ctx.hasPendingMessages()
 
-Control flow helpers. `ctx.isIdle()` is false while DisCo is processing an agent run, automatic retry, auto-compaction retry, or queued continuation.
+Control flow helpers. `ctx.isIdle()` is false while OCSID is processing an agent run, automatic retry, auto-compaction retry, or queued continuation.
 
 ### ctx.shutdown()
 
-Request a graceful shutdown of disco.
+Request a graceful shutdown of ocsid.
 
 - **Interactive mode:** Deferred until the agent becomes idle (after processing all queued steering and follow-up messages).
 - **RPC mode:** Deferred until the next idle state (after completing the current command response, when waiting for the next command).
@@ -1033,7 +1033,7 @@ Request a graceful shutdown of disco.
 Emits `session_shutdown` event to all extensions before exiting. Available in all contexts (event handlers, tools, commands, shortcuts).
 
 ```typescript
-disco.on("tool_call", (event, ctx) => {
+ocsid.on("tool_call", (event, ctx) => {
   if (isFatal(event.input)) {
     ctx.shutdown();
   }
@@ -1069,7 +1069,7 @@ ctx.compact({
 
 ### ctx.getSystemPrompt()
 
-Returns DisCo's current system prompt string.
+Returns OCSID's current system prompt string.
 
 - During `before_agent_start`, this reflects chained system-prompt changes made so far for the current turn.
 - It does not include later `context` message mutations.
@@ -1077,7 +1077,7 @@ Returns DisCo's current system prompt string.
 - If later-loaded extensions run after yours, they can still change what is ultimately sent.
 
 ```typescript
-disco.on("before_agent_start", (event, ctx) => {
+ocsid.on("before_agent_start", (event, ctx) => {
   const prompt = ctx.getSystemPrompt();
   console.log(`System prompt length: ${prompt.length}`);
 });
@@ -1089,7 +1089,7 @@ Command handlers receive `ExtensionCommandContext`, which extends `ExtensionCont
 
 ### ctx.getSystemPromptOptions()
 
-Returns the base inputs DisCo currently uses to build the system prompt.
+Returns the base inputs OCSID currently uses to build the system prompt.
 
 ```typescript
 const options = ctx.getSystemPromptOptions();
@@ -1105,7 +1105,7 @@ This reports the current base prompt inputs. It does not include per-turn `befor
 Wait for the agent to fully settle, including automatic retries, auto-compaction retries, and queued continuations:
 
 ```typescript
-disco.registerCommand("my-cmd", {
+ocsid.registerCommand("my-cmd", {
   handler: async (args, ctx) => {
     await ctx.waitForIdle();
     // Agent is now idle, safe to modify session
@@ -1144,7 +1144,7 @@ if (result.cancelled) {
 Options:
 - `parentSession`: parent session file to record in the new session header
 - `setup`: mutate the new session's `SessionManager` before `withSession` runs
-- `withSession`: run post-switch work against a fresh replacement-session context. Do not use captured old `disco` / command `ctx`; see [Session replacement lifecycle and footguns](#session-replacement-lifecycle-and-footguns).
+- `withSession`: run post-switch work against a fresh replacement-session context. Do not use captured old `ocsid` / command `ctx`; see [Session replacement lifecycle and footguns](#session-replacement-lifecycle-and-footguns).
 
 ### ctx.fork(entryId, options?)
 
@@ -1170,7 +1170,7 @@ if (cloneResult.cancelled) {
 Options:
 - `position`: `"before"` (default) forks before the selected user message, restoring that prompt into the editor
 - `position`: `"at"` duplicates the active path through the selected entry without restoring editor text
-- `withSession`: run post-switch work against a fresh replacement-session context. Do not use captured old `disco` / command `ctx`; see [Session replacement lifecycle and footguns](#session-replacement-lifecycle-and-footguns).
+- `withSession`: run post-switch work against a fresh replacement-session context. Do not use captured old `ocsid` / command `ctx`; see [Session replacement lifecycle and footguns](#session-replacement-lifecycle-and-footguns).
 
 ### ctx.navigateTree(targetId, options?)
 
@@ -1207,14 +1207,14 @@ if (result.cancelled) {
 ```
 
 Options:
-- `withSession`: run post-switch work against a fresh replacement-session context. Do not use captured old `disco` / command `ctx`; see [Session replacement lifecycle and footguns](#session-replacement-lifecycle-and-footguns).
+- `withSession`: run post-switch work against a fresh replacement-session context. Do not use captured old `ocsid` / command `ctx`; see [Session replacement lifecycle and footguns](#session-replacement-lifecycle-and-footguns).
 
 To discover available sessions, use the static `SessionManager.list()` or `SessionManager.listAll()` methods:
 
 ```typescript
-import { SessionManager } from "@arex-skill/disco";
+import { SessionManager } from "ocsid";
 
-disco.registerCommand("switch", {
+ocsid.registerCommand("switch", {
   description: "Switch to another session",
   handler: async (args, ctx) => {
     const sessions = await SessionManager.list(ctx.cwd);
@@ -1241,14 +1241,14 @@ disco.registerCommand("switch", {
 Lifecycle and footguns:
 - `withSession` runs only after the old session has emitted `session_shutdown`, the old runtime has been torn down, the replacement session has been rebound, and the new extension instance has already received `session_start`.
 - The callback still executes in the original closure, not inside the new extension instance. That means your old extension instance may already have run its shutdown cleanup before `withSession` starts.
-- Captured old `disco` / old command `ctx` session-bound objects are stale after replacement and will throw if used. Use only the `ctx` passed to `withSession` for session-bound work.
+- Captured old `ocsid` / old command `ctx` session-bound objects are stale after replacement and will throw if used. Use only the `ctx` passed to `withSession` for session-bound work.
 - Previously extracted raw objects are still your responsibility. For example, if you capture `const sm = ctx.sessionManager` before replacement, `sm` is still the old `SessionManager` object. Do not reuse it after replacement.
 - Code in `withSession` should assume any state invalidated by your `session_shutdown` handler is already gone. Only capture plain data that survives shutdown cleanly, such as strings, ids, and serialized config.
 
 Safe pattern:
 
 ```typescript
-disco.registerCommand("handoff", {
+ocsid.registerCommand("handoff", {
   handler: async (_args, ctx) => {
     const kickoff = "Continue from the replacement session";
     await ctx.newSession({
@@ -1263,14 +1263,14 @@ disco.registerCommand("handoff", {
 Unsafe pattern:
 
 ```typescript
-disco.registerCommand("handoff", {
+ocsid.registerCommand("handoff", {
   handler: async (_args, ctx) => {
     const oldSessionManager = ctx.sessionManager;
     await ctx.newSession({
       withSession: async (_ctx) => {
         // stale old objects: do not do this
         oldSessionManager.getSessionFile();
-        disco.sendUserMessage("wrong");
+        ocsid.sendUserMessage("wrong");
       },
     });
   },
@@ -1282,7 +1282,7 @@ disco.registerCommand("handoff", {
 Run the same reload flow as `/reload`.
 
 ```typescript
-disco.registerCommand("reload-runtime", {
+ocsid.registerCommand("reload-runtime", {
   description: "Reload extensions, skills, prompts, themes, and context files",
   handler: async (_args, ctx) => {
     await ctx.reload();
@@ -1306,11 +1306,11 @@ Tools run with `ExtensionContext`, so they cannot call `ctx.reload()` directly. 
 Example tool the LLM can call to trigger reload:
 
 ```typescript
-import type { ExtensionAPI } from "@arex-skill/disco";
+import type { ExtensionAPI } from "ocsid";
 import { Type } from "typebox";
 
-export default function (disco: ExtensionAPI) {
-  disco.registerCommand("reload-runtime", {
+export default function (ocsid: ExtensionAPI) {
+  ocsid.registerCommand("reload-runtime", {
     description: "Reload extensions, skills, prompts, themes, and context files",
     handler: async (_args, ctx) => {
       await ctx.reload();
@@ -1318,13 +1318,13 @@ export default function (disco: ExtensionAPI) {
     },
   });
 
-  disco.registerTool({
+  ocsid.registerTool({
     name: "reload_runtime",
     label: "Reload Runtime",
     description: "Reload extensions, skills, prompts, themes, and context files",
     parameters: Type.Object({}),
     async execute() {
-      disco.sendUserMessage("/reload-runtime", { deliverAs: "followUp" });
+      ocsid.sendUserMessage("/reload-runtime", { deliverAs: "followUp" });
       return {
         content: [{ type: "text", text: "Queued /reload-runtime as a follow-up command." }],
       };
@@ -1335,17 +1335,17 @@ export default function (disco: ExtensionAPI) {
 
 ## ExtensionAPI Methods
 
-### disco.on(event, handler)
+### ocsid.on(event, handler)
 
 Subscribe to events. See [Events](#events) for event types and return values.
 
-### disco.registerTool(definition)
+### ocsid.registerTool(definition)
 
 Register a custom tool callable by the LLM. See [Custom Tools](#custom-tools) for full details.
 
-`disco.registerTool()` works both during extension load and after startup. You can call it inside `session_start`, command handlers, or other event handlers. New tools are refreshed immediately in the same session, so they appear in `disco.getAllTools()` and are callable by the LLM without `/reload`.
+`ocsid.registerTool()` works both during extension load and after startup. You can call it inside `session_start`, command handlers, or other event handlers. New tools are refreshed immediately in the same session, so they appear in `ocsid.getAllTools()` and are callable by the LLM without `/reload`.
 
-Use `disco.setActiveTools()` to enable or disable tools (including dynamically added tools) at runtime.
+Use `ocsid.setActiveTools()` to enable or disable tools (including dynamically added tools) at runtime.
 
 Use `promptSnippet` to opt a custom tool into a one-line entry in `Available tools`, and `promptGuidelines` to append tool-specific bullets to the default `Guidelines` section when the tool is active.
 
@@ -1357,7 +1357,7 @@ See [dynamic-tools.ts](../examples/extensions/dynamic-tools.ts) for a full examp
 import { Type } from "typebox";
 import { StringEnum } from "@earendil-works/pi-ai";
 
-disco.registerTool({
+ocsid.registerTool({
   name: "my_tool",
   label: "My Tool",
   description: "What this tool does",
@@ -1390,12 +1390,12 @@ disco.registerTool({
 });
 ```
 
-### disco.sendMessage(message, options?)
+### ocsid.sendMessage(message, options?)
 
-Inject a custom message into the session. Custom messages participate in LLM context. For durable TUI-only content that should not be sent to the LLM, use [`disco.appendEntry()`](#piappendentrycustomtype-data) with [`disco.registerEntryRenderer()`](#piregisterentryrenderercustomtype-renderer).
+Inject a custom message into the session. Custom messages participate in LLM context. For durable TUI-only content that should not be sent to the LLM, use [`ocsid.appendEntry()`](#piappendentrycustomtype-data) with [`ocsid.registerEntryRenderer()`](#piregisterentryrenderercustomtype-renderer).
 
 ```typescript
-disco.sendMessage({
+ocsid.sendMessage({
   customType: "my-extension",
   content: "Message text",
   display: true,
@@ -1413,23 +1413,23 @@ disco.sendMessage({
   - `"nextTurn"` - Queued for next user prompt. Does not interrupt or trigger anything.
 - `triggerTurn: true` - If agent is idle, trigger an LLM response immediately. Only applies to `"steer"` and `"followUp"` modes (ignored for `"nextTurn"`).
 
-### disco.sendUserMessage(content, options?)
+### ocsid.sendUserMessage(content, options?)
 
 Send a user message to the agent. Unlike `sendMessage()` which sends custom messages, this sends an actual user message that appears as if typed by the user. Always triggers a turn.
 
 ```typescript
 // Simple text message
-disco.sendUserMessage("What is 2+2?");
+ocsid.sendUserMessage("What is 2+2?");
 
 // With content array (text + images)
-disco.sendUserMessage([
+ocsid.sendUserMessage([
   { type: "text", text: "Describe this image:" },
   { type: "image", source: { type: "base64", mediaType: "image/png", data: "..." } },
 ]);
 
 // During streaming - must specify delivery mode
-disco.sendUserMessage("Focus on error handling", { deliverAs: "steer" });
-disco.sendUserMessage("And then summarize", { deliverAs: "followUp" });
+ocsid.sendUserMessage("Focus on error handling", { deliverAs: "steer" });
+ocsid.sendUserMessage("And then summarize", { deliverAs: "followUp" });
 ```
 
 **Options:**
@@ -1441,16 +1441,16 @@ When not streaming, the message is sent immediately and triggers a new turn. Whe
 
 See [send-user-message.ts](../examples/extensions/send-user-message.ts) for a complete example.
 
-### disco.appendEntry(customType, data?)
+### ocsid.appendEntry(customType, data?)
 
-Persist extension data. Custom entries do NOT participate in LLM context. In interactive mode, they can also render inside the chat transcript when paired with `disco.registerEntryRenderer()`.
+Persist extension data. Custom entries do NOT participate in LLM context. In interactive mode, they can also render inside the chat transcript when paired with `ocsid.registerEntryRenderer()`.
 
 ```typescript
-disco.appendEntry("my-state", { count: 42 });
-disco.appendEntry("status-card", { title: "Indexed files", count: 17 });
+ocsid.appendEntry("my-state", { count: 42 });
+ocsid.appendEntry("status-card", { title: "Indexed files", count: 17 });
 
 // Restore on reload
-disco.on("session_start", async (_event, ctx) => {
+ocsid.on("session_start", async (_event, ctx) => {
   for (const entry of ctx.sessionManager.getEntries()) {
     if (entry.type === "custom" && entry.customType === "my-state") {
       // Reconstruct from entry.data
@@ -1459,35 +1459,35 @@ disco.on("session_start", async (_event, ctx) => {
 });
 ```
 
-### disco.setSessionName(name)
+### ocsid.setSessionName(name)
 
 Set the session display name (shown in session selector instead of first message).
 
 ```typescript
-disco.setSessionName("Refactor auth module");
+ocsid.setSessionName("Refactor auth module");
 ```
 
-### disco.getSessionName()
+### ocsid.getSessionName()
 
 Get the current session name, if set.
 
 ```typescript
-const name = disco.getSessionName();
+const name = ocsid.getSessionName();
 if (name) {
   console.log(`Session: ${name}`);
 }
 ```
 
-### disco.setLabel(entryId, label)
+### ocsid.setLabel(entryId, label)
 
 Set or clear a label on an entry. Labels are user-defined markers for bookmarking and navigation (shown in `/tree` selector).
 
 ```typescript
 // Set a label
-disco.setLabel(entryId, "checkpoint-before-refactor");
+ocsid.setLabel(entryId, "checkpoint-before-refactor");
 
 // Clear a label
-disco.setLabel(entryId, undefined);
+ocsid.setLabel(entryId, undefined);
 
 // Read labels via sessionManager
 const label = ctx.sessionManager.getLabel(entryId);
@@ -1495,14 +1495,14 @@ const label = ctx.sessionManager.getLabel(entryId);
 
 Labels persist in the session and survive restarts. Use them to mark important points (turns, checkpoints) in the conversation tree.
 
-### disco.registerCommand(name, options)
+### ocsid.registerCommand(name, options)
 
 Register a command.
 
-If multiple extensions register the same command name, disco keeps them all and assigns numeric invocation suffixes in load order, for example `/review:1` and `/review:2`.
+If multiple extensions register the same command name, ocsid keeps them all and assigns numeric invocation suffixes in load order, for example `/review:1` and `/review:2`.
 
 ```typescript
-disco.registerCommand("stats", {
+ocsid.registerCommand("stats", {
   description: "Show session statistics",
   handler: async (args, ctx) => {
     const count = ctx.sessionManager.getEntries().length;
@@ -1516,7 +1516,7 @@ Optional: add argument auto-completion for `/command ...`:
 ```typescript
 import type { AutocompleteItem } from "@earendil-works/pi-tui";
 
-disco.registerCommand("deploy", {
+ocsid.registerCommand("deploy", {
   description: "Deploy to an environment",
   getArgumentCompletions: (prefix: string): AutocompleteItem[] | null => {
     const envs = ["dev", "staging", "prod"];
@@ -1530,13 +1530,13 @@ disco.registerCommand("deploy", {
 });
 ```
 
-### disco.getCommands()
+### ocsid.getCommands()
 
 Get the slash commands available for invocation via `prompt` in the current session. Includes extension commands, prompt templates, and skill commands.
 The list matches the RPC `get_commands` ordering: extensions first, then templates, then skills.
 
 ```typescript
-const commands = disco.getCommands();
+const commands = ocsid.getCommands();
 const bySource = commands.filter((command) => command.source === "extension");
 const userScoped = commands.filter((command) => command.sourceInfo.scope === "user");
 ```
@@ -1563,18 +1563,18 @@ Use `sourceInfo` as the canonical provenance field. Do not infer ownership from 
 Built-in interactive commands (like `/model` and `/settings`) are not included here. They are handled only in interactive
 mode and would not execute if sent via `prompt`.
 
-### disco.registerMessageRenderer(customType, renderer)
+### ocsid.registerMessageRenderer(customType, renderer)
 
-Register a custom TUI renderer for custom messages with your `customType`. Custom messages are created with `disco.sendMessage()` and participate in LLM context. See [Custom UI](#custom-ui).
+Register a custom TUI renderer for custom messages with your `customType`. Custom messages are created with `ocsid.sendMessage()` and participate in LLM context. See [Custom UI](#custom-ui).
 
-### disco.registerEntryRenderer(customType, renderer)
+### ocsid.registerEntryRenderer(customType, renderer)
 
-Register a custom TUI renderer for custom entries with your `customType`. Custom entries are created with `disco.appendEntry()` and do not participate in LLM context.
+Register a custom TUI renderer for custom entries with your `customType`. Custom entries are created with `ocsid.appendEntry()` and do not participate in LLM context.
 
 ```typescript
 import { Box, Text } from "@earendil-works/pi-tui";
 
-disco.registerEntryRenderer("status-card", (entry, { expanded }, theme) => {
+ocsid.registerEntryRenderer("status-card", (entry, { expanded }, theme) => {
   const data = entry.data as { title: string; count: number };
   const box = new Box(1, 1, (text) => theme.bg("customMessageBg", text));
   box.addChild(new Text(`${theme.bold(data.title)}: ${data.count}`));
@@ -1584,15 +1584,15 @@ disco.registerEntryRenderer("status-card", (entry, { expanded }, theme) => {
   return box;
 });
 
-disco.appendEntry("status-card", { title: "Indexed files", count: 17 });
+ocsid.appendEntry("status-card", { title: "Indexed files", count: 17 });
 ```
 
-### disco.registerShortcut(shortcut, options)
+### ocsid.registerShortcut(shortcut, options)
 
 Register a keyboard shortcut. See [keybindings.md](keybindings.md) for the shortcut format and built-in keybindings.
 
 ```typescript
-disco.registerShortcut("ctrl+shift+p", {
+ocsid.registerShortcut("ctrl+shift+p", {
   description: "Toggle plan mode",
   handler: async (ctx) => {
     ctx.ui.notify("Toggled!");
@@ -1600,39 +1600,39 @@ disco.registerShortcut("ctrl+shift+p", {
 });
 ```
 
-### disco.registerFlag(name, options)
+### ocsid.registerFlag(name, options)
 
 Register a CLI flag.
 
 ```typescript
-disco.registerFlag("plan", {
+ocsid.registerFlag("plan", {
   description: "Start in plan mode",
   type: "boolean",
   default: false,
 });
 
 // Check value
-if (disco.getFlag("plan")) {
+if (ocsid.getFlag("plan")) {
   // Plan mode enabled
 }
 ```
 
-### disco.exec(command, args, options?)
+### ocsid.exec(command, args, options?)
 
 Execute a shell command.
 
 ```typescript
-const result = await disco.exec("git", ["status"], { signal, timeout: 5000 });
+const result = await ocsid.exec("git", ["status"], { signal, timeout: 5000 });
 // result.stdout, result.stderr, result.code, result.killed
 ```
 
-### disco.getActiveTools() / disco.getAllTools() / disco.setActiveTools(names)
+### ocsid.getActiveTools() / ocsid.getAllTools() / ocsid.setActiveTools(names)
 
-Manage active tools. This works for both built-in tools and dynamically registered tools. `disco.getActiveTools()` returns the active tool names as `string[]`; `disco.getAllTools()` returns metadata for all configured tools.
+Manage active tools. This works for both built-in tools and dynamically registered tools. `ocsid.getActiveTools()` returns the active tool names as `string[]`; `ocsid.getAllTools()` returns metadata for all configured tools.
 
 ```typescript
-const active = disco.getActiveTools(); // ["read", "bash", ...]
-const all = disco.getAllTools();
+const active = ocsid.getActiveTools(); // ["read", "bash", ...]
+const all = ocsid.getAllTools();
 // all = [{
 //   name: "read",
 //   description: "Read file contents...",
@@ -1642,56 +1642,56 @@ const all = disco.getAllTools();
 // }, ...]
 const builtinTools = all.filter((t) => t.sourceInfo.source === "builtin");
 const extensionTools = all.filter((t) => t.sourceInfo.source !== "builtin" && t.sourceInfo.source !== "sdk");
-disco.setActiveTools([...new Set([...active, "my_custom_tool"])]); // Keep current tools and enable my_custom_tool
-disco.setActiveTools(["read", "bash"]); // Switch to read-only
+ocsid.setActiveTools([...new Set([...active, "my_custom_tool"])]); // Keep current tools and enable my_custom_tool
+ocsid.setActiveTools(["read", "bash"]); // Switch to read-only
 ```
 
-`disco.getAllTools()` returns `name`, `description`, `parameters`, `promptGuidelines`, and `sourceInfo`.
+`ocsid.getAllTools()` returns `name`, `description`, `parameters`, `promptGuidelines`, and `sourceInfo`.
 
 Typical `sourceInfo.source` values:
 - `builtin` for built-in tools
 - `sdk` for tools passed via `createAgentSession({ customTools })`
 - extension source metadata for tools registered by extensions
 
-### disco.setModel(model)
+### ocsid.setModel(model)
 
 Set the current model. Returns `false` if no API key is available for the model. See [models.md](models.md) for configuring custom models.
 
 ```typescript
 const model = ctx.modelRegistry.find("anthropic", "claude-sonnet-4-5");
 if (model) {
-  const success = await disco.setModel(model);
+  const success = await ocsid.setModel(model);
   if (!success) {
     ctx.ui.notify("No API key for this model", "error");
   }
 }
 ```
 
-### disco.getThinkingLevel() / disco.setThinkingLevel(level)
+### ocsid.getThinkingLevel() / ocsid.setThinkingLevel(level)
 
 Get or set the thinking level. Level is clamped to model capabilities (non-reasoning models always use "off"). Changes emit `thinking_level_select`.
 
 ```typescript
-const current = disco.getThinkingLevel();  // "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | "max"
-disco.setThinkingLevel("high");
+const current = ocsid.getThinkingLevel();  // "off" | "minimal" | "low" | "medium" | "high" | "xhigh" | "max"
+ocsid.setThinkingLevel("high");
 ```
 
-### disco.events
+### ocsid.events
 
 Shared event bus for communication between extensions:
 
 ```typescript
-disco.events.on("my:event", (data) => { ... });
-disco.events.emit("my:event", { ... });
+ocsid.events.on("my:event", (data) => { ... });
+ocsid.events.emit("my:event", { ... });
 ```
 
-### disco.registerProvider(name, config)
+### ocsid.registerProvider(name, config)
 
 Register or override a model provider dynamically. Useful for proxies, custom endpoints, or team-wide model configurations.
 
 Calls made during the extension factory function are queued and applied once the runner initialises. Calls made after that — for example from a command handler following a user setup flow — take effect immediately without requiring a `/reload`.
 
-Dynamic providers can implement `refreshModels`. DisCo calls it during model refresh, publishes the returned list synchronously through the provider, and passes the canonical credential/store/network/signal context. The extension decides whether to persist the catalog through `context.store`; live servers such as llama.cpp can ignore it.
+Dynamic providers can implement `refreshModels`. OCSID calls it during model refresh, publishes the returned list synchronously through the provider, and passes the canonical credential/store/network/signal context. The extension decides whether to persist the catalog through `context.store`; live servers such as llama.cpp can ignore it.
 
 Extensions that need native provider auth, filtering, refresh, or stream behavior can register a complete `Provider` from `@earendil-works/pi-ai`. The provider becomes the composition base and `models.json` overrides still apply above it.
 
@@ -1722,10 +1722,10 @@ const provider = createProvider({
   api: openAICompletionsApi(),
 });
 
-disco.registerProvider(provider);
+ocsid.registerProvider(provider);
 
 // Register a new provider with custom models
-disco.registerProvider("my-proxy", {
+ocsid.registerProvider("my-proxy", {
   name: "My Proxy",
   baseUrl: "https://proxy.example.com",
   apiKey: "$PROXY_API_KEY",  // env var reference
@@ -1744,7 +1744,7 @@ disco.registerProvider("my-proxy", {
 });
 
 // Register a live llama.cpp catalog without persisting discovered models
-disco.registerProvider("llama.cpp", {
+ocsid.registerProvider("llama.cpp", {
   baseUrl: "http://localhost:8080/v1",
   apiKey: "local",
   api: "openai-completions",
@@ -1764,12 +1764,12 @@ disco.registerProvider("llama.cpp", {
 });
 
 // Override baseUrl for an existing provider (keeps all models)
-disco.registerProvider("anthropic", {
+ocsid.registerProvider("anthropic", {
   baseUrl: "https://proxy.example.com"
 });
 
 // Register provider with OAuth support for /login
-disco.registerProvider("corporate-ai", {
+ocsid.registerProvider("corporate-ai", {
   baseUrl: "https://ai.corp.com",
   api: "openai-responses",
   models: [...],
@@ -1808,17 +1808,17 @@ The object form accepts a complete pi-ai `Provider`, including native `auth`, `g
 
 See [custom-provider.md](custom-provider.md) for advanced topics: custom streaming APIs, OAuth details, model definition reference.
 
-### disco.unregisterProvider(name)
+### ocsid.unregisterProvider(name)
 
 Remove a previously registered provider and its models. Built-in models that were overridden by the provider are restored. Has no effect if the provider was not registered.
 
 Like `registerProvider`, this takes effect immediately when called after the initial load phase, so a `/reload` is not required.
 
 ```typescript
-disco.registerCommand("my-setup-teardown", {
+ocsid.registerCommand("my-setup-teardown", {
   description: "Remove the custom proxy provider",
   handler: async (_args, _ctx) => {
-    disco.unregisterProvider("my-proxy");
+    ocsid.unregisterProvider("my-proxy");
   },
 });
 ```
@@ -1828,11 +1828,11 @@ disco.registerCommand("my-setup-teardown", {
 Extensions with state should store it in tool result `details` for proper branching support:
 
 ```typescript
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
   let items: string[] = [];
 
   // Reconstruct state from session
-  disco.on("session_start", async (_event, ctx) => {
+  ocsid.on("session_start", async (_event, ctx) => {
     items = [];
     for (const entry of ctx.sessionManager.getBranch()) {
       if (entry.type === "message" && entry.message.role === "toolResult") {
@@ -1843,7 +1843,7 @@ export default function (disco: ExtensionAPI) {
     }
   });
 
-  disco.registerTool({
+  ocsid.registerTool({
     name: "my_tool",
     // ...
     async execute(toolCallId, params, signal, onUpdate, ctx) {
@@ -1859,11 +1859,11 @@ export default function (disco: ExtensionAPI) {
 
 ## Custom Tools
 
-Register tools the LLM can call via `disco.registerTool()`. Tools appear in the system prompt and can have custom rendering.
+Register tools the LLM can call via `ocsid.registerTool()`. Tools appear in the system prompt and can have custom rendering.
 
 Use `promptSnippet` for a short one-line entry in the `Available tools` section in the default system prompt. If omitted, custom tools are left out of that section.
 
-Use `promptGuidelines` to add tool-specific bullets to the default system prompt `Guidelines` section. These bullets are included only while the tool is active (for example, after `disco.setActiveTools([...])`).
+Use `promptGuidelines` to add tool-specific bullets to the default system prompt `Guidelines` section. These bullets are included only while the tool is active (for example, after `ocsid.setActiveTools([...])`).
 
 **Important:** `promptGuidelines` bullets are appended flat to the `Guidelines` section with no tool name prefix or grouping. Each guideline must name the tool it refers to — avoid "Use this tool when..." because the LLM cannot tell which tool "this" means. Write "Use my_tool when..." instead.
 
@@ -1878,7 +1878,7 @@ Pass the real target file path to `withFileMutationQueue()`, not the raw user ar
 Queue the entire mutation window on that target path. That includes read-modify-write logic, not just the final write.
 
 ```typescript
-import { withFileMutationQueue } from "@arex-skill/disco";
+import { withFileMutationQueue } from "ocsid";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 
@@ -1906,7 +1906,7 @@ import { Type } from "typebox";
 import { StringEnum } from "@earendil-works/pi-ai";
 import { Text } from "@earendil-works/pi-tui";
 
-disco.registerTool({
+ocsid.registerTool({
   name: "my_tool",
   label: "My Tool",
   description: "What this tool does (shown to LLM)",
@@ -1939,8 +1939,8 @@ disco.registerTool({
       details: { progress: 50 },
     });
 
-    // Run commands via disco.exec (captured from extension closure)
-    const result = await disco.exec("some-command", [], { signal });
+    // Run commands via ocsid.exec (captured from extension closure)
+    const result = await ocsid.exec("some-command", [], { signal });
 
     // Return result
     return {
@@ -1959,7 +1959,7 @@ disco.registerTool({
 });
 ```
 
-**Usage accounting:** If a tool makes nested LLM calls, return their combined `Usage` as `usage`. DisCo persists it on the tool result and includes it in footer, `/session`, and RPC session totals. `tool_result` handlers can inspect or replace this value.
+**Usage accounting:** If a tool makes nested LLM calls, return their combined `Usage` as `usage`. OCSID persists it on the tool result and includes it in footer, `/session`, and RPC session totals. `tool_result` handlers can inspect or replace this value.
 
 **Signaling errors:** To mark a tool execution as failed (sets `isError: true` on the result and reports it to the LLM), throw an error from `execute`. Returning a value never sets the error flag regardless of what properties you include in the return object.
 
@@ -1977,12 +1977,12 @@ async execute(toolCallId, params) {
 
 **Important:** Use `StringEnum` from `@earendil-works/pi-ai` for string enums. `Type.Union`/`Type.Literal` doesn't work with Google's API.
 
-**Argument preparation:** `prepareArguments(args)` is optional. If defined, it runs before schema validation and before `execute()`. Use it to mimic an older accepted input shape when disco resumes an older session whose stored tool call arguments no longer match the current schema. Return the object you want validated against `parameters`. Keep the public schema strict. Do not add deprecated compatibility fields to `parameters` just to keep old resumed sessions working.
+**Argument preparation:** `prepareArguments(args)` is optional. If defined, it runs before schema validation and before `execute()`. Use it to mimic an older accepted input shape when ocsid resumes an older session whose stored tool call arguments no longer match the current schema. Return the object you want validated against `parameters`. Keep the public schema strict. Do not add deprecated compatibility fields to `parameters` just to keep old resumed sessions working.
 
 Example: an older session may contain an `edit` tool call with top-level `oldText` and `newText`, while the current schema only accepts `edits: [{ oldText, newText }]`.
 
 ```typescript
-disco.registerTool({
+ocsid.registerTool({
   name: "edit",
   label: "Edit",
   description: "Edit a single file using exact text replacement",
@@ -2030,13 +2030,13 @@ Extensions can override built-in tools (`read`, `bash`, `edit`, `write`, `grep`,
 
 ```bash
 # Extension's read tool replaces built-in read
-disco -e ./tool-override.ts
+ocsid -e ./tool-override.ts
 ```
 
 Alternatively, use `--no-builtin-tools` to start without any built-in tools while keeping extension tools enabled:
 ```bash
 # No built-in tools, only extension tools
-disco --no-builtin-tools -e ./my-extension.ts
+ocsid --no-builtin-tools -e ./my-extension.ts
 ```
 
 See [examples/extensions/tool-override.ts](../examples/extensions/tool-override.ts) for a complete example that overrides `read` with logging and access control.
@@ -2061,7 +2061,7 @@ Built-in tool implementations:
 Built-in tools support pluggable operations for delegating to remote systems (SSH, containers, etc.):
 
 ```typescript
-import { createReadTool, createBashTool, type ReadOperations } from "@arex-skill/disco";
+import { createReadTool, createBashTool, type ReadOperations } from "ocsid";
 
 // Create tool with custom operations
 const remoteRead = createReadTool(cwd, {
@@ -2072,7 +2072,7 @@ const remoteRead = createReadTool(cwd, {
 });
 
 // Register, checking flag at execution time
-disco.registerTool({
+ocsid.registerTool({
   ...remoteRead,
   async execute(id, params, signal, onUpdate, _ctx) {
     const ssh = getSshConfig();
@@ -2087,12 +2087,12 @@ disco.registerTool({
 
 **Operations interfaces:** `ReadOperations`, `WriteOperations`, `EditOperations`, `BashOperations`, `LsOperations`, `GrepOperations`, `FindOperations`
 
-For `user_bash`, extensions can reuse disco's local shell backend via `createLocalBashOperations()` instead of reimplementing local process spawning, shell resolution, and process-tree termination.
+For `user_bash`, extensions can reuse ocsid's local shell backend via `createLocalBashOperations()` instead of reimplementing local process spawning, shell resolution, and process-tree termination.
 
 The bash tool also supports a spawn hook to adjust the command, cwd, or env before execution:
 
 ```typescript
-import { createBashTool } from "@arex-skill/disco";
+import { createBashTool } from "ocsid";
 
 const bashTool = createBashTool(cwd, {
   spawnHook: ({ command, cwd, env }) => ({
@@ -2103,7 +2103,7 @@ const bashTool = createBashTool(cwd, {
 });
 ```
 
-`createBashTool()` exposes the current session to commands through `DISCO_SESSION_ID`, `DISCO_SESSION_FILE`, `DISCO_PROVIDER`, `DISCO_MODEL`, and `DISCO_REASONING_LEVEL`. Injection happens before `spawnHook`, so hooks receive these values in `env` and preserve them when they spread the existing environment as above. Set `exposeSessionEnvironment: false` to disable them:
+`createBashTool()` exposes the current session to commands through `OCSID_SESSION_ID`, `OCSID_SESSION_FILE`, `OCSID_PROVIDER`, `OCSID_MODEL`, and `OCSID_REASONING_LEVEL`. Injection happens before `spawnHook`, so hooks receive these values in `env` and preserve them when they spread the existing environment as above. Set `exposeSessionEnvironment: false` to disable them:
 
 ```typescript
 const bashTool = createBashTool(cwd, {
@@ -2130,7 +2130,7 @@ import {
   formatSize,        // Human-readable size (e.g., "50KB", "1.5MB")
   DEFAULT_MAX_BYTES, // 50KB
   DEFAULT_MAX_LINES, // 2000
-} from "@arex-skill/disco";
+} from "ocsid";
 
 async execute(toolCallId, params, signal, onUpdate, ctx) {
   const output = await runCommand();
@@ -2170,14 +2170,14 @@ See [examples/extensions/truncated-tool.ts](../examples/extensions/truncated-too
 One extension can register multiple tools with shared state:
 
 ```typescript
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
   let connection = null;
 
-  disco.registerTool({ name: "db_connect", ... });
-  disco.registerTool({ name: "db_query", ... });
-  disco.registerTool({ name: "db_close", ... });
+  ocsid.registerTool({ name: "db_connect", ... });
+  ocsid.registerTool({ name: "db_query", ... });
+  ocsid.registerTool({ name: "db_close", ... });
 
-  disco.on("session_shutdown", async () => {
+  ocsid.on("session_shutdown", async () => {
     connection?.close();
   });
 }
@@ -2192,7 +2192,7 @@ By default, tool output is wrapped in a `Box` that handles padding and backgroun
 Set `renderShell: "self"` when the tool should render its own shell instead of using the default `Box`. This is useful for tools that need complete control over framing or background behavior, for example large previews that must stay visually stable after the tool settles.
 
 ```typescript
-disco.registerTool({
+ocsid.registerTool({
   name: "my_tool",
   label: "My Tool",
   description: "Custom shell example",
@@ -2266,7 +2266,7 @@ If a slot intentionally has no visible content, return an empty `Component` such
 Use `keyHint()` to display keybinding hints that respect the active keybinding configuration:
 
 ```typescript
-import { keyHint } from "@arex-skill/disco";
+import { keyHint } from "ocsid";
 
 renderResult(result, { expanded }, theme, context) {
   let text = theme.fg("success", "✓ Done");
@@ -2310,19 +2310,19 @@ If a slot renderer is not defined or throws:
 
 ### Dynamic Tool Loading
 
-Extensions can register many tools while keeping only a small initial set active. A tool can then add more tools with `disco.setActiveTools()` during execution. DisCo detects purely additive changes, records the newly available tool names on that tool result, and applies the updated active set before the next model request.
+Extensions can register many tools while keeping only a small initial set active. A tool can then add more tools with `ocsid.setActiveTools()` during execution. OCSID detects purely additive changes, records the newly available tool names on that tool result, and applies the updated active set before the next model request.
 
 This works with every model. Models with native deferred-loading support preserve the stable prompt prefix and load the new definitions at the tool-result position. Other models use the fallback described below.
 
 The lifecycle is:
 
-1. Register every tool with `disco.registerTool()` so it appears in `disco.getAllTools()`.
+1. Register every tool with `ocsid.registerTool()` so it appears in `ocsid.getAllTools()`.
 2. Keep loader tools, such as `search_tools`, active and leave searchable tools inactive.
-3. During loader execution, call `disco.setActiveTools([...currentTools, ...matchingTools])`. The change must be additive: do not remove currently active tools in the same call.
-4. DisCo records which tools were added on the loader's tool result.
-5. Before the next model response, DisCo exposes the added definitions using native deferred loading when supported, or the normal active tool list otherwise.
+3. During loader execution, call `ocsid.setActiveTools([...currentTools, ...matchingTools])`. The change must be additive: do not remove currently active tools in the same call.
+4. OCSID records which tools were added on the loader's tool result.
+5. Before the next model response, OCSID exposes the added definitions using native deferred loading when supported, or the normal active tool list otherwise.
 
-You do not need to return provider-specific tool references or mark the loader as a special search tool. The active-tool change is the signal. Names passed to `disco.setActiveTools()` must already be registered; unknown names are ignored.
+You do not need to return provider-specific tool references or mark the loader as a special search tool. The active-tool change is the signal. Names passed to `ocsid.setActiveTools()` must already be registered; unknown names are ignored.
 
 #### Models with native deferred loading
 
@@ -2331,15 +2331,15 @@ You do not need to return provider-specific tool references or mark the loader a
   - **Native representation:** Deferred definitions use `defer_loading`; the load point uses `tool_reference` content.
 - **OpenAI**
   - **Models:** `gpt-5.4` and newer family
-  - **Native representation:** DisCo adds completed client `tool_search_call` and `tool_search_output` items at the load point.
+  - **Native representation:** OCSID adds completed client `tool_search_call` and `tool_search_output` items at the load point.
 
 For a verified custom model or proxy, native handling can be enabled with `compat.supportsToolReferences: true` for `anthropic-messages`, or `compat.supportsToolSearch: true` for `openai-responses` and `openai-codex-responses`. Leave these disabled unless the endpoint and model accept the corresponding native protocol.
 
 #### Fallback behavior
 
-For all other models and providers, dynamic activation still works: DisCo sends the complete current active tool list normally on the next request. The model can call the newly activated tools, but adding their definitions may invalidate the provider's cached prompt prefix.
+For all other models and providers, dynamic activation still works: OCSID sends the complete current active tool list normally on the next request. The model can call the newly activated tools, but adding their definitions may invalidate the provider's cached prompt prefix.
 
-DisCo also uses this safe fallback when the active set is not purely additive, such as replacing one group of tools with another. Tool removals therefore work, but they do not use deferred loading.
+OCSID also uses this safe fallback when the active set is not purely additive, such as replacing one group of tools with another. Tool removals therefore work, but they do not use deferred loading.
 
 For the best cache behavior, keep the loader tool active for the whole session and add tools instead of replacing the active set. Also note that activating a tool with `promptSnippet` or `promptGuidelines` rebuilds the system prompt; that system-prompt change can invalidate the prefix even when the provider supports deferred schemas. Lazily loaded tools should usually rely on their tool `description` and omit active-only prompt metadata.
 
@@ -2348,13 +2348,13 @@ For the best cache behavior, keep the loader tool active for the whole session a
 The following extension registers two searchable tools, removes them from the initial active set, and keeps only `search_tools` as their loader. The example uses simple keyword matching, but the search implementation could use BM25, embeddings, a remote catalog, or project-specific routing.
 
 ```typescript
-import type { ExtensionAPI } from "@arex-skill/disco";
+import type { ExtensionAPI } from "ocsid";
 import { Type } from "typebox";
 
 const SEARCHABLE_TOOL_NAMES = new Set(["lookup_weather", "search_issues"]);
 
-export default function (disco: ExtensionAPI) {
-  disco.registerTool({
+export default function (ocsid: ExtensionAPI) {
+  ocsid.registerTool({
     name: "lookup_weather",
     label: "Lookup Weather",
     description: "Look up the current weather for a city",
@@ -2367,7 +2367,7 @@ export default function (disco: ExtensionAPI) {
     },
   });
 
-  disco.registerTool({
+  ocsid.registerTool({
     name: "search_issues",
     label: "Search Issues",
     description: "Search project issues by keyword",
@@ -2380,7 +2380,7 @@ export default function (disco: ExtensionAPI) {
     },
   });
 
-  disco.registerTool({
+  ocsid.registerTool({
     name: "search_tools",
     label: "Search Tools",
     description: "Search for and enable tools relevant to a task",
@@ -2394,7 +2394,7 @@ export default function (disco: ExtensionAPI) {
     }),
     async execute(_toolCallId, params) {
       const terms = params.query.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
-      const matches = disco.getAllTools()
+      const matches = ocsid.getAllTools()
         .filter((tool) => SEARCHABLE_TOOL_NAMES.has(tool.name))
         .map((tool) => ({
           tool,
@@ -2416,9 +2416,9 @@ export default function (disco: ExtensionAPI) {
         };
       }
 
-      const active = disco.getActiveTools();
+      const active = ocsid.getActiveTools();
       const added = matches.filter((name) => !active.includes(name));
-      disco.setActiveTools([...new Set([...active, ...added])]);
+      ocsid.setActiveTools([...new Set([...active, ...added])]);
 
       return {
         content: [{
@@ -2432,13 +2432,13 @@ export default function (disco: ExtensionAPI) {
     },
   });
 
-  disco.on("session_start", () => {
+  ocsid.on("session_start", () => {
     // Keep searchable tools registered but initially inactive. Preserve built-ins
     // and tools owned by other extensions, and keep the loader itself active.
-    const initialTools = disco.getActiveTools().filter(
+    const initialTools = ocsid.getActiveTools().filter(
       (name) => !SEARCHABLE_TOOL_NAMES.has(name),
     );
-    disco.setActiveTools([...new Set([...initialTools, "search_tools"])]);
+    ocsid.setActiveTools([...new Set([...initialTools, "search_tools"])]);
   });
 }
 ```
@@ -2571,7 +2571,7 @@ ctx.ui.setFooter((tui, theme) => ({
 ctx.ui.setFooter(undefined);  // Restore built-in footer
 
 // Terminal title
-ctx.ui.setTitle("disco - my-project");
+ctx.ui.setTitle("ocsid - my-project");
 
 // Editor text
 ctx.ui.setEditorText("Prefill text");
@@ -2641,7 +2641,7 @@ Typical pattern:
 - delegate `applyCompletion(...)` unless you need custom insertion behavior
 
 ```typescript
-disco.on("session_start", (_event, ctx) => {
+ocsid.on("session_start", (_event, ctx) => {
   ctx.ui.addAutocompleteProvider((current) => ({
     triggerCharacters: ["#"],
     async getSuggestions(lines, cursorLine, cursorCol, options) {
@@ -2744,7 +2744,7 @@ See [tui.md](tui.md) for the full `OverlayOptions` and `OverlayHandle` API and [
 Replace the main input editor with a custom implementation (vim mode, emacs mode, etc.):
 
 ```typescript
-import { CustomEditor, type ExtensionAPI } from "@arex-skill/disco";
+import { CustomEditor, type ExtensionAPI } from "ocsid";
 import { matchesKey } from "@earendil-works/pi-tui";
 
 class VimEditor extends CustomEditor {
@@ -2763,8 +2763,8 @@ class VimEditor extends CustomEditor {
   }
 }
 
-export default function (disco: ExtensionAPI) {
-  disco.on("session_start", (_event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+  ocsid.on("session_start", (_event, ctx) => {
     ctx.ui.setEditorComponent((tui, theme, keybindings) =>
       new VimEditor(tui, theme, keybindings)
     );
@@ -2797,7 +2797,7 @@ Register a custom renderer for messages with your `customType`. Use message rend
 ```typescript
 import { Text } from "@earendil-works/pi-tui";
 
-disco.registerMessageRenderer("my-extension", (message, options, theme) => {
+ocsid.registerMessageRenderer("my-extension", (message, options, theme) => {
   const { expanded, outputPad } = options;
   let text = theme.fg("accent", `[${message.customType}] `);
   text += message.content;
@@ -2810,10 +2810,10 @@ disco.registerMessageRenderer("my-extension", (message, options, theme) => {
 });
 ```
 
-Messages are sent via `disco.sendMessage()`:
+Messages are sent via `ocsid.sendMessage()`:
 
 ```typescript
-disco.sendMessage({
+ocsid.sendMessage({
   customType: "my-extension",  // Matches registerMessageRenderer
   content: "Status update",
   display: true,               // Show in TUI
@@ -2824,11 +2824,11 @@ disco.sendMessage({
 For TUI-only content that should not be sent to the LLM, render custom entries instead:
 
 ```typescript
-disco.registerEntryRenderer("my-card", (entry, options, theme) => {
+ocsid.registerEntryRenderer("my-card", (entry, options, theme) => {
   return new Text(theme.fg("accent", JSON.stringify(entry.data)));
 });
 
-disco.appendEntry("my-card", { status: "done" });
+ocsid.appendEntry("my-card", { status: "done" });
 ```
 
 ### Theme Colors
@@ -2854,7 +2854,7 @@ theme.strikethrough(text)
 For syntax highlighting in custom tool renderers:
 
 ```typescript
-import { highlightCode, getLanguageFromPath } from "@arex-skill/disco";
+import { highlightCode, getLanguageFromPath } from "ocsid";
 
 // Highlight code with explicit language
 const highlighted = highlightCode("const x = 1;", "typescript", theme);
@@ -2958,7 +2958,7 @@ All examples in [examples/extensions/](../examples/extensions/).
 | **Messages & Communication** |||
 | `message-renderer.ts` | Custom message rendering | `registerMessageRenderer`, `sendMessage` |
 | `entry-renderer.ts` | TUI-only custom entry rendering | `registerEntryRenderer`, `appendEntry` |
-| `event-bus.ts` | Inter-extension events | `disco.events` |
+| `event-bus.ts` | Inter-extension events | `ocsid.events` |
 | **Session Metadata** |||
 | `session-name.ts` | Name sessions for selector | `setSessionName`, `getSessionName` |
 | `bookmark.ts` | Bookmark entries for /tree | `setLabel` |

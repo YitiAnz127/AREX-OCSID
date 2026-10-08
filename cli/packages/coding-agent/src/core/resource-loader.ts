@@ -2,10 +2,10 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { basename, dirname, join, resolve, sep } from "node:path";
 import chalk from "chalk";
 import { CONFIG_DIR_NAME } from "../config.ts";
-import { createDisCoDynamicWorkflowExtension } from "../disco/dynamic-workflows/extension-factory.ts";
-import { getDiscoModePrompt } from "../disco/modes/prompts.ts";
-import { isSkillEligibleForDiscoMode } from "../disco/modes/skill-policy.ts";
-import { DEFAULT_DISCO_AGENT_MODE, type DiscoAgentMode } from "../disco/modes/types.ts";
+import { createOCSIDDynamicWorkflowExtension } from "../ocsid/dynamic-workflows/extension-factory.ts";
+import { getOcsidModePrompt } from "../ocsid/modes/prompts.ts";
+import { isSkillEligibleForOcsidMode } from "../ocsid/modes/skill-policy.ts";
+import { DEFAULT_OCSID_AGENT_MODE, type OcsidAgentMode } from "../ocsid/modes/types.ts";
 import { loadThemeFromPath, type Theme } from "../modes/interactive/theme/theme.ts";
 import type { ResourceDiagnostic } from "./diagnostics.ts";
 
@@ -46,7 +46,7 @@ export interface ResourceLoaderReloadOptions {
 }
 
 export interface ResourceLoader {
-	getDiscoMode?(): DiscoAgentMode;
+	getOcsidMode?(): OcsidAgentMode;
 	getExtensions(): LoadExtensionsResult;
 	getSkills(): { skills: Skill[]; diagnostics: ResourceDiagnostic[] };
 	getPrompts(): { prompts: PromptTemplate[]; diagnostics: ResourceDiagnostic[] };
@@ -164,9 +164,9 @@ export interface DefaultResourceLoaderOptions {
 	additionalPromptTemplatePaths?: string[];
 	additionalThemePaths?: string[];
 	extensionFactories?: InlineExtension[];
-	includeDisCoDefaults?: boolean;
-	includeDisCoBuiltinSkills?: boolean;
-	discoMode?: DiscoAgentMode;
+	includeOCSIDDefaults?: boolean;
+	includeOCSIDBuiltinSkills?: boolean;
+	ocsidMode?: OcsidAgentMode;
 	noExtensions?: boolean;
 	noSkills?: boolean;
 	noPromptTemplates?: boolean;
@@ -205,8 +205,8 @@ export class DefaultResourceLoader implements ResourceLoader {
 	private additionalPromptTemplatePaths: string[];
 	private additionalThemePaths: string[];
 	private extensionFactories: InlineExtension[];
-	private includeDisCoDefaults: boolean;
-	private discoMode: DiscoAgentMode;
+	private includeOCSIDDefaults: boolean;
+	private ocsidMode: OcsidAgentMode;
 	private noExtensions: boolean;
 	private noSkills: boolean;
 	private noPromptTemplates: boolean;
@@ -257,24 +257,24 @@ export class DefaultResourceLoader implements ResourceLoader {
 	constructor(options: DefaultResourceLoaderOptions) {
 		this.cwd = resolvePath(options.cwd);
 		this.agentDir = resolvePath(options.agentDir);
-		this.discoMode = options.discoMode ?? DEFAULT_DISCO_AGENT_MODE;
+		this.ocsidMode = options.ocsidMode ?? DEFAULT_OCSID_AGENT_MODE;
 		this.settingsManager = options.settingsManager ?? SettingsManager.create(this.cwd, this.agentDir);
 		this.eventBus = options.eventBus ?? createEventBus();
 		this.packageManager = new DefaultPackageManager({
 			cwd: this.cwd,
 			agentDir: this.agentDir,
 			settingsManager: this.settingsManager,
-			includeDisCoDefaults: options.includeDisCoDefaults,
-			includeDisCoBuiltinSkills: options.includeDisCoBuiltinSkills,
-			discoMode: this.discoMode,
+			includeOCSIDDefaults: options.includeOCSIDDefaults,
+			includeOCSIDBuiltinSkills: options.includeOCSIDBuiltinSkills,
+			ocsidMode: this.ocsidMode,
 		});
 		this.additionalExtensionPaths = options.additionalExtensionPaths ?? [];
 		this.additionalSkillPaths = options.additionalSkillPaths ?? [];
 		this.additionalPromptTemplatePaths = options.additionalPromptTemplatePaths ?? [];
 		this.additionalThemePaths = options.additionalThemePaths ?? [];
-		this.includeDisCoDefaults = options.includeDisCoDefaults ?? true;
+		this.includeOCSIDDefaults = options.includeOCSIDDefaults ?? true;
 		this.extensionFactories = [
-			...(this.includeDisCoDefaults ? [createDisCoDynamicWorkflowExtension(this.cwd, this.discoMode)] : []),
+			...(this.includeOCSIDDefaults ? [createOCSIDDynamicWorkflowExtension(this.cwd, this.ocsidMode)] : []),
 			...(options.extensionFactories ?? []),
 		];
 		this.noExtensions = options.noExtensions ?? false;
@@ -316,8 +316,8 @@ export class DefaultResourceLoader implements ResourceLoader {
 		return this.extensionsResult;
 	}
 
-	getDiscoMode(): DiscoAgentMode {
-		return this.discoMode;
+	getOcsidMode(): OcsidAgentMode {
+		return this.ocsidMode;
 	}
 
 	getSkills(): { skills: Skill[]; diagnostics: ResourceDiagnostic[] } {
@@ -558,8 +558,8 @@ export class DefaultResourceLoader implements ResourceLoader {
 		const resolvedAppendSystemPrompt = this.appendSystemPromptOverride
 			? this.appendSystemPromptOverride(baseAppend)
 			: baseAppend;
-		this.appendSystemPrompt = this.includeDisCoDefaults
-			? [...resolvedAppendSystemPrompt, getDiscoModePrompt(this.discoMode)]
+		this.appendSystemPrompt = this.includeOCSIDDefaults
+			? [...resolvedAppendSystemPrompt, getOcsidModePrompt(this.ocsidMode)]
 			: resolvedAppendSystemPrompt;
 		this.appendSystemPromptSourcePaths = appendSources
 			.filter((source) => existsSync(source))
@@ -703,15 +703,15 @@ export class DefaultResourceLoader implements ResourceLoader {
 				agentDir: this.agentDir,
 				skillPaths,
 				includeDefaults: false,
-				discoMode: this.discoMode,
+				ocsidMode: this.ocsidMode,
 			});
 		}
 		const resolvedSkills = this.skillsOverride ? this.skillsOverride(skillsResult) : skillsResult;
 		this.skills = resolvedSkills.skills
-			.filter((skill) => isSkillEligibleForDiscoMode(skill.discoRole ?? "operating", this.discoMode))
+			.filter((skill) => isSkillEligibleForOcsidMode(skill.ocsidRole ?? "operating", this.ocsidMode))
 			.map((skill) => ({
 				...skill,
-				discoRole: skill.discoRole ?? "operating",
+				ocsidRole: skill.ocsidRole ?? "operating",
 				sourceInfo:
 					this.findSourceInfoForPath(skill.filePath, this.extensionSkillSourceInfos, metadataByPath) ??
 					skill.sourceInfo ??

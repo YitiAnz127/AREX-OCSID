@@ -3,7 +3,7 @@ name: drug-ddi
 description: "Use drug-ddi for drug discovery and development workflows: ddi."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

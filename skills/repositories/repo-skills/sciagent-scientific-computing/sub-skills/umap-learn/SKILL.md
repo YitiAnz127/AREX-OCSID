@@ -3,7 +3,7 @@ name: umap-learn
 description: "UMAP dimensionality reduction for visualization, clustering prep, and feature engineering."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # umap-learn — sciagent-scientific-computing sub-skill

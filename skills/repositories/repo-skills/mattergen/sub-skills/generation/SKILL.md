@@ -6,7 +6,7 @@ description: "Route safe MatterGen crystal generation from pretrained or local
   CrystalGenerator API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

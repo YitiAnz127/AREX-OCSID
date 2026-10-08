@@ -4,7 +4,7 @@ description: "Load, construct, inspect, iterate, and write molecular systems
   with MDAnalysis Universe, readers, writers, and synthetic in-memory systems."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

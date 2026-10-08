@@ -1,8 +1,8 @@
 # Shell Aliases
 
-DisCo runs bash in non-interactive mode (`bash -c`), which doesn't expand aliases by default.
+OCSID runs bash in non-interactive mode (`bash -c`), which doesn't expand aliases by default.
 
-To enable your shell aliases, add to `~/.disco/agent/settings.json`:
+To enable your shell aliases, add to `~/.ocsid/agent/settings.json`:
 
 ```json
 {

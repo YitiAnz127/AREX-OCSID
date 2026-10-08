@@ -4,7 +4,7 @@ description: "Load user data into DeepChem datasets, split datasets, apply
   transformers, and use MoleculeNet loaders safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

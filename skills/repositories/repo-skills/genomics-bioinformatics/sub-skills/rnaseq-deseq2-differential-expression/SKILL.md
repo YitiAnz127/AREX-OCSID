@@ -3,7 +3,7 @@ name: rnaseq-deseq2-differential-expression
 description: "&quot;Bulk RNA-seq DE with R/Bioconductor DESeq2."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rnaseq-deseq2-differential-expression — genomics-bioinformatics sub-skill

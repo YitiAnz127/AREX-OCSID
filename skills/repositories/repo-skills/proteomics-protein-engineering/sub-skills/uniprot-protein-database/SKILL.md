@@ -3,7 +3,7 @@ name: uniprot-protein-database
 description: "&quot;Query UniProt REST API: search by gene/protein name, fetch FASTA, map IDs (Ensembl, PDB, RefSeq), access Swiss-Prot annotations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # uniprot-protein-database — proteomics-protein-engineering sub-skill

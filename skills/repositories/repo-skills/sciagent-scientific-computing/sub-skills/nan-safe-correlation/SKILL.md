@@ -3,7 +3,7 @@ name: nan-safe-correlation
 description: "&quot;Per-feature NaN-safe Spearman/Pearson correlation across many features (genes, proteins, variants) with missing values."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # nan-safe-correlation — sciagent-scientific-computing sub-skill

@@ -25,7 +25,7 @@ async function write(root, path, content) {
 }
 
 async function createFixture() {
-	const root = await mkdtemp(join(tmpdir(), "disco-provenance-"));
+	const root = await mkdtemp(join(tmpdir(), "ocsid-provenance-"));
 	for (const path of [
 		"scripts",
 		"packages/coding-agent/src",

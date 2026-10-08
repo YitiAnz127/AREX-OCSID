@@ -5,7 +5,7 @@ description: "Assemble OpenFF Topology objects, load PDB/biopolymer systems,
   and hand off to Interchange/OpenMM system creation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

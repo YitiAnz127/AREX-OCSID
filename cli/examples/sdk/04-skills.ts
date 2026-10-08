@@ -22,7 +22,7 @@ const customSkill: Skill = {
 	baseDir: "/virtual",
 	sourceInfo: createSyntheticSourceInfo("/virtual/SKILL.md", { source: "sdk" }),
 	disableModelInvocation: false,
-	discoRole: "operating",
+	ocsidRole: "operating",
 };
 
 const loader = new DefaultResourceLoader({
@@ -38,7 +38,7 @@ const loader = new DefaultResourceLoader({
 });
 await loader.reload();
 
-// Discover all skills from cwd/.disco/skills, ~/.disco/agent/skills, etc.
+// Discover all skills from cwd/.ocsid/skills, ~/.ocsid/agent/skills, etc.
 const { skills: allSkills, diagnostics } = loader.getSkills();
 console.log(
 	"Discovered skills:",

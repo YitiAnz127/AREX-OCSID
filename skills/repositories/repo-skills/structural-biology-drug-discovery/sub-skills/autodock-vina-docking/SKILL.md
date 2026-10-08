@@ -3,7 +3,7 @@ name: autodock-vina-docking
 description: "&quot;Molecular docking with AutoDock Vina (Python API)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # autodock-vina-docking — structural-biology-drug-discovery sub-skill

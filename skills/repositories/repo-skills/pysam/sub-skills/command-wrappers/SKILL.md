@@ -5,7 +5,7 @@ description: "Guides agents using pysam samtools and bcftools command wrappers,
   SamtoolsError troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

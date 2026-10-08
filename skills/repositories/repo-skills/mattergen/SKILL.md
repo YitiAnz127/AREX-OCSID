@@ -5,7 +5,7 @@ description: "Guide MatterGen inorganic-crystal generation, structure
   CUDA-aware validation and safe artifact handling."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

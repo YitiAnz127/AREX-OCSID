@@ -4,7 +4,7 @@ description: "Extend AiZynthFinder with custom hooks, stocks, scorers, policies,
   plugins, search algorithms, and focused development tests."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

@@ -4,7 +4,7 @@ description: "Load Squidpy datasets and local spatial inputs with safe cache,
   layout, AnnData, and SpatialData validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

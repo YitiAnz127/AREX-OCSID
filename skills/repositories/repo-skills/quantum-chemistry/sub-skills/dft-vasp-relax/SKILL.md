@@ -3,7 +3,7 @@ name: dft-vasp-relax
 description: "Prepare VASP geometry-relaxation input tasks from a user-provided structure and essential DFT settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-vasp-relax — quantum-chemistry sub-skill

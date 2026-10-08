@@ -3,7 +3,7 @@ name: xtb
 description: "Prepare and explain xTB semiempirical quantum-chemistry workflows for single-point energy, forces, charges, dipole, geometry optimization, and molecular dynamics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # xtb — quantum-chemistry sub-skill

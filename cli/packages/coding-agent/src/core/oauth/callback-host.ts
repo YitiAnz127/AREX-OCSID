@@ -8,9 +8,9 @@ const DEFAULT_OAUTH_CALLBACK_HOST = "127.0.0.1";
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "::1", "localhost"]);
 
 /**
- * Resolve DisCo's loopback OAuth listener without consulting Pi-owned state.
+ * Resolve OCSID's loopback OAuth listener without consulting Pi-owned state.
  *
- * DISCO_OAUTH_CALLBACK_HOST exists for environments where the browser reaches
+ * OCSID_OAUTH_CALLBACK_HOST exists for environments where the browser reaches
  * the CLI through a forwarded port (a container, a remote shell), but the value
  * is used verbatim as a listen() address. `0.0.0.0` there is not "localhost" —
  * it binds every interface, so the authorization code is delivered to whichever
@@ -19,8 +19,8 @@ const LOOPBACK_HOSTS = new Set(["127.0.0.1", "::1", "localhost"]);
  * not a loopback literal keeps the escape hatch for port-forwarding setups while
  * refusing to publish the callback to the network.
  */
-export function getDiscoOAuthCallbackHost(env: NodeJS.ProcessEnv = process.env): string {
-	const configured = env.DISCO_OAUTH_CALLBACK_HOST?.trim();
+export function getOcsidOAuthCallbackHost(env: NodeJS.ProcessEnv = process.env): string {
+	const configured = env.OCSID_OAUTH_CALLBACK_HOST?.trim();
 	if (!configured) {
 		return DEFAULT_OAUTH_CALLBACK_HOST;
 	}
@@ -29,7 +29,7 @@ export function getDiscoOAuthCallbackHost(env: NodeJS.ProcessEnv = process.env):
 	const host = configured.replace(/^\[|\]$/g, "");
 	if (!LOOPBACK_HOSTS.has(host)) {
 		throw new Error(
-			`DISCO_OAUTH_CALLBACK_HOST must be a loopback address (127.0.0.1, ::1, or localhost) so the OAuth callback is not exposed to the network; got ${JSON.stringify(configured)}.`,
+			`OCSID_OAUTH_CALLBACK_HOST must be a loopback address (127.0.0.1, ::1, or localhost) so the OAuth callback is not exposed to the network; got ${JSON.stringify(configured)}.`,
 		);
 	}
 	return host === "localhost" ? DEFAULT_OAUTH_CALLBACK_HOST : host;

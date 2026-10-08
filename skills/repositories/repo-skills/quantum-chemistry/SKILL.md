@@ -3,7 +3,7 @@ name: quantum-chemistry
 description: "Use quantum-chemistry for quantum chemistry workflows: quantum-chemistry."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

@@ -12,7 +12,7 @@ import {
 } from "./repo-skills-library-manager.ts";
 
 const roots: string[] = [];
-const bundledSkillsDir = path.join(process.cwd(), "packages", "coding-agent", "src", "disco", "skills");
+const bundledSkillsDir = path.join(process.cwd(), "packages", "coding-agent", "src", "ocsid", "skills");
 const updaterScript = path.join(bundledSkillsDir, "verify-repo-skill", "scripts", "update_repo_skills_router.mjs");
 const taxonomyHash = "30f8aa8934db13c613e6dfea053acb0023543cb9d5c3990e348ecf100479c985";
 
@@ -21,7 +21,7 @@ function git(repository: string, ...args: string[]): string {
 }
 
 async function makeRoot(): Promise<string> {
-	const root = await mkdtemp(path.join(tmpdir(), "disco-repo-skills-manager-"));
+	const root = await mkdtemp(path.join(tmpdir(), "ocsid-repo-skills-manager-"));
 	roots.push(root);
 	return root;
 }
@@ -35,7 +35,7 @@ async function writeSkill(libraryRoot: string, id: string, marker: string): Prom
 		`description: "Use ${id} for focused repository workflows."`,
 		"disable-model-invocation: true",
 		"metadata:",
-		"  disco-role: operating",
+		"  ocsid-role: operating",
 		"---",
 		"",
 		`# ${id}`,
@@ -58,7 +58,7 @@ async function createSourceRepository(root: string, marker = "source-v1"): Promi
 	await mkdir(repository, { recursive: true });
 	execFileSync("git", ["init", "--initial-branch=main", repository]);
 	git(repository, "config", "user.email", "test@example.com");
-	git(repository, "config", "user.name", "DisCo Test");
+	git(repository, "config", "user.name", "OCSID Test");
 	await writeFile(path.join(repository, ".gitattributes"), "* text=auto eol=lf\n", "utf8");
 	await writeSkill(libraryRoot, "alpha", marker);
 	cpSync(path.join(bundledSkillsDir, "repo-skills-router"), path.join(libraryRoot, "repo-skills-router"), { recursive: true });
@@ -95,7 +95,7 @@ function manager(agentDir: string, sourceRepository: string, overrides: Omit<Rep
 		agentDir,
 		sourceRepository,
 		bundledSkillsDir,
-		env: { ...(overrides.env ?? process.env), DISCO_OFFLINE: "" },
+		env: { ...(overrides.env ?? process.env), OCSID_OFFLINE: "" },
 	});
 }
 
@@ -132,7 +132,7 @@ describe("RepoSkillsLibraryManager", () => {
 		await mkdir(localDir, { recursive: true });
 		await writeFile(path.join(localDir, "SKILL.md"), [
 			"---", "name: local-helper", 'description: "Local helper."',
-			"disable-model-invocation: true", "metadata:", "  disco-role: operating", "---", "", "# Local",
+			"disable-model-invocation: true", "metadata:", "  ocsid-role: operating", "---", "", "# Local",
 		].join("\n"), "utf8");
 		const updated = await manager(agentDir, source).update();
 		expect(updated.localSkills).toBe(1);
@@ -149,7 +149,7 @@ describe("RepoSkillsLibraryManager", () => {
 		await mkdir(path.join(localDir, "references"), { recursive: true });
 		await writeFile(path.join(localDir, "SKILL.md"), [
 			"---", "name: local-routed", 'description: "Local routed helper."',
-			"disable-model-invocation: true", "metadata:", "  disco-role: operating", "---", "", "# Local routed",
+			"disable-model-invocation: true", "metadata:", "  ocsid-role: operating", "---", "", "# Local routed",
 		].join("\n"), "utf8");
 		await writeFile(path.join(localDir, "references", "repo-routing-metadata.json"), `${JSON.stringify({
 			schema_version: "2.0",
@@ -343,7 +343,7 @@ describe("RepoSkillsLibraryManager", () => {
 				'description: "Locally modified alpha skill."',
 				"disable-model-invocation: true",
 				"metadata:",
-				"  disco-role: operating",
+				"  ocsid-role: operating",
 				"---",
 				"",
 				"# Locally modified alpha",

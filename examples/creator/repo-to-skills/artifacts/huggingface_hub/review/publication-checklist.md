@@ -2,7 +2,7 @@
 
 - [x] Runtime root `skills/huggingface-hub/SKILL.md` exists and is router-like.
 - [x] Five sub-skills have canonical lowercase-hyphen IDs matching directory and frontmatter names.
-- [x] Every runtime SKILL.md has double-quoted description, `license: Apache-2.0`, `disable-model-invocation: true`, and `metadata.disco-role: operating`.
+- [x] Every runtime SKILL.md has double-quoted description, `license: Apache-2.0`, `disable-model-invocation: true`, and `metadata.ocsid-role: operating`.
 - [x] Runtime references and scripts are self-contained and linked from nearby routers.
 - [x] No runtime link points to original source docs, tests, scripts, examples, checkout paths, or private environment paths.
 - [x] `references/repo-provenance.md` records commit/tag/version and relative evidence paths without local environment details.
@@ -15,4 +15,4 @@
 - [x] Selected safe native unit/mocked tests pass; unsafe/network/privilege-specific outcomes are explicitly reported, not counted as passes.
 - [x] No required backend is blocked; optional CUDA smoke passed and no GPU claim is made.
 - [x] No managed import was performed, honoring the user's “not import” instruction.
-- [ ] Optional future action: if import is later requested, re-check the current source commit and digest, then run the dedicated locked importer with `skills/disco/routing_decision/classification.json`.
+- [ ] Optional future action: if import is later requested, re-check the current source commit and digest, then run the dedicated locked importer with `skills/ocsid/routing_decision/classification.json`.

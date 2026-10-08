@@ -5,7 +5,7 @@ description: "Use DIG's graph augmentation stack for GraphAug, S-Mixup,
   augmentation-driven graph classification workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

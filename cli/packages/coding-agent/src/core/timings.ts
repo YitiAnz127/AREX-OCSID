@@ -1,6 +1,6 @@
 /**
  * Central timing instrumentation for startup profiling.
- * Enable with DISCO_TIMING=1 environment variable.
+ * Enable with OCSID_TIMING=1 environment variable.
  */
 
 function isTruthyEnvFlag(value: string | undefined): boolean {
@@ -9,9 +9,9 @@ function isTruthyEnvFlag(value: string | undefined): boolean {
 	return normalized === "1" || normalized === "true" || normalized === "yes";
 }
 
-// Accept "1"/"true"/"yes" (case-insensitive) so a natural DISCO_TIMING=true is
-// honored like the other DISCO_* toggles (audit H4).
-const ENABLED = isTruthyEnvFlag(process.env.DISCO_TIMING);
+// Accept "1"/"true"/"yes" (case-insensitive) so a natural OCSID_TIMING=true is
+// honored like the other OCSID_* toggles (audit H4).
+const ENABLED = isTruthyEnvFlag(process.env.OCSID_TIMING);
 interface TimingNamespace {
 	timings: Array<{ label: string; ms: number }>;
 	lastTime: number;

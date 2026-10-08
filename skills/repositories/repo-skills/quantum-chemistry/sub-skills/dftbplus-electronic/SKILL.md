@@ -3,7 +3,7 @@ name: dftbplus-electronic
 description: "Prepare DFTB+ electronic-analysis task inputs based on prior ground-state context."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dftbplus-electronic — quantum-chemistry sub-skill

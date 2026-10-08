@@ -5,7 +5,7 @@
  * Delegates to pi-ai's built-in Anthropic and OpenAI streaming implementations.
  *
  * Usage:
- *   disco -e ./packages/coding-agent/examples/extensions/custom-provider-gitlab-duo
+ *   ocsid -e ./packages/coding-agent/examples/extensions/custom-provider-gitlab-duo
  *   # Then /login gitlab-duo, or set GITLAB_TOKEN=glpat-...
  */
 
@@ -378,8 +378,8 @@ export function streamGitLabDuo(
 // Extension Entry Point
 // =============================================================================
 
-export default function (disco: ExtensionAPI) {
-	disco.registerProvider("gitlab-duo", {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerProvider("gitlab-duo", {
 		baseUrl: AI_GATEWAY_URL,
 		apiKey: "$GITLAB_TOKEN",
 		api: "gitlab-duo-api",

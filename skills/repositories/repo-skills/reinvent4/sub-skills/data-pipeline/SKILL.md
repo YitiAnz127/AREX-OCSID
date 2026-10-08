@@ -4,7 +4,7 @@ description: "Prepare, validate, preprocess, filter, standardize, and
   deduplicate SMILES datasets with REINVENT4 reinvent_datapre."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

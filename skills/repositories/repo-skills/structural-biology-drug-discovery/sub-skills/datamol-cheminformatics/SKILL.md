@@ -3,7 +3,7 @@ name: datamol-cheminformatics
 description: "Pythonic RDKit wrapper with sensible defaults for drug discovery."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # datamol-cheminformatics — structural-biology-drug-discovery sub-skill

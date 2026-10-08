@@ -4,7 +4,7 @@ description: "Use for OmicVerse bulk RNA-seq, enrichment/signature scoring,
   metabolomics, proteomics, microbiome, and statistical table workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

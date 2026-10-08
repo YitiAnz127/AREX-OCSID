@@ -3,7 +3,7 @@ name: degenerate-input-filtering
 description: "&quot;Filter degenerate, uninformative inputs before statistical tests: single-sequence alignments, empty files, constant features, zero-variance inputs, all-NaN columns."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # degenerate-input-filtering — sciagent-scientific-computing sub-skill

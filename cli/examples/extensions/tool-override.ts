@@ -5,7 +5,7 @@
  * This is useful for:
  * - Adding logging or auditing to tool calls
  * - Implementing access control or sandboxing
- * - Routing tool calls to remote systems (e.g., disco-ssh-remote)
+ * - Routing tool calls to remote systems (e.g., ocsid-ssh-remote)
  * - Modifying tool behavior for specific workflows
  *
  * This example overrides the `read` tool to:
@@ -17,7 +17,7 @@
  * is used automatically (syntax highlighting, line numbers, truncation warnings).
  *
  * Usage:
- *   disco -e ./tool-override.ts
+ *   ocsid -e ./tool-override.ts
  */
 
 import type { TextContent } from "@earendil-works/pi-ai";
@@ -65,8 +65,8 @@ const readSchema = Type.Object({
 	limit: Type.Optional(Type.Number({ description: "Maximum number of lines to read" })),
 });
 
-export default function (disco: ExtensionAPI) {
-	disco.registerTool({
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerTool({
 		name: "read", // Same name as built-in - this will override it
 		label: "read (audited)",
 		description:
@@ -129,7 +129,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Also register a command to view the access log
-	disco.registerCommand("read-log", {
+	ocsid.registerCommand("read-log", {
 		description: "View the file access log",
 		handler: async (_args, ctx) => {
 			try {

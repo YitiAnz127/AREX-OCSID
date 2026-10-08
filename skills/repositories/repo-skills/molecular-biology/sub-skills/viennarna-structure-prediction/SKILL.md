@@ -3,7 +3,7 @@ name: viennarna-structure-prediction
 description: "&quot;Predict RNA secondary structure, MFE folding, base-pair probabilities, RNA-RNA interactions via ViennaRNA Python bindings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # viennarna-structure-prediction — molecular-biology sub-skill

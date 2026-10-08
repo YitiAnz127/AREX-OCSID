@@ -3,7 +3,7 @@ name: ligandmpnn
 description: "Ligand-aware protein sequence design using LigandMPNN."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

@@ -3,7 +3,7 @@ name: dft-gpaw-relax
 description: "Prepare GPAW geometry-relaxation task inputs/scripts from a user-provided structure and essential optimization settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-gpaw-relax — quantum-chemistry sub-skill

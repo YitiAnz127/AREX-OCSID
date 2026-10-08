@@ -3,7 +3,7 @@ name: dft-siesta-md
 description: "Prepare SIESTA molecular-dynamics task inputs from a user-provided structure and MD controls."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-siesta-md — quantum-chemistry sub-skill

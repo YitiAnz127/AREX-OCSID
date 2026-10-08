@@ -3,7 +3,7 @@ name: drugmechdb
 description: "Query the DrugMechDB drug mechanism-of-action database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drugmechdb — drug-mechanism sub-skill

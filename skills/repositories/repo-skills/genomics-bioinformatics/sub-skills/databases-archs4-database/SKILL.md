@@ -3,7 +3,7 @@ name: databases-archs4-database
 description: "&quot;Query ARCHS4 REST API for uniformly processed RNA-seq expression, tissue patterns, co-expression across 1M+ human/mouse samples."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-archs4-database — genomics-bioinformatics sub-skill

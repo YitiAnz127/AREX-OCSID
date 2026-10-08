@@ -18,7 +18,7 @@ function caseRecord(skillId: string, caseId: string, assertions: string[]): Case
 		files: {
 			userRequest: `please help with ${caseId}`,
 			assertionsText: JSON.stringify({
-				schema: "disco.usability-case.v1",
+				schema: "ocsid.usability-case.v1",
 				target_skill_area: "x",
 				target_capability: "y",
 				difficulty: "basic",

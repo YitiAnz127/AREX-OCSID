@@ -3,7 +3,7 @@ name: drug-knowledgebase
 description: "Use drug-knowledgebase for drug discovery and development workflows: drug_knowledgebase."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

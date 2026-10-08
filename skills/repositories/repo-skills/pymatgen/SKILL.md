@@ -5,7 +5,7 @@ description: "Use pymatgen for computational materials workflows, including
   and configuration."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

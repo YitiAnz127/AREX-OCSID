@@ -5,7 +5,7 @@ description: "Use OpenFE for alchemical free energy setup, network planning,
   molecular simulation campaigns."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

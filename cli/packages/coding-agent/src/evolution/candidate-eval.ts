@@ -22,6 +22,7 @@ import { persistAuditRun } from "../audit/records.ts";
 import { proxyExecutor } from "../audit/types.ts";
 import type { CaseRecord } from "../audit/types.ts";
 import type { BenchmarkSplit } from "../benchmark/schema.ts";
+import { CANDIDATE_RUN_KINDS } from "../benchmark/schema.ts";
 import { listCandidateRuns } from "./candidate-pool.ts";
 
 /**
@@ -164,9 +165,9 @@ export async function runHeldoutFinalEval(opts: HeldoutFinalEvalOptions): Promis
 	const digest = candidateDigest(opts.candidateText);
 	// FREEZE verification: at least one recorded train/dev candidate run must pin
 	// this exact digest before the held-out set may be touched.
-	const frozen = listCandidateRuns(opts.qualityDir, { includeKind: ["candidate-eval", "candidate-agent-eval"] });
+	const frozen = listCandidateRuns(opts.qualityDir, { includeKind: [...CANDIDATE_RUN_KINDS] });
 	if (!frozen.some((r) => r.candidateSha256 === digest)) {
-		throw new Error(`candidate is NOT frozen: no recorded candidate-eval run has candidateSha256 ${digest.slice(0, 12)}…. Run candidate-eval (train/dev) and record a grade BEFORE held-out final eval.`);
+		throw new Error(`candidate is NOT frozen: no recorded candidate run (${CANDIDATE_RUN_KINDS.join(", ")}) has candidateSha256 ${digest.slice(0, 12)}…. Run candidate-eval (train/dev) and record a grade BEFORE held-out final eval.`);
 	}
 
 	// The held-out terminal set is loaded ONLY here, never through ranking.

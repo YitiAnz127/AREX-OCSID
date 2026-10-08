@@ -3,7 +3,7 @@ name: lammps-deepmd
 description: "A tool and knowledge base for running molecular dynamics (MD) simulations in LAMMPS with the DeePMD-kit plugin."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # lammps-deepmd — molecular-dynamics sub-skill

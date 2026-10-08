@@ -3,7 +3,7 @@ name: cellpose-cell-segmentation
 description: "&quot;DL cell/nucleus segmentation for fluorescence and brightfield microscopy."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # cellpose-cell-segmentation — cell-biology sub-skill

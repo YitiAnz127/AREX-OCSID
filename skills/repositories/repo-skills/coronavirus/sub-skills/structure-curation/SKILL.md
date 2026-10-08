@@ -3,7 +3,7 @@ name: structure-curation
 description: "Validate and curate coronavirus PDB structures, chains, residues,
   and ligand naming before OpenMM preparation."
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 disable-model-invocation: true
 license: CC BY 4.0
 ---

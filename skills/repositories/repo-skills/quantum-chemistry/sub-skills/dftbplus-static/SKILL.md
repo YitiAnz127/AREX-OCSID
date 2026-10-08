@@ -3,7 +3,7 @@ name: dftbplus-static
 description: "Prepare DFTB+ single-point (static) task inputs from a user-provided structure and essential SCC/settings choices."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dftbplus-static — quantum-chemistry sub-skill

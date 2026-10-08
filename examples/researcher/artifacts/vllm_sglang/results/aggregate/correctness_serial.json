@@ -91,6 +91,6 @@
       "vllm_text": " probabilistic.\nA. True\nB. False\nAnswer:\nA\n\nWhich of the following is NOT a characteristic of a normal distribution?\nA"
     }
   ],
-  "schema": "disco.correctness-comparison.v1",
+  "schema": "ocsid.correctness-comparison.v1",
   "successful_in_both": 8
 }

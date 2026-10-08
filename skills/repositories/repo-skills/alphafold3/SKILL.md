@@ -6,7 +6,7 @@ description: "Use this skill for AlphaFold 3 input preparation, prediction
   outputs, troubleshooting, and safe helper scripts."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

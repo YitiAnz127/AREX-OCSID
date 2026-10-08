@@ -6,7 +6,7 @@ description: "Routes medical-research requests involving literature discovery,
   synthesis, and provenance."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

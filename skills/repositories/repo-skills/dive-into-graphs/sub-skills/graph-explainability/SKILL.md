@@ -5,7 +5,7 @@ description: "Use DIG's xgraph stack for subgraph, edge, node, walk, and
   DeepLIFT, GradCAM, FlowX, and explanation metrics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

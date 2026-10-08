@@ -3,7 +3,7 @@ name: dpgen-simplify
 description: "Prepare, explain, validate, and run DP-GEN simplify workflows for reducing repeated or redundant DeepMD datasets."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dpgen-simplify — machine-learning-potentials sub-skill

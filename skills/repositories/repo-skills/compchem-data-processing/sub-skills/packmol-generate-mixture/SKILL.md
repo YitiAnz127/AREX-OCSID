@@ -3,7 +3,7 @@ name: packmol-generate-mixture
 description: "A tool for generating initial packed molecular configurations (XYZ format) from single-molecule structures by calculating box dimensions, writing input scripts, and executing Packm"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # packmol-generate-mixture — compchem-data-processing sub-skill

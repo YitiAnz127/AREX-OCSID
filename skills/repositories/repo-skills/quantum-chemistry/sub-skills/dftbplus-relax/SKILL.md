@@ -3,7 +3,7 @@ name: dftbplus-relax
 description: "Prepare DFTB+ geometry-relaxation task inputs from a user-provided structure and optimization settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dftbplus-relax — quantum-chemistry sub-skill

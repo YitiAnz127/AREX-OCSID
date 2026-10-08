@@ -4,7 +4,7 @@ description: "Plan TorchDrug protein sequence, structure, contact prediction,
   function/property, ESM, GearNet, and protein-protein interaction workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

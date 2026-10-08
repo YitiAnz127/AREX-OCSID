@@ -4,7 +4,7 @@ description: "Build and troubleshoot REINVENT4 scoring configurations,
   components, transforms, aggregation, and scoring plugins."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

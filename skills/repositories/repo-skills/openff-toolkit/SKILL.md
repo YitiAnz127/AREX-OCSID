@@ -4,7 +4,7 @@ description: "Use OpenFF Toolkit for molecule processing, SMIRNOFF force fields,
   topology/system preparation, and optional chemistry backend troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

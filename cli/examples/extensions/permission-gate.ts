@@ -7,10 +7,10 @@
 
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	const dangerousPatterns = [/\brm\s+(-rf?|--recursive)/i, /\bsudo\b/i, /\b(chmod|chown)\b.*777/i];
 
-	disco.on("tool_call", async (event, ctx) => {
+	ocsid.on("tool_call", async (event, ctx) => {
 		if (event.toolName !== "bash") return undefined;
 
 		const command = event.input.command as string;

@@ -5,7 +5,7 @@ description: "Plan and run AlphaFold 3 predictions via Docker or local Python,
   setup, hardware and performance flags, and runtime diagnostics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

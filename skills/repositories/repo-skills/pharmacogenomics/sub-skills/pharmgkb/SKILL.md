@@ -3,7 +3,7 @@ name: pharmgkb
 description: "Query ClinPGx (PharmGKB) and CPIC for pharmacogenomics data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pharmgkb — pharmacogenomics sub-skill

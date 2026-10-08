@@ -3,7 +3,7 @@ name: sgrna-design-guide
 description: "Three-tiered sgRNA design guide using validated Addgene sequences, CRISPick pre-computed datasets, or de novo design rules for CRISPR experiments"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # sgrna-design-guide — molecular-biology sub-skill

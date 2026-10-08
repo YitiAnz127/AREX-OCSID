@@ -3,7 +3,7 @@ name: dgidb
 description: "Query the DGIdb (Drug-Gene Interaction Database) for drug-gene interactions, gene druggability categories, and drug target information."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dgidb — drug-dti sub-skill

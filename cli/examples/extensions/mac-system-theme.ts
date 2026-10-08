@@ -1,8 +1,8 @@
 /**
- * Syncs disco theme with macOS system appearance (dark/light mode).
+ * Syncs ocsid theme with macOS system appearance (dark/light mode).
  *
  * Usage:
- *   disco -e examples/extensions/mac-system-theme.ts
+ *   ocsid -e examples/extensions/mac-system-theme.ts
  */
 
 import { exec } from "node:child_process";
@@ -22,10 +22,10 @@ async function isDarkMode(): Promise<boolean> {
 	}
 }
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	let intervalId: ReturnType<typeof setInterval> | null = null;
 
-	disco.on("session_start", async (_event, ctx) => {
+	ocsid.on("session_start", async (_event, ctx) => {
 		let currentTheme = (await isDarkMode()) ? "dark" : "light";
 		ctx.ui.setTheme(currentTheme);
 
@@ -38,7 +38,7 @@ export default function (disco: ExtensionAPI) {
 		}, 2000);
 	});
 
-	disco.on("session_shutdown", () => {
+	ocsid.on("session_shutdown", () => {
 		if (intervalId) {
 			clearInterval(intervalId);
 			intervalId = null;

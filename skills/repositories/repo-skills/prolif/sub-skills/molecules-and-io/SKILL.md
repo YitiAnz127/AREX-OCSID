@@ -4,7 +4,7 @@ description: "Prepare ProLIF molecules, residues, and input files from RDKit,
   MDAnalysis, SDF, MOL2, PDBQT, PDB, and CIF/template-backed sources."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

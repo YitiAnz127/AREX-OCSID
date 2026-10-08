@@ -3,7 +3,7 @@ name: shap-model-explainability
 description: "Model interpretability via SHAP (Shapley values from game theory)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # shap-model-explainability — sciagent-scientific-computing sub-skill

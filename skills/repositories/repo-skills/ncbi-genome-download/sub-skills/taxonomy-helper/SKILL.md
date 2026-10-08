@@ -5,7 +5,7 @@ description: "Use the optional gimme_taxa workflow to resolve taxon names or
   ncbi-genome-download."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

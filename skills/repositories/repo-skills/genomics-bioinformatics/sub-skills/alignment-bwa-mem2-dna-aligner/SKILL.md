@@ -3,7 +3,7 @@ name: alignment-bwa-mem2-dna-aligner
 description: "&quot;Fast short-read DNA aligner for WGS/WES/ChIP-seq."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # alignment-bwa-mem2-dna-aligner — genomics-bioinformatics sub-skill

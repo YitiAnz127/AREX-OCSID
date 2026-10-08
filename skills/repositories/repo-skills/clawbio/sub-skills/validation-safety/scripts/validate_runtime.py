@@ -29,7 +29,7 @@ ENV_MARKER_RE = re.compile(
     r"(?:" + "|".join(
         re.escape(marker)
         for marker in (
-            "DISCO_" + "CODING_AGENT_DIR",
+            "OCSID_" + "CODING_AGENT_DIR",
             "CONDA" + "_PREFIX",
             "VIRTUAL" + "_ENV",
         )
@@ -69,7 +69,7 @@ def _check_frontmatter(path: Path, expected_name: str) -> list[str]:
         None,  # description is checked for double quotes below
         "disable-model-invocation: true",
         "metadata:",
-        "  disco-role: operating",
+        "  ocsid-role: operating",
     ]
     if not nonblank or nonblank[0] != expected[0]:
         errors.append(f"{path}: name must be {expected[0]!r}")
@@ -80,10 +80,10 @@ def _check_frontmatter(path: Path, expected_name: str) -> list[str]:
         errors.append(f"{path}: description must be double-quoted")
     if "disable-model-invocation: true" not in nonblank:
         errors.append(f"{path}: requires disable-model-invocation: true")
-    if "metadata:" not in nonblank or "  disco-role: operating" not in nonblank:
-        errors.append(f"{path}: requires metadata.disco-role: operating")
+    if "metadata:" not in nonblank or "  ocsid-role: operating" not in nonblank:
+        errors.append(f"{path}: requires metadata.ocsid-role: operating")
 
-    allowed = {expected[0], "disable-model-invocation: true", "metadata:", "  disco-role: operating"}
+    allowed = {expected[0], "disable-model-invocation: true", "metadata:", "  ocsid-role: operating"}
     allowed.update(description_lines)
     unexpected = [line for line in nonblank if line not in allowed]
     if unexpected:

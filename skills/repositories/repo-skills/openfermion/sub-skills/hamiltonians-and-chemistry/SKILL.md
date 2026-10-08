@@ -5,7 +5,7 @@ description: "Build deterministic lattice, jellium, plane-wave, and molecular
   external chemistry work safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
   parent: openfermion
 license: Apache 2.0
 ---

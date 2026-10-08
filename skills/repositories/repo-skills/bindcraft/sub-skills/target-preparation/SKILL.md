@@ -5,7 +5,7 @@ description: "Validate a BindCraft target PDB and construct a target JSON with
   checks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 
@@ -32,7 +32,7 @@ run AF2, ProteinMPNN, PyRosetta, or a design trajectory.
 5. Run the bundled read-only validator:
 
    ```bash
-   python skills/disco/bindcraft/sub-skills/target-preparation/scripts/validate_target.py \
+   python skills/ocsid/bindcraft/sub-skills/target-preparation/scripts/validate_target.py \
      --target-json ./settings_target/my_target.json \
      --pdb ./inputs/my_target.pdb
    ```

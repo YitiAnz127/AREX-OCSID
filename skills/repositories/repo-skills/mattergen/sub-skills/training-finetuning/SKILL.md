@@ -5,7 +5,7 @@ description: "Route MatterGen Hydra base training, CSP training, property
   no-launch validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

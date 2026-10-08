@@ -3,7 +3,7 @@ name: ase-ase-calculators-gpaw
 description: "Configure ASE GPAW calculator adapter settings for ASE workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ase-ase-calculators-gpaw — atomistic-workflows sub-skill

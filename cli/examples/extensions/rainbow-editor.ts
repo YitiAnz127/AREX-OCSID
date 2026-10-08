@@ -1,7 +1,7 @@
 /**
  * Rainbow Editor - highlights "ultrathink" with animated shine effect
  *
- * Usage: disco --extension ./examples/extensions/rainbow-editor.ts
+ * Usage: ocsid --extension ./examples/extensions/rainbow-editor.ts
  */
 
 import { CustomEditor, type ExtensionAPI } from "@arex-skill/disco";
@@ -81,8 +81,8 @@ class RainbowEditor extends CustomEditor {
 	}
 }
 
-export default function (disco: ExtensionAPI) {
-	disco.on("session_start", (_event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("session_start", (_event, ctx) => {
 		ctx.ui.setEditorComponent((tui, theme, kb) => new RainbowEditor(tui, theme, kb));
 	});
 }

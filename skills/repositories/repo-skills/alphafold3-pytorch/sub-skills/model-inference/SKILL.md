@@ -5,7 +5,7 @@ description: "Construct bounded AlphaFold 3 models, choose forward loss or
   distogram, and ranking outputs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

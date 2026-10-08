@@ -5,7 +5,7 @@ description: "Plan, validate, and adapt standard DeepVariant germline
   RNA-seq data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

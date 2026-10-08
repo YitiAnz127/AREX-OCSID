@@ -43,7 +43,7 @@
 #
 # * ripgrep is present because tools-manager.getToolPath falls back to PATH; fd
 #   is found either as `fd` or via `systemBinaryNames: ["fd", "fdfind"]`.
-#   vitest.config.ts forces DISCO_OFFLINE=1, so neither tool can ever be
+#   vitest.config.ts forces OCSID_OFFLINE=1, so neither tool can ever be
 #   downloaded at test time — they must already be on PATH.
 #
 # * python3 is used by parts of the repo's tooling that the tests shell out to.

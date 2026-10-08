@@ -3,7 +3,7 @@ name: transformers-bio-nlp
 description: "&quot;HuggingFace Transformers with biomedical LMs (BioBERT, PubMedBERT, BioGPT, BioMedLM) for scientific NLP: NER (genes, diseases, chemicals), relation extraction, QA, text classifica"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # transformers-bio-nlp — sciagent-scientific-computing sub-skill

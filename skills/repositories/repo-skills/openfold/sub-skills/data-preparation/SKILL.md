@@ -4,7 +4,7 @@ description: "Prepare and validate OpenFold FASTA, mmCIF, MSA, alignment DB,
   cache, duplicate-chain, and cluster-file inputs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

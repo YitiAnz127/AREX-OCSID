@@ -3,7 +3,7 @@ name: pharmkg
 description: "Query the PharmKG knowledge graph (180k entities, 39 relation types, >1M triples)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pharmkg — drug-knowledgebase sub-skill

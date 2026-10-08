@@ -3,7 +3,7 @@ name: neurokit2
 description: "&quot;Python toolkit for neurophysiological signal processing: ECG (HR, HRV, R-peaks), EEG (complexity, PSD), EMG (activation onset), EDA/GSR (SCR decomposition), PPG, and RSP."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # neurokit2 — sciagent-scientific-computing sub-skill

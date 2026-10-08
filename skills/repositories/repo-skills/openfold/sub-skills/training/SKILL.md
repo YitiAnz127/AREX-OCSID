@@ -4,7 +4,7 @@ description: "Plan OpenFold training, fine-tuning, validation, distillation,
   checkpoint, DeepSpeed, and distributed commands safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

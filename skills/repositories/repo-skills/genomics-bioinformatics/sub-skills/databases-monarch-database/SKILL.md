@@ -3,7 +3,7 @@ name: databases-monarch-database
 description: "&quot;Monarch Initiative knowledge graph REST API for disease-gene-phenotype associations and cross-species orthology."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-monarch-database — genomics-bioinformatics sub-skill

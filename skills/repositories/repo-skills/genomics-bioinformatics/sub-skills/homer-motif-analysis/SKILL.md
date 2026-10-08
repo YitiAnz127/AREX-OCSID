@@ -3,7 +3,7 @@ name: homer-motif-analysis
 description: "&quot;De novo and known TF motif enrichment in ChIP-seq/ATAC-seq peaks via HOMER."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # homer-motif-analysis — genomics-bioinformatics sub-skill

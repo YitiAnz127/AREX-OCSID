@@ -3,7 +3,7 @@ name: repurposing_hub
 description: "Query the Broad Institute Drug Repurposing Hub (~6,800 compounds)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # repurposing_hub — drug-repurposing sub-skill

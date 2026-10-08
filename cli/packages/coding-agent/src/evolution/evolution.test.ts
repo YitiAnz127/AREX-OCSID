@@ -44,7 +44,7 @@ describe("propose-only proposal generation", () => {
 			evidence: baseEvidence,
 			generatedAt: "2026-01-01T00:00:00Z",
 		});
-		expect(p.schema).toBe("disco.evolution-proposal.v1");
+		expect(p.schema).toBe("ocsid.evolution-proposal.v1");
 		expect(p.appliedToLiveTree).toBe(false);
 		expect(p.evidence.empirical).toBe(false); // default: not an empirical claim
 		expect(p.plan.length).toBe(2);

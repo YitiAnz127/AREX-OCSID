@@ -3,7 +3,7 @@ name: torch-geometric-graph-neural-networks
 description: "&quot;PyTorch Geometric (PyG) for graph neural networks: node/graph classification, link prediction with GCN, GAT, GraphSAGE, GIN."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # torch-geometric-graph-neural-networks — sciagent-scientific-computing sub-skill

@@ -3,7 +3,7 @@ name: benchling-integration
 description: "&quot;Benchling R&D Python SDK: CRUD on registry entities (DNA, RNA, proteins, custom), inventory, ELN, workflow automation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # benchling-integration — lab-automation sub-skill

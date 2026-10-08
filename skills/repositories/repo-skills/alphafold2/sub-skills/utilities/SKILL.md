@@ -5,7 +5,7 @@ description: "Use alphafold2_pytorch utilities to validate and transform protein
   alignments, and structure-quality metrics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

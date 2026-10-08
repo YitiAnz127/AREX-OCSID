@@ -2,7 +2,7 @@ import { visibleWidth } from "@earendil-works/pi-tui";
 import { beforeAll, describe, expect, it } from "vitest";
 import type { AgentSession } from "../src/core/agent-session.ts";
 import type { ReadonlyFooterDataProvider } from "../src/core/footer-data-provider.ts";
-import type { DiscoAgentMode } from "../src/disco/modes/types.ts";
+import type { OcsidAgentMode } from "../src/ocsid/modes/types.ts";
 import { FooterComponent, formatCwdForFooter } from "../src/modes/interactive/components/footer.ts";
 import { initTheme } from "../src/modes/interactive/theme/theme.ts";
 import { stripAnsi } from "../src/utils/ansi.ts";
@@ -19,7 +19,7 @@ function createSession(options: {
 	sessionName: string;
 	modelId?: string;
 	provider?: string;
-	discoMode?: DiscoAgentMode;
+	ocsidMode?: OcsidAgentMode;
 	reasoning?: boolean;
 	thinkingLevel?: string;
 	usage?: AssistantUsage;
@@ -78,7 +78,7 @@ function createSession(options: {
 			getEntries: () => entries,
 			getSessionName: () => options.sessionName,
 			getCwd: () => "/tmp/project",
-			getDiscoMode: () => options.discoMode ?? "researcher",
+			getOcsidMode: () => options.ocsidMode ?? "researcher",
 		},
 		getContextUsage: () => ({ contextWindow: 200_000, percent: 12.3 }),
 		modelRuntime: {
@@ -157,10 +157,10 @@ describe("FooterComponent width handling", () => {
 	it.each([
 		["creator", "Creator"],
 		["researcher", "Researcher"],
-	] as const)("shows the %s mode after the usage stats", (discoMode, label) => {
+	] as const)("shows the %s mode after the usage stats", (ocsidMode, label) => {
 		const session = createSession({
 			sessionName: "",
-			discoMode,
+			ocsidMode,
 			usage: {
 				input: 12_000,
 				output: 3_400,

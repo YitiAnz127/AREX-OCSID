@@ -5,7 +5,7 @@ description: "Use Chemprop 2.2.3 for molecular property prediction: CLI
   reaction/atom-bond tasks, uncertainty, hpopt, and conversion workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

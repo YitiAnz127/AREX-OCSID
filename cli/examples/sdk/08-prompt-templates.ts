@@ -36,7 +36,7 @@ const loader = new DefaultResourceLoader({
 });
 await loader.reload();
 
-// Discover templates from cwd/.disco/prompts/ and ~/.disco/agent/prompts/
+// Discover templates from cwd/.ocsid/prompts/ and ~/.ocsid/agent/prompts/
 const discovered = loader.getPrompts().prompts;
 console.log("Discovered prompt templates:");
 for (const template of discovered) {

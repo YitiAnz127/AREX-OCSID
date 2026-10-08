@@ -3,7 +3,7 @@ name: stitch
 description: "Query the STITCH chemical-protein interaction database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # stitch — drug-dti sub-skill

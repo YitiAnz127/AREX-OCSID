@@ -5,7 +5,7 @@ description: "Guides PyHealth 2.0 healthcare-AI workflows for clinical datasets,
   mapping, and multimodal data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

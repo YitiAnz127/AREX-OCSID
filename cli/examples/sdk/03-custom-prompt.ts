@@ -20,7 +20,7 @@ const loader1 = new DefaultResourceLoader({
 	agentDir,
 	systemPromptOverride: () => `You are a helpful assistant that speaks like a pirate.
 Always end responses with "Arrr!"`,
-	// Needed to avoid DefaultResourceLoader appending APPEND_SYSTEM.md from ~/.disco/agent or <cwd>/.disco.
+	// Needed to avoid DefaultResourceLoader appending APPEND_SYSTEM.md from ~/.ocsid/agent or <cwd>/.ocsid.
 	appendSystemPromptOverride: () => [],
 });
 await loader1.reload();

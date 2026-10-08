@@ -3,7 +3,7 @@ name: dpdata-minimizer
 description: "Minimize geometries with dpdata minimizer plugins via System.minimize(), including how minimizers relate to drivers (ASEMinimizer needs a dpdata Driver) and how to list supported m"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dpdata-minimizer — compchem-tools sub-skill

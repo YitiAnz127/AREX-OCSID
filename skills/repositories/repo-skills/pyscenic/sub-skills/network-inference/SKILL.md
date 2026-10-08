@@ -4,7 +4,7 @@ description: "Use pySCENIC and Arboreto to infer co-expression adjacencies, add
   TF-target correlations, and build TF-target modules before motif pruning."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

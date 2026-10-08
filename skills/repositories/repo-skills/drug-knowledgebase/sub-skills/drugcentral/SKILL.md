@@ -3,7 +3,7 @@ name: drugcentral
 description: "Query the DrugCentral drug pharmacology database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drugcentral — drug-knowledgebase sub-skill

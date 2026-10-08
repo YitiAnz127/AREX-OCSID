@@ -5,7 +5,7 @@ description: "Use Biotite to read, write, validate, and convert local sequence,
   AtomArray, and AtomArrayStack objects."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

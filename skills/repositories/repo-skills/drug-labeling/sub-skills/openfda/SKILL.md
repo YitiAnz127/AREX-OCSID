@@ -3,7 +3,7 @@ name: openfda
 description: "Query FDA drug labeling data via openFDA."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # openfda — drug-labeling sub-skill

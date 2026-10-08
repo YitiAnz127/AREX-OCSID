@@ -1,15 +1,15 @@
 # Extension Examples
 
-Example extensions for disco-coding-agent.
+Example extensions for ocsid-coding-agent.
 
 ## Usage
 
 ```bash
 # Load an extension with --extension flag
-disco --extension examples/extensions/permission-gate.ts
+ocsid --extension examples/extensions/permission-gate.ts
 
 # Or copy to extensions directory for auto-discovery
-cp permission-gate.ts ~/.disco/agent/extensions/
+cp permission-gate.ts ~/.ocsid/agent/extensions/
 ```
 
 ## Examples
@@ -61,7 +61,7 @@ cp permission-gate.ts ~/.disco/agent/extensions/
 | `model-status.ts` | Shows model changes in status bar via `model_select` hook |
 | `snake.ts` | Snake game with custom UI, keyboard handling, and session persistence |
 | `tic-tac-toe.ts` | Tic-tac-toe vs the agent with `executionMode: "sequential"` tools to prevent race conditions on shared cursor state |
-| `send-user-message.ts` | Demonstrates `disco.sendUserMessage()` for sending user messages from extensions |
+| `send-user-message.ts` | Demonstrates `ocsid.sendUserMessage()` for sending user messages from extensions |
 | `timed-confirm.ts` | Demonstrates AbortSignal for auto-dismissing `ctx.ui.confirm()` and `ctx.ui.select()` dialogs |
 | `rpc-demo.ts` | Exercises all RPC-supported extension UI methods; pair with [`examples/rpc-extension-ui.ts`](../rpc-extension-ui.ts) |
 | `modal-editor.ts` | Custom vim-like modal editor via `ctx.ui.setEditorComponent()` |
@@ -100,7 +100,7 @@ cp permission-gate.ts ~/.disco/agent/extensions/
 
 | Extension | Description |
 |-----------|-------------|
-| `mac-system-theme.ts` | Syncs disco theme with macOS dark/light mode |
+| `mac-system-theme.ts` | Syncs ocsid theme with macOS dark/light mode |
 
 ### Resources
 
@@ -114,7 +114,7 @@ cp permission-gate.ts ~/.disco/agent/extensions/
 |-----------|-------------|
 | `message-renderer.ts` | Custom message rendering with colors and expandable details via `registerMessageRenderer` |
 | `entry-renderer.ts` | TUI-only session entry rendering via `appendEntry` and `registerEntryRenderer` |
-| `event-bus.ts` | Inter-extension communication via `disco.events` |
+| `event-bus.ts` | Inter-extension communication via `ocsid.events` |
 
 ### Session Metadata
 
@@ -142,12 +142,12 @@ cp permission-gate.ts ~/.disco/agent/extensions/
 See [docs/extensions.md](../../docs/extensions.md) for full documentation.
 
 ```typescript
-import type { ExtensionAPI } from "@arex-skill/disco";
+import type { ExtensionAPI } from "ocsid";
 import { Type } from "typebox";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
   // Subscribe to lifecycle events
-  disco.on("tool_call", async (event, ctx) => {
+  ocsid.on("tool_call", async (event, ctx) => {
     if (event.toolName === "bash" && event.input.command?.includes("rm -rf")) {
       const ok = await ctx.ui.confirm("Dangerous!", "Allow rm -rf?");
       if (!ok) return { block: true, reason: "Blocked by user" };
@@ -155,7 +155,7 @@ export default function (disco: ExtensionAPI) {
   });
 
   // Register custom tools
-  disco.registerTool({
+  ocsid.registerTool({
     name: "greet",
     label: "Greeting",
     description: "Generate a greeting",
@@ -171,7 +171,7 @@ export default function (disco: ExtensionAPI) {
   });
 
   // Register commands
-  disco.registerCommand("hello", {
+  ocsid.registerCommand("hello", {
     description: "Say hello",
     handler: async (args, ctx) => {
       ctx.ui.notify("Hello!", "info");
@@ -202,7 +202,7 @@ return {
 };
 
 // Reconstruct on session events
-disco.on("session_start", async (_event, ctx) => {
+ocsid.on("session_start", async (_event, ctx) => {
   for (const entry of ctx.sessionManager.getBranch()) {
     if (entry.type === "message" && entry.message.toolName === "my_tool") {
       const details = entry.message.details;

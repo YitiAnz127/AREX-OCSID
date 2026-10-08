@@ -5,7 +5,7 @@ description: "Use for Scanpy sc.pl plotting, figure saving, headless rendering,
   and plotting troubleshooting after analysis outputs already exist in AnnData."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

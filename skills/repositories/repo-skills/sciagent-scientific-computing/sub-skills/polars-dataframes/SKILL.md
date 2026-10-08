@@ -3,7 +3,7 @@ name: polars-dataframes
 description: "Fast in-memory DataFrame with lazy evaluation, parallel execution, Arrow backend."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # polars-dataframes — sciagent-scientific-computing sub-skill

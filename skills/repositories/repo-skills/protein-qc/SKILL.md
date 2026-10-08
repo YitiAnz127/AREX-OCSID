@@ -3,7 +3,7 @@ name: protein-qc
 description: "Quality control metrics and filtering thresholds for protein design."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

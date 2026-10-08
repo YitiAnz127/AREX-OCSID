@@ -4,7 +4,7 @@ description: "Guide Boltz training and retraining through config edits, debug
   launches, resource settings, checkpoints, and training troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

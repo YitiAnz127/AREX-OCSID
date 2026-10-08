@@ -3,7 +3,7 @@ name: cadec
 description: "Query the CADEC (CSIRO Adverse Drug Event Corpus)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # cadec — drug-nlp sub-skill

@@ -5,7 +5,7 @@ description: "Guide OpenFermion workflows for fermionic and qubit operator
   sparse analysis, measurements, and resource-oriented utilities."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

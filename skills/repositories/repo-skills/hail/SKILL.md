@@ -5,7 +5,7 @@ description: "Use Hail for scalable genomic Tables, MatrixTables,
   troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

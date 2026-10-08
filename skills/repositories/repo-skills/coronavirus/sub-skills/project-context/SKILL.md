@@ -4,7 +4,7 @@ description: "Route potential-target and publication notes for the coronavirus
   repository while preserving scientific evidence, hypotheses, and structure
   provenance."
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 disable-model-invocation: true
 license: CC BY 4.0
 ---

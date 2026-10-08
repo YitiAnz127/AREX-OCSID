@@ -5,7 +5,7 @@ description: "Plan and troubleshoot DGL-LifeSci WLN reaction center prediction
   candidate bond files, and rexgen-direct style commands."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

@@ -3,7 +3,7 @@ name: rdkit-cheminformatics
 description: "&quot;Cheminformatics toolkit for molecular analysis and virtual screening: SMILES/SDF parsing, descriptors (MW, LogP, TPSA), fingerprints (Morgan/ECFP, MACCS), Tanimoto similarity, SMA"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rdkit-cheminformatics — structural-biology-drug-discovery sub-skill

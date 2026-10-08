@@ -3,7 +3,7 @@ name: system-preparation
 description: "Prepare, minimize, equilibrate, serialize, and safely continue
   coronavirus molecular systems with OpenMM."
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 disable-model-invocation: true
 license: CC BY 4.0
 ---

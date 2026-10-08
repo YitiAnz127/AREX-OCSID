@@ -4,7 +4,7 @@ description: "Routes pyCirclize matrix, table, BED, stacked-bar, radar, from-to,
   chord, and radar-chart data preparation workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

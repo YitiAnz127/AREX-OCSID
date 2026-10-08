@@ -71,7 +71,7 @@ Use the bundled builder when a command should be reviewed or recorded without
 execution:
 
 ```bash
-python skills/disco/bindcraft/sub-skills/design-pipeline/scripts/build_bindcraft_command.py \
+python skills/ocsid/bindcraft/sub-skills/design-pipeline/scripts/build_bindcraft_command.py \
   --mode slurm --settings ./settings_target/my_target.json \
   --filters ./settings_filters/default_filters.json \
   --advanced ./settings_advanced/default_4stage_multimer_hardtarget.json \

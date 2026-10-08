@@ -14,7 +14,7 @@ describe("assertExtractedTreeContained", () => {
 	let root: string;
 
 	beforeEach(() => {
-		root = mkdtempSync(join(tmpdir(), "disco-extract-"));
+		root = mkdtempSync(join(tmpdir(), "ocsid-extract-"));
 	});
 
 	afterEach(() => {
@@ -44,7 +44,7 @@ describe("assertExtractedTreeContained", () => {
 	});
 
 	it("rejects a directory symlink pointing outside the tree", () => {
-		const outside = mkdtempSync(join(tmpdir(), "disco-outside-"));
+		const outside = mkdtempSync(join(tmpdir(), "ocsid-outside-"));
 		try {
 			writeFileSync(join(outside, "fd.exe"), "attacker");
 			try {

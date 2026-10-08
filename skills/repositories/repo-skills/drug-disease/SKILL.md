@@ -3,7 +3,7 @@ name: drug-disease
 description: "Use drug-disease for drug discovery and development workflows: drug_disease."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

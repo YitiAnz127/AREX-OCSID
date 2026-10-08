@@ -3,7 +3,7 @@ name: tarkg
 description: "Query canonical TarKG drug-target triplets."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # tarkg — drug-dti sub-skill

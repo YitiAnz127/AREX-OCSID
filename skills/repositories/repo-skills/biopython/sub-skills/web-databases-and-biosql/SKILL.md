@@ -4,7 +4,7 @@ description: "Use Biopython web/database retrieval, offline public-database
   parsers, and optional BioSQL safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

@@ -3,7 +3,7 @@ name: cell-free-expression
 description: "Guidance for cell-free protein synthesis (CFPS) optimization."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

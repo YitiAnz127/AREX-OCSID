@@ -5,14 +5,15 @@ import { compareBaselines, fnv1a, makeRandomEditExecutor } from "./baseline.ts";
 import { makeProposal } from "./propose-only.ts";
 import { structureGrader } from "../audit/structure-grader.ts";
 import type { CaseRecord } from "../audit/types.ts";
+import { OFFICIAL_BENCHMARK_DIR } from "../benchmark/freeze.ts";
 
 const srcEvolution = path.dirname(fileURLToPath(import.meta.url));
 // src/evolution -> repo root is 5 levels up.
 const repoRoot = path.resolve(srcEvolution, "..", "..", "..", "..", "..");
-const benchmarkRoot = path.join(repoRoot, "skills", "tests", "benchmark-v1");
+const benchmarkRoot = path.join(repoRoot, "skills", "tests", OFFICIAL_BENCHMARK_DIR);
 
 function sampleCase(skillId: string, caseId: string, assertions: string[]): CaseRecord {
-	return { skillId, caseId, files: { userRequest: "do it", assertionsText: JSON.stringify({ schema: "disco.usability-case.v1", target_skill_area: "x", target_capability: "y", difficulty: "basic", evidence_basis: [], expected_skill_files: [], assertions }) } };
+	return { skillId, caseId, files: { userRequest: "do it", assertionsText: JSON.stringify({ schema: "ocsid.usability-case.v1", target_skill_area: "x", target_capability: "y", difficulty: "basic", evidence_basis: [], expected_skill_files: [], assertions }) } };
 }
 
 describe("equal-budget baselines (B0/B1/B2)", () => {

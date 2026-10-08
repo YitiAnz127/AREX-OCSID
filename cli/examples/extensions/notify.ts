@@ -1,7 +1,7 @@
 /**
- * DisCo Notify Extension
+ * OCSID Notify Extension
  *
- * Sends a native terminal notification when DisCo agent is done and waiting for input.
+ * Sends a native terminal notification when OCSID agent is done and waiting for input.
  * Supports multiple terminal protocols:
  * - OSC 777: Ghostty, iTerm2, WezTerm, rxvt-unicode
  * - OSC 99: Kitty
@@ -48,8 +48,8 @@ function notify(title: string, body: string): void {
 	}
 }
 
-export default function (disco: ExtensionAPI) {
-	disco.on("agent_end", async () => {
-		notify("DisCo", "Ready for input");
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("agent_end", async () => {
+		notify("OCSID", "Ready for input");
 	});
 }

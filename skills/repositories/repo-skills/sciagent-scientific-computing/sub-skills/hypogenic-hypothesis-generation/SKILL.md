@@ -3,7 +3,7 @@ name: hypogenic-hypothesis-generation
 description: "&quot;LLM-driven hypothesis generation/testing on tabular data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # hypogenic-hypothesis-generation — sciagent-scientific-computing sub-skill

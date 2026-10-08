@@ -4,7 +4,7 @@ description: "Author, validate, and debug Chai FASTA input records for proteins,
   ligands, DNA, RNA, modified residues, entity names, and chain naming."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

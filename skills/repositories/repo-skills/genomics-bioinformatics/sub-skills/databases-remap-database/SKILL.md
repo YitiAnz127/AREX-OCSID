@@ -3,7 +3,7 @@ name: databases-remap-database
 description: "&quot;Query ReMap 2022 TF ChIP-seq peak database via REST API and BED downloads."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-remap-database — genomics-bioinformatics sub-skill

@@ -3,7 +3,7 @@ name: drugprot
 description: "Sub-skill drugprot for drug-nlp."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drugprot — drug-nlp sub-skill

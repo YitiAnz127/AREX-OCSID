@@ -5,7 +5,7 @@ description: "Combine AnnData objects in memory or on disk with concat,
   handling, and lazy collection guidance."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

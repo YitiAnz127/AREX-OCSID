@@ -3,7 +3,7 @@ name: variant-plink2-gwas-analysis
 description: "&quot;GWAS and population genetics tool."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # variant-plink2-gwas-analysis — genomics-bioinformatics sub-skill

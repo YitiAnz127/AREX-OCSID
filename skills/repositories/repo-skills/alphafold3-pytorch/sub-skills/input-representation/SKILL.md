@@ -4,7 +4,7 @@ description: "Build, validate, batch, serialize, and export AlphaFold 3 molecule
   and atom inputs without running model inference."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

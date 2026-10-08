@@ -1,7 +1,7 @@
 /**
  * Minimal Kimi deferred-tool loading demo.
  *
- *   disco -e ./kimi-deferred-tools.ts
+ *   ocsid -e ./kimi-deferred-tools.ts
  *    example prompt: Use the available tools to calculate 100 + 500. Do not calculate it yourself.
  */
 
@@ -12,8 +12,8 @@ function calculate(_expr: string): string {
 	return "42";
 }
 
-export default function (disco: ExtensionAPI): void {
-	disco.registerTool({
+export default function (ocsid: ExtensionAPI): void {
+	ocsid.registerTool({
 		name: "Calculator",
 		label: "Calculator",
 		description: "Evaluate a simple arithmetic expression.",
@@ -28,7 +28,7 @@ export default function (disco: ExtensionAPI): void {
 		},
 	});
 
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "tool_search",
 		label: "Tool Search",
 		description: "Find and activate tools for a capability.",
@@ -44,9 +44,9 @@ export default function (disco: ExtensionAPI): void {
 				};
 			}
 
-			const active = disco.getActiveTools();
+			const active = ocsid.getActiveTools();
 			const added = active.includes("Calculator") ? [] : ["Calculator"];
-			if (added.length > 0) disco.setActiveTools([...active, ...added]);
+			if (added.length > 0) ocsid.setActiveTools([...active, ...added]);
 
 			return {
 				content: [{ type: "text", text: "Success. Found 1 matching tool(s)" }],
@@ -55,7 +55,7 @@ export default function (disco: ExtensionAPI): void {
 		},
 	});
 
-	disco.on("session_start", () => {
-		disco.setActiveTools(["tool_search"]);
+	ocsid.on("session_start", () => {
+		ocsid.setActiveTools(["tool_search"]);
 	});
 }

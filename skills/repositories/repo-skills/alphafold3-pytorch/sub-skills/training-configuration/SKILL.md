@@ -5,7 +5,7 @@ description: "Configure AlphaFold 3 training datasets, Trainer/DataLoader
   diagnostics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

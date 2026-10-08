@@ -4,7 +4,7 @@ description: "Construct, batch, split, mask, validate, and troubleshoot
   TorchDrug graph, molecule, protein, and dataset data objects."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

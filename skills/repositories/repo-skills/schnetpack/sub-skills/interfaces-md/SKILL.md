@@ -5,7 +5,7 @@ description: "Run trained SchNetPack models through ASE calculators, ensemble
   interface guidance."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

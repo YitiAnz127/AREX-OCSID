@@ -1,6 +1,6 @@
 # 贡献指南
 
-AREX-Skill 把 skills 视为未来 agent 可能加载并执行的操作指导。好的贡献应
+OCSID 把 skills 视为未来 agent 可能加载并执行的操作指导。好的贡献应
 基于证据、容易审计，并清楚说明 skill 是如何生成的。
 
 ## 贡献路径
@@ -10,9 +10,9 @@ AREX-Skill 把 skills 视为未来 agent 可能加载并执行的操作指导。
 - `skills/repositories/repo-skills/<skill-id>/` 下新的 generated repo skills；
 - 对已有 repo skills 的优化；
 - router、catalog、provenance 和文档更新；
-- `cli/packages/coding-agent/src/disco/skills/` 下的 bundled workflow
+- `cli/packages/coding-agent/src/ocsid/skills/` 下的 bundled workflow
   skills；
-- `cli/` 下的 DisCo CLI 源码。
+- `cli/` 下的 OCSID CLI 源码。
 
 ## 新增 Repo Skills
 
@@ -86,7 +86,7 @@ find skills/repositories/repo-skills/<skill-id> -type f | sort
 - 用于生产 skill 的 model 和 provider；
 - 使用的 reasoning 或 thinking level，例如 `low`、`medium`、`high`，或对应
   provider 的等价设置；
-- skill 是由 DisCo、复制到其他 agent 的 workflow skills，还是人工编辑产生；
+- skill 是由 OCSID、复制到其他 agent 的 workflow skills，还是人工编辑产生；
 - 已运行的 verification commands 或 review steps；
 - 已知缺口、跳过的检查、不可用 credentials 或环境限制；
 - 当 routing 变化时，确认已经更新同级的
@@ -97,9 +97,9 @@ review、refinement 或 verification。
 
 ## 文档变更
 
-根 README、安装指南、架构说明、DisCo meta skills 说明、repository-skill 刷新指南、
+根 README、安装指南、架构说明、OCSID meta skills 说明、repository-skill 刷新指南、
 贡献指南和
-AREX-Skill Library 说明都有中英文版本。修改其中一份时，应在同一个变更中同步
+OCSID Library 说明都有中英文版本。修改其中一份时，应在同一个变更中同步
 另一种语言。repository catalog 是一个共享数据页，覆盖 1,000 个 root 和
 2,209 个 memberships；中文 README 中的摘要和链接必须与它保持一致。
 
@@ -126,11 +126,11 @@ PY
 
 ## Workflow Skill 变更
 
-`cli/packages/coding-agent/src/disco/skills/` 是随 DisCo 打包、也可复制到
+`cli/packages/coding-agent/src/ocsid/skills/` 是随 OCSID 打包、也可复制到
 external agents 的 workflow skills 的唯一 source of truth。portable 指令应
-在没有 DisCo-only extensions 的情况下也能读懂。
+在没有 OCSID-only extensions 的情况下也能读懂。
 哪些 Creator-only 目录可以复制，以及为什么不能复制 operating router 或
-repository collection，见 [DisCo Meta Skills 专题文档](docs/disco-meta-skills.zh.md)。
+repository collection，见 [OCSID Meta Skills 专题文档](docs/ocsid-meta-skills.zh.md)。
 
 更新 workflow skills 时：
 
@@ -142,17 +142,17 @@ repository collection，见 [DisCo Meta Skills 专题文档](docs/disco-meta-ski
   或复用价值不确定的 graph 默认进入受信任项目的 `.agents/skills/`；只有具备
   跨项目复用证据时才能选择 managed scope，并且一个 graph 不能跨 scope 拆分。
 - Repository graphs 必须继续走
-  `~/.disco/agent/skills/repositories/repo-skills/` 专用导入路径，并在同一个事务中重建同级
+  `~/.ocsid/agent/skills/repositories/repo-skills/` 专用导入路径，并在同一个事务中重建同级
   router；不能把 repo routing metadata 交给通用 graph importer。
 - 当名称、路径、默认值或 workflow 边界变化时，更新
-  [workflow README](cli/packages/coding-agent/src/disco/skills/README.md)。
+  [workflow README](cli/packages/coding-agent/src/ocsid/skills/README.md)。
 - 同时更新 generated templates 和对应 generator。特别是
   `update_repo_skills_router.mjs` 生成的 router 行为，不能只修改一份已生成的
   Markdown 输出。
 
-## DisCo Source 变更
+## OCSID Source 变更
 
-DisCo CLI 源码位于 `cli/`。
+OCSID CLI 源码位于 `cli/`。
 
 常用检查：
 
@@ -173,7 +173,7 @@ repository library 的 router 重建应显式使用 canonical collection 和 sib
 router：
 
 ```bash
-node cli/packages/coding-agent/src/disco/skills/verify-repo-skill/scripts/update_repo_skills_router.mjs \
+node cli/packages/coding-agent/src/ocsid/skills/verify-repo-skill/scripts/update_repo_skills_router.mjs \
   --library-root skills/repositories
 ```
 

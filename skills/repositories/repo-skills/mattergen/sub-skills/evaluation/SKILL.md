@@ -6,7 +6,7 @@ description: "Evaluate MatterGen crystal structures with MatterSim or
   relaxed-structure results."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

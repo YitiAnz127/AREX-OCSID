@@ -41,4 +41,4 @@ When a task spans all three, handle them in that order: author/update the skill,
 
 - `docs/security-report.*` and `docs/images/*.png` are generated outputs; use them as output examples, not as primary policy.
 - The repository policy references diagram-generation tooling, but this snapshot did not include the generator script. Do not invent diagrams; check the target checkout and record the blocker if the required tool is absent.
-- The top-level `skills/` directory is the canonical skill collection. Generated DisCo repo-skill output under `skills/disco/` and review artifacts under `skills/tests/` are construction outputs, not canonical collection entries.
+- The top-level `skills/` directory is the canonical skill collection. Generated OCSID repo-skill output under `skills/ocsid/` and review artifacts under `skills/tests/` are construction outputs, not canonical collection entries.

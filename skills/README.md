@@ -73,6 +73,6 @@ before redistributing either group.
 
 ## CLI boundary
 
-The CLI's bundled router under `cli/packages/coding-agent/src/disco/skills/`
+The CLI's bundled router under `cli/packages/coding-agent/src/ocsid/skills/`
 is deliberately empty and contains only this taxonomy. The live collection in
 this directory is not part of the `ocsid` npm package.

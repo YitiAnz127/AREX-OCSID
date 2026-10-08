@@ -1,10 +1,10 @@
 # Compaction & Branch Summarization
 
-LLMs have limited context windows. When conversations grow too long, disco uses compaction to summarize older content while preserving recent work. This page covers both auto-compaction and branch summarization.
+LLMs have limited context windows. When conversations grow too long, ocsid uses compaction to summarize older content while preserving recent work. This page covers both auto-compaction and branch summarization.
 
 > **Upstream source reference:** The links below show the Pi v0.83.0 baseline
-> from which DisCo's internal coding-agent implementation was forked. The
-> installed `@arex-skill/disco` types and behavior are authoritative.
+> from which OCSID's internal coding-agent implementation was forked. The
+> installed `ocsid` types and behavior are authoritative.
 
 **Upstream source files** ([pi](https://github.com/earendil-works/pi)):
 - [`packages/coding-agent/src/core/compaction/compaction.ts`](https://github.com/earendil-works/pi/blob/v0.83.0/packages/coding-agent/src/core/compaction/compaction.ts) - Auto-compaction logic
@@ -13,11 +13,11 @@ LLMs have limited context windows. When conversations grow too long, disco uses 
 - [`packages/coding-agent/src/core/session-manager.ts`](https://github.com/earendil-works/pi/blob/v0.83.0/packages/coding-agent/src/core/session-manager.ts) - Entry types (`CompactionEntry`, `BranchSummaryEntry`)
 - [`packages/coding-agent/src/core/extensions/types.ts`](https://github.com/earendil-works/pi/blob/v0.83.0/packages/coding-agent/src/core/extensions/types.ts) - Extension event types
 
-For TypeScript definitions in your project, inspect `node_modules/@arex-skill/disco/dist/`.
+For TypeScript definitions in your project, inspect `node_modules/ocsid/dist/`.
 
 ## Overview
 
-DisCo has two summarization mechanisms:
+OCSID has two summarization mechanisms:
 
 | Mechanism | Trigger | Purpose |
 |-----------|---------|---------|
@@ -36,13 +36,13 @@ Auto-compaction triggers when:
 contextTokens > contextWindow - reserveTokens
 ```
 
-By default, `reserveTokens` is 16384 tokens (configurable in `~/.disco/agent/settings.json` or `<project-dir>/.disco/settings.json`). This leaves room for the LLM's response.
+By default, `reserveTokens` is 16384 tokens (configurable in `~/.ocsid/agent/settings.json` or `<project-dir>/.ocsid/settings.json`). This leaves room for the LLM's response.
 
 You can also trigger manually with `/compact [instructions]`, where optional instructions focus the summary.
 
 ### How It Works
 
-1. **Find cut point**: Walk backwards from newest message, accumulating token estimates until `keepRecentTokens` (default 20k, configurable in `~/.disco/agent/settings.json` or `<project-dir>/.disco/settings.json`) is reached
+1. **Find cut point**: Walk backwards from newest message, accumulating token estimates until `keepRecentTokens` (default 20k, configurable in `~/.ocsid/agent/settings.json` or `<project-dir>/.ocsid/settings.json`) is reached
 2. **Extract messages**: Collect messages from the previous kept boundary (or session start) up to the cut point
 3. **Generate summary**: Call LLM to summarize with structured format, passing the previous summary as iterative context when present
 4. **Append entry**: Save `CompactionEntry` with summary and `firstKeptEntryId`
@@ -80,7 +80,7 @@ What the LLM sees:
     prompt   from cmp          messages from firstKeptEntryId
 ```
 
-On repeated compactions, the summarized span starts at the previous compaction's kept boundary (`firstKeptEntryId`), not at the compaction entry itself, falling back to the entry after the previous compaction if that kept entry cannot be found in the path. This preserves messages that survived the earlier compaction by including them in the next summarization pass as well. DisCo also recalculates `tokensBefore` from the rebuilt session context before writing the new `CompactionEntry`, so the token count reflects the actual pre-compaction context being replaced.
+On repeated compactions, the summarized span starts at the previous compaction's kept boundary (`firstKeptEntryId`), not at the compaction entry itself, falling back to the entry after the previous compaction if that kept entry cannot be found in the path. This preserves messages that survived the earlier compaction by including them in the next summarization pass as well. OCSID also recalculates `tokensBefore` from the rebuilt session context before writing the new `CompactionEntry`, so the token count reflects the actual pre-compaction context being replaced.
 
 ### Split Turns
 
@@ -106,7 +106,7 @@ Split turn (one huge turn exceeds budget):
   turnPrefixMessages = [usr, ass, tool, ass, tool, tool]
 ```
 
-For split turns, disco generates two summaries and merges them:
+For split turns, ocsid generates two summaries and merges them:
 1. **History summary**: Previous context (if any)
 2. **Turn prefix summary**: The early part of the split turn
 
@@ -153,7 +153,7 @@ See [`prepareCompaction()`](https://github.com/earendil-works/pi/blob/v0.83.0/pa
 
 ### When It Triggers
 
-When you use `/tree` to navigate to a different branch, disco offers to summarize the work you're leaving. This injects context from the left branch into the new branch.
+When you use `/tree` to navigate to a different branch, ocsid offers to summarize the work you're leaving. This injects context from the left branch into the new branch.
 
 ### How It Works
 
@@ -182,7 +182,7 @@ After navigation with summary:
 
 ### Cumulative File Tracking
 
-Both compaction and branch summarization track files cumulatively. When generating a summary, disco extracts file operations from:
+Both compaction and branch summarization track files cumulatively. When generating a summary, ocsid extracts file operations from:
 - Tool calls in the messages being summarized
 - Previous compaction or branch summary `details` (if any)
 
@@ -281,7 +281,7 @@ Extensions can intercept and customize both compaction and branch summarization.
 Fired before auto-compaction or `/compact`. Can cancel or provide custom summary. See `SessionBeforeCompactEvent` and `CompactionPreparation` in the types file.
 
 ```typescript
-disco.on("session_before_compact", async (event, ctx) => {
+ocsid.on("session_before_compact", async (event, ctx) => {
   const { preparation, branchEntries, customInstructions, reason, willRetry, signal } = event;
 
   // preparation.messagesToSummarize - messages to summarize
@@ -318,9 +318,9 @@ disco.on("session_before_compact", async (event, ctx) => {
 To generate a summary with your own model, convert messages to text using `serializeConversation`:
 
 ```typescript
-import { convertToLlm, serializeConversation } from "@arex-skill/disco";
+import { convertToLlm, serializeConversation } from "ocsid";
 
-disco.on("session_before_compact", async (event, ctx) => {
+ocsid.on("session_before_compact", async (event, ctx) => {
   const { preparation } = event;
   
   // Convert AgentMessage[] to Message[], then serialize to text
@@ -355,7 +355,7 @@ See [custom-compaction.ts](../examples/extensions/custom-compaction.ts) for a co
 Fired before `/tree` navigation. Always fires regardless of whether user chose to summarize. Can cancel navigation or provide custom summary.
 
 ```typescript
-disco.on("session_before_tree", async (event, ctx) => {
+ocsid.on("session_before_tree", async (event, ctx) => {
   const { preparation, signal } = event;
 
   // preparation.targetId - where we're navigating to
@@ -384,7 +384,7 @@ See `SessionBeforeTreeEvent` and `TreePreparation` in the types file.
 
 ## Settings
 
-Configure compaction in `~/.disco/agent/settings.json` or `<project-dir>/.disco/settings.json`:
+Configure compaction in `~/.ocsid/agent/settings.json` or `<project-dir>/.ocsid/settings.json`:
 
 ```json
 {

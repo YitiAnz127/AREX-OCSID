@@ -1,5 +1,5 @@
 import { cp, mkdir, readdir, rm } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const packageRoot = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -8,7 +8,11 @@ const distRoot = join(packageRoot, "dist");
 
 async function copyDirectory(source, destination) {
   await mkdir(dirname(destination), { recursive: true });
-  await cp(source, destination, { recursive: true });
+  await cp(source, destination, {
+    recursive: true,
+    // Verification caches are not runtime assets and may hold Windows locks.
+    filter: (path) => ![".pytest_cache", "__pycache__"].includes(basename(path)) && !path.endsWith(".pyc"),
+  });
 }
 
 async function copyFiles(sourceDirectory, destinationDirectory, predicate) {
@@ -43,10 +47,10 @@ await copyDirectory(
   join(distRoot, "core", "export-html", "vendor"),
 );
 
-const discoSkills = join(sourceRoot, "disco", "skills");
+const ocsidSkills = join(sourceRoot, "ocsid", "skills");
 try {
-  await rm(join(distRoot, "disco-resources"), { recursive: true, force: true });
-  await copyDirectory(discoSkills, join(distRoot, "disco-resources", "skills"));
+  await rm(join(distRoot, "ocsid-resources"), { recursive: true, force: true });
+  await copyDirectory(ocsidSkills, join(distRoot, "ocsid-resources", "skills"));
 } catch (error) {
   if (error?.code !== "ENOENT") throw error;
 }

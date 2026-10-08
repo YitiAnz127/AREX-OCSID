@@ -14,8 +14,8 @@ import type { Readable } from "node:stream";
 import crossSpawn from "cross-spawn";
 
 const EXIT_STDIO_GRACE_MS = 100;
-const DEFAULT_GIT_COMMITTER_NAME = "DisCo";
-const DEFAULT_GIT_COMMITTER_EMAIL = "disco@localhost";
+const DEFAULT_GIT_COMMITTER_NAME = "OCSID";
+const DEFAULT_GIT_COMMITTER_EMAIL = "ocsid@localhost";
 
 /**
  * Git records reflogs during clone/fetch. Supplying a local fallback identity

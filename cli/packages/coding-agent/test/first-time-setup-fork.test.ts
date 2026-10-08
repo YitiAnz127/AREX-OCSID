@@ -7,29 +7,29 @@ vi.mock("../src/config.ts", async (importOriginal) => {
 	const actual = await importOriginal();
 	return {
 		...(actual as Record<string, unknown>),
-		PACKAGE_NAME: "@example/disco-fork",
+		PACKAGE_NAME: "@example/ocsid-fork",
 	};
 });
 
 import { shouldRunFirstTimeSetup } from "../src/cli/startup-ui.ts";
 
 describe("shouldRunFirstTimeSetup in forked distributions", () => {
-	const originalDiscoExperimental = process.env.DISCO_EXPERIMENTAL;
+	const originalOcsidExperimental = process.env.OCSID_EXPERIMENTAL;
 	let tempDir: string;
 	let settingsPath: string;
 
 	beforeEach(() => {
-		tempDir = mkdtempSync(join(tmpdir(), "disco-first-time-setup-fork-"));
+		tempDir = mkdtempSync(join(tmpdir(), "ocsid-first-time-setup-fork-"));
 		settingsPath = join(tempDir, "settings.json");
-		process.env.DISCO_EXPERIMENTAL = "1";
+		process.env.OCSID_EXPERIMENTAL = "1";
 	});
 
 	afterEach(() => {
 		rmSync(tempDir, { recursive: true, force: true });
-		if (originalDiscoExperimental === undefined) {
-			delete process.env.DISCO_EXPERIMENTAL;
+		if (originalOcsidExperimental === undefined) {
+			delete process.env.OCSID_EXPERIMENTAL;
 		} else {
-			process.env.DISCO_EXPERIMENTAL = originalDiscoExperimental;
+			process.env.OCSID_EXPERIMENTAL = originalOcsidExperimental;
 		}
 	});
 

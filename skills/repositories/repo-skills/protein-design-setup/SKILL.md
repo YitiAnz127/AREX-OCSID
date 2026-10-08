@@ -3,7 +3,7 @@ name: protein-design-setup
 description: "First-time setup for protein design tools."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

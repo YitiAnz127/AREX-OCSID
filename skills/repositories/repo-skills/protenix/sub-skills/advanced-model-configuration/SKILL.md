@@ -5,7 +5,7 @@ description: "Inspect and troubleshoot Protenix configs, model internals, kernel
   fallbacks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

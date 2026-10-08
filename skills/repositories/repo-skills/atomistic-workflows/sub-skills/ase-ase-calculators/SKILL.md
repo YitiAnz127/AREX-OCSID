@@ -3,7 +3,7 @@ name: ase-ase-calculators
 description: "Route ASE calculator-backend requests to adapter subskills based on backend choice."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ase-ase-calculators — atomistic-workflows sub-skill

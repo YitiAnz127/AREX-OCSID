@@ -18,7 +18,7 @@ if (typeof process !== "undefined" && (process.versions?.node || process.version
 }
 
 import type { AuthInteraction, OAuthAuth, OAuthCredential } from "@earendil-works/pi-ai";
-import { getDiscoOAuthCallbackHost } from "./callback-host.ts";
+import { getOcsidOAuthCallbackHost } from "./callback-host.ts";
 import { pollOAuthDeviceCodeFlow } from "./device-code.ts";
 import { oauthErrorHtml, oauthSuccessHtml } from "./oauth-page.ts";
 import { generatePKCE } from "./pkce.ts";
@@ -43,7 +43,7 @@ type OAuthToken = { access: string; refresh: string; expires: number };
 type TokenOperation = "exchange" | "refresh";
 
 function getCallbackHost(): string {
-	return getDiscoOAuthCallbackHost();
+	return getOcsidOAuthCallbackHost();
 }
 
 type DeviceAuthInfo = {
@@ -301,7 +301,7 @@ async function pollOpenAICodexDeviceAuth(device: DeviceAuthInfo, signal?: AbortS
 }
 
 async function createAuthorizationFlow(
-	originator: string = "disco",
+	originator: string = "ocsid",
 ): Promise<{ verifier: string; state: string; url: string }> {
 	const { verifier, challenge } = await generatePKCE();
 	const state = createState();

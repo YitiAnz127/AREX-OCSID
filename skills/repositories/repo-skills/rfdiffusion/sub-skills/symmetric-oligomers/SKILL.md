@@ -6,7 +6,7 @@ description: "Build RFdiffusion symmetric oligomer and symmetric
   potentials, neighbor-only modeling, and output checks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

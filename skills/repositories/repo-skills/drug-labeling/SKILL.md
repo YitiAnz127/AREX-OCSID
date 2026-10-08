@@ -3,7 +3,7 @@ name: drug-labeling
 description: "Use drug-labeling for drug discovery and development workflows: drug_labeling."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

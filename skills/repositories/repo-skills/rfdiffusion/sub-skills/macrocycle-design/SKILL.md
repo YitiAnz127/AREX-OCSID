@@ -5,7 +5,7 @@ description: "Build RFpeptides macrocyclic peptide monomer and binder
   target/binder chain layout, hotspot formatting, and validation checks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

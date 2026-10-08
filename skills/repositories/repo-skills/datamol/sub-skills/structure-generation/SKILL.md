@@ -5,7 +5,7 @@ description: "Guides agents using datamol to generate and manipulate molecular
   reactions, attachments, and isomer enumeration."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

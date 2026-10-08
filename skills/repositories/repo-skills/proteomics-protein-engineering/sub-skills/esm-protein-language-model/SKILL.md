@@ -3,7 +3,7 @@ name: esm-protein-language-model
 description: "&quot;Protein language models (ESM3, ESM C) for sequence generation, structure prediction, inverse folding, and embeddings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # esm-protein-language-model — proteomics-protein-engineering sub-skill

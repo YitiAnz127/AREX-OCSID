@@ -3,7 +3,7 @@ name: qc-busco-status-interpretation
 description: "&quot;Guide to interpreting BUSCO completeness statuses: why Duplicated BUSCOs count as complete, parsing output files, computing/comparing completeness across proteomes/genomes, common"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # qc-busco-status-interpretation — genomics-bioinformatics sub-skill

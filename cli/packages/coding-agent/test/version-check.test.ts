@@ -1,14 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-	checkForNewDiscoVersion,
+	checkForNewOcsidVersion,
 	comparePackageVersions,
-	getLatestDiscoRelease,
-	getLatestDiscoVersion,
+	getLatestOcsidRelease,
+	getLatestOcsidVersion,
 	isNewerPackageVersion,
 } from "../src/utils/version-check.ts";
 import { allowNetwork } from "./test-network-env.ts";
 
-const originalSkipVersionCheck = process.env.DISCO_SKIP_VERSION_CHECK;
+const originalSkipVersionCheck = process.env.OCSID_SKIP_VERSION_CHECK;
 
 beforeEach(() => {
 	allowNetwork();
@@ -17,9 +17,9 @@ beforeEach(() => {
 afterEach(() => {
 	vi.unstubAllGlobals();
 	if (originalSkipVersionCheck === undefined) {
-		delete process.env.DISCO_SKIP_VERSION_CHECK;
+		delete process.env.OCSID_SKIP_VERSION_CHECK;
 	} else {
-		process.env.DISCO_SKIP_VERSION_CHECK = originalSkipVersionCheck;
+		process.env.OCSID_SKIP_VERSION_CHECK = originalSkipVersionCheck;
 	}
 });
 
@@ -37,15 +37,15 @@ describe("version checks", () => {
 		const fetchMock = vi.fn(async () => Response.json({ version: "1.2.3" }));
 		vi.stubGlobal("fetch", fetchMock);
 
-		await expect(checkForNewDiscoVersion("1.2.3")).resolves.toBeUndefined();
-		await expect(checkForNewDiscoVersion("1.2.2")).resolves.toEqual({ version: "1.2.3" });
+		await expect(checkForNewOcsidVersion("1.2.3")).resolves.toBeUndefined();
+		await expect(checkForNewOcsidVersion("1.2.2")).resolves.toEqual({ version: "1.2.3" });
 	});
 
-	it("uses the npm registry with a DisCo user agent", async () => {
+	it("uses the npm registry with a OCSID user agent", async () => {
 		const fetchMock = vi.fn(async () => Response.json({ version: "1.2.4" }));
 		vi.stubGlobal("fetch", fetchMock);
 
-		await expect(getLatestDiscoVersion("1.2.3")).resolves.toBe("1.2.4");
+		await expect(getLatestOcsidVersion("1.2.3")).resolves.toBe("1.2.4");
 		// The endpoint is derived from the running package name, so a rebrand cannot
 		// silently point the version check — and the `update --self` target built
 		// from its result — at a different npm package.
@@ -53,7 +53,7 @@ describe("version checks", () => {
 			"https://registry.npmjs.org/ocsid/latest",
 			expect.objectContaining({
 				headers: expect.objectContaining({
-					"User-Agent": expect.stringMatching(/^disco\/1\.2\.3 /),
+					"User-Agent": expect.stringMatching(/^ocsid\/1\.2\.3 /),
 					accept: "application/json",
 				}),
 			}),
@@ -69,31 +69,31 @@ describe("version checks", () => {
 		);
 		vi.stubGlobal("fetch", fetchMock);
 
-		await expect(getLatestDiscoRelease("1.2.3")).resolves.toEqual({ version: "1.2.4" });
+		await expect(getLatestOcsidRelease("1.2.3")).resolves.toEqual({ version: "1.2.4" });
 	});
 
 	it("returns update notes from the version check api", async () => {
 		const fetchMock = vi.fn(async () => Response.json({ note: " **Read this** ", version: "1.2.4" }));
 		vi.stubGlobal("fetch", fetchMock);
 
-		await expect(getLatestDiscoRelease("1.2.3")).resolves.toEqual({ note: "**Read this**", version: "1.2.4" });
+		await expect(getLatestOcsidRelease("1.2.3")).resolves.toEqual({ note: "**Read this**", version: "1.2.4" });
 	});
 
 	it("skips automatic api calls when version checks are disabled", async () => {
-		process.env.DISCO_SKIP_VERSION_CHECK = "1";
+		process.env.OCSID_SKIP_VERSION_CHECK = "1";
 		const fetchMock = vi.fn();
 		vi.stubGlobal("fetch", fetchMock);
 
-		await expect(checkForNewDiscoVersion("1.2.3")).resolves.toBeUndefined();
+		await expect(checkForNewOcsidVersion("1.2.3")).resolves.toBeUndefined();
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
 	it("allows direct api calls when automatic version checks are disabled", async () => {
-		process.env.DISCO_SKIP_VERSION_CHECK = "1";
+		process.env.OCSID_SKIP_VERSION_CHECK = "1";
 		const fetchMock = vi.fn(async () => Response.json({ version: "1.2.4" }));
 		vi.stubGlobal("fetch", fetchMock);
 
-		await expect(getLatestDiscoVersion("1.2.3")).resolves.toBe("1.2.4");
+		await expect(getLatestOcsidVersion("1.2.3")).resolves.toBe("1.2.4");
 		expect(fetchMock).toHaveBeenCalledOnce();
 	});
 });

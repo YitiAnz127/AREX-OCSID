@@ -4,7 +4,7 @@ description: "Use, deploy, debug, and inspect DiffDock's Gradio web UI and
   downloadable output archives."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

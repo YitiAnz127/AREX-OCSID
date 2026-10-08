@@ -5,7 +5,7 @@ description: "Plan Protenix training data roots, custom CIF preprocessing, safe
   troubleshooting without launching expensive jobs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

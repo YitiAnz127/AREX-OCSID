@@ -230,13 +230,13 @@ describe("ModelRuntime auth options", () => {
 		});
 	});
 
-	it("uses DisCo cache retention without inheriting PI_CACHE_RETENTION", async () => {
+	it("uses OCSID cache retention without inheriting PI_CACHE_RETENTION", async () => {
 		const previousPiCacheRetention = process.env.PI_CACHE_RETENTION;
-		const previousDiscoCacheRetention = process.env.DISCO_CACHE_RETENTION;
+		const previousOcsidCacheRetention = process.env.OCSID_CACHE_RETENTION;
 		const captured: Array<string | undefined> = [];
 		try {
 			process.env.PI_CACHE_RETENTION = "long";
-			delete process.env.DISCO_CACHE_RETENTION;
+			delete process.env.OCSID_CACHE_RETENTION;
 			const runtime = await ModelRuntime.create({ credentials: AuthStorage.inMemory(), modelsPath: null });
 			runtime.registerProvider("cache-provider", {
 				baseUrl: "https://example.test/v1",
@@ -252,7 +252,7 @@ describe("ModelRuntime auth options", () => {
 			expect(model).toBeDefined();
 
 			await runtime.completeSimple(model!, { messages: [] });
-			process.env.DISCO_CACHE_RETENTION = "long";
+			process.env.OCSID_CACHE_RETENTION = "long";
 			await runtime.completeSimple(model!, { messages: [] });
 			await runtime.completeSimple(model!, { messages: [] }, { cacheRetention: "none" });
 
@@ -260,8 +260,8 @@ describe("ModelRuntime auth options", () => {
 		} finally {
 			if (previousPiCacheRetention === undefined) delete process.env.PI_CACHE_RETENTION;
 			else process.env.PI_CACHE_RETENTION = previousPiCacheRetention;
-			if (previousDiscoCacheRetention === undefined) delete process.env.DISCO_CACHE_RETENTION;
-			else process.env.DISCO_CACHE_RETENTION = previousDiscoCacheRetention;
+			if (previousOcsidCacheRetention === undefined) delete process.env.OCSID_CACHE_RETENTION;
+			else process.env.OCSID_CACHE_RETENTION = previousOcsidCacheRetention;
 		}
 	});
 

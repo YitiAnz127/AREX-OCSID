@@ -3,7 +3,7 @@ name: drug-mechanism
 description: "Use drug-mechanism for drug discovery and development workflows: drug_mechanism."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

@@ -3,7 +3,7 @@ name: structural-biology-drug-discovery
 description: "Use structural-biology-drug-discovery for protein modeling workflows: structural-biology-drug-discovery."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

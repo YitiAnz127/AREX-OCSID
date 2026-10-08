@@ -39,7 +39,7 @@ helper.
 5. Run the root environment helper with explicit asset paths:
 
    ```bash
-   python skills/disco/bindcraft/scripts/check_bindcraft_env.py \
+   python skills/ocsid/bindcraft/scripts/check_bindcraft_env.py \
      --check-assets --af-params-dir ./params \
      --dssp-path ./functions/dssp \
      --dalphaball-path ./functions/DAlphaBall.gcc

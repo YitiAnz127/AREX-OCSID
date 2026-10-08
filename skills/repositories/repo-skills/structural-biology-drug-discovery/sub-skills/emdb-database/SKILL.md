@@ -3,7 +3,7 @@ name: emdb-database
 description: "&quot;Look up EMDB cryo-EM density maps and fitted atomic models via the entry REST API + EBI Search WS."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # emdb-database — structural-biology-drug-discovery sub-skill

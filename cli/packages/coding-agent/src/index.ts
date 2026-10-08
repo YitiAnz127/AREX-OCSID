@@ -323,14 +323,14 @@ export {
 	type ProjectTrustStoreEntry,
 	type ProjectTrustUpdate,
 } from "./core/trust-manager.ts";
-export type { DiscoSkillRole } from "./disco/modes/skill-policy.ts";
+export type { OcsidSkillRole } from "./ocsid/modes/skill-policy.ts";
 export {
-	DEFAULT_DISCO_AGENT_MODE,
-	type DiscoAgentMode,
-	formatDiscoAgentMode,
-	isDiscoAgentMode,
-	resolveDiscoAgentMode,
-} from "./disco/modes/types.ts";
+	DEFAULT_OCSID_AGENT_MODE,
+	type OcsidAgentMode,
+	formatOcsidAgentMode,
+	isOcsidAgentMode,
+	resolveOcsidAgentMode,
+} from "./ocsid/modes/types.ts";
 // Main entry point
 export { type MainOptions, main } from "./main.ts";
 // Run modes for programmatic SDK usage

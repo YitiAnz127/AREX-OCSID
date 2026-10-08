@@ -4,7 +4,7 @@ description: "Validate OmegaFold FASTA inputs, inspect pseudo-MSA tensors,
   predict PDB output names, and interpret confidence stored as B-factors."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

@@ -11,7 +11,7 @@
  * - Minimal: Shows only tool call, no output (this extension's collapsed mode)
  *
  * Usage:
- *   disco -e ./minimal-mode.ts
+ *   ocsid -e ./minimal-mode.ts
  *
  * Then use ctrl+o to toggle between minimal (collapsed) and full (expanded) views.
  */
@@ -64,11 +64,11 @@ function getBuiltInTools(cwd: string) {
 	return tools;
 }
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	// =========================================================================
 	// Read Tool
 	// =========================================================================
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "read",
 		label: "read",
 		description:
@@ -115,7 +115,7 @@ export default function (disco: ExtensionAPI) {
 	// =========================================================================
 	// Bash Tool
 	// =========================================================================
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "bash",
 		label: "bash",
 		description:
@@ -164,7 +164,7 @@ export default function (disco: ExtensionAPI) {
 	// =========================================================================
 	// Write Tool
 	// =========================================================================
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "write",
 		label: "write",
 		description:
@@ -206,7 +206,7 @@ export default function (disco: ExtensionAPI) {
 	// =========================================================================
 	// Edit Tool
 	// =========================================================================
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "edit",
 		label: "edit",
 		description:
@@ -251,7 +251,7 @@ export default function (disco: ExtensionAPI) {
 	// =========================================================================
 	// Find Tool
 	// =========================================================================
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "find",
 		label: "find",
 		description:
@@ -309,7 +309,7 @@ export default function (disco: ExtensionAPI) {
 	// =========================================================================
 	// Grep Tool
 	// =========================================================================
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "grep",
 		label: "grep",
 		description:
@@ -371,7 +371,7 @@ export default function (disco: ExtensionAPI) {
 	// =========================================================================
 	// Ls Tool
 	// =========================================================================
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "ls",
 		label: "ls",
 		description:

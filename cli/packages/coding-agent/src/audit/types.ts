@@ -132,7 +132,7 @@ export type ExecutionErrorKind =
  */
 export interface ExecutionResult {
 	/** Contract version marker so downstream readers can branch on schema breaks. */
-	schema: "disco.execution-result.v1";
+	schema: "ocsid.execution-result.v1";
 	status: ExecutionStatus;
 	/** The produced artifact (response text / produced file content), or null when no artifact exists. */
 	artifact: string | null;
@@ -203,7 +203,7 @@ export function artifactResult(artifact: string): ExecutionResult {
 	// Imported lazily to avoid a node:crypto dependency at module-eval time in
 	// environments that only touch types. (createHash is cheap; fine to eval here.)
 	return {
-		schema: "disco.execution-result.v1",
+		schema: "ocsid.execution-result.v1",
 		status: "succeeded",
 		artifact,
 		artifactSha256: sha256Hex(artifact),

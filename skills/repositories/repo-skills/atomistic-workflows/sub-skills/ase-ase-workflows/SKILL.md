@@ -3,7 +3,7 @@ name: ase-ase-workflows
 description: "Route ASE atomistic workflow requests to task-specific subskills based on user intent."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ase-ase-workflows — atomistic-workflows sub-skill

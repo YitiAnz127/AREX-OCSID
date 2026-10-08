@@ -5,7 +5,7 @@ description: "Use MDAnalysis to load molecular simulation data, select atoms,
   optional dependency issues."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

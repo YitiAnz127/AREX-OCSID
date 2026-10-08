@@ -6,7 +6,7 @@ description: "Use gget for genomic database queries, Ensembl annotation and
   CLI or Python API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 2-Clause
 ---
 

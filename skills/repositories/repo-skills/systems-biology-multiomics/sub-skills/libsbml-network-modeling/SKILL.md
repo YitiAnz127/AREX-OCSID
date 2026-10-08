@@ -3,7 +3,7 @@ name: libsbml-network-modeling
 description: "&quot;Build, read, validate, modify SBML biological network models via the libSBML Python API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # libsbml-network-modeling — systems-biology-multiomics sub-skill

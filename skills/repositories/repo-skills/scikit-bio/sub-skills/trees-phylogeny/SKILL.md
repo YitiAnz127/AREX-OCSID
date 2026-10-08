@@ -5,7 +5,7 @@ description: "Use scikit-bio TreeNode objects, Newick trees, distance-based tree
   for downstream diversity analyses."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

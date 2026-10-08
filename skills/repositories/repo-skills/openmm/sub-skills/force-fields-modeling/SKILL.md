@@ -7,7 +7,7 @@ description: "Choose and troubleshoot OpenMM force fields, model-building
   AMBER/CHARMM/GROMACS/Tinker inputs, or ffxml validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT, GPL, LGPL
 ---
 

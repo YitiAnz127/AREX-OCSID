@@ -21,7 +21,7 @@ function normalizeToolName(input: string): string | undefined {
 	return trimmed;
 }
 
-export default function dynamicToolsExtension(disco: ExtensionAPI) {
+export default function dynamicToolsExtension(ocsid: ExtensionAPI) {
 	const registeredToolNames = new Set<string>();
 
 	const registerEchoTool = (name: string, label: string, prefix: string): boolean => {
@@ -30,7 +30,7 @@ export default function dynamicToolsExtension(disco: ExtensionAPI) {
 		}
 
 		registeredToolNames.add(name);
-		disco.registerTool({
+		ocsid.registerTool({
 			name,
 			label,
 			description: `Echo a message with prefix: ${prefix}`,
@@ -48,12 +48,12 @@ export default function dynamicToolsExtension(disco: ExtensionAPI) {
 		return true;
 	};
 
-	disco.on("session_start", (_event, ctx) => {
+	ocsid.on("session_start", (_event, ctx) => {
 		registerEchoTool("echo_session", "Echo Session", "[session] ");
 		ctx.ui.notify("Registered dynamic tool: echo_session", "info");
 	});
 
-	disco.registerCommand("add-echo-tool", {
+	ocsid.registerCommand("add-echo-tool", {
 		description: "Register a new echo tool dynamically: /add-echo-tool <tool_name>",
 		handler: async (args, ctx) => {
 			const toolName = normalizeToolName(args);

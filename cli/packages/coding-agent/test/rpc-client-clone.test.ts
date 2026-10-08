@@ -14,7 +14,7 @@ describe("RpcClient clone", () => {
 		expect(isAbsolute(defaultPath)).toBe(true);
 		expect(dirname(defaultPath)).toMatch(/[\\/]src$/u);
 		expect(defaultPath).toMatch(/[\\/]cli\.js$/u);
-		expect(resolveRpcCliPath("/explicit/disco-cli.js")).toBe("/explicit/disco-cli.js");
+		expect(resolveRpcCliPath("/explicit/ocsid-cli.js")).toBe("/explicit/ocsid-cli.js");
 	});
 
 	it("sends the clone RPC command", async () => {

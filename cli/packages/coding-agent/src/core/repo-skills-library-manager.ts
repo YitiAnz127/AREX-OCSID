@@ -95,7 +95,7 @@ export class RepoSkillsLibraryConflictError extends RepoSkillsLibraryError {
 	}
 }
 
-interface ManagedTreeState {
+export interface ManagedTreeState {
 	digest: string;
 	fileCount: number;
 }
@@ -176,6 +176,40 @@ export interface RepoSkillsInstallResult {
 export interface RepoSkillsRouterToggleResult {
 	enabled: boolean;
 	changed: boolean;
+}
+
+/** Facts about the live skill a promotion would replace, handed to the caller's validator. */
+export interface SkillReplacementContext {
+	skillId: string;
+	/** Absolute path of the live skill directory, or null when the skill is absent on disk. */
+	liveSkillRoot: string | null;
+	/** Digest of the live skill tree (this manager's scheme), when the skill exists. */
+	liveSkillDigest?: string;
+	liveSkillFileCount?: number;
+	/** Whole-library live tree digest recorded in the managed state. */
+	liveTreeDigest: string;
+	/** Source commit the managed library was installed from. */
+	commit: string;
+}
+
+export interface SkillReplacementRequest {
+	skillId: string;
+	/** Fully staged candidate skill tree, outside the managed skills root. Never mutated. */
+	stagedSkillRoot: string;
+	/** Runs under the live lock; return a message to refuse the promotion. */
+	validate?: (context: SkillReplacementContext) => string | undefined;
+}
+
+export interface SkillReplacementResult {
+	skillId: string;
+	/** Where the installed skill now lives (the caller re-verifies against this). */
+	liveSkillRoot: string;
+	previous?: ManagedTreeState;
+	installed: ManagedTreeState;
+	/** Digest of the whole live repo-skills tree after the swap. */
+	liveTreeDigest: string;
+	backupPath?: string;
+	transactionRoot: string;
 }
 
 export interface RepoSkillsLibraryStatus {
@@ -957,7 +991,7 @@ function writeRouterEnabled(routerDir: string, enabled: boolean): boolean {
 	const routerFile = join(routerDir, "SKILL.md");
 	if (!pathExists(routerFile)) {
 		throw new RepoSkillsLibraryError(
-			`Repository skill router is not installed at ${routerFile}. Run "disco repo-skills install" first.`,
+			`Repository skill router is not installed at ${routerFile}. Run "ocsid repo-skills install" first.`,
 			2,
 		);
 	}
@@ -1043,7 +1077,7 @@ export class RepoSkillsLibraryManager {
 		this.gitCommand = options.gitCommand ?? "git";
 		this.bundledSkillsDir = resolve(options.bundledSkillsDir ?? getBundledSkillsDir());
 		this.env = options.env ?? process.env;
-		this.offline = options.offline ?? isTruthyEnvironmentFlag(this.env.DISCO_OFFLINE);
+		this.offline = options.offline ?? isTruthyEnvironmentFlag(this.env.OCSID_OFFLINE);
 		this.now = options.now ?? (() => new Date());
 		this.transactionFaultInjector = options.transactionFaultInjector;
 	}
@@ -1194,7 +1228,7 @@ export class RepoSkillsLibraryManager {
 	private assertOnline(): void {
 		if (!this.offline) return;
 		throw new RepoSkillsLibraryError(
-			"Repository skill install/update is unavailable in offline mode. Re-run without --offline or DISCO_OFFLINE.",
+			"Repository skill install/update is unavailable in offline mode. Re-run without --offline or OCSID_OFFLINE.",
 			2,
 		);
 	}
@@ -1365,8 +1399,8 @@ export class RepoSkillsLibraryManager {
 	private swapLiveTree(
 		transactionRoot: string,
 		stagedRepoSkills: string,
-		stagedRouter: string,
-		stagedState: string,
+		stagedRouter: string | undefined,
+		stagedState: string | undefined,
 		preserveBackup: boolean,
 	): string | undefined {
 		const backupRoot = join(transactionRoot, "backup");
@@ -1376,8 +1410,11 @@ export class RepoSkillsLibraryManager {
 		mkdirSync(backupRoot, { recursive: true });
 		mkdirSync(this.skillsRoot, { recursive: true });
 		const hadRepoSkills = pathExists(this.repoSkillsRoot);
-		const hadRouter = pathExists(this.routerDir);
-		const hadState = pathExists(this.statePath);
+		// A piece is only backed up when a replacement for it is supplied: a
+		// promotion that leaves the router (or the state file) alone must not
+		// sweep it into the backup directory and delete it from live on success.
+		const hadRouter = stagedRouter !== undefined && pathExists(this.routerDir);
+		const hadState = stagedState !== undefined && pathExists(this.statePath);
 		let installedRepoSkills = false;
 		let installedRouter = false;
 		let installedState = false;
@@ -1388,12 +1425,16 @@ export class RepoSkillsLibraryManager {
 			this.transactionFaultInjector?.("before-install-repo-skills");
 			renameSync(stagedRepoSkills, this.repoSkillsRoot);
 			installedRepoSkills = true;
-			this.transactionFaultInjector?.("before-install-router");
-			renameSync(stagedRouter, this.routerDir);
-			installedRouter = true;
-			this.transactionFaultInjector?.("before-install-state");
-			renameSync(stagedState, this.statePath);
-			installedState = true;
+			if (stagedRouter !== undefined) {
+				this.transactionFaultInjector?.("before-install-router");
+				renameSync(stagedRouter, this.routerDir);
+				installedRouter = true;
+			}
+			if (stagedState !== undefined) {
+				this.transactionFaultInjector?.("before-install-state");
+				renameSync(stagedState, this.statePath);
+				installedState = true;
+			}
 		} catch (error) {
 			const rollbackErrors: string[] = [];
 			for (const [installed, livePath, backupPath, hadPrevious] of [
@@ -1470,7 +1511,7 @@ export class RepoSkillsLibraryManager {
 			}
 			if (operation === "update" && !previousState) {
 				throw new RepoSkillsLibraryError(
-					'Repository skills are not managed yet. Run "disco repo-skills install" to install or adopt them first.',
+					'Repository skills are not managed yet. Run "ocsid repo-skills install" to install or adopt them first.',
 					2,
 				);
 			}
@@ -1614,7 +1655,7 @@ export class RepoSkillsLibraryManager {
 		this.assertOnline();
 		if (!readState(this.statePath)) {
 			throw new RepoSkillsLibraryError(
-				'Repository skills are not managed yet. Run "disco repo-skills install" to install or adopt them first.',
+				'Repository skills are not managed yet. Run "ocsid repo-skills install" to install or adopt them first.',
 				2,
 			);
 		}
@@ -1631,6 +1672,109 @@ export class RepoSkillsLibraryManager {
 			const changed = writeRouterEnabled(this.routerDir, enabled);
 			return { enabled, changed };
 		});
+	}
+
+	/**
+	 * Replace ONE managed repository skill with a staged candidate tree, atomically.
+	 *
+	 * This is the file-commit half of a human-gated promotion: the caller decides
+	 * *whether* to promote (approval reference, candidate manifest, regression and
+	 * acceptance evidence) and passes a `validate` hook that runs under the live
+	 * lock, so a parent-version check cannot race a concurrent install/update.
+	 * The mechanics are the ones `install`/`update` already use: the live lock, a
+	 * staged copy of the whole library, `swapLiveTree`'s backup/rename/rollback and
+	 * an atomically written state file. The router is deliberately NOT touched, so
+	 * a promotion cannot silently re-route skills.
+	 */
+	async replaceSkill(request: SkillReplacementRequest): Promise<SkillReplacementResult> {
+		const skillId = request.skillId;
+		if (!CANONICAL_SKILL_ID.test(skillId)) {
+			throw new RepoSkillsLibraryError(
+				`promotion target must be a canonical lowercase-hyphen skill id: ${skillId}`,
+				2,
+			);
+		}
+		const staged = resolve(request.stagedSkillRoot);
+		if (!pathExists(staged)) {
+			throw new RepoSkillsLibraryError(`staged candidate tree not found: ${staged}`, 2);
+		}
+		// The staged tree is a candidate snapshot, so its own directory name is
+		// irrelevant — the invariant is that it declares the skill being replaced.
+		const stagedSkillFile = join(staged, "SKILL.md");
+		const stagedId = pathExists(stagedSkillFile) ? parseSkillName(stagedSkillFile) : null;
+		if (stagedId !== skillId) {
+			throw new RepoSkillsLibraryError(
+				`staged candidate tree <${staged}> declares skill <${stagedId ?? "none"}>, not "${skillId}"`,
+				2,
+			);
+		}
+		const stagedWithinLibrary = relative(this.skillsRoot, staged);
+		if (stagedWithinLibrary === "" || (!stagedWithinLibrary.startsWith("..") && !isAbsolute(stagedWithinLibrary))) {
+			throw new RepoSkillsLibraryError(`staged candidate tree must live outside the managed skills root: ${staged}`, 2);
+		}
+		return withDirectoryLock(this.liveLockPath, async () => {
+			const state = readState(this.statePath);
+			if (!state) {
+				throw new RepoSkillsLibraryError(
+					'Repository skills are not managed yet. Run "ocsid repo-skills install" to install or adopt them first.',
+					2,
+				);
+			}
+			const managed = state.managedSkills[skillId];
+			if (!managed) {
+				throw new RepoSkillsLibraryError(
+					`"${skillId}" is not a managed repository skill; a promotion only replaces official library skills (use install/update for everything else)`,
+					2,
+				);
+			}
+			const liveSkillRoot = join(this.repoSkillsRoot, skillId);
+			const liveSkill = pathExists(liveSkillRoot) ? digestTree(liveSkillRoot) : undefined;
+			const refusal = request.validate?.({
+				skillId,
+				liveSkillRoot: liveSkill ? liveSkillRoot : null,
+				...(liveSkill ? { liveSkillDigest: liveSkill.digest, liveSkillFileCount: liveSkill.fileCount } : {}),
+				liveTreeDigest: state.liveTreeDigest,
+				commit: state.source.commit,
+			});
+			if (refusal) throw new RepoSkillsLibraryError(refusal, 2);
+
+			const transactionRoot = join(
+				this.agentDir,
+				`.repo-skills-promotion.${process.pid}.${Date.now()}.${Math.random().toString(36).slice(2)}`,
+			);
+			const stagedSkillsRoot = join(transactionRoot, "stage", "skills");
+			const stagedRepoSkills = join(stagedSkillsRoot, "repo-skills");
+			const stagedState = join(transactionRoot, "stage", "repo-skills-library.json");
+			mkdirSync(stagedSkillsRoot, { recursive: true });
+			if (pathExists(this.repoSkillsRoot)) copyDirectory(this.repoSkillsRoot, stagedRepoSkills);
+			else mkdirSync(stagedRepoSkills, { recursive: true });
+			const stagedSkillRoot = join(stagedRepoSkills, skillId);
+			rmSync(stagedSkillRoot, { recursive: true, force: true });
+			copyDirectory(staged, stagedSkillRoot);
+			const installed = digestTree(stagedSkillRoot);
+			const nextState: RepoSkillsLibraryState = {
+				...state,
+				updatedAt: this.now().toISOString(),
+				managedSkills: { ...state.managedSkills, [skillId]: installed },
+				liveTreeDigest: digestTree(stagedRepoSkills).digest,
+			};
+			writeFileSync(stagedState, stableJson(nextState), "utf8");
+			const backupPath = this.swapLiveTree(transactionRoot, stagedRepoSkills, undefined, stagedState, true);
+			return {
+				skillId,
+				liveSkillRoot: join(this.repoSkillsRoot, skillId),
+				...(liveSkill ? { previous: liveSkill } : {}),
+				installed,
+				liveTreeDigest: nextState.liveTreeDigest,
+				...(backupPath ? { backupPath } : {}),
+				transactionRoot,
+			};
+		});
+	}
+
+	/** Restore a skill tree previously preserved by a promotion backup. */
+	async restoreSkill(skillId: string, backupSkillRoot: string, validate?: SkillReplacementRequest["validate"]): Promise<SkillReplacementResult> {
+		return this.replaceSkill({ skillId, stagedSkillRoot: backupSkillRoot, ...(validate ? { validate } : {}) });
 	}
 
 	private statusUnlocked(state: RepoSkillsLibraryState | undefined): RepoSkillsLibraryStatus {

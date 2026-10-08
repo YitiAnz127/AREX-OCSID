@@ -306,8 +306,8 @@ class SnakeComponent {
 
 const SNAKE_SAVE_TYPE = "snake-save";
 
-export default function (disco: ExtensionAPI) {
-	disco.registerCommand("snake", {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerCommand("snake", {
 		description: "Play Snake!",
 
 		handler: async (_args, ctx) => {
@@ -333,7 +333,7 @@ export default function (disco: ExtensionAPI) {
 					() => done(undefined),
 					(state) => {
 						// Save or clear state
-						disco.appendEntry(SNAKE_SAVE_TYPE, state);
+						ocsid.appendEntry(SNAKE_SAVE_TYPE, state);
 					},
 					savedState,
 				);

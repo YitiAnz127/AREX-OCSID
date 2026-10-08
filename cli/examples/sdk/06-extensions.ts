@@ -5,12 +5,12 @@
  * They provide a unified system for extensions, custom tools, commands, and more.
  *
  * By default, extension files are discovered from:
- * - ~/.disco/agent/extensions/
- * - <cwd>/.disco/extensions/
+ * - ~/.ocsid/agent/extensions/
+ * - <cwd>/.ocsid/extensions/
  * - Paths specified in settings.json "extensions" array
  *
  * An extension is a TypeScript file that exports a default function:
- *   export default function (disco: ExtensionAPI) { ... }
+ *   export default function (ocsid: ExtensionAPI) { ... }
  */
 
 import {
@@ -28,8 +28,8 @@ const resourceLoader = new DefaultResourceLoader({
 	agentDir: getAgentDir(),
 	additionalExtensionPaths: ["./my-logging-extension.ts", "./my-safety-extension.ts"],
 	extensionFactories: [
-		(disco) => {
-			disco.on("agent_start", () => {
+		(ocsid) => {
+			ocsid.on("agent_start", () => {
 				console.log("[Inline Extension] Agent starting");
 			});
 		},
@@ -59,23 +59,23 @@ try {
 /*
 import type { ExtensionAPI } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
-	disco.on("agent_start", async () => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("agent_start", async () => {
 		console.log("[Extension] Agent starting");
 	});
 
-	disco.on("tool_call", async (event) => {
+	ocsid.on("tool_call", async (event) => {
 		console.log(\`[Extension] Tool: \${event.toolName}\`);
 		// Return { block: true, reason: "..." } to block execution
 		return undefined;
 	});
 
-	disco.on("agent_end", async (event) => {
+	ocsid.on("agent_end", async (event) => {
 		console.log(\`[Extension] Done, \${event.messages.length} messages\`);
 	});
 
 	// Register a custom tool
-	disco.registerTool({
+	ocsid.registerTool({
 		name: "my_tool",
 		label: "My Tool",
 		description: "Does something useful",
@@ -89,7 +89,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Register a command
-	disco.registerCommand("mycommand", {
+	ocsid.registerCommand("mycommand", {
 		description: "Do something",
 		handler: async (args, ctx) => {
 			ctx.ui.notify(\`Command executed with: \${args}\`);

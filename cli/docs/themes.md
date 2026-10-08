@@ -1,4 +1,4 @@
-> disco can create themes. Ask it to build one for your setup.
+> ocsid can create themes. Ask it to build one for your setup.
 
 # Themes
 
@@ -16,12 +16,12 @@ Themes are JSON files that define colors for the TUI.
 
 ## Locations
 
-DisCo loads themes from:
+OCSID loads themes from:
 
 - Built-in: `dark`, `light`
-- Global: `~/.disco/agent/themes/*.json`
-- Project: `.disco/themes/*.json` (only after the project is trusted)
-- Packages: `themes/` directories or `disco.themes` entries in `package.json`
+- Global: `~/.ocsid/agent/themes/*.json`
+- Project: `.ocsid/themes/*.json` (only after the project is trusted)
+- Packages: `themes/` directories or `ocsid.themes` entries in `package.json`
 - Settings: `themes` array with files or directories
 - CLI: `--theme <path>` (repeatable)
 
@@ -37,15 +37,15 @@ Select a theme via `/settings` or in `settings.json`:
 }
 ```
 
-On first run, disco detects your terminal background and defaults to `dark` or `light`.
+On first run, ocsid detects your terminal background and defaults to `dark` or `light`.
 
 ## Creating a Custom Theme
 
 1. Create a theme file:
 
 ```bash
-mkdir -p ~/.disco/agent/themes
-vim ~/.disco/agent/themes/my-theme.json
+mkdir -p ~/.ocsid/agent/themes
+vim ~/.ocsid/agent/themes/my-theme.json
 ```
 
 2. Define the theme with all required colors (see [Color Tokens](#color-tokens)):
@@ -117,7 +117,7 @@ vim ~/.disco/agent/themes/my-theme.json
 
 3. Select the theme via `/settings`.
 
-**Hot reload:** When you edit the currently active custom theme file, disco reloads it automatically for immediate visual feedback.
+**Hot reload:** When you edit the currently active custom theme file, ocsid reloads it automatically for immediate visual feedback.
 
 ## Theme Format
 
@@ -270,7 +270,7 @@ Four formats are supported:
 
 ### Terminal Compatibility
 
-DisCo uses 24-bit RGB colors. Most modern terminals support this (iTerm2, Kitty, WezTerm, Windows Terminal, VS Code). For older terminals with only 256-color support, disco falls back to the nearest approximation.
+OCSID uses 24-bit RGB colors. Most modern terminals support this (iTerm2, Kitty, WezTerm, Windows Terminal, VS Code). For older terminals with only 256-color support, ocsid falls back to the nearest approximation.
 
 Check truecolor support:
 

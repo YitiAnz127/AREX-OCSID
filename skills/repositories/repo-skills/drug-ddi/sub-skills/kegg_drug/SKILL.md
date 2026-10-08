@@ -3,7 +3,7 @@ name: kegg_drug
 description: "Sub-skill kegg_drug for drug-ddi."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # kegg_drug — drug-ddi sub-skill

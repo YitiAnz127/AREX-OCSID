@@ -3,7 +3,7 @@ name: drug-molecular-property
 description: "Use drug-molecular-property for drug discovery and development workflows: drug_molecular_property."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

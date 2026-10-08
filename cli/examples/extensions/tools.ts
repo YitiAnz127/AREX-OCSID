@@ -5,7 +5,7 @@
  * Tool selection persists across session reloads and respects branch navigation.
  *
  * Usage:
- * 1. Copy this file to ~/.disco/agent/extensions/ or your project's .disco/extensions/
+ * 1. Copy this file to ~/.ocsid/agent/extensions/ or your project's .ocsid/extensions/
  * 2. Use /tools to open the tool selector
  */
 
@@ -18,26 +18,26 @@ interface ToolsState {
 	enabledTools: string[];
 }
 
-export default function toolsExtension(disco: ExtensionAPI) {
+export default function toolsExtension(ocsid: ExtensionAPI) {
 	// Track enabled tools
 	let enabledTools: Set<string> = new Set();
 	let allTools: ToolInfo[] = [];
 
 	// Persist current state
 	function persistState() {
-		disco.appendEntry<ToolsState>("tools-config", {
+		ocsid.appendEntry<ToolsState>("tools-config", {
 			enabledTools: Array.from(enabledTools),
 		});
 	}
 
 	// Apply current tool selection
 	function applyTools() {
-		disco.setActiveTools(Array.from(enabledTools));
+		ocsid.setActiveTools(Array.from(enabledTools));
 	}
 
 	// Find the last tools-config entry in the current branch
 	function restoreFromBranch(ctx: ExtensionContext) {
-		allTools = disco.getAllTools();
+		allTools = ocsid.getAllTools();
 
 		// Get entries in current branch only
 		const branchEntries = ctx.sessionManager.getBranch();
@@ -59,12 +59,12 @@ export default function toolsExtension(disco: ExtensionAPI) {
 			applyTools();
 		} else {
 			// No saved state - sync with currently active tools
-			enabledTools = new Set(disco.getActiveTools());
+			enabledTools = new Set(ocsid.getActiveTools());
 		}
 	}
 
 	// Register /tools command
-	disco.registerCommand("tools", {
+	ocsid.registerCommand("tools", {
 		description: "Enable/disable tools",
 		handler: async (_args, ctx) => {
 			if (ctx.mode !== "tui") {
@@ -73,7 +73,7 @@ export default function toolsExtension(disco: ExtensionAPI) {
 			}
 
 			// Refresh tool list
-			allTools = disco.getAllTools();
+			allTools = ocsid.getAllTools();
 
 			await ctx.ui.custom((tui, theme, _kb, done) => {
 				// Build settings items for each tool
@@ -135,12 +135,12 @@ export default function toolsExtension(disco: ExtensionAPI) {
 	});
 
 	// Restore state on session start
-	disco.on("session_start", async (_event, ctx) => {
+	ocsid.on("session_start", async (_event, ctx) => {
 		restoreFromBranch(ctx);
 	});
 
 	// Restore state when navigating the session tree
-	disco.on("session_tree", async (_event, ctx) => {
+	ocsid.on("session_tree", async (_event, ctx) => {
 		restoreFromBranch(ctx);
 	});
 }

@@ -3,7 +3,7 @@ name: databases-clinvar-database
 description: "&quot;Query NCBI ClinVar via E-utilities for variant clinical significance, pathogenicity, disease associations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-clinvar-database — genomics-bioinformatics sub-skill

@@ -3,7 +3,7 @@ name: unimol
 description: "A standardized CLI wrapper for Uni-Mol molecular ML workflows that handles representation extraction (embeddings), model training (regression/classification), and property predicti"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # unimol — molecular-representation sub-skill

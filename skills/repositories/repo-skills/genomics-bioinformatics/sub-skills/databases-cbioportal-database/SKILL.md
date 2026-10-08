@@ -3,7 +3,7 @@ name: databases-cbioportal-database
 description: "&quot;Cancer genomics (TCGA et al.) via cBioPortal REST API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-cbioportal-database — genomics-bioinformatics sub-skill

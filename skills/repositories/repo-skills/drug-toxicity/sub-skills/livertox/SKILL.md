@@ -3,7 +3,7 @@ name: livertox
 description: "Sub-skill livertox for drug-toxicity."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # livertox — drug-toxicity sub-skill

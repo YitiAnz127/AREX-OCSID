@@ -3,7 +3,7 @@ name: lammps-reaxff
 description: "Run reactive molecular dynamics simulations in LAMMPS with the ReaxFF potential, including preparing input scripts (pair_style reaxff + fix qeq/reaxff), mapping LAMMPS atom types t"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # lammps-reaxff — molecular-dynamics sub-skill

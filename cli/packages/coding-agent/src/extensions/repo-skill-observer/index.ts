@@ -2,7 +2,7 @@
  * Repo Skill Observer — records runtime skill usage evidence.
  *
  * This is the "sensor" of the RSI loop (方向 A). It subscribes to already-
- * existing DisCo extension events and translates them into privacy-safe
+ * existing OCSID extension events and translates them into privacy-safe
  * `RepoSkillEvent` rows:
  *
  *   - read/grep/ls/find `tool_call` path  -> router/taxonomy/skill reads
@@ -189,10 +189,10 @@ function toAbsolute(p: string, cwd?: string): string {
 }
 
 /**
- * Build the DisCo inline-extension factory for the repo-skill observer.
+ * Build the OCSID inline-extension factory for the repo-skill observer.
  * It wires the observer to existing agent events and never throws on load.
  */
-export function createRepoSkillObserverExtension(disco: ExtensionAPI): void {
+export function createRepoSkillObserverExtension(ocsid: ExtensionAPI): void {
 	const observer = new RepoSkillObserver({
 		eventsDir: getRsiEventsDir(),
 		repoSkillsRoot: getRepoSkillsRoot(),
@@ -238,9 +238,9 @@ export function createRepoSkillObserverExtension(disco: ExtensionAPI): void {
 		}
 	};
 
-	disco.on("tool_call", onToolCall);
-	disco.on("tool_result", onToolResult);
-	disco.on("turn_end", onTurnEnd);
-	disco.on("agent_settled", onAgentSettled);
-	disco.on("session_shutdown", onSessionShutdown);
+	ocsid.on("tool_call", onToolCall);
+	ocsid.on("tool_result", onToolResult);
+	ocsid.on("turn_end", onTurnEnd);
+	ocsid.on("agent_settled", onAgentSettled);
+	ocsid.on("session_shutdown", onSessionShutdown);
 }

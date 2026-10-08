@@ -1,6 +1,6 @@
 # Repo Provenance
 
-schema: disco.repo-provenance.v1
+schema: ocsid.repo-provenance.v1
 
 ## Source Snapshot
 
@@ -9,7 +9,7 @@ schema: disco.repo-provenance.v1
 - Git commit: `bfdd2d4e91a77ef4d3e005324a2ecc166b358898`
 - Git branch: `main`
 - Exact tag: none recorded
-- Working tree state at generation: dirty because DisCo-generated `skills/` content was present or being created
+- Working tree state at generation: dirty because OCSID-generated `skills/` content was present or being created
 - Remote URL: https://github.com/chemprop/chemprop
 
 ## Evidence Paths

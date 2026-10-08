@@ -3,7 +3,7 @@ name: string-database-ppi
 description: "Query STRING REST API for PPIs (59M proteins, 20B interactions, 5000+ species)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # string-database-ppi — systems-biology-multiomics sub-skill

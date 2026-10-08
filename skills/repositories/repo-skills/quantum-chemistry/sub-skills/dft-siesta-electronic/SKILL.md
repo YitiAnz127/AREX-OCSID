@@ -3,7 +3,7 @@ name: dft-siesta-electronic
 description: "Prepare SIESTA electronic-analysis task inputs from prior converged context."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-siesta-electronic — quantum-chemistry sub-skill

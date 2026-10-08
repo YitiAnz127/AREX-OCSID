@@ -3,7 +3,7 @@ name: opencv-bioimage-analysis
 description: "&quot;Computer vision for bio-image preprocessing, feature detection, real-time microscopy."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # opencv-bioimage-analysis — cell-biology sub-skill

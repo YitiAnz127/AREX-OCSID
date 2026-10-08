@@ -12,11 +12,11 @@ import {
 
 const execPathDescriptor = Object.getOwnPropertyDescriptor(process, "execPath");
 const originalPath = process.env.PATH;
-const originalDiscoPackageDir = process.env.DISCO_PACKAGE_DIR;
-const originalManagedInstall = process.env.DISCO_MANAGED_INSTALL;
-const originalManagedInstallDir = process.env.DISCO_MANAGED_INSTALL_DIR;
-const originalManagedInstallMarker = process.env.DISCO_MANAGED_INSTALL_MARKER;
-const originalShareViewerUrl = process.env.DISCO_SHARE_VIEWER_URL;
+const originalOcsidPackageDir = process.env.OCSID_PACKAGE_DIR;
+const originalManagedInstall = process.env.OCSID_MANAGED_INSTALL;
+const originalManagedInstallDir = process.env.OCSID_MANAGED_INSTALL_DIR;
+const originalManagedInstallMarker = process.env.OCSID_MANAGED_INSTALL_MARKER;
+const originalShareViewerUrl = process.env.OCSID_SHARE_VIEWER_URL;
 const originalArgv1 = process.argv[1];
 let tempDir: string | undefined;
 
@@ -36,30 +36,30 @@ afterEach(() => {
 	} else {
 		process.env.PATH = originalPath;
 	}
-	if (originalDiscoPackageDir === undefined) {
-		delete process.env.DISCO_PACKAGE_DIR;
+	if (originalOcsidPackageDir === undefined) {
+		delete process.env.OCSID_PACKAGE_DIR;
 	} else {
-		process.env.DISCO_PACKAGE_DIR = originalDiscoPackageDir;
+		process.env.OCSID_PACKAGE_DIR = originalOcsidPackageDir;
 	}
 	if (originalManagedInstall === undefined) {
-		delete process.env.DISCO_MANAGED_INSTALL;
+		delete process.env.OCSID_MANAGED_INSTALL;
 	} else {
-		process.env.DISCO_MANAGED_INSTALL = originalManagedInstall;
+		process.env.OCSID_MANAGED_INSTALL = originalManagedInstall;
 	}
 	if (originalManagedInstallDir === undefined) {
-		delete process.env.DISCO_MANAGED_INSTALL_DIR;
+		delete process.env.OCSID_MANAGED_INSTALL_DIR;
 	} else {
-		process.env.DISCO_MANAGED_INSTALL_DIR = originalManagedInstallDir;
+		process.env.OCSID_MANAGED_INSTALL_DIR = originalManagedInstallDir;
 	}
 	if (originalManagedInstallMarker === undefined) {
-		delete process.env.DISCO_MANAGED_INSTALL_MARKER;
+		delete process.env.OCSID_MANAGED_INSTALL_MARKER;
 	} else {
-		process.env.DISCO_MANAGED_INSTALL_MARKER = originalManagedInstallMarker;
+		process.env.OCSID_MANAGED_INSTALL_MARKER = originalManagedInstallMarker;
 	}
 	if (originalShareViewerUrl === undefined) {
-		delete process.env.DISCO_SHARE_VIEWER_URL;
+		delete process.env.OCSID_SHARE_VIEWER_URL;
 	} else {
-		process.env.DISCO_SHARE_VIEWER_URL = originalShareViewerUrl;
+		process.env.OCSID_SHARE_VIEWER_URL = originalShareViewerUrl;
 	}
 	if (originalArgv1 === undefined) {
 		process.argv.splice(1, 1);
@@ -75,48 +75,48 @@ afterEach(() => {
 
 describe("getShareViewerUrl", () => {
 	test("uses the public gist URL by default", () => {
-		delete process.env.DISCO_SHARE_VIEWER_URL;
+		delete process.env.OCSID_SHARE_VIEWER_URL;
 		expect(getShareViewerUrl("abc123")).toBe("https://gist.github.com/abc123");
 	});
 
 	test("keeps hash routing for a configured share viewer", () => {
-		process.env.DISCO_SHARE_VIEWER_URL = "https://viewer.example/disco#";
-		expect(getShareViewerUrl("abc123")).toBe("https://viewer.example/disco#abc123");
+		process.env.OCSID_SHARE_VIEWER_URL = "https://viewer.example/ocsid#";
+		expect(getShareViewerUrl("abc123")).toBe("https://viewer.example/ocsid#abc123");
 	});
 });
 
-function createNpmPrefixInstall(template = "disco-prefix-"): { prefix: string; packageDir: string } {
+function createNpmPrefixInstall(template = "ocsid-prefix-"): { prefix: string; packageDir: string } {
 	const prefix = mkdtempSync(join(tmpdir(), template));
 	const root = join(prefix, "lib", "node_modules");
 	const scopeDir = join(root, "@arex-skill");
-	const packageDir = join(scopeDir, "disco");
+	const packageDir = join(scopeDir, "ocsid");
 	mkdirSync(packageDir, { recursive: true });
 	tempDir = prefix;
-	process.env.DISCO_PACKAGE_DIR = packageDir;
+	process.env.OCSID_PACKAGE_DIR = packageDir;
 	setExecPath(join(packageDir, "dist", "cli.js"));
 	return { prefix, packageDir };
 }
 
 function createPnpmGlobalInstall(): { root: string; packageDir: string } {
-	const temp = mkdtempSync(join(tmpdir(), "disco-pnpm-"));
+	const temp = mkdtempSync(join(tmpdir(), "ocsid-pnpm-"));
 	const binDir = join(temp, "bin");
 	const root = join(temp, "pnpm", "global", "5", "node_modules");
-	const packageDir = join(root, "@arex-skill", "disco");
+	const packageDir = join(root, "@arex-skill", "ocsid");
 	mkdirSync(packageDir, { recursive: true });
 	mkdirSync(binDir, { recursive: true });
 	writeFileSync(join(binDir, process.platform === "win32" ? "pnpm.cmd" : "pnpm"), createFakePnpmScript(root));
 	chmodSync(join(binDir, process.platform === "win32" ? "pnpm.cmd" : "pnpm"), 0o755);
 	tempDir = temp;
 	process.env.PATH = `${binDir}${delimiter}${originalPath ?? ""}`;
-	process.env.DISCO_PACKAGE_DIR = packageDir;
+	process.env.OCSID_PACKAGE_DIR = packageDir;
 	setExecPath(
 		join(
 			root,
 			".pnpm",
-			"@arex-skill+disco@0.0.0",
+			"@arex-skill+ocsid@0.0.0",
 			"node_modules",
 			"@arex-skill",
-			"disco",
+			"ocsid",
 			"dist",
 			"cli.js",
 		),
@@ -125,46 +125,46 @@ function createPnpmGlobalInstall(): { root: string; packageDir: string } {
 }
 
 function createYarnGlobalInstall(): { globalDir: string; packageDir: string } {
-	const temp = mkdtempSync(join(tmpdir(), "disco-yarn-"));
+	const temp = mkdtempSync(join(tmpdir(), "ocsid-yarn-"));
 	const binDir = join(temp, "bin");
 	const globalDir = join(temp, "yarn", "global");
-	const packageDir = join(globalDir, "node_modules", "@arex-skill", "disco");
+	const packageDir = join(globalDir, "node_modules", "@arex-skill", "ocsid");
 	mkdirSync(packageDir, { recursive: true });
 	mkdirSync(binDir, { recursive: true });
 	writeFileSync(join(binDir, process.platform === "win32" ? "yarn.cmd" : "yarn"), createFakeYarnScript(globalDir));
 	chmodSync(join(binDir, process.platform === "win32" ? "yarn.cmd" : "yarn"), 0o755);
 	tempDir = temp;
 	process.env.PATH = `${binDir}${delimiter}${originalPath ?? ""}`;
-	process.env.DISCO_PACKAGE_DIR = packageDir;
-	setExecPath(join(globalDir, ".yarn", "@arex-skill", "disco", "dist", "cli.js"));
+	process.env.OCSID_PACKAGE_DIR = packageDir;
+	setExecPath(join(globalDir, ".yarn", "@arex-skill", "ocsid", "dist", "cli.js"));
 	return { globalDir, packageDir };
 }
 
 function createBunGlobalInstall(): { packageDir: string } {
-	const temp = mkdtempSync(join(tmpdir(), "disco-bun-"));
+	const temp = mkdtempSync(join(tmpdir(), "ocsid-bun-"));
 	const prefix = join(temp, ".bun");
 	const bunBin = join(prefix, "bin");
 	const root = join(prefix, "install", "global", "node_modules");
 	const scopeDir = join(root, "@arex-skill");
-	const packageDir = join(scopeDir, "disco");
+	const packageDir = join(scopeDir, "ocsid");
 	mkdirSync(packageDir, { recursive: true });
 	mkdirSync(bunBin, { recursive: true });
 	writeFileSync(join(bunBin, process.platform === "win32" ? "bun.cmd" : "bun"), createFakeBunScript(bunBin));
 	chmodSync(join(bunBin, process.platform === "win32" ? "bun.cmd" : "bun"), 0o755);
 	tempDir = temp;
 	process.env.PATH = `${bunBin}${delimiter}${originalPath ?? ""}`;
-	process.env.DISCO_PACKAGE_DIR = packageDir;
+	process.env.OCSID_PACKAGE_DIR = packageDir;
 	setExecPath(join(packageDir, "dist", "cli.js"));
 	return { packageDir };
 }
 
 function createManagedInstall(): { installDir: string; installerPath: string } {
-	const temp = mkdtempSync(join(tmpdir(), "disco-managed-"));
+	const temp = mkdtempSync(join(tmpdir(), "ocsid-managed-"));
 	const installDir = join(temp, "install");
 	const version = "0.2.1";
 	const releaseDir = join(installDir, "releases", version);
-	const entrypoint = join(releaseDir, "node_modules", "@arex-skill", "disco", "dist", "cli.js");
-	const installerPath = join(installDir, "install-disco.sh");
+	const entrypoint = join(releaseDir, "node_modules", "@arex-skill", "ocsid", "dist", "cli.js");
+	const installerPath = join(installDir, "install-ocsid.sh");
 	const nodePath = join(temp, "node");
 	mkdirSync(dirname(entrypoint), { recursive: true });
 	mkdirSync(installDir, { recursive: true });
@@ -191,9 +191,9 @@ function createManagedInstall(): { installDir: string; installerPath: string } {
 		}),
 	);
 	tempDir = temp;
-	process.env.DISCO_MANAGED_INSTALL = "1";
-	process.env.DISCO_MANAGED_INSTALL_DIR = installDir;
-	delete process.env.DISCO_MANAGED_INSTALL_MARKER;
+	process.env.OCSID_MANAGED_INSTALL = "1";
+	process.env.OCSID_MANAGED_INSTALL_DIR = installDir;
+	delete process.env.OCSID_MANAGED_INSTALL_MARKER;
 	return { installDir, installerPath };
 }
 
@@ -247,12 +247,12 @@ describe("detectInstallMethod", () => {
 	});
 
 	test("does not fall back to a package manager when a managed marker is invalid", () => {
-		const temp = mkdtempSync(join(tmpdir(), "disco-invalid-managed-"));
+		const temp = mkdtempSync(join(tmpdir(), "ocsid-invalid-managed-"));
 		tempDir = temp;
-		process.env.DISCO_MANAGED_INSTALL = "1";
-		process.env.DISCO_MANAGED_INSTALL_DIR = join(temp, "install");
+		process.env.OCSID_MANAGED_INSTALL = "1";
+		process.env.OCSID_MANAGED_INSTALL_DIR = join(temp, "install");
 		writeFileSync(join(temp, "marker.json"), "{}\n");
-		process.env.DISCO_MANAGED_INSTALL_MARKER = join(temp, "marker.json");
+		process.env.OCSID_MANAGED_INSTALL_MARKER = join(temp, "marker.json");
 
 		expect(detectInstallMethod()).toBe("managed");
 		expect(getSelfUpdateCommand("@arex-skill/disco")).toBeUndefined();
@@ -261,7 +261,7 @@ describe("detectInstallMethod", () => {
 
 	test("detects pnpm from Windows .pnpm install paths", () => {
 		setExecPath(
-			"C:\\Users\\Admin\\Documents\\pnpm-repository\\global\\5\\.pnpm\\@arex-skill+disco@0.67.68\\node_modules\\@arex-skill\\disco\\dist\\cli.js",
+			"C:\\Users\\Admin\\Documents\\pnpm-repository\\global\\5\\.pnpm\\@arex-skill+ocsid@0.67.68\\node_modules\\@arex-skill\\ocsid\\dist\\cli.js",
 		);
 
 		expect(detectInstallMethod()).toBe("pnpm");
@@ -327,12 +327,12 @@ describe("detectInstallMethod", () => {
 	test("self-updates renamed packages from the current install prefix", () => {
 		const { prefix } = createNpmPrefixInstall();
 
-		const command = getSelfUpdateCommand("@arex-skill/disco", undefined, "@example/disco-next");
+		const command = getSelfUpdateCommand("@arex-skill/disco", undefined, "@example/ocsid-next");
 
 		expect(command).toEqual({
 			command: "npm",
-			args: ["--prefix", prefix, "install", "-g", "--ignore-scripts", "--min-release-age=0", "@example/disco-next"],
-			display: `npm --prefix ${prefix} uninstall -g @arex-skill/disco && npm --prefix ${prefix} install -g --ignore-scripts --min-release-age=0 @example/disco-next`,
+			args: ["--prefix", prefix, "install", "-g", "--ignore-scripts", "--min-release-age=0", "@example/ocsid-next"],
+			display: `npm --prefix ${prefix} uninstall -g @arex-skill/disco && npm --prefix ${prefix} install -g --ignore-scripts --min-release-age=0 @example/ocsid-next`,
 			steps: [
 				{
 					command: "npm",
@@ -341,8 +341,8 @@ describe("detectInstallMethod", () => {
 				},
 				{
 					command: "npm",
-					args: ["--prefix", prefix, "install", "-g", "--ignore-scripts", "--min-release-age=0", "@example/disco-next"],
-					display: `npm --prefix ${prefix} install -g --ignore-scripts --min-release-age=0 @example/disco-next`,
+					args: ["--prefix", prefix, "install", "-g", "--ignore-scripts", "--min-release-age=0", "@example/ocsid-next"],
+					display: `npm --prefix ${prefix} install -g --ignore-scripts --min-release-age=0 @example/ocsid-next`,
 				},
 			],
 		});
@@ -385,7 +385,7 @@ describe("detectInstallMethod", () => {
 	});
 
 	test("quotes npm self-update display paths", () => {
-		const { prefix } = createNpmPrefixInstall("disco prefix ");
+		const { prefix } = createNpmPrefixInstall("ocsid prefix ");
 
 		const command = getSelfUpdateCommand("@arex-skill/disco");
 
@@ -395,8 +395,8 @@ describe("detectInstallMethod", () => {
 	});
 
 	test("does not infer Windows npm custom prefixes from package paths", () => {
-		const packageDir = "C:\\Users\\Admin\\npm prefix\\node_modules\\@arex-skill\\disco";
-		process.env.DISCO_PACKAGE_DIR = packageDir;
+		const packageDir = "C:\\Users\\Admin\\npm prefix\\node_modules\\@arex-skill\\ocsid";
+		process.env.OCSID_PACKAGE_DIR = packageDir;
 		setExecPath(`${packageDir}\\dist\\cli.js`);
 
 		expect(detectInstallMethod()).toBe("npm");
@@ -421,14 +421,14 @@ describe("detectInstallMethod", () => {
 	test("self-updates renamed pnpm global installs by removing the old package first", () => {
 		createPnpmGlobalInstall();
 
-		const command = getSelfUpdateCommand("@arex-skill/disco", undefined, "@example/disco-next");
+		const command = getSelfUpdateCommand("@arex-skill/disco", undefined, "@example/ocsid-next");
 
 		expect(detectInstallMethod()).toBe("pnpm");
 		expect(command).toEqual({
 			command: "pnpm",
-			args: ["install", "-g", "--ignore-scripts", "--config.minimumReleaseAge=0", "@example/disco-next"],
+			args: ["install", "-g", "--ignore-scripts", "--config.minimumReleaseAge=0", "@example/ocsid-next"],
 			display:
-				"pnpm remove -g @arex-skill/disco && pnpm install -g --ignore-scripts --config.minimumReleaseAge=0 @example/disco-next",
+				"pnpm remove -g @arex-skill/disco && pnpm install -g --ignore-scripts --config.minimumReleaseAge=0 @example/ocsid-next",
 			steps: [
 				{
 					command: "pnpm",
@@ -437,19 +437,19 @@ describe("detectInstallMethod", () => {
 				},
 				{
 					command: "pnpm",
-					args: ["install", "-g", "--ignore-scripts", "--config.minimumReleaseAge=0", "@example/disco-next"],
-					display: "pnpm install -g --ignore-scripts --config.minimumReleaseAge=0 @example/disco-next",
+					args: ["install", "-g", "--ignore-scripts", "--config.minimumReleaseAge=0", "@example/ocsid-next"],
+					display: "pnpm install -g --ignore-scripts --config.minimumReleaseAge=0 @example/ocsid-next",
 				},
 			],
 		});
 	});
 
 	test("self-updates pnpm v11 global installs resolved through the store", () => {
-		const temp = mkdtempSync(join(tmpdir(), "disco-pnpm11-"));
+		const temp = mkdtempSync(join(tmpdir(), "ocsid-pnpm11-"));
 		const binDir = join(temp, "bin");
 		const root = join(temp, "Library", "pnpm", "global", "v11");
 		const packageName = "@arex-skill/disco";
-		const globalPackageDir = join(root, "11e9a", "node_modules", "@arex-skill", "disco");
+		const globalPackageDir = join(root, "11e9a", "node_modules", "@arex-skill", "ocsid");
 		const storePackageDir = join(
 			temp,
 			"Library",
@@ -458,12 +458,12 @@ describe("detectInstallMethod", () => {
 			"v11",
 			"links",
 			"@arex-skill",
-			"disco",
+			"ocsid",
 			"0.75.0",
 			"hash",
 			"node_modules",
 			"@arex-skill",
-			"disco",
+			"ocsid",
 		);
 		mkdirSync(globalPackageDir, { recursive: true });
 		mkdirSync(storePackageDir, { recursive: true });
@@ -473,7 +473,7 @@ describe("detectInstallMethod", () => {
 		chmodSync(join(binDir, process.platform === "win32" ? "pnpm.cmd" : "pnpm"), 0o755);
 		tempDir = temp;
 		process.env.PATH = `${binDir}${delimiter}${originalPath ?? ""}`;
-		process.env.DISCO_PACKAGE_DIR = storePackageDir;
+		process.env.OCSID_PACKAGE_DIR = storePackageDir;
 		process.argv[1] = join(globalPackageDir, "dist", "cli.js");
 		setExecPath(join(storePackageDir, "dist", "cli.js"));
 
@@ -490,13 +490,13 @@ describe("detectInstallMethod", () => {
 	test("self-updates renamed yarn global installs by removing the old package first", () => {
 		createYarnGlobalInstall();
 
-		const command = getSelfUpdateCommand("@arex-skill/disco", undefined, "@example/disco-next");
+		const command = getSelfUpdateCommand("@arex-skill/disco", undefined, "@example/ocsid-next");
 
 		expect(detectInstallMethod()).toBe("yarn");
 		expect(command).toEqual({
 			command: "yarn",
-			args: ["global", "add", "--ignore-scripts", "@example/disco-next"],
-			display: "yarn global remove @arex-skill/disco && yarn global add --ignore-scripts @example/disco-next",
+			args: ["global", "add", "--ignore-scripts", "@example/ocsid-next"],
+			display: "yarn global remove @arex-skill/disco && yarn global add --ignore-scripts @example/ocsid-next",
 			steps: [
 				{
 					command: "yarn",
@@ -505,8 +505,8 @@ describe("detectInstallMethod", () => {
 				},
 				{
 					command: "yarn",
-					args: ["global", "add", "--ignore-scripts", "@example/disco-next"],
-					display: "yarn global add --ignore-scripts @example/disco-next",
+					args: ["global", "add", "--ignore-scripts", "@example/ocsid-next"],
+					display: "yarn global add --ignore-scripts @example/ocsid-next",
 				},
 			],
 		});
@@ -515,14 +515,14 @@ describe("detectInstallMethod", () => {
 	test("self-updates renamed bun global installs by removing the old package first", () => {
 		createBunGlobalInstall();
 
-		const command = getSelfUpdateCommand("@arex-skill/disco", undefined, "@example/disco-next");
+		const command = getSelfUpdateCommand("@arex-skill/disco", undefined, "@example/ocsid-next");
 
 		expect(detectInstallMethod()).toBe("bun");
 		expect(command).toEqual({
 			command: "bun",
-			args: ["install", "-g", "--ignore-scripts", "--minimum-release-age=0", "@example/disco-next"],
+			args: ["install", "-g", "--ignore-scripts", "--minimum-release-age=0", "@example/ocsid-next"],
 			display:
-				"bun uninstall -g @arex-skill/disco && bun install -g --ignore-scripts --minimum-release-age=0 @example/disco-next",
+				"bun uninstall -g @arex-skill/disco && bun install -g --ignore-scripts --minimum-release-age=0 @example/ocsid-next",
 			steps: [
 				{
 					command: "bun",
@@ -531,8 +531,8 @@ describe("detectInstallMethod", () => {
 				},
 				{
 					command: "bun",
-					args: ["install", "-g", "--ignore-scripts", "--minimum-release-age=0", "@example/disco-next"],
-					display: "bun install -g --ignore-scripts --minimum-release-age=0 @example/disco-next",
+					args: ["install", "-g", "--ignore-scripts", "--minimum-release-age=0", "@example/ocsid-next"],
+					display: "bun install -g --ignore-scripts --minimum-release-age=0 @example/ocsid-next",
 				},
 			],
 		});

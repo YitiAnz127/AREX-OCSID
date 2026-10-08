@@ -1,5 +1,5 @@
 {
-  "name": "disco-extension-custom-provider-anthropic",
+  "name": "ocsid-extension-custom-provider-anthropic",
   "private": true,
   "version": "0.83.0",
   "type": "module",
@@ -8,7 +8,7 @@
     "build": "echo 'nothing to build'",
     "check": "echo 'nothing to check'"
   },
-  "disco": {
+  "ocsid": {
     "extensions": [
       "./index.ts"
     ]

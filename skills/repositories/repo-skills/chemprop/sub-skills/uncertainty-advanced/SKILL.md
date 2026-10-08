@@ -5,7 +5,7 @@ description: "Route advanced Chemprop workflows for uncertainty estimation,
   transfer/foundation starts, and interpretation planning."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

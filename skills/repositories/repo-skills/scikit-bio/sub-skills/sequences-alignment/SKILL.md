@@ -4,7 +4,7 @@ description: "Construct, transform, compare, and align scikit-bio biological
   sequences and TabularMSA objects."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

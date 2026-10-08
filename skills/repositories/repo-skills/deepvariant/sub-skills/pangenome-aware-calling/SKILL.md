@@ -4,7 +4,7 @@ description: "Use pangenome-aware DeepVariant with GBZ inputs and
   run_pangenome_aware_deepvariant for WGS and WES workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

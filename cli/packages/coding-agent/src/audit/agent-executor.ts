@@ -1,10 +1,9 @@
 /**
- * B2 — single-case real Agent vertical slice (interface + fake-executor).
+ * B2 — single-case agent execution with a real-driver research entry point.
  *
- * This module is the "1 skill × 1 case" real-execution contract. It does NOT
- * claim a real closed loop by itself: per the upgrade plan (line 194), without
- * model credentials / a hardened sandbox, B2 may only complete the interface and
- * a fake-executor test path. Real model execution is an EXTERNAL prerequisite.
+ * This module supplies the "1 skill × 1 case" execution contract. FakeAgentDriver
+ * remains for interface tests; runAgentEval rejects it. Research results also
+ * require a separate verifier over the actual workspace output.
  *
  * The contract (guaranteed here and exercised by tests, plan lines 88–94):
  *  1. Every case executes in an independent temporary workspace with a frozen
@@ -30,8 +29,13 @@ import * as path from "node:path";
 import { createHash } from "node:crypto";
 import { getRepoSkillsRoot } from "../config.ts";
 import type { CaseRecord, CaseExecutor, ExecutionResult, ExecutionUsage } from "./types.ts";
+import type { SplitIndex } from "./runner.ts";
 import { candidateIdFor, skillTreeDigest, type CandidateManifest } from "../evolution/skill-patch.ts";
 import { assertCanonicalId, assertCaseId } from "./id.ts";
+import { loadWorkspaceVerifier, verifyWorkspace, type WorkspaceVerifier } from "./workspace-verifier.ts";
+import { captureWorkspaceEvidence, writeWorkspaceEvidence, type WorkspaceEvidence } from "./workspace-evidence.ts";
+import { atomicWriteFileSync } from "./atomic.ts";
+import type { DiagnosticEvidence } from "../evolution/diagnostic-policy.ts";
 
 /** Sampling / constraint-relevant fixed execution config (B2: fixed per run). */
 export interface AgentExecutionConfig {
@@ -51,7 +55,7 @@ export interface AgentExecutionConfig {
 	tokenBudget: number;
 	/** Allowed tools. Empty means no tools. */
 	toolAllowlist: readonly string[];
-	/** Absolute paths the agent may WRITE to (outside this list writes are denied). */
+	/** Absolute paths or the stable @workspace/output token the agent may WRITE to. */
 	writeDirs: readonly string[];
 	/** Network policy: "none" (offline) | "allowlist" (hosts) | "all". */
 	networkPolicy: "none" | "allowlist" | "all";
@@ -62,9 +66,8 @@ export interface AgentExecutionConfig {
 /**
  * Default constraints for a no-tools, offline single-case probe (fake path).
  *
- * PROVISIONAL: these are raised above the original (8/16/5min/32k) but are still
- * guesses — no real driver exists yet, so nothing has measured what an actual
- * skill case costs. Re-derive them from a real driver's reported `usage` before
+ * PROVISIONAL: these values have not been calibrated on the pilot's real
+ * scientific cases. Re-derive them from a real driver's reported `usage` before
  * treating any of these as a calibrated budget; `maxToolCalls`/`tokenBudget`/
  * `wallMs` are enforced (see `budgetViolations` and the deadline race), so a
  * wrong value shows up as failed runs rather than as silently-truncated ones.
@@ -97,6 +100,16 @@ const NON_CASE_DIRS = new Set([".git", "node_modules", "test-cases"]);
  */
 export interface AgentDriver {
 	readonly name: string;
+	/**
+	 * P1-03: which runtime produced the score. Absent means the direct
+	 * OpenAI-compatible model-API driver (`ModelAgentDriver`); `"native-session"`
+	 * means a real `ocsid` session ran the case. The audit ledger labels the two
+	 * classes separately so a native session score is never silently compared
+	 * against a pasted-snapshot API score.
+	 */
+	readonly runtime?: AgentDriverRuntime;
+	/** P1-03: identity of the session behind the last score, when it is a session. */
+	sessionEvidence?(): NativeSessionIdentity | null;
 	run(opts: {
 		workspace: CaseWorkspace;
 		caseInput: AgentCaseInput;
@@ -118,6 +131,17 @@ export interface AgentCaseInput {
 	skillId: string;
 	caseId: string;
 	userRequest: string;
+}
+
+/** P1-03: which runtime an agent score came from. */
+export type AgentDriverRuntime = "model-api" | "native-session";
+
+/** P1-03: the native session that produced a score (audit evidence). */
+export interface NativeSessionIdentity {
+	sessionId: string | null;
+	mode: string | null;
+	provider: string | null;
+	model: string | null;
 }
 
 export interface SkillSnapshotOptions {
@@ -179,6 +203,7 @@ export function prepareCaseWorkspace(skillRoot: string, caseRecord: CaseRecord, 
 		}
 	};
 	try {
+		fs.mkdirSync(path.join(root, "output"), { recursive: true });
 		copySkillTree(srcSkill, snapshotDir);
 		if (options.expectedSkillDigest && skillTreeDigest(snapshotDir) !== options.expectedSkillDigest) {
 			throw new Error(`skill snapshot digest mismatch: ${srcSkill}`);
@@ -277,7 +302,8 @@ export function assertWorkspaceWritable(workspace: CaseWorkspace, config: AgentE
 	const root = path.resolve(workspace.root);
 	const snapshot = path.resolve(workspace.skillSnapshotDir);
 	for (const dir of config.writeDirs) {
-		if (!path.isAbsolute(dir)) throw new Error(`write dir must be absolute: ${dir}`);
+		if (dir === "@workspace/output") continue;
+		if (!path.isAbsolute(dir)) throw new Error(`write dir must be absolute or @workspace/output: ${dir}`);
 		// Resolve FIRST so `..` / `.` components are normalized: a non-resolved
 		// prefix check can be bypassed by e.g. `<root>\..\secret`, which lexically
 		// starts with root but resolves outside it.
@@ -348,7 +374,7 @@ export class FakeAgentDriver implements AgentDriver {
 			wallMs: this.metrics.wallMs,
 		};
 		return {
-			schema: "disco.execution-result.v1",
+			schema: "ocsid.execution-result.v1",
 			status: "succeeded",
 			artifact,
 			artifactSha256: createHash("sha256").update(artifact, "utf8").digest("hex"),
@@ -373,7 +399,7 @@ export function makeAgentExecutor(
 	skillRoot: string,
 	driver: AgentDriver,
 	config: AgentExecutionConfig,
-	options: SkillSnapshotOptions & { captureResult?: (result: ExecutionResult) => void } = {},
+	options: SkillSnapshotOptions & { captureResult?: (result: ExecutionResult) => void; inspectWorkspace?: (workspace: CaseWorkspace) => void } = {},
 ): CaseExecutor {
 	return {
 		async execute(caseRecord: CaseRecord): Promise<ExecutionResult> {
@@ -441,6 +467,7 @@ export function makeAgentExecutor(
 									error: `execution exceeded its declared budget: ${overruns.join("; ")}`,
 								}
 							: frozen;
+					if (finalResult.status === "succeeded") options.inspectWorkspace?.(workspace);
 					if (options.captureResult) options.captureResult(finalResult);
 					return finalResult;
 				} catch (error) {
@@ -451,7 +478,7 @@ export function makeAgentExecutor(
 					deferCleanup = true;
 					void tracked.catch(() => {}).then(releaseWorkspace);
 					const timedOutResult: ExecutionResult = {
-						schema: "disco.execution-result.v1",
+						schema: "ocsid.execution-result.v1",
 						status: "timed-out",
 						artifact: null,
 						artifactSha256: null,
@@ -477,15 +504,14 @@ export function makeAgentExecutor(
 
 /**
  * B2 — a focused, runnable agent-eval: exactly ONE skill × ONE case through a
- * real (or fake) agent driver. An authored candidate uses its own runKind and
+ * real agent driver. An authored candidate uses its own runKind and
  * the digest of the staged skill tree, never a digest of candidate text.
  *
- * Without credentials/sandbox this uses the provided driver (default the fake
- * one) and the persisted run is honestly labeled as interface/fake validation,
- * NOT a real closed loop (plan line 194).
+ * The fake driver remains available for isolated executor tests, but this
+ * research evaluation entry point rejects it.
  */
 export interface AgentEvalOptions {
-	benchmarkRoot: string;
+	benchmarkRoot?: string;
 	qualityDir: string;
 	runId: string;
 	skillId: string;
@@ -494,20 +520,43 @@ export interface AgentEvalOptions {
 	skillRoot?: string;
 	/** Evaluate exactly this authored candidate tree rather than the live skill. */
 	candidate?: { manifestFile: string; stagedRoot: string };
+	/** Hidden, independent file/numeric verifier. Omit for proxy-only diagnostics. */
+	verifierFile?: string;
 	config: AgentExecutionConfig;
-	driver?: AgentDriver;
+	/** A real driver must be supplied by the caller; fake drivers are test-only. */
+	driver: AgentDriver;
 	runAt?: string;
+	/**
+	 * P1-03: run one case from the post-freeze HELD-OUT split as a real acceptance
+	 * measurement. Only the native-session runtime may do this (the direct API
+	 * driver can only score a pasted snapshot proxy), and the run is persisted
+	 * under its own label so it can never be folded into the improvement loop as
+	 * if it were a train/dev measurement.
+	 */
+	acceptance?: "heldout";
+	/**
+	 * P1-03: score a case that is NOT part of any frozen benchmark — the
+	 * Creator→Researcher flow grades the skill a native Creator session just
+	 * produced. The recorded split label is `adhoc`, so such a score can never be
+	 * counted as a frozen-split (train/dev/heldout) measurement.
+	 */
+	adhocCase?: { skillId: string; caseId: string; userRequest: string; assertionsText?: string };
 }
 
 export interface AgentEvalResult {
 	runId: string;
 	skillId: string;
 	caseId: string;
-	executor: "agent";
-	runKind: "agent-eval" | "candidate-agent-eval";
+	/** P1-03: "agent" is the pasted-snapshot model-API driver, "agent-native" a real OCSID session. */
+	executor: "agent" | "agent-native";
+	runKind: "agent-eval" | "candidate-agent-eval" | "native-agent-eval" | "native-candidate-agent-eval" | "native-heldout-acceptance";
+	/** P1-03: the real session behind a native score (absent for model-API runs). */
+	nativeSession?: NativeSessionIdentity;
 	candidateId?: string;
 	candidateSha256: string | null;
 	status: ExecutionResult["status"];
+	errorKind?: ExecutionResult["errorKind"];
+	error?: string;
 	artifactSha256: string | null;
 	usage: ExecutionUsage;
 	model: string | undefined;
@@ -516,13 +565,17 @@ export interface AgentEvalResult {
 	ledgerPath: string;
 	summaryPath: string;
 	driver: string;
+	verifierSha256: string | null;
+	/** P1-02: archived graded workspace files, absent without a workspace verifier. */
+	workspaceEvidencePath?: string;
+	diagnosticEvidencePath: string;
 	note: string;
 }
 
 function readCandidateSnapshot(input: NonNullable<AgentEvalOptions["candidate"]>, skillId: string): { manifest: CandidateManifest; root: string } {
 	const manifest = JSON.parse(fs.readFileSync(input.manifestFile, "utf8")) as CandidateManifest;
 	const digest = /^[0-9a-f]{64}$/;
-	if (manifest.enc !== "disco.candidate-manifest.v1" || manifest.targetSkillId !== skillId ||
+	if (manifest.enc !== "ocsid.candidate-manifest.v1" || manifest.targetSkillId !== skillId ||
 		!digest.test(manifest.candidateId) || !digest.test(manifest.parentSkillDigest) ||
 		!digest.test(manifest.patchDigest) || !digest.test(manifest.resultSkillDigest) ||
 		candidateIdFor(manifest.parentSkillDigest, manifest.patchDigest) !== manifest.candidateId) {
@@ -553,24 +606,81 @@ export async function runAgentEval(opts: AgentEvalOptions): Promise<AgentEvalRes
 	const { persistAuditRun } = await import("./records.ts");
 	const { modelGrader } = await import("./model-grader.ts");
 
-	// P0-04 / B2 isolation: only load train+dev, never held-out for this path.
-	const { cases, splitIndex } = loadBenchmark(opts.benchmarkRoot, ["train", "dev"]);
-	const target = cases.find((c) => c.skillId === opts.skillId && c.caseId === opts.caseId);
-	if (!target) {
-		throw new Error(`agent-eval: no case ${opts.skillId}:${opts.caseId} in train/dev of ${opts.benchmarkRoot}`);
+	// P1-03: the runtime decides the label, and only the native runtime may run a
+	// held-out acceptance case (the model-API driver has no native heldout route).
+	const nativeRuntime = opts.driver.runtime === "native-session";
+	if (opts.acceptance === "heldout" && !nativeRuntime) {
+		throw new Error('agent-eval: acceptance "heldout" requires the native-session runtime; the model-API driver cannot execute a real held-out case');
+	}
+
+	// P0-04 / B2 isolation: only load train+dev, never held-out — except for an
+	// explicit native acceptance run, which loads held-out ONLY. A P1-03 ad-hoc
+	// case (the Creator→Researcher flow scores a freshly created skill that is not
+	// in any frozen benchmark) bypasses the benchmark lookup entirely and is
+	// labelled `adhoc` so it can never be mistaken for a frozen-split measurement.
+	const splits: Array<"train" | "dev" | "heldout"> = opts.acceptance === "heldout" ? ["heldout"] : ["train", "dev"];
+	let target: CaseRecord;
+	let splitIndex: SplitIndex;
+	if (opts.adhocCase) {
+		const adhoc = opts.adhocCase;
+		target = { skillId: adhoc.skillId, caseId: adhoc.caseId, files: { userRequest: adhoc.userRequest,
+			assertionsText: adhoc.assertionsText ?? (opts.verifierFile ? JSON.stringify({ schema: "ocsid.usability-case.v1", assertions: ["Independent workspace verifier"] }) : "") } };
+		splitIndex = { [`${adhoc.skillId}:${adhoc.caseId}`]: "adhoc" };
+	} else {
+		if (!opts.benchmarkRoot) throw new Error("agent-eval: benchmarkRoot is required unless adhocCase is provided");
+		const loaded = loadBenchmark(opts.benchmarkRoot, splits);
+		const found = loaded.cases.find((c) => c.skillId === opts.skillId && c.caseId === opts.caseId);
+		if (!found) {
+			throw new Error(`agent-eval: no case ${opts.skillId}:${opts.caseId} in ${splits.join("/")} of ${opts.benchmarkRoot}`);
+		}
+		target = found;
+		splitIndex = loaded.splitIndex;
 	}
 
 	const skillRoot = path.resolve(opts.skillRoot ?? path.join(getRepoSkillsRoot(), "repo-skills"));
 	const candidate = opts.candidate ? readCandidateSnapshot(opts.candidate, opts.skillId) : null;
-	const runKind = candidate ? "candidate-agent-eval" : "agent-eval";
-	const driver = opts.driver ?? new FakeAgentDriver();
+	const skillSha256 = candidate?.manifest.resultSkillDigest ?? skillTreeDigest(path.join(skillRoot, opts.skillId));
+	if (opts.verifierFile) {
+		const verifierPath = path.resolve(opts.verifierFile);
+		for (const exposedRoot of [path.join(skillRoot, opts.skillId), candidate?.root].filter((root): root is string => !!root)) {
+			if (verifierPath === exposedRoot || verifierPath.startsWith(exposedRoot + path.sep)) {
+				throw new Error("verifier file must be outside the agent-visible skill tree");
+			}
+		}
+	}
+	const runKind = opts.acceptance === "heldout"
+		? "native-heldout-acceptance"
+		: candidate
+			? (nativeRuntime ? "native-candidate-agent-eval" : "candidate-agent-eval")
+			: (nativeRuntime ? "native-agent-eval" : "agent-eval");
+	const driver = opts.driver;
+	if (!driver || driver instanceof FakeAgentDriver || driver.name === "fake-agent-driver") {
+		throw new Error("agent-eval requires a real AgentDriver; fake execution cannot produce research scores");
+	}
+	const verifier: WorkspaceVerifier | null = opts.verifierFile ? loadWorkspaceVerifier(opts.verifierFile) : null;
+	let verified: ReturnType<typeof verifyWorkspace> | undefined;
 	let captured: ExecutionResult | undefined;
+	// P1-02: the temp workspace (and with it the graded output/) is deleted in
+	// `finally`, so seal the graded files + verifier + verdict while they exist.
+	let sealed: WorkspaceEvidence | undefined;
 	const caseExecutor = makeAgentExecutor(skillRoot, driver, opts.config, {
 		sourceSkillDir: candidate?.root,
-		expectedSkillDigest: candidate?.manifest.resultSkillDigest,
+		expectedSkillDigest: skillSha256,
 		captureResult: (r) => {
 			captured = r;
 		},
+		inspectWorkspace: verifier ? (workspace) => {
+			const verdict = verifyWorkspace(workspace.root, verifier);
+			verified = verdict;
+			sealed = captureWorkspaceEvidence({
+				workspaceRoot: workspace.root,
+				runId: opts.runId,
+				skillId: opts.skillId,
+				caseId: opts.caseId,
+				verifier,
+				verdict,
+			});
+		} : undefined,
 	});
 
 	// Single-case audit through the agent executor. The ledger/kind is genuinely
@@ -578,24 +688,56 @@ export async function runAgentEval(opts: AgentEvalOptions): Promise<AgentEvalRes
 	const run = await runAudit(
 		[target],
 		{ runId: opts.runId, runAt: opts.runAt ?? new Date().toISOString(), candidateSha256: candidate?.manifest.resultSkillDigest ?? null },
-		{ executor: caseExecutor, grader: modelGrader(), splitIndex },
+		{ executor: caseExecutor, grader: verifier ? { gradedBy: "assertion", async grade() {
+			if (!verified) throw new Error("workspace verifier did not run");
+			return verified;
+		} } : modelGrader(), splitIndex },
 	);
+	// P1-03: the real session that produced this score, recorded as ledger note
+	// evidence (a native score must be attributable to a session, not just a model).
+	const session: NativeSessionIdentity | null = nativeRuntime ? driver.sessionEvidence?.() ?? null : null;
+	const sessionNote = session
+		? ` nativeSession=${session.sessionId ?? "unknown"} mode=${session.mode ?? "unknown"} runtime=${session.provider ?? "unknown"}/${session.model ?? "unknown"};`
+		: "";
 	const persisted = persistAuditRun(run, {
 		qualityDir: opts.qualityDir,
 		kind: runKind,
-		note: `${runKind}: single-case (${opts.skillId}:${opts.caseId}) via driver "${driver.name}" over model ${opts.config.model}; candidateId=${candidate?.manifest.candidateId ?? "none"}; deterministic proxy grader (NOT a task-quality claim); ${driver.name === "fake-agent-driver" ? "FAKE executor (interface validation only)." : "Driver supplied by caller; verify its execution provenance before making a quality claim."}`,
+		note: `${runKind}: single-case (${opts.skillId}:${opts.caseId}) via driver "${driver.name}" (runtime=${driver.runtime ?? "model-api"}) over model ${opts.config.model}; candidateId=${candidate?.manifest.candidateId ?? "none"};${sessionNote} ${verifier ? `workspace verifier ${verifier.sha256}` : "deterministic proxy grader (NOT a task-quality claim)"}.${opts.acceptance === "heldout" ? " POST-FREEZE HELD-OUT ACCEPTANCE: not an improvement signal and never fed back into the loop." : ""}`,
 	});
 
 	const row = run.cases[0];
+	// P1-02: archive the graded workspace files so the verdict survives the
+	// deletion of the temp workspace and can be replayed (`verify-archive`).
+	const sealedEvidencePath = sealed ? writeWorkspaceEvidence(persisted.dir, sealed) : undefined;
+	const diagnosticEvidence: DiagnosticEvidence = {
+		schema: "ocsid.diagnostic-evidence.v1",
+		runId: opts.runId,
+		caseId: opts.caseId,
+		skillId: opts.skillId,
+		skillDigest: skillSha256,
+		// Text-token proxy grades remain in the audit ledger for plumbing checks,
+		// but cannot authorize a persistent skill edit.
+		score: verifier ? row?.score ?? null : null,
+		executionStatus: row?.execStatus ?? "not-attempted",
+		evidenceRefs: [persisted.ledgerPath, persisted.summaryPath, persisted.tracesPath, ...(sealedEvidencePath ? [sealedEvidencePath] : [])],
+		probeBudgetAvailable: false,
+	};
+	const diagnosticEvidencePath = path.join(persisted.dir, "diagnostic-evidence.json");
+	atomicWriteFileSync(diagnosticEvidencePath, JSON.stringify(diagnosticEvidence, null, 2) + "\n", "utf8");
 	return {
 		runId: run.runId,
 		skillId: opts.skillId,
 		caseId: opts.caseId,
-		executor: "agent",
+		executor: nativeRuntime ? "agent-native" : "agent",
 		runKind,
+		...(session ? { nativeSession: session } : {}),
 		candidateId: candidate?.manifest.candidateId,
 		candidateSha256: candidate?.manifest.resultSkillDigest ?? null,
 		status: row?.execStatus ?? "not-attempted",
+		...(row?.execStatus !== "succeeded" && row?.execStatus !== "not-attempted" ? {
+			errorKind: captured?.errorKind ?? row?.errorKind,
+			error: captured?.error ?? row?.blocker,
+		} : {}),
 		artifactSha256: row && "artifactSha256" in row ? row.artifactSha256 ?? null : null,
 		usage: captured?.usage ?? {},
 		model: captured?.model ?? opts.config.model,
@@ -604,8 +746,38 @@ export async function runAgentEval(opts: AgentEvalOptions): Promise<AgentEvalRes
 		ledgerPath: persisted.ledgerPath,
 		summaryPath: persisted.summaryPath,
 		driver: driver.name,
-		note: `${runKind} persisted; ${row?.row ? 1 : 0} ledger row(s); deterministic proxy grader; driver=${driver.name}.`,
+		verifierSha256: verifier?.sha256 ?? null,
+		...(sealedEvidencePath ? { workspaceEvidencePath: sealedEvidencePath } : {}),
+		diagnosticEvidencePath,
+		note: `${runKind} persisted; ${row?.row ? 1 : 0} ledger row(s); ${verifier ? "programmatic workspace verifier" : "deterministic proxy grader"}; driver=${driver.name}.`,
 	};
+}
+
+/** Execute a parent and its authored candidate on the same case, model, budget and private verifier. */
+export async function runPairedAgentEval(
+	opts: AgentEvalOptions & { candidate: NonNullable<AgentEvalOptions["candidate"]>; verifierFile: string },
+): Promise<{ parent: AgentEvalResult; candidate: AgentEvalResult; parentScore: number | null; candidateScore: number | null; delta: number | null }> {
+	assertCanonicalId(opts.runId, "runId");
+	assertCanonicalId(`${opts.runId}-parent`, "parent runId");
+	assertCanonicalId(`${opts.runId}-candidate`, "candidate runId");
+	const skillRoot = path.resolve(opts.skillRoot ?? path.join(getRepoSkillsRoot(), "repo-skills"));
+	const manifest = readCandidateSnapshot(opts.candidate, opts.skillId).manifest;
+	if (skillTreeDigest(path.join(skillRoot, opts.skillId)) !== manifest.parentSkillDigest) {
+		throw new Error("paired evaluation parent skill does not match candidate manifest");
+	}
+	const parent = await runAgentEval({ ...opts, runId: `${opts.runId}-parent`, candidate: undefined });
+	const candidate = await runAgentEval({ ...opts, runId: `${opts.runId}-candidate` });
+	if (parent.configDigest !== candidate.configDigest || parent.verifierSha256 !== candidate.verifierSha256) {
+		throw new Error("paired evaluation configuration or verifier changed between runs");
+	}
+	const scoreOf = (run: AgentEvalResult): number | null => {
+		const evidence = JSON.parse(fs.readFileSync(run.diagnosticEvidencePath, "utf8")) as DiagnosticEvidence;
+		return evidence.score;
+	};
+	const parentScore = scoreOf(parent);
+	const candidateScore = scoreOf(candidate);
+	return { parent, candidate, parentScore, candidateScore,
+		delta: parentScore === null || candidateScore === null ? null : candidateScore - parentScore };
 }
 
 /** Aggregated usage across an audit run's execution results (summed where present). */

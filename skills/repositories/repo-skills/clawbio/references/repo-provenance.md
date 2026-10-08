@@ -11,7 +11,7 @@ routes still apply.
 
 ```json
 {
-  "schema": "disco.repo-provenance.v1",
+  "schema": "ocsid.repo-provenance.v1",
   "generated_at_utc": "2026-08-21T00:00:00Z",
   "repository": {
     "name": "ClawBio",

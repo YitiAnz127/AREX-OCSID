@@ -2,7 +2,7 @@
  * Observer -> quality ledger projection (Step 2).
  *
  * Bridges the observation layer (`repo-skill-observer`) and the benchmark
- * quality ledger (`disco.quality-ledger.v1`). The observer emits *facts*: a
+ * quality ledger (`ocsid.quality-ledger.v1`). The observer emits *facts*: a
  * `task_judgement` row already carries a `judgementSource` (assertion / human /
  * model_grader) and an optional 0..1 `taskScore`. This module projects those
  * into a durable benchmark ledger row WITHOUT re-deriving anything from

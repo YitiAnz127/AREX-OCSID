@@ -3,7 +3,7 @@ name: scikit-learn-machine-learning
 description: "&quot;Classical ML in Python: classification, regression, clustering, dim reduction, evaluation, tuning, preprocessing pipelines."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # scikit-learn-machine-learning — sciagent-scientific-computing sub-skill

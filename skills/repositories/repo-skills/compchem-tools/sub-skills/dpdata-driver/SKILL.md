@@ -3,7 +3,7 @@ name: dpdata-driver
 description: "Use dpdata Python Driver plugins to label systems (energies/forces/virials) via System.predict(), list available drivers, and build Driver objects (ase/deepmd/gaussian/sqm/hybrid)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dpdata-driver — compchem-tools sub-skill

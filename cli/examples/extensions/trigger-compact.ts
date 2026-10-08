@@ -2,7 +2,7 @@ import type { ExtensionAPI, ExtensionContext } from "@arex-skill/disco";
 
 const COMPACT_THRESHOLD_TOKENS = 100_000;
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	let previousTokens: number | null | undefined;
 
 	const triggerCompaction = (ctx: ExtensionContext, customInstructions?: string) => {
@@ -24,7 +24,7 @@ export default function (disco: ExtensionAPI) {
 		});
 	};
 
-	disco.on("turn_end", (_event, ctx) => {
+	ocsid.on("turn_end", (_event, ctx) => {
 		const usage = ctx.getContextUsage();
 		const currentTokens = usage?.tokens ?? null;
 		if (currentTokens === null) {
@@ -40,7 +40,7 @@ export default function (disco: ExtensionAPI) {
 		triggerCompaction(ctx);
 	});
 
-	disco.registerCommand("trigger-compact", {
+	ocsid.registerCommand("trigger-compact", {
 		description: "Trigger compaction immediately",
 		handler: async (args, ctx) => {
 			const instructions = args.trim() || undefined;

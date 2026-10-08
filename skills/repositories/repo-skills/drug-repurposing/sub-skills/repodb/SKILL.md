@@ -3,7 +3,7 @@ name: repodb
 description: "Query the RepoDB drug repurposing database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # repodb — drug-repurposing sub-skill

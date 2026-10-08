@@ -3,7 +3,7 @@ name: ade_corpus
 description: "Sub-skill ade_corpus for drug-nlp."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ade_corpus — drug-nlp sub-skill

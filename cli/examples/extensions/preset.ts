@@ -6,8 +6,8 @@
  * and can be activated via CLI flag, /preset command, or Ctrl+Shift+U to cycle.
  *
  * Config files (merged, project takes precedence):
- * - ~/.disco/agent/presets.json (global)
- * - <cwd>/.disco/presets.json (project-local)
+ * - ~/.ocsid/agent/presets.json (global)
+ * - <cwd>/.ocsid/presets.json (project-local)
  *
  * Example presets.json:
  * ```json
@@ -30,7 +30,7 @@
  * ```
  *
  * Usage:
- * - `disco --preset plan` - start with plan preset
+ * - `ocsid --preset plan` - start with plan preset
  * - `/preset` - show selector to switch presets mid-session
  * - `/preset implement` - switch to implement preset directly
  * - `Ctrl+Shift+U` - cycle through presets
@@ -104,14 +104,14 @@ interface OriginalState {
 	tools: string[];
 }
 
-export default function presetExtension(disco: ExtensionAPI) {
+export default function presetExtension(ocsid: ExtensionAPI) {
 	let presets: PresetsConfig = {};
 	let activePresetName: string | undefined;
 	let activePreset: Preset | undefined;
 	let originalState: OriginalState | undefined;
 
 	// Register --preset CLI flag
-	disco.registerFlag("preset", {
+	ocsid.registerFlag("preset", {
 		description: "Preset configuration to use",
 		type: "string",
 	});
@@ -124,8 +124,8 @@ export default function presetExtension(disco: ExtensionAPI) {
 		if (activePresetName === undefined) {
 			originalState = {
 				model: ctx.model,
-				thinkingLevel: disco.getThinkingLevel(),
-				tools: disco.getActiveTools(),
+				thinkingLevel: ocsid.getThinkingLevel(),
+				tools: ocsid.getActiveTools(),
 			};
 		}
 
@@ -133,7 +133,7 @@ export default function presetExtension(disco: ExtensionAPI) {
 		if (preset.provider && preset.model) {
 			const model = ctx.modelRegistry.find(preset.provider, preset.model);
 			if (model) {
-				const success = await disco.setModel(model);
+				const success = await ocsid.setModel(model);
 				if (!success) {
 					ctx.ui.notify(`Preset "${name}": No API key for ${preset.provider}/${preset.model}`, "warning");
 				}
@@ -144,12 +144,12 @@ export default function presetExtension(disco: ExtensionAPI) {
 
 		// Apply thinking level if specified
 		if (preset.thinkingLevel) {
-			disco.setThinkingLevel(preset.thinkingLevel);
+			ocsid.setThinkingLevel(preset.thinkingLevel);
 		}
 
 		// Apply tools if specified
 		if (preset.tools && preset.tools.length > 0) {
-			const allToolNames = disco.getAllTools().map((t) => t.name);
+			const allToolNames = ocsid.getAllTools().map((t) => t.name);
 			const validTools = preset.tools.filter((t) => allToolNames.includes(t));
 			const invalidTools = preset.tools.filter((t) => !allToolNames.includes(t));
 
@@ -158,7 +158,7 @@ export default function presetExtension(disco: ExtensionAPI) {
 			}
 
 			if (validTools.length > 0) {
-				disco.setActiveTools(validTools);
+				ocsid.setActiveTools(validTools);
 			}
 		}
 
@@ -273,12 +273,12 @@ export default function presetExtension(disco: ExtensionAPI) {
 			activePreset = undefined;
 			if (originalState) {
 				if (originalState.model) {
-					await disco.setModel(originalState.model);
+					await ocsid.setModel(originalState.model);
 				}
-				disco.setThinkingLevel(originalState.thinkingLevel);
-				disco.setActiveTools(originalState.tools);
+				ocsid.setThinkingLevel(originalState.thinkingLevel);
+				ocsid.setActiveTools(originalState.tools);
 			} else {
-				disco.setActiveTools(["read", "bash", "edit", "write"]);
+				ocsid.setActiveTools(["read", "bash", "edit", "write"]);
 			}
 			ctx.ui.notify("Preset cleared, defaults restored", "info");
 			updateStatus(ctx);
@@ -329,12 +329,12 @@ export default function presetExtension(disco: ExtensionAPI) {
 			activePreset = undefined;
 			if (originalState) {
 				if (originalState.model) {
-					await disco.setModel(originalState.model);
+					await ocsid.setModel(originalState.model);
 				}
-				disco.setThinkingLevel(originalState.thinkingLevel);
-				disco.setActiveTools(originalState.tools);
+				ocsid.setThinkingLevel(originalState.thinkingLevel);
+				ocsid.setActiveTools(originalState.tools);
 			} else {
-				disco.setActiveTools(["read", "bash", "edit", "write"]);
+				ocsid.setActiveTools(["read", "bash", "edit", "write"]);
 			}
 			ctx.ui.notify("Preset cleared, defaults restored", "info");
 			updateStatus(ctx);
@@ -349,7 +349,7 @@ export default function presetExtension(disco: ExtensionAPI) {
 		updateStatus(ctx);
 	}
 
-	disco.registerShortcut(Key.ctrlShift("u"), {
+	ocsid.registerShortcut(Key.ctrlShift("u"), {
 		description: "Cycle presets",
 		handler: async (ctx) => {
 			await cyclePreset(ctx);
@@ -357,7 +357,7 @@ export default function presetExtension(disco: ExtensionAPI) {
 	});
 
 	// Register /preset command
-	disco.registerCommand("preset", {
+	ocsid.registerCommand("preset", {
 		description: "Switch preset configuration",
 		handler: async (args, ctx) => {
 			// If preset name provided, apply directly
@@ -383,7 +383,7 @@ export default function presetExtension(disco: ExtensionAPI) {
 	});
 
 	// Inject preset instructions into system prompt
-	disco.on("before_agent_start", async (event) => {
+	ocsid.on("before_agent_start", async (event) => {
 		if (activePreset?.instructions) {
 			return {
 				systemPrompt: `${event.systemPrompt}\n\n${activePreset.instructions}`,
@@ -392,12 +392,12 @@ export default function presetExtension(disco: ExtensionAPI) {
 	});
 
 	// Initialize on session start
-	disco.on("session_start", async (_event, ctx) => {
+	ocsid.on("session_start", async (_event, ctx) => {
 		// Load presets from config files
 		presets = loadPresets(ctx.cwd);
 
 		// Check for --preset flag
-		const presetFlag = disco.getFlag("preset");
+		const presetFlag = ocsid.getFlag("preset");
 		if (typeof presetFlag === "string" && presetFlag) {
 			const preset = presets[presetFlag];
 			if (preset) {
@@ -428,9 +428,9 @@ export default function presetExtension(disco: ExtensionAPI) {
 	});
 
 	// Persist preset state
-	disco.on("turn_start", async () => {
+	ocsid.on("turn_start", async () => {
 		if (activePresetName) {
-			disco.appendEntry("preset-state", { name: activePresetName });
+			ocsid.appendEntry("preset-state", { name: activePresetName });
 		}
 	});
 }

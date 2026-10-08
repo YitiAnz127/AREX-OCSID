@@ -3,7 +3,7 @@ name: single-cell-single-cell-annotation-guide
 description: "&quot;Decision framework for manual marker-based, automated (CellTypist), and reference-based (popV) cell type annotation in scRNA-seq."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # single-cell-single-cell-annotation-guide — genomics-bioinformatics sub-skill

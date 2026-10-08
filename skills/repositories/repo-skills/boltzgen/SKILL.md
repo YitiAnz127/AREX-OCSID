@@ -3,7 +3,7 @@ name: boltzgen
 description: "All-atom protein design using BoltzGen diffusion model."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

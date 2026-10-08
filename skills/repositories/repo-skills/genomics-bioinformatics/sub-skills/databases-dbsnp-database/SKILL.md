@@ -3,7 +3,7 @@ name: databases-dbsnp-database
 description: "&quot;Query NCBI dbSNP for SNP records by rsID, gene, or region via E-utilities and Variation Services REST API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-dbsnp-database — genomics-bioinformatics sub-skill

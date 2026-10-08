@@ -3,7 +3,7 @@ name: phee
 description: "Query the PHEE pharmacovigilance event extraction dataset."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # phee — drug-nlp sub-skill

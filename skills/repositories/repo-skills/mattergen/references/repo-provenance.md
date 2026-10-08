@@ -8,7 +8,7 @@ evidence paths differ, use the repository-skill refresh workflow.
 
 ```json
 {
-  "schema": "disco.repo-provenance.v1",
+  "schema": "ocsid.repo-provenance.v1",
   "generated_at_utc": "2026-08-20T10:30:00Z",
   "repository": {
     "name": "mattergen",
@@ -18,7 +18,7 @@ evidence paths differ, use the repository-skill refresh workflow.
     "tag": null,
     "commit": "ac9ddd406171138c3f037d06b9b53fedbbb1c536",
     "working_tree": "source-clean-at-generation; generated skill and review artifacts added afterward",
-    "dirty_paths": ["skills/disco/mattergen", "skills/tests/mattergen"]
+    "dirty_paths": ["skills/ocsid/mattergen", "skills/tests/mattergen"]
   },
   "packages": [
     {
@@ -52,6 +52,6 @@ evidence paths differ, use the repository-skill refresh workflow.
 - Treat a change in torch/CUDA/PyG compatibility, property registry, CSV cache
   schema, evaluation correction schemes, or Hydra config layout as a reason to
   refresh and rerun verification.
-- The `skills/disco/mattergen` and `skills/tests/mattergen` paths are generated
+- The `skills/ocsid/mattergen` and `skills/tests/mattergen` paths are generated
   outputs, not source evidence; do not interpret their presence as a source-code
   change when assessing package staleness.

@@ -6,7 +6,7 @@ description: "Guides agents using pysam for tabix compression, tabix indexing,
   issues."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

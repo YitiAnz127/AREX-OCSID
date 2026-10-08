@@ -3,7 +3,7 @@ name: cell-biology
 description: "Use cell-biology for genomics and bioinformatics workflows: cell-biology."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

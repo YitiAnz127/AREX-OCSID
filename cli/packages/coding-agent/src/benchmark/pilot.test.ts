@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { selectPilotSkills, type SkillProfile } from "./pilot";
 import { assignDeterministicSplits, buildManifest } from "./schema";
 import { computeBenchmarkContentDigest, computeBenchmarkSplitDigests } from "../audit/loader.ts";
+import { OFFICIAL_BENCHMARK_DIR, OFFICIAL_BENCHMARK_NAME } from "./freeze.ts";
 
 const FIXTURE = join(__dirname, "..", "..", "test", "fixtures", "benchmark", "skill-profiles.json");
 
@@ -71,7 +72,7 @@ describe("pilot benchmark selection", () => {
 		}
 	});
 
-	it("committed pilot-v1 manifest reproduces the identical splitHash", () => {
+	it("committed pilot manifest reproduces the identical splitHash", () => {
 		const committedPath = join(
 			__dirname,
 			"..",
@@ -81,7 +82,7 @@ describe("pilot benchmark selection", () => {
 			"..",
 			"skills",
 			"tests",
-			"benchmark-v1",
+			OFFICIAL_BENCHMARK_DIR,
 			"manifest.json",
 		);
 		const committed = JSON.parse(readFileSync(committedPath, "utf8")) as {
@@ -94,7 +95,7 @@ describe("pilot benchmark selection", () => {
 		const splitList = Object.entries(committed.splits).flatMap(([split, ids]) =>
 			ids.map((skillId) => ({ skillId, split })),
 		);
-		const rebuilt = buildManifest("pilot-v1", committed.frozenAt, splitList);
+		const rebuilt = buildManifest(OFFICIAL_BENCHMARK_NAME, committed.frozenAt, splitList);
 		expect(rebuilt.splitHash).toBe(committed.splitHash);
 		const skillRoot = join(committedPath, "..", "..");
 		expect(committed.contentHashes).toEqual(computeBenchmarkSplitDigests(skillRoot, rebuilt.splits));

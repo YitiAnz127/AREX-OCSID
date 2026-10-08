@@ -3,7 +3,7 @@ name: macs3-peak-calling
 description: "&quot;Poisson-model peak caller for ChIP-seq/ATAC-seq BAMs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # macs3-peak-calling — genomics-bioinformatics sub-skill

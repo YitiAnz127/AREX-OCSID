@@ -4,7 +4,7 @@ description: "Use pymatgen external data clients for Materials Project, COD, and
   OPTIMADE safely with credentials, fields, pagination, and network boundaries."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

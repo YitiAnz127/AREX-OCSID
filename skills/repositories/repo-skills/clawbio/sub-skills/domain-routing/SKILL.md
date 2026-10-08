@@ -4,7 +4,7 @@ description: "Choose a ClawBio skill or short skill chain from catalog metadata,
   file shape, headers, and biological intent."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

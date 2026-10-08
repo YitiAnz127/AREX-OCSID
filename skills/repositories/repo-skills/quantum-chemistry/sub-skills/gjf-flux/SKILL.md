@@ -3,7 +3,7 @@ name: gjf-flux
 description: "Assemble and extract Gaussian .gjf input file sections (directives, route, title, molecule blocks, appendices) and build single- or multi-step Link1 jobs from modular component fil"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # gjf-flux — quantum-chemistry sub-skill

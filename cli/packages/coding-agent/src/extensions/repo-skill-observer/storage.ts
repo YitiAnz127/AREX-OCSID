@@ -2,7 +2,7 @@
  * Rotation JSONL storage for RepoSkill events.
  *
  * Design (per the RSI plan):
- * - Write into a local agent dir (`~/.disco/agent/rsi/events/`), never into the
+ * - Write into a local agent dir (`~/.ocsid/agent/rsi/events/`), never into the
  *   managed skill tree.
  * - In-memory queue + batch append; write failures MUST NOT block or crash the
  *   host agent — they only increment a health counter (`dropped_events`).

@@ -5,7 +5,7 @@ description: "Train and evaluate DeepChem models; choose metrics, model
   workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

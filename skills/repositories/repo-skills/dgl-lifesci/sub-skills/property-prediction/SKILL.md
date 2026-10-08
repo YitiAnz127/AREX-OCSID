@@ -5,7 +5,7 @@ description: "Build DGL-LifeSci molecular property prediction workflows for
   model configs, and safe training or inference planning."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

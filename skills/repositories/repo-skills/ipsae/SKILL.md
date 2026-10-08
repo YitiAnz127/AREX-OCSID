@@ -3,7 +3,7 @@ name: ipsae
 description: "Binder design ranking using ipSAE (interprotein Score from Aligned Errors)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

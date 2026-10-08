@@ -5,7 +5,7 @@ description: "Implement and debug OpenMM custom expression forces,
   functions, and serialization-aware custom systems."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT, GPL, LGPL
 ---
 

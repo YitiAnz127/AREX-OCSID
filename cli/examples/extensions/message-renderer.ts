@@ -10,9 +10,9 @@
 import type { ExtensionAPI } from "@arex-skill/disco";
 import { Box, Text } from "@earendil-works/pi-tui";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	// Register custom renderer for "status-update" messages
-	disco.registerMessageRenderer("status-update", (message, { expanded, outputPad }, theme) => {
+	ocsid.registerMessageRenderer("status-update", (message, { expanded, outputPad }, theme) => {
 		const details = message.details as { level: string; timestamp: number } | undefined;
 		const level = details?.level ?? "info";
 
@@ -35,7 +35,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Command to send status messages
-	disco.registerCommand("status", {
+	ocsid.registerCommand("status", {
 		description: "Send a status message (usage: /status [warn|error] message)",
 		handler: async (args, _ctx) => {
 			const parts = args.trim().split(/\s+/);
@@ -48,7 +48,7 @@ export default function (disco: ExtensionAPI) {
 				content = parts.slice(1).join(" ") || "Status update";
 			}
 
-			disco.sendMessage({
+			ocsid.sendMessage({
 				customType: "status-update",
 				content,
 				display: true,

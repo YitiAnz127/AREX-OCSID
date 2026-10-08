@@ -3,7 +3,7 @@ name: ddinter-database
 description: "&quot;Query DDInter drug-drug interactions via REST API (1.7M+ interactions, 2,400+ drugs)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ddinter-database — structural-biology-drug-discovery sub-skill

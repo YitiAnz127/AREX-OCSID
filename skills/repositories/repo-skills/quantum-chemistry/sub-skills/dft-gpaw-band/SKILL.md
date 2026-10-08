@@ -3,7 +3,7 @@ name: dft-gpaw-band
 description: "Prepare GPAW band-structure workflow scripts from existing ground-state context and user-specified k-path settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-gpaw-band — quantum-chemistry sub-skill

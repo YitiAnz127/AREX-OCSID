@@ -3,7 +3,7 @@ name: mdanalysis-trajectory
 description: "&quot;Analyze MD trajectories from GROMACS, AMBER, NAMD, CHARMM, LAMMPS."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # mdanalysis-trajectory — structural-biology-drug-discovery sub-skill

@@ -5,7 +5,7 @@ description: "Use OmicVerse specialist domains for genetics/post-GWAS, AIRR
   amplicon pipelines, and external binary wrappers."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

@@ -5,7 +5,7 @@ description: "Use PaddleHelix LinearRNA for LinearFold and LinearPartition RNA
   and safe input validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

@@ -3,7 +3,7 @@ name: databases-cosmic-database
 description: "&quot;Query COSMIC for cancer somatic mutations, gene census, mutational signatures, drug resistance variants."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-cosmic-database — genomics-bioinformatics sub-skill

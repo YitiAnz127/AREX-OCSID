@@ -3,7 +3,7 @@ name: protocolsio-integration
 description: "&quot;protocols.io REST API: search and fetch wet-lab, bioinformatics, and clinical protocols by keyword, DOI, or category, with steps, reagents, materials, equipment, timing."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # protocolsio-integration — lab-automation sub-skill

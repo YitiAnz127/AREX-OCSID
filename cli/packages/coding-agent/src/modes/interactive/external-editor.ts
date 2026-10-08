@@ -16,7 +16,7 @@ export type ExternalEditorResult = { status: "complete"; content: string } | { s
  * `spawn` with `shell: true` — which is what lets an editor path containing
  * spaces work despite that naive split, but also means these characters are
  * re-parsed as shell syntax. The value can come from a project's
- * `.disco/settings.json`, and the trust prompt never discloses that it is
+ * `.ocsid/settings.json`, and the trust prompt never discloses that it is
  * shell-parsed, so a value carrying them is refused rather than executed.
  *
  * Deliberately excluded: `(` and `)`, which appear in the common Windows path

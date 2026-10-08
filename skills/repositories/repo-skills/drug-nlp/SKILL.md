@@ -3,7 +3,7 @@ name: drug-nlp
 description: "Use drug-nlp for drug discovery and development workflows: drug_nlp."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

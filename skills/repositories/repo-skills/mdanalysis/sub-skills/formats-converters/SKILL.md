@@ -4,7 +4,7 @@ description: "Navigate MDAnalysis format support, optional format dependencies,
   auxiliary data, fetchers, and converters to RDKit, OpenMM, and ParmEd."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

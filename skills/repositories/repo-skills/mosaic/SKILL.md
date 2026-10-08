@@ -3,7 +3,7 @@ name: mosaic
 description: "Multi-objective, gradient-based protein binder design with Mosaic."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

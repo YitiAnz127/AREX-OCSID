@@ -1,6 +1,6 @@
 # Termux (Android) Setup
 
-DisCo runs on Android via [Termux](https://termux.dev/), a terminal emulator and Linux environment for Android.
+OCSID runs on Android via [Termux](https://termux.dev/), a terminal emulator and Linux environment for Android.
 
 ## Prerequisites
 
@@ -16,14 +16,15 @@ pkg update && pkg upgrade
 # Install dependencies
 pkg install nodejs termux-api git
 
-# Install disco
-npm install -g --ignore-scripts @arex-skill/disco
+# Install ocsid from a checkout (the package is not published to npm)
+git clone https://github.com/YitiAnz127/AREX-ocsid.git ~/ocsid
+cd ~/ocsid/cli && npm install && npm run build && npm link
 
 # Create config directory
-mkdir -p ~/.disco/agent
+mkdir -p ~/.ocsid/agent
 
-# Run disco
-disco
+# Run ocsid
+ocsid
 ```
 
 ## Clipboard Support
@@ -34,7 +35,7 @@ Image clipboard is not supported on Termux (the `ctrl+v` image paste feature wil
 
 ## Example AGENTS.md for Termux
 
-Create `~/.disco/agent/AGENTS.md` to help the agent understand the Termux environment:
+Create `~/.ocsid/agent/AGENTS.md` to help the agent understand the Termux environment:
 
 ````markdown
 # Agent Environment: Termux on Android

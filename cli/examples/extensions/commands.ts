@@ -1,19 +1,19 @@
 /**
  * Commands Extension
  *
- * Demonstrates the disco.getCommands() API by providing a /commands command
+ * Demonstrates the ocsid.getCommands() API by providing a /commands command
  * that lists all available slash commands in the current session.
  *
  * Usage:
- * 1. Copy this file to ~/.disco/agent/extensions/ or your project's .disco/extensions/
+ * 1. Copy this file to ~/.ocsid/agent/extensions/ or your project's .ocsid/extensions/
  * 2. Use /commands to see available commands
  * 3. Use /commands extensions to filter by source
  */
 
 import type { ExtensionAPI, SlashCommandInfo } from "@arex-skill/disco";
 
-export default function commandsExtension(disco: ExtensionAPI) {
-	disco.registerCommand("commands", {
+export default function commandsExtension(ocsid: ExtensionAPI) {
+	ocsid.registerCommand("commands", {
 		description: "List available slash commands",
 		getArgumentCompletions: (prefix) => {
 			const sources = ["extension", "prompt", "skill"];
@@ -21,7 +21,7 @@ export default function commandsExtension(disco: ExtensionAPI) {
 			return filtered.length > 0 ? filtered.map((s) => ({ value: s, label: s })) : null;
 		},
 		handler: async (args, ctx) => {
-			const commands = disco.getCommands();
+			const commands = ocsid.getCommands();
 			const sourceFilter = args.trim() as "extension" | "prompt" | "skill" | "";
 
 			// Filter by source if specified

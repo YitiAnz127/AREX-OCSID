@@ -3,7 +3,7 @@ name: opentargets-database
 description: "&quot;Query Open Targets GraphQL API for target-disease associations, evidence, drug links, safety."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # opentargets-database — structural-biology-drug-discovery sub-skill

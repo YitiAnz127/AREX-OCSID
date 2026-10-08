@@ -5,7 +5,7 @@ description: "Handle DeepChem protein-ligand docking, binding pocket discovery,
   optional dependency triage."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

@@ -3,7 +3,7 @@ name: hmdb-database
 description: "&quot;Parse HMDB (Human Metabolome Database) local XML for metabolite info, chemical properties, biological context, disease links, spectra, and cross-DB mapping."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # hmdb-database — proteomics-protein-engineering sub-skill

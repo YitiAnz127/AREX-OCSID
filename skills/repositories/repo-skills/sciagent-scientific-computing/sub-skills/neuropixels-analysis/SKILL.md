@@ -3,7 +3,7 @@ name: neuropixels-analysis
 description: "&quot;Pipeline for Neuropixels extracellular electrophysiology: probe geometry (ProbeInterface), Kilosort sorting via SpikeInterface, quality metrics, unit curation (ISI, firing rate, S"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # neuropixels-analysis — sciagent-scientific-computing sub-skill

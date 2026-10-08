@@ -3,7 +3,7 @@ name: pubchem-compound-search
 description: "&quot;Query PubChem (110M+ compounds) directly via the PUG-REST/JSON API with plain `requests` — no SDK install required."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pubchem-compound-search — structural-biology-drug-discovery sub-skill

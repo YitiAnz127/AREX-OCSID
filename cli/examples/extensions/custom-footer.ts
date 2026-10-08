@@ -12,10 +12,10 @@ import type { AssistantMessage } from "@earendil-works/pi-ai";
 import type { ExtensionAPI } from "@arex-skill/disco";
 import { truncateToWidth, visibleWidth } from "@earendil-works/pi-tui";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	let enabled = false;
 
-	disco.registerCommand("footer", {
+	ocsid.registerCommand("footer", {
 		description: "Toggle custom footer",
 		handler: async (_args, ctx) => {
 			enabled = !enabled;

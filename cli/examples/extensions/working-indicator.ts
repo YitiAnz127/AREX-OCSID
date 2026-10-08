@@ -2,10 +2,10 @@
  * Working Indicator Extension
  *
  * Demonstrates `ctx.ui.setWorkingIndicator()` for customizing the inline
- * working indicator shown while disco is streaming a response.
+ * working indicator shown while ocsid is streaming a response.
  *
  * Usage:
- *   disco --extension examples/extensions/working-indicator.ts
+ *   ocsid --extension examples/extensions/working-indicator.ts
  *
  * Commands:
  *   /working-indicator           Show current mode
@@ -13,7 +13,7 @@
  *   /working-indicator pulse     Use a custom animated indicator
  *   /working-indicator none      Hide the indicator entirely
  *   /working-indicator spinner   Restore an animated spinner
- *   /working-indicator reset     Restore disco's default spinner
+ *   /working-indicator reset     Restore ocsid's default spinner
  */
 
 import type { ExtensionAPI, ExtensionContext, WorkingIndicatorOptions } from "@arex-skill/disco";
@@ -79,11 +79,11 @@ function describeMode(mode: WorkingIndicatorMode): string {
 		case "spinner":
 			return "custom spinner";
 		case "default":
-			return "disco default spinner";
+			return "ocsid default spinner";
 	}
 }
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	let mode: WorkingIndicatorMode = "spinner";
 
 	const applyIndicator = (ctx: ExtensionContext) => {
@@ -91,11 +91,11 @@ export default function (disco: ExtensionAPI) {
 		ctx.ui.setStatus("working-indicator", ctx.ui.theme.fg("dim", `Indicator: ${describeMode(mode)}`));
 	};
 
-	disco.on("session_start", async (_event, ctx) => {
+	ocsid.on("session_start", async (_event, ctx) => {
 		applyIndicator(ctx);
 	});
 
-	disco.registerCommand("working-indicator", {
+	ocsid.registerCommand("working-indicator", {
 		description: "Set the streaming working indicator: dot, pulse, none, spinner, or reset.",
 		handler: async (args, ctx) => {
 			const nextMode = args.trim().toLowerCase();

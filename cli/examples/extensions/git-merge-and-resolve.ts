@@ -8,8 +8,8 @@
  * with file, line range, and ours/theirs sections so it can resolve them.
  * Also re-sends unresolved conflicts from a previous incomplete merge.
  *
- * Start disco with this extension:
- *   disco -e ./examples/extensions/git-merge-and-resolve.ts
+ * Start ocsid with this extension:
+ *   ocsid -e ./examples/extensions/git-merge-and-resolve.ts
  */
 import { createReadStream } from "node:fs";
 import { join } from "node:path";
@@ -24,8 +24,8 @@ interface ConflictBlock {
 }
 
 /** Parse conflict markers from working tree files with unmerged paths. */
-async function findConflicts(disco: ExtensionAPI, cwd: string): Promise<ConflictBlock[]> {
-	const { stdout, code } = await disco.exec("git", ["diff", "--name-only", "--diff-filter=U"]);
+async function findConflicts(ocsid: ExtensionAPI, cwd: string): Promise<ConflictBlock[]> {
+	const { stdout, code } = await ocsid.exec("git", ["diff", "--name-only", "--diff-filter=U"]);
 	if (code !== 0 || !stdout.trim()) return [];
 
 	const blocks: ConflictBlock[] = [];
@@ -70,21 +70,21 @@ function formatConflicts(ref: string, blocks: ConflictBlock[]): string {
 	return lines.join("\n");
 }
 
-export default function (disco: ExtensionAPI) {
-	disco.on("agent_end", async (_event, ctx) => {
-		const { code: revParseCode } = await disco.exec("git", ["rev-parse", "--git-dir"]);
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("agent_end", async (_event, ctx) => {
+		const { code: revParseCode } = await ocsid.exec("git", ["rev-parse", "--git-dir"]);
 		if (revParseCode !== 0) return;
 
 		let ref = "MERGE_HEAD";
 
 		// If not already in a merge, attempt one
-		const { code: mergeHeadCode } = await disco.exec("git", ["rev-parse", "MERGE_HEAD"]);
+		const { code: mergeHeadCode } = await ocsid.exec("git", ["rev-parse", "MERGE_HEAD"]);
 		if (mergeHeadCode !== 0) {
 			// Only attempt a new merge if the working tree is clean
-			const { stdout: status } = await disco.exec("git", ["status", "--porcelain"]);
+			const { stdout: status } = await ocsid.exec("git", ["status", "--porcelain"]);
 			if (status.trim()) return;
 
-			const { stdout: upstream, code: upstreamCode } = await disco.exec("git", [
+			const { stdout: upstream, code: upstreamCode } = await ocsid.exec("git", [
 				"rev-parse",
 				"--abbrev-ref",
 				"--symbolic-full-name",
@@ -96,20 +96,20 @@ export default function (disco: ExtensionAPI) {
 			const remote = ref.split("/")[0];
 			ctx.ui.notify(`git-merge-and-resolve: fetching ${remote}, merging ${ref}`, "info");
 
-			const { code: fetchCode, stderr: fetchErr } = await disco.exec("git", ["fetch", remote]);
+			const { code: fetchCode, stderr: fetchErr } = await ocsid.exec("git", ["fetch", remote]);
 			if (fetchCode !== 0) {
 				ctx.ui.notify(`git-merge-and-resolve: fetch failed: ${fetchErr.trim()}`, "warning");
 				return;
 			}
 
-			const { code: mergeCode } = await disco.exec("git", ["merge", "--no-ff", ref]);
+			const { code: mergeCode } = await ocsid.exec("git", ["merge", "--no-ff", ref]);
 			if (mergeCode === 0) return;
 		}
 
 		// Either we just merged with conflicts, or we were already in an unfinished merge
-		const conflicts = await findConflicts(disco, ctx.cwd);
+		const conflicts = await findConflicts(ocsid, ctx.cwd);
 		if (conflicts.length === 0) return;
 
-		disco.sendUserMessage(formatConflicts(ref, conflicts), { deliverAs: "followUp" });
+		ocsid.sendUserMessage(formatConflicts(ref, conflicts), { deliverAs: "followUp" });
 	});
 }

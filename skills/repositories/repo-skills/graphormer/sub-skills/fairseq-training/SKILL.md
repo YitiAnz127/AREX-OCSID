@@ -4,7 +4,7 @@ description: "Graphormer fairseq-train templates for graph prediction and
   Graphormer3D IS2RE."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

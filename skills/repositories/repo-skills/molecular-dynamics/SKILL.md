@@ -3,7 +3,7 @@ name: molecular-dynamics
 description: "Use molecular-dynamics for molecular simulation workflows: molecular-dynamics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

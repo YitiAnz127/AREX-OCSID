@@ -3,7 +3,7 @@ name: mdtraj-trajectory-analysis
 description: "&quot;mdtraj molecular dynamics trajectory analysis (Python)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # mdtraj-trajectory-analysis — structural-biology-drug-discovery sub-skill

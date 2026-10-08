@@ -5,7 +5,7 @@ description: "Use DIG for 3D graph learning and 3D molecular geometry
   ComENet, ProNet, and G-SphereNet."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

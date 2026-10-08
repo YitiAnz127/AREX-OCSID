@@ -1,6 +1,6 @@
 # Examples
 
-Example code for disco-coding-agent SDK and extensions.
+Example code for ocsid-coding-agent SDK and extensions.
 
 ## Directories
 

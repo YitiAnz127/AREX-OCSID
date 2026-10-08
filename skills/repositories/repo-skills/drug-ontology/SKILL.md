@@ -3,7 +3,7 @@ name: drug-ontology
 description: "Use drug-ontology for drug discovery and development workflows: drug_ontology."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

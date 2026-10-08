@@ -49,7 +49,7 @@ describe("candidate-cli (C1: authoring a verifiable skill patch)", () => {
 		// manifest written append-only in <out>/candidates/
 		expect(fs.existsSync(res.manifestFile)).toBe(true);
 		const manifest = JSON.parse(fs.readFileSync(res.manifestFile, "utf8"));
-		expect(manifest.enc).toBe("disco.candidate-manifest.v1");
+		expect(manifest.enc).toBe("ocsid.candidate-manifest.v1");
 		expect(manifest.candidateId).toBe(res.candidateId);
 		expect(manifest.targetSkillId).toBe("s1");
 		expect(manifest.parentSkillDigest).toBe(beforeDigest);

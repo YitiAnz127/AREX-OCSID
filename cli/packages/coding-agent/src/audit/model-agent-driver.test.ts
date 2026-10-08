@@ -65,6 +65,51 @@ function toolCompletion(
 }
 
 describe("ModelAgentDriver", () => {
+	it("does not purchase another call or execute tools when provider usage is missing", async () => {
+		const fx = makeSkillFixture();
+		const workspace = prepareCaseWorkspace(fx.skillRoot, caseRecord);
+		try {
+			let calls = 0;
+			const driver = new ModelAgentDriver({
+				baseUrl: "https://example.test/v1", apiKey: API_KEY, model: "test-model",
+				fetchImpl: async () => {
+					calls += 1;
+					return jsonResponse(toolCompletion("read_file", JSON.stringify({ path: "skill-snapshot/SKILL.md" }), null, {}));
+				},
+			});
+			const result = await driver.run({ workspace, caseInput: { skillId: "skill-a", caseId: "c1", userRequest: "Read the skill." },
+				config: { ...BASE_CONFIG, maxRounds: 3, toolAllowlist: ["read_file"] }, startedAt: new Date().toISOString() });
+			expect(calls).toBe(1);
+			expect(result.status).toBe("failed");
+			expect(result.usage?.toolCalls).toBe(0);
+			expect(result.usage?.totalTokens).toBeUndefined();
+		} finally {
+			workspace.cleanup();
+			fx.cleanup();
+		}
+	});
+	it("caps each completion request to the remaining token allowance", async () => {
+		const fx = makeSkillFixture();
+		const workspace = prepareCaseWorkspace(fx.skillRoot, caseRecord);
+		try {
+			const caps: number[] = [];
+			const driver = new ModelAgentDriver({
+				baseUrl: "https://example.test/v1", apiKey: API_KEY, model: "test-model", maxTokens: 99,
+				fetchImpl: async (_url, init) => {
+					caps.push(JSON.parse(String(init?.body)).max_tokens);
+					return jsonResponse(caps.length === 1
+						? toolCompletion("read_file", JSON.stringify({ path: "skill-snapshot/SKILL.md" }), null, { prompt_tokens: 2, completion_tokens: 2, total_tokens: 4 })
+						: completion("done", { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 }));
+				},
+			});
+			await driver.run({ workspace, caseInput: { skillId: "skill-a", caseId: "c1", userRequest: "Read the skill." },
+				config: { ...BASE_CONFIG, maxRounds: 3, tokenBudget: 10, toolAllowlist: ["read_file"] }, startedAt: new Date().toISOString() });
+			expect(caps).toEqual([10, 6]);
+		} finally {
+			workspace.cleanup();
+			fx.cleanup();
+		}
+	});
 	it("returns the completion as the artifact with real usage and its digest", async () => {
 		const fx = makeSkillFixture();
 		try {

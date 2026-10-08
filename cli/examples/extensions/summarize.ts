@@ -143,8 +143,8 @@ const showSummaryUi = async (summary: string, ctx: ExtensionCommandContext) => {
 	});
 };
 
-export default function (disco: ExtensionAPI) {
-	disco.registerCommand("summarize", {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerCommand("summarize", {
 		description: "Summarize the current conversation in a custom UI",
 		handler: async (_args, ctx) => {
 			const branch = ctx.sessionManager.getBranch();

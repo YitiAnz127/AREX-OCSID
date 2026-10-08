@@ -2,7 +2,7 @@
 
 ## Pi coding-agent
 
-DisCo includes a modified copy of `@earendil-works/pi-coding-agent` v0.83.0
+OCSID includes a modified copy of `@earendil-works/pi-coding-agent` v0.83.0
 and selected OAuth flow sources from `@earendil-works/pi-ai` v0.83.0, from
 commit `845d6ff1f6643aba440341cce877ce1c43ebbc39`.
 

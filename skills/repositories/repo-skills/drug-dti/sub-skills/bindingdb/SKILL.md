@@ -3,7 +3,7 @@ name: bindingdb
 description: "Query the BindingDB drug-target binding affinity database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # bindingdb — drug-dti sub-skill

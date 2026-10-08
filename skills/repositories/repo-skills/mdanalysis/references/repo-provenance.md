@@ -1,6 +1,6 @@
 # MDAnalysis Repo Provenance
 
-Schema: `disco.repo-provenance.v1`
+Schema: `ocsid.repo-provenance.v1`
 
 This skill was generated from repository evidence for the MDAnalysis source tree.
 

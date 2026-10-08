@@ -3,7 +3,7 @@ name: dpdisp-submit
 description: "Run Shell commands as computational jobs, on local machines or HPC clusters, through Shell, Slurm, PBS, LSF, Bohrium, etc."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dpdisp-submit — compchem-tools sub-skill

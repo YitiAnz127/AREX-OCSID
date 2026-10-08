@@ -5,7 +5,7 @@ description: "Use SaProt for structure-aware protein language modeling, AA+3Di
   mutation-effect evaluation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

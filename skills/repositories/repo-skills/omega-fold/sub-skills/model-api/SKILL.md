@@ -5,7 +5,7 @@ description: "Use OmegaFold programmatically: configs, model construction,
   debugging."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

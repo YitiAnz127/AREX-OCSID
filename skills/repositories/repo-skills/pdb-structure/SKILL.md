@@ -3,7 +3,7 @@ name: pdb-structure
 description: "Fetch and analyze protein structures from RCSB PDB."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

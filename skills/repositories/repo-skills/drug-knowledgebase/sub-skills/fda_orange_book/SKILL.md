@@ -3,7 +3,7 @@ name: fda_orange_book
 description: "Query or inspect the FDA Orange Book - FDA-Approved Drug Products Listing resource for drug-centric tasks with emphasis on drug knowledgebase Use whenever Codex needs the calling p"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # fda_orange_book — drug-knowledgebase sub-skill

@@ -13,7 +13,7 @@ function caseRecord(skillId: string, caseId: string, assertions: string[]): Case
 		files: {
 			userRequest: `please help with ${caseId}`,
 			assertionsText: JSON.stringify({
-				schema: "disco.usability-case.v1",
+				schema: "ocsid.usability-case.v1",
 				target_skill_area: "x",
 				target_capability: "y",
 				difficulty: "basic",
@@ -36,7 +36,7 @@ function fixedResult(result: ExecutionResult): CaseExecutor {
 
 function succeeded(artifact: string): ExecutionResult {
 	return {
-		schema: "disco.execution-result.v1",
+		schema: "ocsid.execution-result.v1",
 		status: "succeeded",
 		artifact,
 		artifactSha256: artifact.length ? artifact : null,
@@ -79,7 +79,7 @@ describe("B1 execution-fault states (6 distinct outcomes)", () => {
 	it("4) timed-out: distinct status, depth L1, errorKind=timeout", async () => {
 		const cases = [caseRecord("gget", "case-c", ["uses gget.search"])];
 		const timedOut: ExecutionResult = {
-			schema: "disco.execution-result.v1", status: "timed-out", artifact: null, artifactSha256: null,
+			schema: "ocsid.execution-result.v1", status: "timed-out", artifact: null, artifactSha256: null,
 			errorKind: "timeout", error: "wall-clock budget exceeded", usage: { wallMs: 120_000 },
 		};
 		const run = await runAudit(cases, { runId: "r", runAt: "T" }, { executor: fixedResult(timedOut), grader: gradeFor(), splitIndex });
@@ -94,7 +94,7 @@ describe("B1 execution-fault states (6 distinct outcomes)", () => {
 	it("5) tool-failure / failed execution: distinct status, errorKind=tool-failure", async () => {
 		const cases = [caseRecord("gget", "case-c", ["uses gget.search"])];
 		const failedTool: ExecutionResult = {
-			schema: "disco.execution-result.v1", status: "failed", artifact: null, artifactSha256: null,
+			schema: "ocsid.execution-result.v1", status: "failed", artifact: null, artifactSha256: null,
 			errorKind: "tool-failure", error: "grep tool exited non-zero", usage: { toolCalls: 3 },
 		};
 		const run = await runAudit(cases, { runId: "r", runAt: "T" }, { executor: fixedResult(failedTool), grader: gradeFor(), splitIndex });

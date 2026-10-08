@@ -4,7 +4,7 @@ description: "Run ProLIF fingerprints on trajectories, ligand-pose iterables, or
   molecule pairs and export results safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

@@ -3,7 +3,7 @@ name: rowan
 description: "&quot;Cloud quantum chemistry platform with Python SDK."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rowan — structural-biology-drug-discovery sub-skill

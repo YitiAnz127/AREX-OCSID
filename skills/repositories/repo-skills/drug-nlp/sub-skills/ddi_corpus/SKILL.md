@@ -3,7 +3,7 @@ name: ddi_corpus
 description: "Sub-skill ddi_corpus for drug-nlp."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ddi_corpus — drug-nlp sub-skill

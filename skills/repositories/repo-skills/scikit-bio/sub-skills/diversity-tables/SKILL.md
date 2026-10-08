@@ -4,7 +4,7 @@ description: "Compute scikit-bio community diversity metrics and prepare
   BIOM-style table-like inputs for count workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

@@ -4,7 +4,7 @@ description: "Use Squidpy tool-layer workflows for sliding windows,
   distance-to-anchor design matrices, and plotting handoffs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

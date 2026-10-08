@@ -6,7 +6,7 @@ description: "Run and adapt ProteinMPNN inference/design workflows, including
   interpretation, and CPU/GPU-safe command construction."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

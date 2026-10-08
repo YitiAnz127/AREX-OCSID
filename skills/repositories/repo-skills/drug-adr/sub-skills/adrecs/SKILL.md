@@ -3,7 +3,7 @@ name: adrecs
 description: "Query the ADReCS (Adverse Drug Reaction Classification System) v3.3 database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # adrecs — drug-adr sub-skill

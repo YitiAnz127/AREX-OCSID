@@ -151,8 +151,8 @@ class Checker:
         if frontmatter.get("disable-model-invocation") is not True:
             self.error("operating-invocation", skill_md, "disable-model-invocation must be true")
         metadata = frontmatter.get("metadata")
-        if not isinstance(metadata, dict) or metadata.get("disco-role") != "operating":
-            self.error("operating-role", skill_md, "metadata.disco-role must be operating")
+        if not isinstance(metadata, dict) or metadata.get("ocsid-role") != "operating":
+            self.error("operating-role", skill_md, "metadata.ocsid-role must be operating")
         raw_description = frontmatter.get("_raw_description", "")
         if not (isinstance(raw_description, str) and raw_description.startswith('"') and raw_description.endswith('"')):
             self.error("operating-description-quote", skill_md, "description must use a double-quoted YAML scalar")

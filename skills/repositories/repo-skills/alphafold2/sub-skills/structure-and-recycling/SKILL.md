@@ -5,7 +5,7 @@ description: "Guide coordinate prediction, IPA structure refinement, confidence
   structure refinement in alphafold2-pytorch 0.4.32."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

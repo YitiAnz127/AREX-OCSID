@@ -4,7 +4,7 @@ description: "Prepare and validate Chai MSA and template inputs from aligned
   parquet, A3M, ColabFold server, m8, and staged ColabFold outputs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

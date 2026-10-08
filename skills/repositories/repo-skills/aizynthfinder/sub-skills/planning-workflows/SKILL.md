@@ -4,7 +4,7 @@ description: "Run AiZynthFinder retrosynthesis planning and one-step expansion
   through CLI, Python APIs, and optional notebook interfaces."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

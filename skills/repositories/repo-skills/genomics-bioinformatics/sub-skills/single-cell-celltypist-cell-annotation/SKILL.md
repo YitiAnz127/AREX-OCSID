@@ -3,7 +3,7 @@ name: single-cell-celltypist-cell-annotation
 description: "&quot;Automated scRNA-seq cell type annotation via pre-trained logistic regression."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # single-cell-celltypist-cell-annotation — genomics-bioinformatics sub-skill

@@ -5,7 +5,7 @@ description: "Generate/optimize RDKit 3D conformers, compute alignment/RMSD,
   PNG."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

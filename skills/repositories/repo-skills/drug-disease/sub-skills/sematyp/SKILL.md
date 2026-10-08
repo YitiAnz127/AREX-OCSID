@@ -3,7 +3,7 @@ name: sematyp
 description: "Sub-skill sematyp for drug-disease."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # sematyp — drug-disease sub-skill

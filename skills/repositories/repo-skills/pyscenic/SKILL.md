@@ -4,7 +4,7 @@ description: "Use pySCENIC for single-cell SCENIC regulatory network inference,
   motif pruning, AUCell scoring, data export, and CLI or container workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

@@ -3,7 +3,7 @@ name: rdkit-chemdraw-cdxml
 description: "&quot;Read, write, and edit ChemDraw CDX/CDXML files with RDKit's rdkit.Chem.rdChemDraw plus direct XML editing, always paired with a rendered PNG."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rdkit-chemdraw-cdxml — structural-biology-drug-discovery sub-skill

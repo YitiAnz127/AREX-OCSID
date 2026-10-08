@@ -8,7 +8,7 @@ Read this before deciding whether this generated repo skill is current for a che
 
 ```json
 {
-  "schema": "disco.repo-provenance.v1",
+  "schema": "ocsid.repo-provenance.v1",
   "generated_at_utc": "2026-08-11T17:26:16Z",
   "repository": {
     "name": "scientific-agent-skills",
@@ -68,5 +68,5 @@ Read this before deciding whether this generated repo skill is current for a che
 
 - If `git rev-parse HEAD` differs from `repository.commit`, treat this skill as potentially stale.
 - If `pyproject.toml`, `AGENTS.md`, `CONTRIBUTING.md`, `tests/_contract/`, `tests/_meta/`, `tests/run_all.py`, `tests/skill-requirements.toml`, `scan_pr_skills.py`, `scan_skills.py`, or the CI workflows changed, refresh before using this skill for PR-critical guidance.
-- If the repository changes where generated DisCo repo skills or review artifacts should live, refresh before creating new outputs.
+- If the repository changes where generated OCSID repo skills or review artifacts should live, refresh before creating new outputs.
 - If a future checkout gains or removes diagram-generation tooling, refresh the `skill-authoring` catalog/diagram guidance.

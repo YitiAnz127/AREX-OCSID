@@ -3,7 +3,7 @@ name: sider
 description: "Sub-skill sider for drug-adr."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # sider — drug-adr sub-skill

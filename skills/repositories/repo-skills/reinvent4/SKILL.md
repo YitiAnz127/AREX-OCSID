@@ -5,7 +5,7 @@ description: "Use REINVENT4 for molecular design CLI workflows: sampling,
   plugins, and SMILES preprocessing."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

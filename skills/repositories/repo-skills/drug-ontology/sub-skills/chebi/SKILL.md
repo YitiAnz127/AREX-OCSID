@@ -3,7 +3,7 @@ name: chebi
 description: "Query the ChEBI (Chemical Entities of Biological Interest) database."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # chebi — drug-ontology sub-skill

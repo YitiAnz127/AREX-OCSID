@@ -3,7 +3,7 @@ name: dpdata-cli
 description: "Convert and manipulate atomic simulation data formats using dpdata CLI."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dpdata-cli — compchem-tools sub-skill

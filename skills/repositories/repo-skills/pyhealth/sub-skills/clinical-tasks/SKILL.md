@@ -5,7 +5,7 @@ description: "Guides PyHealth task selection, task-to-dataset attachment,
   custom task definitions."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

@@ -5,7 +5,7 @@ description: "Guides PyHealth medical-code ontology lookup and mapping plus NLP,
   optional-resource gates."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

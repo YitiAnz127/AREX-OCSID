@@ -17,7 +17,7 @@ describe("InteractiveMode package update notifications", () => {
 	});
 
 	beforeEach(() => {
-		vi.stubEnv("DISCO_OFFLINE", "");
+		vi.stubEnv("OCSID_OFFLINE", "");
 	});
 
 	afterEach(() => {

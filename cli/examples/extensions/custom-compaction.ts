@@ -10,7 +10,7 @@
  * which can be cheaper/faster than the main conversation model.
  *
  * Usage:
- *   disco --extension examples/extensions/custom-compaction.ts
+ *   ocsid --extension examples/extensions/custom-compaction.ts
  */
 
 import { uuidv7 } from "@earendil-works/pi-ai";
@@ -18,8 +18,8 @@ import { complete } from "@earendil-works/pi-ai/compat";
 import type { ExtensionAPI } from "@arex-skill/disco";
 import { convertToLlm, serializeConversation } from "@arex-skill/disco";
 
-export default function (disco: ExtensionAPI) {
-	disco.on("session_before_compact", async (event, ctx) => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("session_before_compact", async (event, ctx) => {
 		ctx.ui.notify("Custom compaction extension triggered", "info");
 
 		const { preparation, branchEntries: _, signal } = event;

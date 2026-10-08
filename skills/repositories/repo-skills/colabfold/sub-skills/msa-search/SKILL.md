@@ -5,7 +5,7 @@ description: "Generate ColabFold MSAs using the public server, local MMseqs2
   MSA server planning."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

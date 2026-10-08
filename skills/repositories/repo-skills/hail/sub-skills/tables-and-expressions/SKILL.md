@@ -5,7 +5,7 @@ description: "Build Hail Table and expression pipelines for imports, keys,
   expression-scope troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

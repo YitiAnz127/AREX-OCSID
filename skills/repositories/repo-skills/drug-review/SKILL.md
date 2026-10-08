@@ -3,7 +3,7 @@ name: drug-review
 description: "Use drug-review for drug discovery and development workflows: drug_review."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

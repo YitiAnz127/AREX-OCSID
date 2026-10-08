@@ -5,7 +5,7 @@ description: "Safely plan and validate ncbi-genome-download output layout,
   human-readable links without causing unintended genome downloads."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

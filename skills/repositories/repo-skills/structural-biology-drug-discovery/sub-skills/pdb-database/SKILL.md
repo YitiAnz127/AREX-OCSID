@@ -3,7 +3,7 @@ name: pdb-database
 description: "&quot;Query RCSB PDB (200K+ structures) via the public REST + GraphQL APIs with plain `requests` (no SDK)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pdb-database — structural-biology-drug-discovery sub-skill

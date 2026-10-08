@@ -6,7 +6,7 @@ description: "Use AlphaFold 3 PyTorch for protein and biomolecular
   configuration, and local CLI or Gradio operation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

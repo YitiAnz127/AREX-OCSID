@@ -4,7 +4,7 @@ description: "Understand SaProt LMDB datasets, JSONL-to-LMDB conversion, task
   YAML paths, and safe config validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

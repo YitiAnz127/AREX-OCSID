@@ -5,7 +5,7 @@ description: "Use Biotite structure analysis APIs for AtomArray construction,
   structural alphabets."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

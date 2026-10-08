@@ -1,14 +1,14 @@
 # JSON Event Stream Mode
 
 > **Upstream source reference:** GitHub source links on this page point to the
-> Pi v0.83.0 dependency and fork baseline. The installed DisCo types and event
+> Pi v0.83.0 dependency and fork baseline. The installed OCSID types and event
 > stream are authoritative.
 
 ```bash
-disco --mode json "Your prompt"
+ocsid --mode json "Your prompt"
 ```
 
-Outputs all session events as JSON lines to stdout. Useful for integrating disco into other tools or custom UIs.
+Outputs all session events as JSON lines to stdout. Useful for integrating ocsid into other tools or custom UIs.
 
 ## Event Types
 
@@ -86,5 +86,5 @@ Followed by events as they occur:
 ## Example
 
 ```bash
-disco --mode json "List files" 2>/dev/null | jq -c 'select(.type == "message_end")'
+ocsid --mode json "List files" 2>/dev/null | jq -c 'select(.type == "message_end")'
 ```

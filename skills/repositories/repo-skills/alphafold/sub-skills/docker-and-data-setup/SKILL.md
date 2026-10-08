@@ -5,7 +5,7 @@ description: "Plan AlphaFold Docker execution, database/model-parameter
   starting containers or downloads."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

@@ -8,15 +8,15 @@
  * file changes, giving the model immediate context. During steering the
  * exec call is skipped so the correction reaches the model without delay.
  *
- * Start disco with this extension:
- *   disco -e ./examples/extensions/input-transform-streaming.ts
+ * Start ocsid with this extension:
+ *   ocsid -e ./examples/extensions/input-transform-streaming.ts
  */
 import type { ExtensionAPI } from "@arex-skill/disco";
 
 const TRIGGER = /\b(changes?|diff|modified)\b/i;
 
-export default function (disco: ExtensionAPI) {
-	disco.on("input", async (event) => {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.on("input", async (event) => {
 		// During steering, skip the exec call — corrections should be fast
 		if (event.streamingBehavior === "steer") {
 			return { action: "continue" };
@@ -26,7 +26,7 @@ export default function (disco: ExtensionAPI) {
 			return { action: "continue" };
 		}
 
-		const { stdout, code } = await disco.exec("git", ["diff", "--stat"]);
+		const { stdout, code } = await ocsid.exec("git", ["diff", "--stat"]);
 		if (code !== 0 || !stdout.trim()) {
 			return { action: "continue" };
 		}

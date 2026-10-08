@@ -15,9 +15,9 @@ Router rebuild is a separate step (see rebuild_router.py).
 import json, os, sys, hashlib, re, datetime
 
 try:
-    from .domain_common import FrontmatterError, copy_companion_resources, load_json_file, parse_frontmatter, read_bytes
+    from .domain_common import FrontmatterError, copy_companion_resources, git_head_commit, load_json_file, parse_frontmatter, read_bytes
 except ImportError:
-    from domain_common import FrontmatterError, copy_companion_resources, load_json_file, parse_frontmatter, read_bytes
+    from domain_common import FrontmatterError, copy_companion_resources, git_head_commit, load_json_file, parse_frontmatter, read_bytes
 
 MAX_DESCRIPTION_LENGTH = 180  # Agent Skills description compatibility limit.
 
@@ -87,7 +87,7 @@ name: {skill_id}
 description: {json.dumps(fd, ensure_ascii=False)}
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: {license or "Unknown"}
 ---
 
@@ -136,13 +136,15 @@ Frontmatter normalized to AREX repo-skill schema; references/ added; body retain
     # (update_repo_skills_router.mjs readProvenance), which extracts the first
     # ```json block as the authoritative source snapshot for
     # repository.remote_url / commit / generated_skill.root. Without it the
-    # router falls back to fabricating a GitHub URL from the repo_id.
+    # router falls back to fabricating a GitHub URL from the repo_id. The commit is
+    # read from the source checkout when it is a git tree, so a rebuild can prove the
+    # source was pinned instead of only proving the generated structure matches.
     prov_json = {
         "schema": "arex.repo-provenance.v1",
         "generated_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "repository": {
             "remote_url": repo_url if isinstance(repo_url, str) and repo_url else None,
-            "commit": None,
+            "commit": git_head_commit(source_root),
         },
         "generated_skill": {"root": f"skills/repositories/repo-skills/{skill_id}/"},
     }
@@ -367,7 +369,7 @@ name: {sub_name}
 description: {json.dumps(sfd, ensure_ascii=False)}
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # {sub_name} — {did} sub-skill

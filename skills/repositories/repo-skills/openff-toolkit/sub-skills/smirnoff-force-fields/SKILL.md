@@ -4,7 +4,7 @@ description: "Load, modify, inspect, serialize, label, and apply SMIRNOFF OFFXML
   force fields with OpenFF Toolkit ForceField APIs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

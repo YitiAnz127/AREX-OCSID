@@ -3,7 +3,7 @@ name: metabolomics-workbench-database
 description: "&quot;Query Metabolomics Workbench REST API (4,200+ NIH studies) for metabolite ID, study discovery, RefMet standardization, m/z precursor searches, and gene/protein annotations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # metabolomics-workbench-database — proteomics-protein-engineering sub-skill

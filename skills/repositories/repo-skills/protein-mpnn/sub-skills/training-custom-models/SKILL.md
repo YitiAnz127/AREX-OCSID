@@ -5,7 +5,7 @@ description: "Retrain ProteinMPNN, validate training data layout, resume or
   inference."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

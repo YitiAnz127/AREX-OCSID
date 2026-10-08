@@ -1,10 +1,10 @@
-> disco can create skills. Ask it to build one for your use case.
+> ocsid can create skills. Ask it to build one for your use case.
 
 # Skills
 
 Skills are self-contained capability packages that the agent loads on-demand. A skill provides specialized workflows, setup instructions, helper scripts, and reference documentation for specific tasks.
 
-DisCo implements the [Agent Skills standard](https://agentskills.io/specification), warning about most violations but remaining lenient. DisCo allows skill names to differ from their parent directory even though the standard disallows it; that rule is suboptimal for shared skill directories used across multiple agent harnesses.
+OCSID implements the [Agent Skills standard](https://agentskills.io/specification), warning about most violations but remaining lenient. OCSID allows skill names to differ from their parent directory even though the standard disallows it; that rule is suboptimal for shared skill directories used across multiple agent harnesses.
 
 ## Table of Contents
 
@@ -21,24 +21,24 @@ DisCo implements the [Agent Skills standard](https://agentskills.io/specificatio
 
 > **Security:** Skills can instruct the model to perform any action and may include executable code the model invokes. Review skill content before use.
 
-DisCo loads skills from:
+OCSID loads skills from:
 
 - Global:
-  - `~/.disco/agent/skills/`
+  - `~/.ocsid/agent/skills/`
   - `~/.agents/skills/`
 - Project (only after the project is trusted):
-  - `.disco/skills/`
+  - `.ocsid/skills/`
   - `.agents/skills/` in `cwd` and ancestor directories (up to git repo root, or filesystem root when not in a repo)
-- Packages: `skills/` directories or `disco.skills` entries in `package.json`
+- Packages: `skills/` directories or `ocsid.skills` entries in `package.json`
 - Settings: `skills` array with files or directories
 - CLI: `--skill <path>` (repeatable, additive even with `--no-skills`)
 
 Discovery rules:
-- In `~/.disco/agent/skills/` and `.disco/skills/`, direct root `.md` files are discovered as individual skills
+- In `~/.ocsid/agent/skills/` and `.ocsid/skills/`, direct root `.md` files are discovered as individual skills
 - In all skill locations, directories containing `SKILL.md` are discovered recursively
 - In `~/.agents/skills/` and project `.agents/skills/`, root `.md` files are ignored
 
-Use `--disco-no-builtin-skills` to disable only the skills bundled with DisCo.
+Use `--ocsid-no-builtin-skills` to disable only the skills bundled with OCSID.
 User, project, package, settings, generic `.agents`, and explicit `--skill`
 sources continue to load, and Creator/Researcher mode contracts and dynamic
 workflows remain available.
@@ -59,7 +59,7 @@ To use skills from Claude Code or OpenAI Codex, add their directories to setting
 }
 ```
 
-For project-level Claude Code skills, add to `.disco/settings.json`:
+For project-level Claude Code skills, add to `.ocsid/settings.json`:
 
 ```json
 {
@@ -69,7 +69,7 @@ For project-level Claude Code skills, add to `.disco/settings.json`:
 
 ## How Skills Work
 
-1. At startup, disco scans skill locations and extracts names and descriptions
+1. At startup, ocsid scans skill locations and extracts names and descriptions
 2. The system prompt includes available skills in XML format per the [specification](https://agentskills.io/integrate-skills)
 3. When a task matches, the agent uses `read` to load the full SKILL.md (models don't always do this; use prompting or `/skill:name` to force it)
 4. The agent follows the instructions, using relative paths to reference scripts and assets
@@ -146,7 +146,7 @@ Per the [Agent Skills specification](https://agentskills.io/specification#frontm
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `name` | Yes | Max 64 chars. Lowercase a-z, 0-9, hyphens. Unlike the standard, DisCo does not require this to match the parent directory because that standard requirement is suboptimal for shared skill directories. |
+| `name` | Yes | Max 64 chars. Lowercase a-z, 0-9, hyphens. Unlike the standard, OCSID does not require this to match the parent directory because that standard requirement is suboptimal for shared skill directories. |
 | `description` | Yes | Max 1024 chars. What the skill does and when to use it. |
 | `license` | No | License name or reference to bundled file. |
 | `compatibility` | No | Max 500 chars. Environment requirements. |
@@ -160,7 +160,7 @@ Per the [Agent Skills specification](https://agentskills.io/specification#frontm
 - Lowercase letters, numbers, hyphens only
 - No leading/trailing hyphens
 - No consecutive hyphens
-DisCo does not require the name to match the parent directory. The Agent Skills standard does, but that requirement is suboptimal for shared skill directories used by multiple tools.
+OCSID does not require the name to match the parent directory. The Agent Skills standard does, but that requirement is suboptimal for shared skill directories used by multiple tools.
 
 Valid: `pdf-processing`, `data-analysis`, `code-review`
 Invalid: `PDF-Processing`, `-pdf`, `pdf--processing`
@@ -181,7 +181,7 @@ description: Helps with PDFs.
 
 ## Validation
 
-DisCo validates skills against the Agent Skills standard. Most issues produce warnings but still load the skill:
+OCSID validates skills against the Agent Skills standard. Most issues produce warnings but still load the skill:
 
 - Name exceeds 64 characters or contains invalid characters
 - Name starts/ends with hyphen or has consecutive hyphens
@@ -234,4 +234,4 @@ cd /path/to/brave-search && npm install
 ## Skill Repositories
 
 - [Anthropic Skills](https://github.com/anthropics/skills) - Document processing (docx, pdf, pptx, xlsx), web development
-- [Upstream Pi Skills](https://github.com/badlogic/pi-skills) - A Pi-maintained Agent Skills collection; review compatibility before loading it explicitly in DisCo
+- [Upstream Pi Skills](https://github.com/badlogic/pi-skills) - A Pi-maintained Agent Skills collection; review compatibility before loading it explicitly in OCSID

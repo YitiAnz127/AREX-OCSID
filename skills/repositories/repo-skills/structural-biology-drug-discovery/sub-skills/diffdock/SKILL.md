@@ -3,7 +3,7 @@ name: diffdock
 description: "&quot;Diffusion-based docking that predicts protein-ligand poses without a predefined site."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # diffdock — structural-biology-drug-discovery sub-skill

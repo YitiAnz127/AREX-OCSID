@@ -3,7 +3,7 @@ name: dft-siesta-relax
 description: "Prepare SIESTA geometry-relaxation task inputs from a user-provided structure and optimization settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-siesta-relax — quantum-chemistry sub-skill

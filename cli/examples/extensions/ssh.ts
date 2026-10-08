@@ -5,8 +5,8 @@
  * When --ssh is provided, read/write/edit/bash run on the remote.
  *
  * Usage:
- *   disco -e ./ssh.ts --ssh user@host
- *   disco -e ./ssh.ts --ssh user@host:/remote/path
+ *   ocsid -e ./ssh.ts --ssh user@host
+ *   ocsid -e ./ssh.ts --ssh user@host:/remote/path
  *
  * Requirements:
  *   - SSH key-based auth (no password prompts)
@@ -111,8 +111,8 @@ function createRemoteBashOps(remote: string, remoteCwd: string, localCwd: string
 	};
 }
 
-export default function (disco: ExtensionAPI) {
-	disco.registerFlag("ssh", { description: "SSH remote: user@host or user@host:/path", type: "string" });
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerFlag("ssh", { description: "SSH remote: user@host or user@host:/path", type: "string" });
 
 	const localCwd = process.cwd();
 	const localRead = createReadTool(localCwd);
@@ -125,7 +125,7 @@ export default function (disco: ExtensionAPI) {
 
 	const getSsh = () => resolvedSsh;
 
-	disco.registerTool({
+	ocsid.registerTool({
 		...localRead,
 		async execute(id, params, signal, onUpdate, _ctx) {
 			const ssh = getSsh();
@@ -139,7 +139,7 @@ export default function (disco: ExtensionAPI) {
 		},
 	});
 
-	disco.registerTool({
+	ocsid.registerTool({
 		...localWrite,
 		async execute(id, params, signal, onUpdate, _ctx) {
 			const ssh = getSsh();
@@ -153,7 +153,7 @@ export default function (disco: ExtensionAPI) {
 		},
 	});
 
-	disco.registerTool({
+	ocsid.registerTool({
 		...localEdit,
 		async execute(id, params, signal, onUpdate, _ctx) {
 			const ssh = getSsh();
@@ -167,7 +167,7 @@ export default function (disco: ExtensionAPI) {
 		},
 	});
 
-	disco.registerTool({
+	ocsid.registerTool({
 		...localBash,
 		async execute(id, params, signal, onUpdate, _ctx) {
 			const ssh = getSsh();
@@ -181,9 +181,9 @@ export default function (disco: ExtensionAPI) {
 		},
 	});
 
-	disco.on("session_start", async (_event, ctx) => {
+	ocsid.on("session_start", async (_event, ctx) => {
 		// Resolve SSH config now that CLI flags are available
-		const arg = disco.getFlag("ssh") as string | undefined;
+		const arg = ocsid.getFlag("ssh") as string | undefined;
 		if (arg) {
 			if (arg.includes(":")) {
 				const [remote, path] = arg.split(":");
@@ -200,14 +200,14 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Handle user ! commands via SSH
-	disco.on("user_bash", (_event) => {
+	ocsid.on("user_bash", (_event) => {
 		const ssh = getSsh();
 		if (!ssh) return; // No SSH, use local execution
 		return { operations: createRemoteBashOps(ssh.remote, ssh.remoteCwd, localCwd) };
 	});
 
 	// Replace local cwd with remote cwd in system prompt
-	disco.on("before_agent_start", async (event) => {
+	ocsid.on("before_agent_start", async (event) => {
 		const ssh = getSsh();
 		if (ssh) {
 			const modified = event.systemPrompt.replace(

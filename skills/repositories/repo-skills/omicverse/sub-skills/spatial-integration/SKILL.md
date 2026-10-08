@@ -5,7 +5,7 @@ description: "Use for OmicVerse spatial transcriptomics, histology-to-spatial
   spatial-adjacent multimodal integration."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

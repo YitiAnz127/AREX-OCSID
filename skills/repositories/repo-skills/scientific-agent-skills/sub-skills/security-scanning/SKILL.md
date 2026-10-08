@@ -6,7 +6,7 @@ description: "Plans and triages Scientific Agent Skills security scans using
   docs/security-triage false-positive verification rules."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

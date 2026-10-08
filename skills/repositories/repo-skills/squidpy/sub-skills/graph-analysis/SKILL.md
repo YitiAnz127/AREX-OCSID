@@ -4,7 +4,7 @@ description: "Build Squidpy spatial neighbor graphs and run graph/statistical
   analyses on AnnData or SpatialData tables."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

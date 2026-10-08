@@ -1,6 +1,6 @@
 import { compare, valid } from "semver";
 import { PACKAGE_NAME } from "../config.ts";
-import { getDiscoUserAgent } from "./disco-user-agent.ts";
+import { getOcsidUserAgent } from "./ocsid-user-agent.ts";
 
 /**
  * Derived from the running package name so a rebrand cannot silently point the
@@ -10,7 +10,7 @@ import { getDiscoUserAgent } from "./disco-user-agent.ts";
 const DEFAULT_LATEST_VERSION_URL = `https://registry.npmjs.org/${encodeURIComponent(PACKAGE_NAME)}/latest`;
 const DEFAULT_VERSION_CHECK_TIMEOUT_MS = 10000;
 
-export interface LatestDiscoRelease {
+export interface LatestOcsidRelease {
 	version: string;
 	note?: string;
 }
@@ -32,15 +32,15 @@ export function isNewerPackageVersion(candidateVersion: string, currentVersion: 
 	return candidateVersion.trim() !== currentVersion.trim();
 }
 
-export async function getLatestDiscoRelease(
+export async function getLatestOcsidRelease(
 	currentVersion: string,
 	options: { timeoutMs?: number } = {},
-): Promise<LatestDiscoRelease | undefined> {
-	if (process.env.DISCO_OFFLINE) return undefined;
+): Promise<LatestOcsidRelease | undefined> {
+	if (process.env.OCSID_OFFLINE) return undefined;
 
-	const response = await fetch(process.env.DISCO_LATEST_VERSION_URL || DEFAULT_LATEST_VERSION_URL, {
+	const response = await fetch(process.env.OCSID_LATEST_VERSION_URL || DEFAULT_LATEST_VERSION_URL, {
 		headers: {
-			"User-Agent": getDiscoUserAgent(currentVersion),
+			"User-Agent": getOcsidUserAgent(currentVersion),
 			accept: "application/json",
 		},
 		signal: AbortSignal.timeout(options.timeoutMs ?? DEFAULT_VERSION_CHECK_TIMEOUT_MS),
@@ -61,18 +61,18 @@ export async function getLatestDiscoRelease(
 	};
 }
 
-export async function getLatestDiscoVersion(
+export async function getLatestOcsidVersion(
 	currentVersion: string,
 	options: { timeoutMs?: number } = {},
 ): Promise<string | undefined> {
-	return (await getLatestDiscoRelease(currentVersion, options))?.version;
+	return (await getLatestOcsidRelease(currentVersion, options))?.version;
 }
 
-export async function checkForNewDiscoVersion(currentVersion: string): Promise<LatestDiscoRelease | undefined> {
-	if (process.env.DISCO_SKIP_VERSION_CHECK) return undefined;
+export async function checkForNewOcsidVersion(currentVersion: string): Promise<LatestOcsidRelease | undefined> {
+	if (process.env.OCSID_SKIP_VERSION_CHECK) return undefined;
 
 	try {
-		const latestRelease = await getLatestDiscoRelease(currentVersion);
+		const latestRelease = await getLatestOcsidRelease(currentVersion);
 		if (latestRelease && isNewerPackageVersion(latestRelease.version, currentVersion)) {
 			return latestRelease;
 		}

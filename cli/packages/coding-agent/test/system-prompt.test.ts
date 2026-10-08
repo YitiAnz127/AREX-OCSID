@@ -7,7 +7,7 @@ describe("buildSystemPrompt", () => {
 
 		expect(prompt).toContain("You are ocsid");
 		expect(prompt).toContain("chemistry and molecular-science research harness");
-		expect(prompt).not.toContain("You are DisCo");
+		expect(prompt).not.toContain("You are OCSID");
 	});
 
 	describe("empty tools", () => {
@@ -54,7 +54,7 @@ describe("buildSystemPrompt", () => {
 			expect(prompt).toContain("- write:");
 		});
 
-		test("instructs models to resolve DisCo docs and examples under absolute base paths", () => {
+		test("instructs models to resolve OCSID docs and examples under absolute base paths", () => {
 			const prompt = buildSystemPrompt({
 				contextFiles: [],
 				skills: [],

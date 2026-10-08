@@ -94,16 +94,16 @@ import { isInstallTelemetryEnabled } from "../../core/telemetry.ts";
 import type { TruncationResult } from "../../core/tools/truncate.ts";
 import { hasTrustRequiringProjectResources, ProjectTrustStore } from "../../core/trust-manager.ts";
 import { getUsageCostBreakdown } from "../../core/usage-totals.ts";
-import { type DiscoAgentMode, formatDiscoAgentMode, parseDiscoAgentModeCommand } from "../../disco/modes/types.ts";
+import { type OcsidAgentMode, formatOcsidAgentMode, parseOcsidAgentModeCommand } from "../../ocsid/modes/types.ts";
 import { getChangelogPath, getNewEntries, normalizeChangelogLinks, parseChangelog } from "../../utils/changelog.ts";
 import { copyToClipboard, readClipboardText } from "../../utils/clipboard.ts";
 import { extensionForImageMimeType, readClipboardImage } from "../../utils/clipboard-image.ts";
-import { getDiscoUserAgent } from "../../utils/disco-user-agent.ts";
+import { getOcsidUserAgent } from "../../utils/ocsid-user-agent.ts";
 import { parseGitUrl } from "../../utils/git.ts";
 import { getCwdRelativePath } from "../../utils/paths.ts";
 import { killTrackedDetachedChildren } from "../../utils/shell.ts";
 import { ensureTool } from "../../utils/tools-manager.ts";
-import { checkForNewDiscoVersion, type LatestDiscoRelease } from "../../utils/version-check.ts";
+import { checkForNewOcsidVersion, type LatestOcsidRelease } from "../../utils/version-check.ts";
 import { AssistantMessageComponent } from "./components/assistant-message.ts";
 import { BashExecutionComponent } from "./components/bash-execution.ts";
 import { BorderedLoader } from "./components/bordered-loader.ts";
@@ -113,17 +113,17 @@ import { CustomEditor } from "./components/custom-editor.ts";
 import { CustomEntryComponent } from "./components/custom-entry.ts";
 import { CustomMessageComponent } from "./components/custom-message.ts";
 import {
-	animateDisCoSplash,
+	animateOCSIDSplash,
 	centerText,
-	DISCO_COLORS,
-	DisCoSplash,
-	discoBold,
-	discoFg,
-	discoSceneContentWidth,
-	formatDisCoScene,
+	OCSID_COLORS,
+	OCSIDSplash,
+	ocsidBold,
+	ocsidFg,
+	ocsidSceneContentWidth,
+	formatOCSIDScene,
 	formatStartupTagline,
-	shouldShowDisCoStartupSplash,
-} from "./components/disco-splash.ts";
+	shouldShowOCSIDStartupSplash,
+} from "./components/ocsid-splash.ts";
 import { DynamicBorder } from "./components/dynamic-border.ts";
 import { ExtensionEditorComponent } from "./components/extension-editor.ts";
 import { ExtensionInputComponent } from "./components/extension-input.ts";
@@ -265,20 +265,20 @@ function startupInfoLine(label: string, value: string, width: number, linkUrl?: 
 	const labelText = label.padEnd(12);
 	const available = Math.max(1, width - visibleWidth(labelText) - 4);
 	const displayValue = truncateToWidth(value, available, "...");
-	const styledValue = discoBold(DISCO_COLORS.gold, displayValue);
+	const styledValue = ocsidBold(OCSID_COLORS.gold, displayValue);
 	const linkedValue = linkUrl ? hyperlink(styledValue, linkUrl) : styledValue;
-	return `  ${discoFg(DISCO_COLORS.olive, labelText)}  ${linkedValue}`;
+	return `  ${ocsidFg(OCSID_COLORS.olive, labelText)}  ${linkedValue}`;
 }
 
 function buildStartupBanner(
 	model: Model<any> | undefined,
 	cwd: string,
 	version: string,
-	discoMode: DiscoAgentMode,
+	ocsidMode: OcsidAgentMode,
 ): string {
 	const terminalWidth = process.stdout.columns || 120;
-	const contentWidth = discoSceneContentWidth(terminalWidth);
-	const logo = formatDisCoScene(2, terminalWidth).join("\n");
+	const contentWidth = ocsidSceneContentWidth(terminalWidth);
+	const logo = formatOCSIDScene(2, terminalWidth).join("\n");
 	const tagline = centerText(formatStartupTagline(version), contentWidth);
 	const modelName = model ? model.id : "no model selected";
 	const endpoint = getModelEndpoint(model);
@@ -289,7 +289,7 @@ function buildStartupBanner(
 		"",
 		startupInfoLine("starting dir", formatStartupCwd(cwd), infoWidth),
 		startupInfoLine("model", modelName, infoWidth),
-		startupInfoLine("mode", formatDiscoAgentMode(discoMode), infoWidth),
+		startupInfoLine("mode", formatOcsidAgentMode(ocsidMode), infoWidth),
 		startupInfoLine("via", endpoint || model?.provider || "n/a", infoWidth, endpoint || undefined),
 	];
 	return lines.join("\n");
@@ -752,7 +752,7 @@ export class InteractiveMode {
 	}
 
 	private shouldShowStartupSplash(): boolean {
-		return shouldShowDisCoStartupSplash({
+		return shouldShowOCSIDStartupSplash({
 			stdinIsTTY: process.stdin.isTTY === true,
 			stdoutIsTTY: process.stdout.isTTY === true,
 			verbose: this.options.verbose,
@@ -765,7 +765,7 @@ export class InteractiveMode {
 			return;
 		}
 
-		const splash = new DisCoSplash(this.version);
+		const splash = new OCSIDSplash(this.version);
 		const abortController = new AbortController();
 		this.startupSplashAbortController = abortController;
 		this.ui.addChild(splash);
@@ -773,7 +773,7 @@ export class InteractiveMode {
 		this.isInitialized = true;
 
 		try {
-			await animateDisCoSplash(splash, () => this.ui.requestRender(), { signal: abortController.signal });
+			await animateOCSIDSplash(splash, () => this.ui.requestRender(), { signal: abortController.signal });
 		} finally {
 			this.ui.removeChild(splash);
 			if (this.startupSplashAbortController === abortController) {
@@ -846,7 +846,7 @@ export class InteractiveMode {
 					this.session.model,
 					this.sessionManager.getCwd(),
 					this.version,
-					this.sessionManager.getDiscoMode(),
+					this.sessionManager.getOcsidMode(),
 				);
 
 			// Build startup instructions using keybinding hint helpers
@@ -879,15 +879,15 @@ export class InteractiveMode {
 				rawKeyHint("/", "commands"),
 				rawKeyHint("!", "bash"),
 				hint("app.tools.expand", "more"),
-			].join(discoFg(DISCO_COLORS.olive, " · "));
-			const compactOnboarding = discoFg(
-				DISCO_COLORS.olive,
+			].join(ocsidFg(OCSID_COLORS.olive, " · "));
+			const compactOnboarding = ocsidFg(
+				OCSID_COLORS.olive,
 				`Press ${keyText("app.tools.expand")} to show full startup help and loaded resources.`,
 			);
 			const getOnboarding = () =>
-				discoFg(
-					DISCO_COLORS.olive,
-					this.sessionManager.getDiscoMode() === "creator"
+				ocsidFg(
+					OCSID_COLORS.olive,
+					this.sessionManager.getOcsidMode() === "creator"
 						? "Describe a chemistry or molecular-science skill to create. Creator will assess the visible meta skills before proposing a workflow."
 						: "Describe a chemistry, biochemistry, molecular, or drug-discovery goal. Researcher will use the visible operating skills and routed knowledge graph.",
 				);
@@ -953,15 +953,15 @@ export class InteractiveMode {
 		await this.init();
 		if (this.isShuttingDown) return;
 
-		if (!process.env.DISCO_OFFLINE) {
+		if (!process.env.OCSID_OFFLINE) {
 			void this.session.modelRuntime
 				.refresh()
 				.then(() => this.updateAvailableProviderCount())
 				.catch(() => {});
 		}
 
-		// Start version check asynchronously when DisCo is configured with a release endpoint.
-		checkForNewDiscoVersion(this.version).then((newRelease) => {
+		// Start version check asynchronously when OCSID is configured with a release endpoint.
+		checkForNewOcsidVersion(this.version).then((newRelease) => {
 			if (newRelease) {
 				this.showNewVersionNotification(newRelease);
 			}
@@ -976,7 +976,7 @@ export class InteractiveMode {
 			})
 			.finally(() => {
 				// On Windows, npm can overwrite the shared console title while checking
-				// extension package versions. Restore DisCo's title after the startup check.
+				// extension package versions. Restore OCSID's title after the startup check.
 				if (process.platform === "win32" && this.isInitialized) {
 					this.updateTerminalTitle();
 				}
@@ -1041,7 +1041,7 @@ export class InteractiveMode {
 	}
 
 	private async checkForPackageUpdates(): Promise<string[]> {
-		if (process.env.DISCO_OFFLINE) {
+		if (process.env.OCSID_OFFLINE) {
 			return [];
 		}
 
@@ -1137,8 +1137,8 @@ export class InteractiveMode {
 	}
 
 	private reportInstallTelemetry(version: string): void {
-		const telemetryUrl = process.env.DISCO_INSTALL_TELEMETRY_URL;
-		if (!telemetryUrl || process.env.DISCO_OFFLINE) {
+		const telemetryUrl = process.env.OCSID_INSTALL_TELEMETRY_URL;
+		if (!telemetryUrl || process.env.OCSID_OFFLINE) {
 			return;
 		}
 
@@ -1151,7 +1151,7 @@ export class InteractiveMode {
 
 		void fetch(url, {
 			headers: {
-				"User-Agent": getDiscoUserAgent(version),
+				"User-Agent": getOcsidUserAgent(version),
 			},
 			signal: AbortSignal.timeout(5000),
 		})
@@ -2769,7 +2769,7 @@ export class InteractiveMode {
 			if (image) {
 				const tmpDir = os.tmpdir();
 				const ext = extensionForImageMimeType(image.mimeType) ?? "png";
-				const fileName = `disco-clipboard-${crypto.randomUUID()}.${ext}`;
+				const fileName = `ocsid-clipboard-${crypto.randomUUID()}.${ext}`;
 				const filePath = path.join(tmpDir, fileName);
 				fs.writeFileSync(filePath, Buffer.from(image.bytes));
 
@@ -2886,14 +2886,14 @@ export class InteractiveMode {
 				await this.handleClearCommand();
 				return;
 			}
-			const discoModeCommand = parseDiscoAgentModeCommand(text);
-			if (discoModeCommand) {
+			const ocsidModeCommand = parseOcsidAgentModeCommand(text);
+			if (ocsidModeCommand) {
 				this.editor.setText("");
-				if (discoModeCommand.hasArguments) {
+				if (ocsidModeCommand.hasArguments) {
 					this.showWarning("Usage: /creator or /researcher. These commands do not accept arguments.");
 					return;
 				}
-				await this.handleModeSwitchCommand(discoModeCommand.mode);
+				await this.handleModeSwitchCommand(ocsidModeCommand.mode);
 				return;
 			}
 			if (text === "/compact" || text.startsWith("/compact ")) {
@@ -3813,7 +3813,7 @@ export class InteractiveMode {
 
 		// Restore the terminal before the process dies on any uncaught throw.
 		// Without this, an unhandled exception from extension code (or anywhere
-		// in DisCo) leaves the terminal in raw mode with no cursor.
+		// in OCSID) leaves the terminal in raw mode with no cursor.
 		const uncaughtExceptionHandler = (error: Error) => this.uncaughtCrash(error);
 		process.prependListener("uncaughtException", uncaughtExceptionHandler);
 		this.signalCleanupHandlers.push(() => process.off("uncaughtException", uncaughtExceptionHandler));
@@ -4021,10 +4021,10 @@ export class InteractiveMode {
 		this.ui.requestRender();
 	}
 
-	showNewVersionNotification(release: LatestDiscoRelease): void {
+	showNewVersionNotification(release: LatestOcsidRelease): void {
 		const action = theme.fg("accent", `${APP_NAME} update`);
 		const updateInstruction = theme.fg("muted", `New version ${release.version} is available. Run `) + action;
-		const changelogUrl = process.env.DISCO_CHANGELOG_URL;
+		const changelogUrl = process.env.OCSID_CHANGELOG_URL;
 		const changelogLine = changelogUrl
 			? theme.fg("muted", "Changelog: ") +
 				(getCapabilities().hyperlinks
@@ -5804,7 +5804,7 @@ export class InteractiveMode {
 		}
 		info += `${theme.fg("dim", "File:")} ${stats.sessionFile ?? "In-memory"}\n`;
 		info += `${theme.fg("dim", "ID:")} ${stats.sessionId}\n`;
-		info += `${theme.fg("dim", "Mode:")} ${formatDiscoAgentMode(this.sessionManager.getDiscoMode())}\n\n`;
+		info += `${theme.fg("dim", "Mode:")} ${formatOcsidAgentMode(this.sessionManager.getOcsidMode())}\n\n`;
 		info += `${theme.bold("Messages")}\n`;
 		info += `${theme.fg("dim", "Total:")} ${stats.totalMessages}\n`;
 		info += `${theme.fg("dim", "User:")} ${stats.userMessages}\n`;
@@ -6018,9 +6018,9 @@ export class InteractiveMode {
 		}
 	}
 
-	private async handleModeSwitchCommand(targetMode: DiscoAgentMode): Promise<void> {
-		const currentMode = this.sessionManager.getDiscoMode();
-		const targetLabel = formatDiscoAgentMode(targetMode);
+	private async handleModeSwitchCommand(targetMode: OcsidAgentMode): Promise<void> {
+		const currentMode = this.sessionManager.getOcsidMode();
+		const targetLabel = formatOcsidAgentMode(targetMode);
 		if (currentMode === targetMode) {
 			this.showStatus(`Already in ${targetLabel} mode; the current context was kept.`);
 			return;
@@ -6057,7 +6057,7 @@ export class InteractiveMode {
 			if (canResumeCurrentSession && !this.sessionManager.persistForResume()) {
 				throw new Error("Failed to preserve the current session for /resume");
 			}
-			const result = await this.runtimeHost.newSession({ discoMode: targetMode });
+			const result = await this.runtimeHost.newSession({ ocsidMode: targetMode });
 			if (result.cancelled) {
 				this.showStatus("Mode switch cancelled");
 				return;

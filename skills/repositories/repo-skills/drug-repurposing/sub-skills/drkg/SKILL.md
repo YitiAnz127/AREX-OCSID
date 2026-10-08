@@ -3,7 +3,7 @@ name: drkg
 description: "Query the DRKG (Drug Repurposing Knowledge Graph)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drkg — drug-repurposing sub-skill

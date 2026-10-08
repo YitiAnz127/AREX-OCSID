@@ -5,7 +5,7 @@
  * when thinking blocks are hidden.
  *
  * Usage:
- *   disco --extension examples/extensions/hidden-thinking-label.ts
+ *   ocsid --extension examples/extensions/hidden-thinking-label.ts
  *
  * Test:
  *   1. Load this extension
@@ -22,18 +22,18 @@ import type { ExtensionAPI, ExtensionContext } from "@arex-skill/disco";
 
 const DEFAULT_LABEL = "Pondering...";
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	let label = DEFAULT_LABEL;
 
 	const applyLabel = (ctx: ExtensionContext) => {
 		ctx.ui.setHiddenThinkingLabel(label);
 	};
 
-	disco.on("session_start", async (_event, ctx) => {
+	ocsid.on("session_start", async (_event, ctx) => {
 		applyLabel(ctx);
 	});
 
-	disco.registerCommand("thinking-label", {
+	ocsid.registerCommand("thinking-label", {
 		description: "Set the hidden thinking label. Use without args to reset.",
 		handler: async (args, ctx) => {
 			const nextLabel = args.trim();

@@ -4,7 +4,7 @@ description: "Build MDAnalysis on-the-fly coordinate transformation pipelines
   and write transformed outputs safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

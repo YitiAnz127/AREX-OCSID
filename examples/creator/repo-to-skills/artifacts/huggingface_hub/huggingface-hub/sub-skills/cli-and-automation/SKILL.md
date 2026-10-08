@@ -4,7 +4,7 @@ description: "Routes reliable Hugging Face Hub CLI and shell automation, includi
 disable-model-invocation: true
 license: Apache-2.0
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # CLI and Automation

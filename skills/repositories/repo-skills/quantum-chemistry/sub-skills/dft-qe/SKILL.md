@@ -3,7 +3,7 @@ name: dft-qe
 description: "Generate Quantum ESPRESSO DFT input tasks from a user-provided structure plus user-specified DFT settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-qe — quantum-chemistry sub-skill

@@ -5,7 +5,7 @@ description: "Safely edit, build, and test the RDKit repository itself,
   generated stubs/docstrings, and checkout-shadowing diagnostics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

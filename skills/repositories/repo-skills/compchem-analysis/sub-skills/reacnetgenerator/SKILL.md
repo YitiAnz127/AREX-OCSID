@@ -3,7 +3,7 @@ name: reacnetgenerator
 description: "Run ReacNetGenerator on reactive MD trajectories to generate reaction networks and reports."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # reacnetgenerator — compchem-analysis sub-skill

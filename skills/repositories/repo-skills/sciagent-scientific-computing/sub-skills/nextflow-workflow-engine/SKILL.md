@@ -3,7 +3,7 @@ name: nextflow-workflow-engine
 description: "&quot;Dataflow workflow engine for scalable bioinformatics pipelines."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # nextflow-workflow-engine — sciagent-scientific-computing sub-skill

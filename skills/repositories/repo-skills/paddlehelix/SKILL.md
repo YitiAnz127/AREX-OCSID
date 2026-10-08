@@ -5,7 +5,7 @@ description: "Route PaddleHelix tasks across pahelix core APIs,
   HelixFold structure prediction, and LinearRNA usage."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 
@@ -64,7 +64,7 @@ Run helpers from their owning skill directories or provide paths explicitly. Do 
 - `references/capability-map.md`: concise mapping from user intent to sub-skill, evidence, bundled helper, and verification candidate.
 - `references/troubleshooting.md`: cross-cutting install/import/build/backend/download issues.
 - `references/repo-provenance.md`: source snapshot and refresh baseline.
-- `references/repo-routing-metadata.json`: structured router metadata used during managed DisCo import.
+- `references/repo-routing-metadata.json`: structured router metadata used during managed OCSID import.
 
 ## Safety and Scope
 

@@ -3,7 +3,7 @@ name: rnaseq-gseapy-gene-enrichment
 description: "&quot;GSEA and over-representation analysis (ORA) for RNA-seq and proteomics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # rnaseq-gseapy-gene-enrichment — genomics-bioinformatics sub-skill

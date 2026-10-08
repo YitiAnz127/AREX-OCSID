@@ -1,6 +1,6 @@
 import { copyFileSync, existsSync, mkdirSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
-import type { DiscoAgentMode } from "../disco/modes/types.ts";
+import type { OcsidAgentMode } from "../ocsid/modes/types.ts";
 import { resolvePath } from "../utils/paths.ts";
 import type { AgentSession } from "./agent-session.ts";
 import type { AgentSessionRuntimeDiagnostic, AgentSessionServices } from "./agent-session-services.ts";
@@ -226,7 +226,7 @@ export class AgentSessionRuntime {
 
 	async newSession(options?: {
 		parentSession?: string;
-		discoMode?: DiscoAgentMode;
+		ocsidMode?: OcsidAgentMode;
 		setup?: (sessionManager: SessionManager) => Promise<void>;
 		withSession?: (ctx: ReplacedSessionContext) => Promise<void>;
 	}): Promise<{ cancelled: boolean }> {
@@ -237,10 +237,10 @@ export class AgentSessionRuntime {
 
 		const previousSessionFile = this.session.sessionFile;
 		const sessionDir = this.session.sessionManager.getSessionDir();
-		const discoMode = options?.discoMode ?? this.session.sessionManager.getDiscoMode();
+		const ocsidMode = options?.ocsidMode ?? this.session.sessionManager.getOcsidMode();
 		const sessionManager = this.session.sessionManager.isPersisted()
-			? SessionManager.create(this.cwd, sessionDir, { parentSession: options?.parentSession, discoMode })
-			: SessionManager.inMemory(this.cwd, { parentSession: options?.parentSession, discoMode });
+			? SessionManager.create(this.cwd, sessionDir, { parentSession: options?.parentSession, ocsidMode })
+			: SessionManager.inMemory(this.cwd, { parentSession: options?.parentSession, ocsidMode });
 
 		await this.teardownCurrent("new", sessionManager.getSessionFile());
 		this.apply(
@@ -296,7 +296,7 @@ export class AgentSessionRuntime {
 			if (!targetLeafId) {
 				const sessionManager = SessionManager.create(this.cwd, sessionDir, {
 					parentSession: currentSessionFile,
-					discoMode: this.session.sessionManager.getDiscoMode(),
+					ocsidMode: this.session.sessionManager.getOcsidMode(),
 				});
 				await this.teardownCurrent("fork", sessionManager.getSessionFile());
 				this.apply(
@@ -338,7 +338,7 @@ export class AgentSessionRuntime {
 		if (!targetLeafId) {
 			sessionManager.newSession({
 				parentSession: this.session.sessionFile,
-				discoMode: sessionManager.getDiscoMode(),
+				ocsidMode: sessionManager.getOcsidMode(),
 			});
 		} else {
 			sessionManager.createBranchedSession(targetLeafId);

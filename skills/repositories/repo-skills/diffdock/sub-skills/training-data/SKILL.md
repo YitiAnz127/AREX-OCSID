@@ -4,7 +4,7 @@ description: "Plan DiffDock score/confidence training and prepare datasets,
   splits, ESM embeddings, caches, and checkpoints safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

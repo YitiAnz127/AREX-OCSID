@@ -8,15 +8,15 @@
  * "improvement" is inferred here — the ledger only records measurements; stats
  * and conclusions happen on top of observed rows.
  *
- * The test-case container itself is the existing `disco.usability-case.v1`
+ * The test-case container itself is the existing `ocsid.usability-case.v1`
  * contract (user_request.txt + README.md + assertions.json + fixtures/) defined
  * by verify-repo-skill/references/usability-test-cases.md.
  */
 
 import { createHash } from "node:crypto";
 
-export const BENCHMARK_MANIFEST_SCHEMA = "disco.benchmark.v1" as const;
-export const QUALITY_LEDGER_SCHEMA = "disco.quality-ledger.v1" as const;
+export const BENCHMARK_MANIFEST_SCHEMA = "ocsid.benchmark.v1" as const;
+export const QUALITY_LEDGER_SCHEMA = "ocsid.quality-ledger.v1" as const;
 
 export type BenchmarkSplit = "train" | "dev" | "heldout";
 
@@ -127,12 +127,20 @@ function splitSha256(text: string): string {
  */
 export type GradedBy = "assertion" | "human" | "model_grader" | "token_overlap";
 
-/** Candidate runs may use either the text-proxy or skill-snapshot executor. */
-export type CandidateRunKind = "candidate-eval" | "candidate-agent-eval";
+/**
+ * Candidate runs may use the text-proxy executor, the pasted-snapshot model-API
+ * executor, or (P1-03) the native OCSID session executor. The native label is
+ * distinct so a native score is never silently averaged with an API score, while
+ * still counting as a candidate run for the promotion plumbing.
+ */
+export type CandidateRunKind = "candidate-eval" | "candidate-agent-eval" | "native-candidate-agent-eval";
 
 export function isCandidateRunKind(kind: unknown): kind is CandidateRunKind {
-	return kind === "candidate-eval" || kind === "candidate-agent-eval";
+	return kind === "candidate-eval" || kind === "candidate-agent-eval" || kind === "native-candidate-agent-eval";
 }
+
+/** P1-03: every run kind that carries a candidate score (one list, no drift). */
+export const CANDIDATE_RUN_KINDS: readonly CandidateRunKind[] = ["candidate-eval", "candidate-agent-eval", "native-candidate-agent-eval"];
 
 /**
  * B3 (P0-3): separate the *scoring source* from the *executor type*.

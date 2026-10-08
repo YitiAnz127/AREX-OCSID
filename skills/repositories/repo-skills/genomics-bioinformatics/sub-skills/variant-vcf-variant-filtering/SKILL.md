@@ -3,7 +3,7 @@ name: variant-vcf-variant-filtering
 description: "&quot;Guide to quality filtering raw VCF files before computing summary stats (Ts/Tv ratio, variant counts, AF distributions)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # variant-vcf-variant-filtering — genomics-bioinformatics sub-skill

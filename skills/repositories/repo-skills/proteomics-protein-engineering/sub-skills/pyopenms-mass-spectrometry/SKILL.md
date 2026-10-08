@@ -3,7 +3,7 @@ name: pyopenms-mass-spectrometry
 description: "MS data processing with PyOpenMS for LC-MS/MS proteomics and metabolomics — mzML/mzXML I/O, signal processing (smoothing, peak picking, centroiding), feature detection/linking, pep"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pyopenms-mass-spectrometry — proteomics-protein-engineering sub-skill

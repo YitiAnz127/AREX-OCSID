@@ -1,0 +1,35 @@
+{
+  "schema": "ocsid.benchmark.v1",
+  "name": "ocsid-current-cases-infrastructure-smoke-20261001",
+  "frozenAt": "2026-10-01T14:11:43.689Z",
+  "splitHash": "fabcb729156e295afed6b395f1905939f18857158351c0945c0c93525a7c7a05",
+  "splits": {
+    "train": [
+      "alphafold3-pytorch",
+      "atomistic-workflows",
+      "chemprop",
+      "drug-combination"
+    ],
+    "dev": [
+      "drug-molecular-property",
+      "gget",
+      "mosaic"
+    ],
+    "heldout": [
+      "pdb-structure",
+      "protein-campaign-manager",
+      "pycirclize"
+    ]
+  },
+  "skillCounts": {
+    "train": 4,
+    "dev": 3,
+    "heldout": 3
+  },
+  "contentHash": "f680ac8b32236cd160000f8f6b5b9832599d31a99437795f4a1c19ad0c5852a1",
+  "contentHashes": {
+    "train": "e539026bd869f8ddee42b3cb0d85669950e1f9adb8da788f3bc89f4456410cdf",
+    "dev": "4bb578400761867f8b449085ea2d0a9b8221a57e622e2e1d812810133e26ce1f",
+    "heldout": "1b4ae1ee4f2e00e62e233e73d2aba0e913bde11a2c3ba9a8bf2408cfd2d8f029"
+  }
+}

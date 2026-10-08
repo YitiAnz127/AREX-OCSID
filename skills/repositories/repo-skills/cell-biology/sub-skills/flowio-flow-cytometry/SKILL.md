@@ -3,7 +3,7 @@ name: flowio-flow-cytometry
 description: "&quot;Parse/write FCS (Flow Cytometry) files v2.0-3.1."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # flowio-flow-cytometry — cell-biology sub-skill

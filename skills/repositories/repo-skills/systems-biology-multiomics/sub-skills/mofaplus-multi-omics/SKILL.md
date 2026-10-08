@@ -3,7 +3,7 @@ name: mofaplus-multi-omics
 description: "&quot;Multi-Omics Factor Analysis v2 (MOFA+) with mofapy2."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # mofaplus-multi-omics — systems-biology-multiomics sub-skill

@@ -21,6 +21,6 @@ const helloTool = defineTool({
 	},
 });
 
-export default function (disco: ExtensionAPI) {
-	disco.registerTool(helloTool);
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerTool(helloTool);
 }

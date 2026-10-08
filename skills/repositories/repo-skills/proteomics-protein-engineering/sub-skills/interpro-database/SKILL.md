@@ -3,7 +3,7 @@ name: interpro-database
 description: "&quot;Query InterPro REST API for protein domain architecture, family classification, and member-DB integration."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # interpro-database — proteomics-protein-engineering sub-skill

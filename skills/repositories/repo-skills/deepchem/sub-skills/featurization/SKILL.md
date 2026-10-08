@@ -5,7 +5,7 @@ description: "Choose, run, validate, and troubleshoot DeepChem featurizers for
   complexes."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

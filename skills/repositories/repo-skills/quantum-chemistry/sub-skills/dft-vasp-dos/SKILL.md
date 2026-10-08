@@ -3,7 +3,7 @@ name: dft-vasp-dos
 description: "Prepare VASP DOS workflow inputs from existing SCF artifacts and user-specified DOS settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-vasp-dos — quantum-chemistry sub-skill

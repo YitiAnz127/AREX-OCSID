@@ -4,8 +4,8 @@ import { isAbsolute, join, relative, resolve } from "node:path";
 
 export const MANAGED_INSTALL_SCHEMA_VERSION = 1;
 /**
- * The package name the platform installers (`install-disco.sh` and
- * `install-disco.ps1`) install into a managed release tree, and therefore the
+ * The package name the platform installers (`install-ocsid.sh` and
+ * `install-ocsid.ps1`) install into a managed release tree, and therefore the
  * name recorded in `managed-install.json`. It deliberately stays
  * `@arex-skill/disco` while the published managed package is the upstream one.
  * `readManagedInstallMarker` derives its expected entrypoint from this value, so
@@ -43,11 +43,11 @@ function pathSeparator(): string {
 }
 
 function markerPathFromEnvironment(): string {
-	const explicit = process.env.DISCO_MANAGED_INSTALL_MARKER?.trim();
+	const explicit = process.env.OCSID_MANAGED_INSTALL_MARKER?.trim();
 	if (explicit) return resolve(explicit);
-	const installDir = process.env.DISCO_MANAGED_INSTALL_DIR?.trim();
+	const installDir = process.env.OCSID_MANAGED_INSTALL_DIR?.trim();
 	if (installDir) return resolve(installDir, "managed-install.json");
-	const agentDir = process.env.DISCO_CODING_AGENT_DIR?.trim() || join(homedir(), ".disco", "agent");
+	const agentDir = process.env.OCSID_CODING_AGENT_DIR?.trim() || join(homedir(), ".ocsid", "agent");
 	return resolve(agentDir, "install", "managed-install.json");
 }
 
@@ -107,7 +107,7 @@ function parseMarker(raw: unknown, markerPath: string): ManagedInstallMarker | u
 
 /** Read and validate the installer-owned marker for the current process. */
 export function readManagedInstallMarker(): ManagedInstallMarker | undefined {
-	if (process.env.DISCO_MANAGED_INSTALL !== "1") return undefined;
+	if (process.env.OCSID_MANAGED_INSTALL !== "1") return undefined;
 	const markerPath = markerPathFromEnvironment();
 	try {
 		const markerText = readFileSync(markerPath, "utf8").replace(/^\uFEFF/u, "");

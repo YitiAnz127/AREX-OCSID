@@ -5,7 +5,7 @@ description: "Use DIG's graph self-supervised learning stack for GraphCL, GRACE,
   TUDataset/Planetoid-based SSL evaluation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

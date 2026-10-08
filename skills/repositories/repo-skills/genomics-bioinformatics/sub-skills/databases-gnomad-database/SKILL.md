@@ -3,7 +3,7 @@ name: databases-gnomad-database
 description: "&quot;gnomAD v4 population variant frequencies via GraphQL API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-gnomad-database — genomics-bioinformatics sub-skill

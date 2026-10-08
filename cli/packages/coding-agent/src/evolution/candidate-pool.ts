@@ -16,6 +16,7 @@ import { readdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import type { AuditRunSummary } from "../audit/runner.ts";
 import type { QualityLedgerRow } from "../benchmark/schema.ts";
+import { CANDIDATE_RUN_KINDS } from "../benchmark/schema.ts";
 
 export interface RecordedRun {
 	runId: string;
@@ -40,7 +41,7 @@ interface SummaryFile extends AuditRunSummary {
 export function listCandidateRuns(qualityDir: string, opts: { includeKind?: string[] } = {}): RecordedRun[] {
 	const auditRoot = path.join(qualityDir, "audit");
 	if (!existsSync(auditRoot)) return [];
-	const allowed = opts.includeKind ?? ["candidate-eval", "candidate-agent-eval"];
+	const allowed = opts.includeKind ?? [...CANDIDATE_RUN_KINDS];
 	const out: RecordedRun[] = [];
 	for (const dir of readdirSync(auditRoot)) {
 		const summaryPath = path.join(auditRoot, dir, "summary.json");

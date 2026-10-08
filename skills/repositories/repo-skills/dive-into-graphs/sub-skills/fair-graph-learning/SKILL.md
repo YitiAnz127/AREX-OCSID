@@ -5,7 +5,7 @@ description: "Use DIG's fair graph learning stack for NBA/POKEC datasets,
   workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

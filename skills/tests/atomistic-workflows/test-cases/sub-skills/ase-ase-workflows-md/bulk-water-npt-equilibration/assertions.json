@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "ase-ase-workflows-md",
   "target_capability": "npt-equilibration-md-workflow",
   "difficulty": "intermediate",

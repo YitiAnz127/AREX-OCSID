@@ -5,7 +5,7 @@ description: "Operate the alphafold3_pytorch CLI and alphafold3_pytorch_app
   checkpoint, device, output, entity, cache, and precision behavior."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

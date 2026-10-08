@@ -3,7 +3,7 @@ name: single-cell-harmony-batch-correction
 description: "&quot;Harmony batch correction for scRNA-seq and other omics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # single-cell-harmony-batch-correction — genomics-bioinformatics sub-skill

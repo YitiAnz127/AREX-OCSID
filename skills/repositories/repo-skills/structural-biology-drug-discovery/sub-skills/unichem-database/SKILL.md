@@ -3,7 +3,7 @@ name: unichem-database
 description: "&quot;Cross-reference compound IDs across 20+ databases (ChEMBL, DrugBank, PubChem, ChEBI, PDB, SureChEMBL, HMDB, DrugCentral, BindingDB) via UniChem REST API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # unichem-database — structural-biology-drug-discovery sub-skill

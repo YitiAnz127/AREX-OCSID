@@ -3,7 +3,7 @@ name: pylabrobot
 description: "&quot;Hardware-agnostic Python liquid-handler library: portable scripts run on Hamilton STAR, Tecan Freedom EVO, Opentrons OT-2, or a simulator without vendor lock-in."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pylabrobot — lab-automation sub-skill

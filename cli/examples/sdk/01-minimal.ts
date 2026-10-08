@@ -2,7 +2,7 @@
  * Minimal SDK Usage
  *
  * Uses all defaults: discovers skills, extensions, tools, context files
- * from cwd and ~/.disco/agent. Model chosen from settings or first available.
+ * from cwd and ~/.ocsid/agent. Model chosen from settings or first available.
  */
 
 import { createAgentSession } from "@arex-skill/disco";

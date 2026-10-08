@@ -5,7 +5,7 @@ description: "Guides agents using the datamol Python package for RDKit-first
   visualization, and utility workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

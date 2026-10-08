@@ -3,7 +3,7 @@ name: databases-ucsc-genome-browser
 description: "&quot;Query UCSC Genome Browser REST API for DNA sequences, tracks, gene models, and conservation across 100+ assemblies."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-ucsc-genome-browser — genomics-bioinformatics sub-skill

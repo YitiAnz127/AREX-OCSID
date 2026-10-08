@@ -3,7 +3,7 @@ name: single-cell-popv-cell-annotation
 description: "&quot;Consensus cell type annotation: runs 10+ algorithms (KNN-Harmony/BBKNN/Scanorama/scVI, CellTypist, ONCLASS, Random Forest, SCANVI, SVM, XGBoost) on a labeled reference and transfe"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # single-cell-popv-cell-annotation — genomics-bioinformatics sub-skill

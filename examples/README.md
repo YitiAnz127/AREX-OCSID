@@ -31,16 +31,16 @@ including environment checks, input contracts, and a reproducible smoke test.
 
 ## Retained upstream demonstrations
 
-The HTML exports and artifact bundles below are inherited AREX/DisCo
+The HTML exports and artifact bundles below are inherited AREX/OCSID
 architecture demonstrations. They remain useful for studying session export,
 Creator/Researcher orchestration, and evidence recording, but their
 Hugging Face and vLLM/SGLang subjects are not part of the current chemistry
 repository-skill router.
 
-- [Repository-to-skill Creator session](creator/repo-to-skills/disco-creator-huggingface_hub.html)
+- [Repository-to-skill Creator session](creator/repo-to-skills/ocsid-creator-huggingface_hub.html)
 - [Repository-to-skill artifact bundle](creator/repo-to-skills/artifacts/huggingface_hub/README.md)
 - [Paper-to-skill starter configuration](creator/paper-to-skills/distiller-run-config.toml)
-- [Researcher benchmark session](researcher/disco-researcher-vllm_sglang.html)
+- [Researcher benchmark session](researcher/ocsid-researcher-vllm_sglang.html)
 - [Researcher benchmark report](researcher/artifacts/vllm_sglang/REPORT.md)
 
 These files are retained examples, not claims about the capabilities or

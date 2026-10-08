@@ -4,7 +4,7 @@ description: "Plan and interpret DeepVariant VCF stats, runtime-by-region,
   show_examples, and benchmark-analysis reports safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

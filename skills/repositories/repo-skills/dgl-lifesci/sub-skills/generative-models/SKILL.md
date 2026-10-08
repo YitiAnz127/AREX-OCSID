@@ -5,7 +5,7 @@ description: "Plan and troubleshoot DGL-LifeSci molecular generative workflows
   generation, and safe input validation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

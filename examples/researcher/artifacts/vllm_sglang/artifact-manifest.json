@@ -1,5 +1,5 @@
 {
-  "schema": "disco.example-artifacts.v1",
+  "schema": "ocsid.example-artifacts.v1",
   "example": "vllm_sglang",
   "generated_from": "sanitized Researcher benchmark workspace",
   "scope": "curated report inputs and aggregate evidence; raw logs, model weights, environments, caches, process identifiers, and host dumps are intentionally excluded",

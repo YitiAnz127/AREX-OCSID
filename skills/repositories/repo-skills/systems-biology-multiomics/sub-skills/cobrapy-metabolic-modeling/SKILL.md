@@ -3,7 +3,7 @@ name: cobrapy-metabolic-modeling
 description: "&quot;Constraint-based (COBRA) analysis of genome-scale metabolic models: FBA, FVA, knockouts, flux sampling, production envelopes, gapfilling, media optimization."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # cobrapy-metabolic-modeling — systems-biology-multiomics sub-skill

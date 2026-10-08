@@ -4,7 +4,7 @@ description: "Routes Distributional Graphormer (DiG) catalyst, property-guided,
   protein, and protein-ligand workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

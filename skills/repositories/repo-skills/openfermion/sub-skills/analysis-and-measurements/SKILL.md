@@ -6,7 +6,7 @@ description: "Use OpenFermion for bounded sparse or dense operator analysis,
   estimation, resource functionals, and grid or lattice numerical helpers."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

@@ -3,7 +3,7 @@ name: molecular_targets_data
 description: "Query the NCI-60 Molecular Target (Protein) database from the Developmental Therapeutics Program."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # molecular_targets_data — drug-dti sub-skill

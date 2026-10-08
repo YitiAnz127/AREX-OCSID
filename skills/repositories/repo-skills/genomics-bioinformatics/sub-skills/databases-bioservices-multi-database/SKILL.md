@@ -3,7 +3,7 @@ name: databases-bioservices-multi-database
 description: "Unified Python interface to 40+ bioinformatics web services: UniProt proteins, KEGG pathways, ChEMBL/ChEBI/PubChem, BLAST, cross-database ID mapping, GO annotations, PPI."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-bioservices-multi-database — genomics-bioinformatics sub-skill

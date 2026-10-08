@@ -155,5 +155,5 @@
     "results/vllm/final_compliant/throughput_02/result.json",
     "results/vllm/final_compliant/throughput_03/result.json"
   ],
-  "schema": "disco.benchmark-aggregate.v1"
+  "schema": "ocsid.benchmark-aggregate.v1"
 }

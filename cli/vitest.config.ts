@@ -11,10 +11,10 @@ export default defineConfig({
     fileParallelism: false,
     testTimeout: 30000,
     env: {
-      DISCO_OFFLINE: "1",
+      OCSID_OFFLINE: "1",
       PI_OFFLINE: "1",
-      GIT_COMMITTER_NAME: "DisCo test fixture",
-      GIT_COMMITTER_EMAIL: "disco-tests@localhost",
+      GIT_COMMITTER_NAME: "OCSID test fixture",
+      GIT_COMMITTER_EMAIL: "ocsid-tests@localhost",
     },
     unstubEnvs: true,
     reporters: process.env.GITHUB_ACTIONS ? ["dot", "github-actions"] : ["dot"],

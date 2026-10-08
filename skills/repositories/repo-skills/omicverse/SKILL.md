@@ -5,7 +5,7 @@ description: "OmicVerse multi-omics Python workflows for AnnData, single-cell,
   alignment, MCP, CLI, and agentic analysis."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: GPL 3.0
 ---
 

@@ -5,7 +5,7 @@ description: "Use scikit-bio for bioinformatics sequences, alignments,
   distance statistics, ordination, compositional analysis, and embeddings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

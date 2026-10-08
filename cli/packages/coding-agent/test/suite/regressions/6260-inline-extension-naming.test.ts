@@ -41,7 +41,7 @@ describe("inline extension naming", () => {
 			noSkills: true,
 			noPromptTemplates: true,
 			noThemes: true,
-			includeDisCoDefaults: false,
+			includeOCSIDDefaults: false,
 			extensionFactories: [noop, noop],
 		});
 
@@ -62,7 +62,7 @@ describe("inline extension naming", () => {
 			noSkills: true,
 			noPromptTemplates: true,
 			noThemes: true,
-			includeDisCoDefaults: false,
+			includeOCSIDDefaults: false,
 			extensionFactories: [
 				{ name: "my-provider", factory: noop },
 				{ name: "my-commands", factory: noop },
@@ -86,7 +86,7 @@ describe("inline extension naming", () => {
 			noSkills: true,
 			noPromptTemplates: true,
 			noThemes: true,
-			includeDisCoDefaults: false,
+			includeOCSIDDefaults: false,
 			extensionFactories: [{ name: "built-in", factory: noop, hidden: true }],
 		});
 
@@ -107,7 +107,7 @@ describe("inline extension naming", () => {
 			noSkills: true,
 			noPromptTemplates: true,
 			noThemes: true,
-			includeDisCoDefaults: false,
+			includeOCSIDDefaults: false,
 			extensionFactories: [noop, { name: "named-ext", factory: noop }, noop],
 		});
 

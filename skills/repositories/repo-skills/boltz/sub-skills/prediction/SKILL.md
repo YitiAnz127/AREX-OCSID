@@ -5,7 +5,7 @@ description: "Use Boltz prediction workflows: CLI runs, YAML/FASTA inputs, MSA
   and output interpretation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

@@ -3,7 +3,7 @@ name: uniprot
 description: "Access UniProt for protein sequence and annotation retrieval."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

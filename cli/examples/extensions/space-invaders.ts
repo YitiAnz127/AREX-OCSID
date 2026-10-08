@@ -524,8 +524,8 @@ class SpaceInvadersComponent {
 
 const INVADERS_SAVE_TYPE = "space-invaders-save";
 
-export default function (disco: ExtensionAPI) {
-	disco.registerCommand("invaders", {
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerCommand("invaders", {
 		description: "Play Space Invaders!",
 
 		handler: async (_args, ctx) => {
@@ -550,7 +550,7 @@ export default function (disco: ExtensionAPI) {
 					tui,
 					() => done(undefined),
 					(state) => {
-						disco.appendEntry(INVADERS_SAVE_TYPE, state);
+						ocsid.appendEntry(INVADERS_SAVE_TYPE, state);
 					},
 					savedState,
 				);

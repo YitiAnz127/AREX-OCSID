@@ -4,7 +4,7 @@ description: "Routes hosted Jobs and Sandboxes, Space runtime configuration, OAu
 disable-model-invocation: true
 license: Apache-2.0
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # Hosted compute and integrations

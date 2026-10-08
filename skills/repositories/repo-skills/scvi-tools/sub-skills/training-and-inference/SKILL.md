@@ -5,7 +5,7 @@ description: "Configure scvi-tools training, Trainer options, CPU/GPU devices,
   dataloader execution patterns."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

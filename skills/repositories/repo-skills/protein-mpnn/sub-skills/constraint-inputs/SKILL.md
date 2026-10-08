@@ -6,7 +6,7 @@ description: "Prepare and validate ProteinMPNN parsed-PDB JSONL and
   acids, and PSSM-guided design."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

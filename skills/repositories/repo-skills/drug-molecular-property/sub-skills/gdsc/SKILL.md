@@ -3,7 +3,7 @@ name: gdsc
 description: "Sub-skill gdsc for drug-molecular-property."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # gdsc — drug-molecular-property sub-skill

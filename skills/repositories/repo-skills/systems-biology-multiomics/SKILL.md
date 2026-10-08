@@ -3,7 +3,7 @@ name: systems-biology-multiomics
 description: "Use systems-biology-multiomics for genomics and bioinformatics workflows: systems-biology-multiomics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

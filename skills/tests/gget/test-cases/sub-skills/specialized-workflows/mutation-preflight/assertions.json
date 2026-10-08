@@ -1,5 +1,5 @@
 {
-  "schema": "disco.usability-case.v1",
+  "schema": "ocsid.usability-case.v1",
   "target_skill_area": "specialized-workflows",
   "target_capability": "mutate-input-preflight-join-validation",
   "difficulty": "intermediate",

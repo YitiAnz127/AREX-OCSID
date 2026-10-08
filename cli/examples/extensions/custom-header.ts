@@ -2,14 +2,14 @@
  * Custom Header Extension
  *
  * Demonstrates ctx.ui.setHeader() for replacing the built-in header
- * (logo + keybinding hints) with a custom component showing the disco mascot.
+ * (logo + keybinding hints) with a custom component showing the ocsid mascot.
  */
 
 import type { ExtensionAPI, Theme } from "@arex-skill/disco";
 import { VERSION } from "@arex-skill/disco";
 
 // --- PI MASCOT ---
-// Based on pi_mascot.ts - the disco agent character
+// Based on pi_mascot.ts - the ocsid agent character
 function getPiMascot(theme: Theme): string[] {
 	// --- COLORS ---
 	// 3b1b Blue: R=80, G=180, B=230
@@ -44,9 +44,9 @@ function getPiMascot(theme: Theme): string[] {
 	return ["", lineEyes, lineBar, lineLeg, lineLeg, lineLeg, lineLeg, ""];
 }
 
-export default function (disco: ExtensionAPI) {
+export default function (ocsid: ExtensionAPI) {
 	// Set custom header immediately on load (if UI is available)
-	disco.on("session_start", async (_event, ctx) => {
+	ocsid.on("session_start", async (_event, ctx) => {
 		if (ctx.mode === "tui") {
 			ctx.ui.setHeader((_tui, theme) => {
 				return {
@@ -63,7 +63,7 @@ export default function (disco: ExtensionAPI) {
 	});
 
 	// Command to restore built-in header
-	disco.registerCommand("builtin-header", {
+	ocsid.registerCommand("builtin-header", {
 		description: "Restore built-in header with keybinding hints",
 		handler: async (_args, ctx) => {
 			ctx.ui.setHeader(undefined);

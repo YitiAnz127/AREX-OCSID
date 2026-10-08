@@ -336,7 +336,7 @@ describe("SessionManager.setSessionFile with corrupted files", () => {
 		writeFileSync(noHeaderFile, originalContent);
 
 		expect(() => SessionManager.open(noHeaderFile, tempDir)).toThrow(
-			`Session file is not a valid ocsid/DisCo/Pi-compatible session: ${noHeaderFile}`,
+			`Session file is not a valid ocsid/OCSID/Pi-compatible session: ${noHeaderFile}`,
 		);
 		expect(readFileSync(noHeaderFile, "utf-8")).toBe(originalContent);
 	});
@@ -347,7 +347,7 @@ describe("SessionManager.setSessionFile with corrupted files", () => {
 		writeFileSync(nonSessionFile, originalContent);
 
 		expect(() => SessionManager.open(nonSessionFile, tempDir)).toThrow(
-			`Session file is not a valid ocsid/DisCo/Pi-compatible session: ${nonSessionFile}`,
+			`Session file is not a valid ocsid/OCSID/Pi-compatible session: ${nonSessionFile}`,
 		);
 		expect(readFileSync(nonSessionFile, "utf-8")).toBe(originalContent);
 	});

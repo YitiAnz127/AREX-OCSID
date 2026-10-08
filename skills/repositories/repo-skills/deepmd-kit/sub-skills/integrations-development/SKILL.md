@@ -4,7 +4,7 @@ description: "Integrate DeePMD-kit with LAMMPS, i-PI, native APIs, dpdata, ASE,
   Node.js, and maintainer build/test workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: LGPL 3.0
 ---
 

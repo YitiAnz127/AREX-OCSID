@@ -3,7 +3,7 @@ name: oregano
 description: "Query the OREGANO knowledge graph for computational drug repurposing."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # oregano — drug-repurposing sub-skill

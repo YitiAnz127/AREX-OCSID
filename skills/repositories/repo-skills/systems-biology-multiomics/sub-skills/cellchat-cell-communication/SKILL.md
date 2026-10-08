@@ -3,7 +3,7 @@ name: cellchat-cell-communication
 description: "&quot;Infer and visualize intercellular communication from scRNA-seq with CellChat (R)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # cellchat-cell-communication — systems-biology-multiomics sub-skill

@@ -5,7 +5,7 @@ description: "Prepare molecular and protein-ligand data for DGL-LifeSci by
   datasets, and applying supported split/evaluation helpers."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

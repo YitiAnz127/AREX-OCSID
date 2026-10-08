@@ -1,6 +1,6 @@
 # vLLM vs SGLang: Qwen3.5-4B Serving Benchmark
 
-This directory is a curated evidence bundle from a DisCo Researcher session.
+This directory is a curated evidence bundle from a OCSID Researcher session.
 It contains the benchmark contract, deterministic workloads, selected server
 commands, aggregate measurements, correctness comparisons, and version
 summaries. It is intended to make the research decisions and reported results

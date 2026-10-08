@@ -3,7 +3,7 @@ name: scikit-image-processing
 description: "&quot;Python image processing for microscopy and bioimage analysis."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # scikit-image-processing — cell-biology sub-skill

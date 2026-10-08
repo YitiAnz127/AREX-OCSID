@@ -3,7 +3,7 @@ import { requiredTokens, scoreAssertion, structureGrader } from "./structure-gra
 import type { CaseRecord } from "./types.ts";
 
 function mkCase(assertions: string[]): CaseRecord {
-	return { skillId: "chemprop", caseId: "x", files: { userRequest: "u", assertionsText: JSON.stringify({ schema: "disco.usability-case.v1", target_skill_area: "x", target_capability: "y", difficulty: "basic", evidence_basis: [], expected_skill_files: [], assertions }) } };
+	return { skillId: "chemprop", caseId: "x", files: { userRequest: "u", assertionsText: JSON.stringify({ schema: "ocsid.usability-case.v1", target_skill_area: "x", target_capability: "y", difficulty: "basic", evidence_basis: [], expected_skill_files: [], assertions }) } };
 }
 
 describe("structure grader", () => {

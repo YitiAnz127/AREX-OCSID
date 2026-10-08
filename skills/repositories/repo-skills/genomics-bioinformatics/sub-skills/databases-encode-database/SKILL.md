@@ -3,7 +3,7 @@ name: databases-encode-database
 description: "&quot;ENCODE Portal REST API for regulatory genomics: TF ChIP-seq, ATAC-seq/DNase-seq peaks, histone marks, and RNA-seq across 1000+ cell types."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-encode-database — genomics-bioinformatics sub-skill

@@ -6,6 +6,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -34,6 +35,34 @@ def _ignore_protected_generated(src_dir: str, names: list[str]) -> list[str]:
 
 class FrontmatterError(ValueError):
     """Raised when a SKILL.md frontmatter block is present but malformed."""
+
+
+def git_head_commit(path: str | None) -> str | None:
+    """Full commit hash of the source checkout, or None when it is not a git tree.
+
+    Provenance must be recorded where it is actually known: a commit is never guessed,
+    but a source tree that IS a git checkout can be pinned exactly, and the router
+    rebuild then preserves that value instead of writing source_commit=None.
+    """
+    if not path:
+        return None
+    directory = os.path.abspath(path)
+    while directory and not os.path.isdir(directory):
+        parent = os.path.dirname(directory)
+        if parent == directory:
+            return None
+        directory = parent
+    try:
+        result = subprocess.run(
+            ["git", "-C", directory, "rev-parse", "HEAD"],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if result.returncode != 0:
+        return None
+    commit = (result.stdout or "").strip().lower()
+    return commit if re.match(r"^[0-9a-f]{40}$", commit) else None
 
 
 def _reject_escaping_symlinks(source: Path) -> None:

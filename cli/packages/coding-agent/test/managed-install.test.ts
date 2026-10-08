@@ -3,18 +3,18 @@ import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { readManagedInstallMarker } from "../src/utils/managed-install.ts";
 
-const originalManagedInstall = process.env.DISCO_MANAGED_INSTALL;
-const originalManagedInstallDir = process.env.DISCO_MANAGED_INSTALL_DIR;
-const originalManagedInstallMarker = process.env.DISCO_MANAGED_INSTALL_MARKER;
+const originalManagedInstall = process.env.OCSID_MANAGED_INSTALL;
+const originalManagedInstallDir = process.env.OCSID_MANAGED_INSTALL_DIR;
+const originalManagedInstallMarker = process.env.OCSID_MANAGED_INSTALL_MARKER;
 const temporaryDirectories: string[] = [];
 
 function createMarker(overrides: Record<string, unknown> = {}): string {
-	const root = mkdtempSync(join("/tmp", "disco-managed-marker-"));
+	const root = mkdtempSync(join("/tmp", "ocsid-managed-marker-"));
 	temporaryDirectories.push(root);
 	const installDir = join(root, "install");
 	const version = "0.2.1";
-	const entrypoint = join(installDir, "releases", version, "node_modules", "@arex-skill", "disco", "dist", "cli.js");
-	const installerPath = join(installDir, "install-disco.sh");
+	const entrypoint = join(installDir, "releases", version, "node_modules", "@arex-skill", "ocsid", "dist", "cli.js");
+	const installerPath = join(installDir, "install-ocsid.sh");
 	const nodePath = join(root, "node");
 	mkdirSync(dirname(entrypoint), { recursive: true });
 	mkdirSync(installDir, { recursive: true });
@@ -41,19 +41,19 @@ function createMarker(overrides: Record<string, unknown> = {}): string {
 			...overrides,
 		}),
 	);
-	process.env.DISCO_MANAGED_INSTALL = "1";
-	process.env.DISCO_MANAGED_INSTALL_DIR = installDir;
-	delete process.env.DISCO_MANAGED_INSTALL_MARKER;
+	process.env.OCSID_MANAGED_INSTALL = "1";
+	process.env.OCSID_MANAGED_INSTALL_DIR = installDir;
+	delete process.env.OCSID_MANAGED_INSTALL_MARKER;
 	return installDir;
 }
 
 afterEach(() => {
-	if (originalManagedInstall === undefined) delete process.env.DISCO_MANAGED_INSTALL;
-	else process.env.DISCO_MANAGED_INSTALL = originalManagedInstall;
-	if (originalManagedInstallDir === undefined) delete process.env.DISCO_MANAGED_INSTALL_DIR;
-	else process.env.DISCO_MANAGED_INSTALL_DIR = originalManagedInstallDir;
-	if (originalManagedInstallMarker === undefined) delete process.env.DISCO_MANAGED_INSTALL_MARKER;
-	else process.env.DISCO_MANAGED_INSTALL_MARKER = originalManagedInstallMarker;
+	if (originalManagedInstall === undefined) delete process.env.OCSID_MANAGED_INSTALL;
+	else process.env.OCSID_MANAGED_INSTALL = originalManagedInstall;
+	if (originalManagedInstallDir === undefined) delete process.env.OCSID_MANAGED_INSTALL_DIR;
+	else process.env.OCSID_MANAGED_INSTALL_DIR = originalManagedInstallDir;
+	if (originalManagedInstallMarker === undefined) delete process.env.OCSID_MANAGED_INSTALL_MARKER;
+	else process.env.OCSID_MANAGED_INSTALL_MARKER = originalManagedInstallMarker;
 	for (const directory of temporaryDirectories.splice(0)) rmSync(directory, { recursive: true, force: true });
 });
 
@@ -96,5 +96,5 @@ describe("managed install marker", () => {
 });
 
 function installDirPlaceholder(): string {
-	return "/tmp/disco-marker-outside";
+	return "/tmp/ocsid-marker-outside";
 }

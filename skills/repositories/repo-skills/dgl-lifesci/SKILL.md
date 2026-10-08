@@ -5,7 +5,7 @@ description: "Use DGL-LifeSci and dgllife for molecular graph learning, molecule
   affinity, model-zoo/pretrained models, and molecular generation workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

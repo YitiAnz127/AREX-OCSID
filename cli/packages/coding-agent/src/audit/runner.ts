@@ -224,7 +224,7 @@ export function checkCaseFiles(files: CaseFile): { ok: true } | { ok: false; rea
 	if (!files.assertionsText) return { ok: false, reason: "missing assertions.json text" };
 	try {
 		const parsed = JSON.parse(files.assertionsText) as { assertions?: unknown; schema?: unknown };
-		if (parsed.schema !== "disco.usability-case.v1") return { ok: false, reason: "assertions schema != disco.usability-case.v1" };
+		if (parsed.schema !== "ocsid.usability-case.v1") return { ok: false, reason: "assertions schema != ocsid.usability-case.v1" };
 		if (!Array.isArray(parsed.assertions) || parsed.assertions.length === 0) return { ok: false, reason: "no non-empty assertions list" };
 	} catch {
 		return { ok: false, reason: "assertions.json is not valid JSON" };

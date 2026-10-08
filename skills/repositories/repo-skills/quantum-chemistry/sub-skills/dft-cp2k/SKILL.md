@@ -3,7 +3,7 @@ name: dft-cp2k
 description: "Route CP2K requests to task-specific subskills based on user intent."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-cp2k — quantum-chemistry sub-skill

@@ -3,7 +3,7 @@ name: dili
 description: "Sub-skill dili for drug-toxicity."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dili — drug-toxicity sub-skill

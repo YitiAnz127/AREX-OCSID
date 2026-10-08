@@ -3,7 +3,7 @@ name: vaex-dataframes
 description: "Out-of-core DataFrame for billion-row data via lazy evaluation and memory-mapped files."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # vaex-dataframes — sciagent-scientific-computing sub-skill

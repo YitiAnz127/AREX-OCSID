@@ -16,7 +16,7 @@ Read this when a repo-maintenance task fails before you know whether the owner i
 | `scan_pr_skills.py` writes a skipped comment because `SKILL_SCANNER_LLM_API_KEY` is unset | `security-scanning` | This is expected for fork PRs/no-key contexts. It is not a finding. Ask before using a key/network. |
 | Security scanner reports files that do not exist, env-var exfiltration for normal service auth, or `eval` inside words like `retrieval` | `security-scanning` | Verify against the filesystem and `docs/security-triage.md` before editing the skill. |
 | Diagram policy says to regenerate `docs/images/<skill>.png`, but no generator is present | `skill-authoring` | Do not fabricate an image. Record the missing tool as a blocker or use the documented generator only if it exists in the target checkout. |
-| A repo-wide `skills/*/` glob starts including construction output directories | root/integration | Treat `skills/disco/` and `skills/tests/` as generated construction outputs. Do not commit them to the canonical collection unless the repo policy is updated to exclude or handle them. |
+| A repo-wide `skills/*/` glob starts including construction output directories | root/integration | Treat `skills/ocsid/` and `skills/tests/` as generated construction outputs. Do not commit them to the canonical collection unless the repo policy is updated to exclude or handle them. |
 
 ## Safe escalation order
 

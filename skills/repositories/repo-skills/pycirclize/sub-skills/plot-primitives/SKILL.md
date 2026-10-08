@@ -5,7 +5,7 @@ description: "Guide pyCirclize 1.10.1 Sector and Track plotting primitives,
   Matplotlib export."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

@@ -5,7 +5,7 @@ description: "Use Biotite database clients and external application wrappers for
   orchestration, and optional dependency diagnostics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

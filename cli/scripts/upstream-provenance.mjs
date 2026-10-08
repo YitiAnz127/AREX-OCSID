@@ -80,12 +80,22 @@ async function pathExists(path) {
 	}
 }
 
+/**
+ * Editor/pytest-local caches that .gitignore already excludes and that carry no
+ * source identity. They can appear under a covered root merely because someone
+ * ran pytest locally; treating them as unclassified files would fail the
+ * release gate for a reason that has nothing to do with the published package.
+ */
+const LOCAL_CACHE_DIRS = new Set(["__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache"]);
+const LOCAL_CACHE_FILE = /\.py[co]$/;
+
 async function walkFiles(root) {
 	const result = [];
 	for (const entry of await readdir(root, { withFileTypes: true })) {
+		if (LOCAL_CACHE_DIRS.has(entry.name)) continue;
 		const path = join(root, entry.name);
 		if (entry.isDirectory()) result.push(...(await walkFiles(path)));
-		else if (entry.isFile()) result.push(toPosix(relative(packageRoot, path)));
+		else if (entry.isFile() && !LOCAL_CACHE_FILE.test(entry.name)) result.push(toPosix(relative(packageRoot, path)));
 	}
 	return result.sort();
 }
@@ -144,7 +154,7 @@ async function buildManifest(upstreamRoot) {
 			rename: new Map([
 				[
 					"packages/coding-agent/src/utils/pi-user-agent.ts",
-					"packages/coding-agent/src/utils/disco-user-agent.ts",
+					"packages/coding-agent/src/utils/ocsid-user-agent.ts",
 				],
 			]),
 		},
@@ -425,6 +435,6 @@ if (mode === "write") {
 	}
 	const entries = collectEntries(manifest);
 	console.log(
-		`Verified ${entries.length} upstream decisions and ${manifest.localAdditions.length} DisCo-owned files.`,
+		`Verified ${entries.length} upstream decisions and ${manifest.localAdditions.length} OCSID-owned files.`,
 	);
 }

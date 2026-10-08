@@ -5,7 +5,7 @@ description: "Guides PyHealth dataset construction, sample schemas, feature
   clinical data preparation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

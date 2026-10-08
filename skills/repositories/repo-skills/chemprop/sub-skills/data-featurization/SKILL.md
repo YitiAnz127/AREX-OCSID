@@ -5,7 +5,7 @@ description: "Prepare and validate Chemprop CSV/NPZ inputs, SMILES/reaction
   and split APIs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: NOASSERTION
 ---
 

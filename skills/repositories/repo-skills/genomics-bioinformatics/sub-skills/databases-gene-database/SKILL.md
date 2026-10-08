@@ -3,7 +3,7 @@ name: databases-gene-database
 description: "&quot;NCBI Gene via E-utilities: curated records across 1M+ taxa."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # databases-gene-database — genomics-bioinformatics sub-skill

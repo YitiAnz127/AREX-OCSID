@@ -3,7 +3,7 @@ name: faers
 description: "Query the FDA Adverse Event Reporting System (FAERS) via openFDA API."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # faers — drug-adr sub-skill

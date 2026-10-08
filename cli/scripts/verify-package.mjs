@@ -29,6 +29,7 @@ async function pathExists(path) {
 async function walkFiles(path) {
 	const result = [];
 	for (const entry of await readdir(path, { withFileTypes: true })) {
+		if ([".pytest_cache", "__pycache__"].includes(entry.name)) continue;
 		const entryPath = join(path, entry.name);
 		if (entry.isDirectory()) result.push(...(await walkFiles(entryPath)));
 		else if (entry.isFile() || entry.isSymbolicLink()) result.push(entryPath);
@@ -59,7 +60,7 @@ check(packageJson.repository?.directory === "cli", "repository.directory must id
 check(packageJson.exports?.["."]?.import === "./dist/index.js", "root ESM export is missing");
 check(packageJson.exports?.["."]?.types === "./dist/index.d.ts", "root type export is missing");
 check(packageJson.exports?.["./rpc-entry"]?.import === "./dist/rpc-entry.js", "RPC ESM export is missing");
-check(packageJson.dependencies?.["@earendil-works/pi-coding-agent"] === undefined, "DisCo must not depend on pi-coding-agent");
+check(packageJson.dependencies?.["@earendil-works/pi-coding-agent"] === undefined, "OCSID must not depend on pi-coding-agent");
 
 for (const name of ["@earendil-works/pi-agent-core", "@earendil-works/pi-ai", "@earendil-works/pi-tui"]) {
 	check(packageJson.dependencies?.[name] === "0.83.0", `${name} must be pinned to 0.83.0`);
@@ -90,25 +91,25 @@ const requiredBuildFiles = [
 	"dist/core/oauth/anthropic.js",
 	"dist/core/oauth/openai-codex.js",
 	"dist/core/oauth/openrouter.js",
-	"dist/disco-resources/skills/README.md",
-	"dist/disco-resources/skills/distill-ml-knowledge/SKILL.md",
-	"dist/disco-resources/skills/distill-ml-knowledge/references/task-and-construction-contract.md",
-	"dist/disco-resources/skills/distill-ml-knowledge/references/construction-strategy-and-adequacy.md",
-	"dist/disco-resources/skills/distill-ml-knowledge/references/direct-construction-and-handoff.md",
-	"dist/disco-resources/skills/distill-ml-knowledge/scripts/import_operating_skill_graph.mjs",
-	"dist/disco-resources/skills/design-meta-skill/SKILL.md",
-	"dist/disco-resources/skills/design-meta-skill/references/reusable-bundle-specification.md",
-	"dist/disco-resources/skills/design-meta-skill/references/generation-verification-and-review.md",
-	"dist/disco-resources/skills/verify-repo-skill/scripts/license-validation.mjs",
-	"dist/disco-resources/skills/verify-repo-skill/scripts/resolve_repo_license.mjs",
-	"dist/disco-resources/skills/verify-repo-skill/scripts/apply_repo_license.mjs",
-	"dist/disco-resources/skills/verify-repo-skill/scripts/sync_repo_license.mjs",
-	"dist/disco-resources/skills/verify-repo-skill/scripts/import_repo_skill.mjs",
-	"dist/disco-resources/skills/verify-repo-skill/scripts/update_repo_skills_router.mjs",
-	"dist/disco-resources/skills/verify-repo-skill/scripts/with_import_lock.mjs",
-	"dist/disco-resources/skills/import-repo-skills-to-agent/SKILL.md",
-	"dist/disco-resources/skills/import-repo-skills-to-agent/scripts/apply_codex_openai_policy.py",
-	"dist/disco-resources/skills/import-repo-skills-to-agent/scripts/export_repo_skills_to_agent.mjs",
+	"dist/ocsid-resources/skills/README.md",
+	"dist/ocsid-resources/skills/distill-ml-knowledge/SKILL.md",
+	"dist/ocsid-resources/skills/distill-ml-knowledge/references/task-and-construction-contract.md",
+	"dist/ocsid-resources/skills/distill-ml-knowledge/references/construction-strategy-and-adequacy.md",
+	"dist/ocsid-resources/skills/distill-ml-knowledge/references/direct-construction-and-handoff.md",
+	"dist/ocsid-resources/skills/distill-ml-knowledge/scripts/import_operating_skill_graph.mjs",
+	"dist/ocsid-resources/skills/design-meta-skill/SKILL.md",
+	"dist/ocsid-resources/skills/design-meta-skill/references/reusable-bundle-specification.md",
+	"dist/ocsid-resources/skills/design-meta-skill/references/generation-verification-and-review.md",
+	"dist/ocsid-resources/skills/verify-repo-skill/scripts/license-validation.mjs",
+	"dist/ocsid-resources/skills/verify-repo-skill/scripts/resolve_repo_license.mjs",
+	"dist/ocsid-resources/skills/verify-repo-skill/scripts/apply_repo_license.mjs",
+	"dist/ocsid-resources/skills/verify-repo-skill/scripts/sync_repo_license.mjs",
+	"dist/ocsid-resources/skills/verify-repo-skill/scripts/import_repo_skill.mjs",
+	"dist/ocsid-resources/skills/verify-repo-skill/scripts/update_repo_skills_router.mjs",
+	"dist/ocsid-resources/skills/verify-repo-skill/scripts/with_import_lock.mjs",
+	"dist/ocsid-resources/skills/import-repo-skills-to-agent/SKILL.md",
+	"dist/ocsid-resources/skills/import-repo-skills-to-agent/scripts/apply_codex_openai_policy.py",
+	"dist/ocsid-resources/skills/import-repo-skills-to-agent/scripts/export_repo_skills_to_agent.mjs",
 	"README.md",
 	"CHANGELOG.md",
 	"LICENSE",
@@ -134,8 +135,8 @@ const publishableSourceFiles = [
 
 const textExtensions = new Set([".css", ".d.ts", ".html", ".js", ".json", ".map", ".md", ".mjs", ".ts", ".txt"]);
 const localProxy = "127.0.0.1:7890";
-const fictitiousService = /https?:\/\/(?:www\.)?disco\.dev\b/u;
-const unownedDiscoRepository = /(?:github\.com|raw\.githubusercontent\.com)\/earendil-works\/disco\b/u;
+const fictitiousService = /https?:\/\/(?:www\.)?ocsid\.dev\b/u;
+const unownedOcsidRepository = /(?:github\.com|raw\.githubusercontent\.com)\/earendil-works\/ocsid\b/u;
 const staleUpstreamRepository = /github\.com\/earendil-works\/pi-mono\b/u;
 const stalePiBranding = ["Pi Coding Agent Theme", "Theme schema for Pi coding agent", "pi has joined Earendil"];
 
@@ -143,8 +144,8 @@ for (const path of publishableSourceFiles) {
 	if (!textExtensions.has(extname(path)) && !path.endsWith(".d.ts")) continue;
 	const content = await readFile(path, "utf8");
 	check(!content.includes(localProxy), `${displayPath(path)} contains the local validation proxy`);
-	check(!fictitiousService.test(content), `${displayPath(path)} contains an unowned disco.dev URL`);
-	check(!unownedDiscoRepository.test(content), `${displayPath(path)} contains an unowned DisCo repository URL`);
+	check(!fictitiousService.test(content), `${displayPath(path)} contains an unowned ocsid.dev URL`);
+	check(!unownedOcsidRepository.test(content), `${displayPath(path)} contains an unowned OCSID repository URL`);
 	check(!staleUpstreamRepository.test(content), `${displayPath(path)} contains the stale upstream repository URL`);
 	for (const branding of stalePiBranding) {
 		check(!content.includes(branding), `${displayPath(path)} contains stale Pi branding: ${branding}`);
@@ -171,7 +172,7 @@ for (const path of sourceFiles.filter((entry) => entry.endsWith(".ts"))) {
 
 const packageManagerCli = await readFile(join(runtimeSourceRoot, "package-manager-cli.ts"), "utf8");
 check(!packageManagerCli.includes("@earendil-works/pi-coding-agent"), "self-update code still targets pi-coding-agent");
-check(packageManagerCli.includes("installSpec: `${PACKAGE_NAME}@latest`"), "self-update must derive its target from DisCo PACKAGE_NAME");
+check(packageManagerCli.includes("installSpec: `${PACKAGE_NAME}@latest`"), "self-update must derive its target from OCSID PACKAGE_NAME");
 check(packageManagerCli.includes('installMethod !== "managed"'), "self-update code must allow managed installations on Windows");
 const managedInstallSource = await readFile(join(runtimeSourceRoot, "utils", "managed-install.ts"), "utf8");
 check(managedInstallSource.includes("MANAGED_INSTALL_SCHEMA_VERSION = 1"), "managed install marker protocol is missing");
@@ -185,8 +186,8 @@ check(
 	"default rpiv-todo package must require the session-isolated 2.x version line",
 );
 
-const builtDiscoResourceFiles = await walkFiles(join(packageRoot, "dist", "disco-resources"));
-const markdownFiles = [...publishableSourceFiles, ...builtDiscoResourceFiles].filter((path) => path.endsWith(".md"));
+const builtOcsidResourceFiles = await walkFiles(join(packageRoot, "dist", "ocsid-resources"));
+const markdownFiles = [...publishableSourceFiles, ...builtOcsidResourceFiles].filter((path) => path.endsWith(".md"));
 for (const markdownPath of markdownFiles) {
 	const markdown = await readFile(markdownPath, "utf8");
 	const links = [];
@@ -254,10 +255,10 @@ for (const entry of packedEntries) {
 		if (textExtensions.has(extname(diskPath)) || diskPath.endsWith(".d.ts")) {
 			const content = await readFile(diskPath, "utf8");
 			check(!content.includes(localProxy), `npm tarball file contains the local validation proxy: ${packedPath}`);
-			check(!fictitiousService.test(content), `npm tarball file contains an unowned disco.dev URL: ${packedPath}`);
+			check(!fictitiousService.test(content), `npm tarball file contains an unowned ocsid.dev URL: ${packedPath}`);
 			check(
-				!unownedDiscoRepository.test(content),
-				`npm tarball file contains an unowned DisCo repository URL: ${packedPath}`,
+				!unownedOcsidRepository.test(content),
+				`npm tarball file contains an unowned OCSID repository URL: ${packedPath}`,
 			);
 			check(
 				!staleUpstreamRepository.test(content),
@@ -270,15 +271,15 @@ for (const entry of packedEntries) {
 	}
 }
 
-const previousPackageDir = process.env.DISCO_PACKAGE_DIR;
-delete process.env.DISCO_PACKAGE_DIR;
+const previousPackageDir = process.env.OCSID_PACKAGE_DIR;
+delete process.env.OCSID_PACKAGE_DIR;
 try {
 	const rpcClientModule = await import(
 		`${pathToFileURL(join(packageRoot, "dist", "modes", "rpc", "rpc-client.js")).href}?verify=${Date.now()}`
 	);
 	check(
 		rpcClientModule.resolveRpcCliPath() === join(packageRoot, "dist", "cli.js"),
-		"RpcClient default CLI path must resolve inside the installed DisCo package",
+		"RpcClient default CLI path must resolve inside the installed OCSID package",
 	);
 
 const systemPromptModule = await import(`${pathToFileURL(join(packageRoot, "dist", "core", "system-prompt.js")).href}?verify=${Date.now()}`);
@@ -294,7 +295,7 @@ const systemPromptModule = await import(`${pathToFileURL(join(packageRoot, "dist
 	check(typeof buildManifest === "function", "dist/benchmark/schema.js must export buildManifest");
 	if (typeof buildManifest === "function") {
 		const smoke = buildManifest("smoke", "2026-01-01T00:00:00Z", [{ skillId: "alpha", split: "train" }]);
-		check(smoke.schema === "disco.benchmark.v1", "built schema.js buildManifest returned the wrong schema id");
+		check(smoke.schema === "ocsid.benchmark.v1", "built schema.js buildManifest returned the wrong schema id");
 		check(Array.isArray(smoke.splits.train) && smoke.splits.train.includes("alpha"), "built schema.js did not bucket the train split");
 		check(/^[0-9a-f]{64}$/u.test(smoke.splitHash), "built schema.js computed a non-sha256 splitHash");
 	}
@@ -320,8 +321,8 @@ const systemPromptModule = await import(`${pathToFileURL(join(packageRoot, "dist
 		);
 	}
 } finally {
-	if (previousPackageDir === undefined) delete process.env.DISCO_PACKAGE_DIR;
-	else process.env.DISCO_PACKAGE_DIR = previousPackageDir;
+	if (previousPackageDir === undefined) delete process.env.OCSID_PACKAGE_DIR;
+	else process.env.OCSID_PACKAGE_DIR = previousPackageDir;
 }
 
 if (failures.length > 0) {

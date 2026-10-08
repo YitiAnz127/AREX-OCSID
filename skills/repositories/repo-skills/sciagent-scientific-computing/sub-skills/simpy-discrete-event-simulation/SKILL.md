@@ -3,7 +3,7 @@ name: simpy-discrete-event-simulation
 description: "&quot;Process-based discrete-event simulation."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # simpy-discrete-event-simulation — sciagent-scientific-computing sub-skill

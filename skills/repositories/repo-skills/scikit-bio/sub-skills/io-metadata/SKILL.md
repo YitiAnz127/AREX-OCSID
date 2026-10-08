@@ -4,7 +4,7 @@ description: "Use scikit-bio IO registry formats and metadata objects for
   reading, writing, validation, and serialization."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

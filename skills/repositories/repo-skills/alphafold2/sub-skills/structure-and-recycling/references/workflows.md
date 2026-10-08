@@ -11,7 +11,7 @@ shape behavior only; they do not produce a meaningful structure.
 Start with the bundled helper from arbitrary current directories:
 
 ```bash
-python /path/to/skills/disco/alphafold2/sub-skills/structure-and-recycling/scripts/coordinate_smoke.py
+python /path/to/skills/ocsid/alphafold2/sub-skills/structure-and-recycling/scripts/coordinate_smoke.py
 ```
 
 It defaults to CPU, uses `dim=32`, trunk `depth=1`, `heads=1`,
@@ -20,7 +20,7 @@ coordinate and confidence outputs, then captures and reuses recyclables. It
 performs no filesystem writes or network access. A CUDA probe is explicit:
 
 ```bash
-python /path/to/skills/disco/alphafold2/sub-skills/structure-and-recycling/scripts/coordinate_smoke.py --device cuda
+python /path/to/skills/ocsid/alphafold2/sub-skills/structure-and-recycling/scripts/coordinate_smoke.py --device cuda
 ```
 
 Use `--device cuda:0` for a selected device. A visible CUDA runtime is not

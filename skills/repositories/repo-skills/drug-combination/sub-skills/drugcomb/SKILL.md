@@ -3,7 +3,7 @@ name: drugcomb
 description: "Query the DrugComb drug combination database for cancer cell-line synergy and sensitivity data."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # drugcomb — drug-combination sub-skill

@@ -62,9 +62,9 @@ separate from file copying and must be reported separately.
 ## Compatible-agent export
 
 For Claude Code, Codex, another compatible agent, or a project-local directory,
-first distinguish **managed DisCo deployment** from **export**:
+first distinguish **managed OCSID deployment** from **export**:
 
-- Managed DisCo skills remain in their canonical managed scope and are consumed
+- Managed OCSID skills remain in their canonical managed scope and are consumed
   through the appropriate router. Do not hand-edit a live router during a
   catalog operation.
 - An export is a separate, user-requested copy into a named target. Confirm the

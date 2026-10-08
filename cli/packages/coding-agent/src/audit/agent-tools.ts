@@ -186,18 +186,18 @@ function safeRealPath(p: string): string | null {
 	}
 }
 
-/** Check a resolved target lies inside at least one configured writeDir. */
-function assertWithinWriteDirs(workspace: ToolWorkspace, config: AgentExecutionConfig, abs: string): void {
+/** Return the configured writeDir containing a resolved target. */
+function assertWithinWriteDirs(workspace: ToolWorkspace, config: AgentExecutionConfig, abs: string): string {
 	const root = path.resolve(workspace.root);
 	if (config.writeDirs.length === 0) {
 		throw new Error("no write directories configured; writes are denied");
 	}
 	for (const dirRaw of config.writeDirs) {
-		const dir = path.resolve(dirRaw);
-		// writeDirs are validated absolute + inside-root by the executor; anchor
-		// them to root here defensively anyway.
+		const dir = dirRaw === "@workspace/output" ? path.join(root, "output") : path.resolve(dirRaw);
+		// Absolute paths and the workspace token are validated by the executor;
+		// anchor the result to root here defensively as well.
 		const anchored = path.isAbsolute(dir) ? dir : path.join(root, dir);
-		if (abs === anchored || abs.startsWith(anchored + path.sep)) return;
+		if (abs === anchored || abs.startsWith(anchored + path.sep)) return anchored;
 	}
 	throw new Error(`write target is not inside a configured writeDir: ${abs}`);
 }
@@ -239,9 +239,23 @@ export async function executeToolCall(
 			}
 			case "write_file": {
 				const target = resolveInsideRoot(workspace, asString(args["path"]));
-				assertWithinWriteDirs(workspace, config, target);
+				const writeRoot = assertWithinWriteDirs(workspace, config, target);
 				const content = asString(args["content"]);
+				// A missing target can still traverse a symlinked parent. Check every
+				// existing component before creating directories, then check the final
+				// real parent against the configured output root before writing.
+				const relativeParent = path.relative(path.resolve(workspace.root), path.dirname(target));
+				if (relativeParent.startsWith("..") || path.isAbsolute(relativeParent)) throw new Error("write parent is outside the workspace");
+				let component = path.resolve(workspace.root);
+				for (const part of relativeParent.split(path.sep).filter(Boolean)) {
+					component = path.join(component, part);
+					if (fs.existsSync(component) && fs.lstatSync(component).isSymbolicLink()) throw new Error("write parent is a symbolic link");
+				}
 				fs.mkdirSync(path.dirname(target), { recursive: true });
+				const realOutput = fs.realpathSync(writeRoot);
+				const realParent = fs.realpathSync(path.dirname(target));
+				if (realParent !== realOutput && !realParent.startsWith(realOutput + path.sep)) throw new Error("write parent resolves outside its configured writeDir");
+				if (fs.existsSync(target) && fs.lstatSync(target).isSymbolicLink()) throw new Error("write target is a symbolic link");
 				fs.writeFileSync(target, content, { flag: "w", encoding: "utf8" });
 				return {
 					output: `wrote ${Buffer.byteLength(content, "utf8")} bytes to ${target}`,

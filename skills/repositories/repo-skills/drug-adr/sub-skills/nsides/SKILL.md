@@ -3,7 +3,7 @@ name: nsides
 description: "Query the nSIDES drug side effect databases (OnSIDES, OffSIDES, KidSIDES)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # nsides — drug-adr sub-skill

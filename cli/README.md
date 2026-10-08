@@ -1,11 +1,11 @@
 # ocsid CLI
 
-This directory contains the local CLI derived from DisCo 0.2.1.
+This directory contains the local `ocsid` CLI: a rename-fork of the upstream `@arex-skill/disco` 0.2.1 CLI.
 
 The npm package identity in `package.json` is `ocsid@0.2.1`, and the only
-published executable is `ocsid -> dist/cli.js`. Internal compatibility names
-remain DisCo: configuration uses `.disco`, environment variables use the
-`DISCO_*` prefix, and many source types retain DisCo names.
+published executable is `ocsid -> dist/cli.js`. The rename is applied throughout:
+configuration uses `.ocsid`, environment variables use the `OCSID_*` prefix, and
+source types, assets, and docs carry the `ocsid` names.
 
 ## Requirements
 
@@ -25,8 +25,9 @@ node dist/cli.js --version
 
 Linking or installing this package locally exposes the `ocsid` command.
 
-The repository-level managed installers still download
-`@arex-skill/disco`. They are not installers for this local package.
+The repository-level managed installers (`scripts/install-disco.sh`,
+`scripts/install-disco.ps1`) still download the published upstream
+`@arex-skill/disco` package. They are not installers for this local package.
 
 ## Roles
 
@@ -50,16 +51,17 @@ Use `ocsid --help` for the complete command surface.
 
 ## Configuration and data
 
-Despite the package rename, the code currently retains:
+The code uses:
 
-- `.disco/` for project configuration;
-- the configured DisCo agent directory for user settings, credentials, sessions,
+- `.ocsid/` for project configuration;
+- the configured OCSID agent directory for user settings, credentials, sessions,
   extensions, and installed skills;
-- `DISCO_*` environment variables;
-- `metadata.disco-role` in skill frontmatter.
+- `OCSID_*` environment variables;
+- `metadata.ocsid-role` in skill frontmatter.
 
-The package does not read the repository-root `auth.json` or `settings.json`
-as source documentation. Those files are local runtime artifacts.
+Runtime state (credentials, settings, sessions, installed skills) lives in the
+configured agent directory, `~/.ocsid/agent` by default. It is not stored in this
+checkout and is not project documentation.
 
 ## Repository skills
 
@@ -67,9 +69,9 @@ The CLI bundles an empty repository-skills router template with the same
 2-area/10-family taxonomy as the domain collection. The npm package does not
 contain the 109 live repository skills under the repository root.
 
-The inherited `repo-skills install` and `repo-skills update` commands still
-use the upstream AREX-Skill Git repository by default. They therefore do not
-deploy the current working-tree chemistry subset.
+`repo-skills install` and `repo-skills update` fetch
+`https://github.com/YitiAnz127/ocsid-repo-skill.git` by default. They therefore
+deploy the published collection, not the current working-tree chemistry subset.
 
 The domain collection itself is validated from the repository root:
 
@@ -90,7 +92,7 @@ npm run verify:package
 Focused tests for the domain taxonomy integration are:
 
 ```powershell
-npx vitest --run --config vitest.config.ts src/core/repo-skills-library-manager.test.ts src/disco/import_repo_skill.test.ts src/disco/build_repo_skills_collection.test.ts
+npx vitest --run --config vitest.config.ts src/core/repo-skills-library-manager.test.ts src/ocsid/import_repo_skill.test.ts src/ocsid/build_repo_skills_collection.test.ts
 ```
 
 The complete inherited suite includes platform-specific cases. On Windows,

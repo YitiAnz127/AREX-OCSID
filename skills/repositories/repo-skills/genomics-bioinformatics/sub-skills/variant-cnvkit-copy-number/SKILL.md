@@ -3,7 +3,7 @@ name: variant-cnvkit-copy-number
 description: "&quot;Detect somatic CNVs from WES/WGS/targeted BAMs (CNVkit v0.9.x)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # variant-cnvkit-copy-number — genomics-bioinformatics sub-skill

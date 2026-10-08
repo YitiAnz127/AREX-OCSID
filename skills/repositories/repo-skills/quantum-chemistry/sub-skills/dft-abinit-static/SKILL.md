@@ -3,7 +3,7 @@ name: dft-abinit-static
 description: "Prepare ABINIT single-point (static) task inputs from a user-provided structure and essential DFT settings."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-abinit-static — quantum-chemistry sub-skill

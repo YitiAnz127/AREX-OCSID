@@ -3,7 +3,7 @@ name: ase
 description: "Unified ASE router skill with a tree of subskills for static/relax/MD/NEB workflows and backend adapters (GPAW, MACE)."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # ase — atomistic-workflows sub-skill

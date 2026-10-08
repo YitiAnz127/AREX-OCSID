@@ -163,21 +163,21 @@ function resolveSpawnContext(
 	ctx: ExtensionContext | undefined,
 ): BashSpawnContext {
 	const env = { ...getShellEnv() };
-	delete env.DISCO_SESSION_ID;
-	delete env.DISCO_SESSION_FILE;
-	delete env.DISCO_PROVIDER;
-	delete env.DISCO_MODEL;
-	delete env.DISCO_REASONING_LEVEL;
+	delete env.OCSID_SESSION_ID;
+	delete env.OCSID_SESSION_FILE;
+	delete env.OCSID_PROVIDER;
+	delete env.OCSID_MODEL;
+	delete env.OCSID_REASONING_LEVEL;
 	if (exposeSessionEnvironment && ctx) {
 		const model = ctx.model;
-		env.DISCO_SESSION_ID = ctx.sessionManager.getSessionId();
+		env.OCSID_SESSION_ID = ctx.sessionManager.getSessionId();
 		const sessionFile = ctx.sessionManager.getSessionFile();
-		if (sessionFile) env.DISCO_SESSION_FILE = sessionFile;
+		if (sessionFile) env.OCSID_SESSION_FILE = sessionFile;
 		if (model) {
-			env.DISCO_PROVIDER = model.provider;
-			env.DISCO_MODEL = model.id;
+			env.OCSID_PROVIDER = model.provider;
+			env.OCSID_MODEL = model.id;
 		}
-		if (ctx.thinkingLevel) env.DISCO_REASONING_LEVEL = ctx.thinkingLevel;
+		if (ctx.thinkingLevel) env.OCSID_REASONING_LEVEL = ctx.thinkingLevel;
 	}
 	const baseContext: BashSpawnContext = { command, cwd, env };
 	return spawnHook ? spawnHook(baseContext) : baseContext;
@@ -190,7 +190,7 @@ export interface BashToolOptions {
 	commandPrefix?: string;
 	/** Optional explicit shell path from settings */
 	shellPath?: string;
-	/** Expose current DisCo session metadata as DISCO_* environment variables. Default: true */
+	/** Expose current OCSID session metadata as OCSID_* environment variables. Default: true */
 	exposeSessionEnvironment?: boolean;
 	/** Hook to adjust command, cwd, or env before execution */
 	spawnHook?: BashSpawnHook;
@@ -327,7 +327,7 @@ export function createBashToolDefinition(
 		description: `Execute a bash command in the current working directory. Returns stdout and stderr. Output is truncated to last ${DEFAULT_MAX_LINES} lines or ${DEFAULT_MAX_BYTES / 1024}KB (whichever is hit first). If truncated, full output is saved to a temp file. Optionally provide a timeout in seconds.`,
 		promptSnippet: "Execute bash commands (ls, grep, find, etc.)",
 		promptGuidelines: exposeSessionEnvironment
-			? ["Inspect DISCO_* environment variables for current model and session details."]
+			? ["Inspect OCSID_* environment variables for current model and session details."]
 			: undefined,
 		parameters: bashSchema,
 		async execute(
@@ -339,7 +339,7 @@ export function createBashToolDefinition(
 		) {
 			const resolvedCommand = commandPrefix ? `${commandPrefix}\n${command}` : command;
 			const spawnContext = resolveSpawnContext(resolvedCommand, cwd, spawnHook, exposeSessionEnvironment, ctx);
-			const output = new OutputAccumulator({ tempFilePrefix: "disco-bash" });
+			const output = new OutputAccumulator({ tempFilePrefix: "ocsid-bash" });
 			let acceptingOutput = true;
 			let updateTimer: NodeJS.Timeout | undefined;
 			let updateDirty = false;

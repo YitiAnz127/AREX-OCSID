@@ -3,7 +3,7 @@ name: scikit-bio
 description: "Python library for biology: sequence manipulation (DNA/RNA/protein), pairwise/multiple alignment, phylogenetic trees (NJ, UPGMA), diversity (Shannon, Faith PD, Bray-Curtis, UniFrac"
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # scikit-bio — genomics-bioinformatics sub-skill

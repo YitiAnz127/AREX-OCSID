@@ -4,7 +4,7 @@ description: "Run CellTypist prediction and annotation workflows from Python or
   CLI for tables, Matrix Market, h5ad, and AnnData."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

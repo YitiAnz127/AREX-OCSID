@@ -6,7 +6,7 @@ description: "Query bulk, comparative, single-cell, and partitioned expression
   normalized expression."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 2-Clause
 ---
 

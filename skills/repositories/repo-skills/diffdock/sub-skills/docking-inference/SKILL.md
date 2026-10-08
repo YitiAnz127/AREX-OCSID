@@ -5,7 +5,7 @@ description: "Plan, validate, command-build, and troubleshoot DiffDock
   inputs."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

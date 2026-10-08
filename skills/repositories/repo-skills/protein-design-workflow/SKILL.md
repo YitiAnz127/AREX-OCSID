@@ -3,7 +3,7 @@ name: protein-design-workflow
 description: "End-to-end guidance for protein design pipelines."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

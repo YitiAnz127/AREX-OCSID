@@ -3,7 +3,7 @@ name: matlab-scientific-computing
 description: "&quot;MATLAB/GNU Octave numerical computing: matrices, linear algebra, ODEs, signal processing, optimization, statistics, scientific visualization."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # matlab-scientific-computing — sciagent-scientific-computing sub-skill

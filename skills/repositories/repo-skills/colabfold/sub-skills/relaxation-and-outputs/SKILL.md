@@ -5,7 +5,7 @@ description: "Post-process ColabFold results with Amber/OpenMM relaxation,
   pTM/interface metrics."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

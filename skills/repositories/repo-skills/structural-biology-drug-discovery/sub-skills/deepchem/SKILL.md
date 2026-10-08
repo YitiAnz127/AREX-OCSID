@@ -3,7 +3,7 @@ name: deepchem
 description: "&quot;Deep learning for drug discovery."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # deepchem — structural-biology-drug-discovery sub-skill

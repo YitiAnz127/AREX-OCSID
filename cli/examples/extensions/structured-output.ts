@@ -60,6 +60,6 @@ const structuredOutputTool = defineTool({
 	},
 });
 
-export default function (disco: ExtensionAPI) {
-	disco.registerTool(structuredOutputTool);
+export default function (ocsid: ExtensionAPI) {
+	ocsid.registerTool(structuredOutputTool);
 }

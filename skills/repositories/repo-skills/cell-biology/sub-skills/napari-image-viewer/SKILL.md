@@ -3,7 +3,7 @@ name: napari-image-viewer
 description: "&quot;Interactive viewer for microscopy."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # napari-image-viewer — cell-biology sub-skill

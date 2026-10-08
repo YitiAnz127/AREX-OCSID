@@ -189,7 +189,7 @@ describe("skill-patch (C1: candidate as verifiable skill patch)", () => {
 			reason: "tighten instructions",
 			createdAt: "2026-01-01T00:00:00Z",
 		});
-		expect(m.enc).toBe("disco.candidate-manifest.v1");
+		expect(m.enc).toBe("ocsid.candidate-manifest.v1");
 		expect(m.candidateId).toBe(candidateIdFor(pd, patchDigest(ops)));
 		expect(m.parentSkillDigest).toBe(pd);
 		expect(m.patchDigest).toBe(patchDigest(ops));

@@ -3,7 +3,7 @@ name: dailymed
 description: "Query DailyMed for FDA drug label / package insert information."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dailymed — drug-labeling sub-skill

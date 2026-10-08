@@ -4,7 +4,7 @@ description: "Prepare and validate ColabFold FASTA, CSV, A3M, AlphaFold3
   molecule, and PDB/mmCIF inputs before MSA search or prediction."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

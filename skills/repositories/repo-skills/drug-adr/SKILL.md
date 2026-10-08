@@ -3,7 +3,7 @@ name: drug-adr
 description: "Use drug-adr for drug discovery and development workflows: adr."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Unknown
 ---
 

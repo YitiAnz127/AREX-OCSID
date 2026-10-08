@@ -4,7 +4,7 @@ description: "Route TorchDrug graph learning, drug discovery, molecular ML,
   protein, knowledge graph, data, model, and training engine workflows."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

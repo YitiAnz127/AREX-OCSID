@@ -5,7 +5,7 @@ description: "Plan DGL-LifeSci protein-ligand binding affinity workflows with
   safe input checks."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: Apache 2.0
 ---
 

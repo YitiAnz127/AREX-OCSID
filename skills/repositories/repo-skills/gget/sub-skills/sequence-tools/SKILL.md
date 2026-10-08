@@ -5,7 +5,7 @@ description: "Use gget for remote BLAST/BLAT searches, local MUSCLE/DIAMOND
   prediction workflow."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 2-Clause
 ---
 

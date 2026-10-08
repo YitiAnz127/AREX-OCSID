@@ -3,7 +3,7 @@ name: dft-cp2k-electronic
 description: "Prepare CP2K electronic-analysis task inputs from prior converged context."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # dft-cp2k-electronic — quantum-chemistry sub-skill

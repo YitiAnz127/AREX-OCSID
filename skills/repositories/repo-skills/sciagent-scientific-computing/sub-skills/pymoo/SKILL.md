@@ -3,7 +3,7 @@ name: pymoo
 description: "&quot;Python framework for single- and multi-objective optimization with evolutionary algorithms."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 ---
 
 # pymoo — sciagent-scientific-computing sub-skill

@@ -4,7 +4,7 @@ description: "Run scikit-bio distance-matrix statistics, ordination,
   compositional analyses, and biological embedding summaries."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: BSD 3-Clause
 ---
 

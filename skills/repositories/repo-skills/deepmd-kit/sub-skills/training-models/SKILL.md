@@ -4,7 +4,7 @@ description: "Choose DeePMD-kit model families/backends and draft, launch,
   restart, fine-tune, monitor, and freeze training workflows safely."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: LGPL 3.0
 ---
 

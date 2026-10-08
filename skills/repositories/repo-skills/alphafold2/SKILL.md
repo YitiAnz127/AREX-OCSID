@@ -5,7 +5,7 @@ description: "Guide alphafold2-pytorch protein sequence, MSA, distogram,
   structure-utility workflows with version-aware troubleshooting."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 

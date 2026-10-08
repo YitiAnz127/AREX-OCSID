@@ -5,7 +5,7 @@ description: "Use OpenFE console commands for planning networks, running
   viewing ligand networks, and testing installations."
 disable-model-invocation: true
 metadata:
-  disco-role: operating
+  ocsid-role: operating
 license: MIT
 ---
 
